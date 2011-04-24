@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title>Documentación</title>
+
+    <productname>Java Database Application Library</productname>
+
+    <releaseinfo>1.0</releaseinfo>
+
+    <mediaobject>
+      <imageobject role="fo">
+        <imagedata align="center" fileref="images/logo-pdf.png" format="PNG"
+                   width="240" />
+      </imageobject>
+    </mediaobject>
+
+    <authorgroup>
+      <author>
+        <firstname>José Luis</firstname>
+
+        <surname>Martín</surname>
+      </author>
+    </authorgroup>
+
+    <copyright>
+      <year>2008-2011</year>
+      <holder>José Luis Martín</holder>
+    </copyright>
+
+    <legalnotice>
+      <para>Copies of this document may be made for your own use and for
+      distribution to others, provided that you do not charge any fee for such
+      copies and further provided that each copy contains this Copyright
+      Notice, whether distributed in print or electronically.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <part id="jdal-intro">
+    <title>Introducción a JDAL</title>
+    <partintro id="jdal-intro-core"></partintro>
+    <xi:include href="overview.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  </part>
+
+ 
+</book>

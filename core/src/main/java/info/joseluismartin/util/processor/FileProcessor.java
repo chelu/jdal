@@ -1,0 +1,46 @@
+/**
+ * 
+ */
+package info.joseluismartin.util.processor;
+
+import java.io.File;
+import java.sql.Connection;
+import java.util.Map;
+
+import net.sf.jasperreports.engine.JRDataSource;
+
+/**
+ * @author Jose A. Corbacho
+ *
+ */
+public interface FileProcessor {
+
+	/**
+	 * Process the parameter file
+	 * @param file
+	 */
+	public void processFile(File file, String outputType, boolean hasQuery);
+
+	/**
+	 * Process the parameter file passed as raw data
+	 * @param rawData
+	 */
+	public void processFile(byte[] rawData);
+	
+	/**
+	 * Returns a raw set of the data of this file
+	 * @return
+	 */
+	public byte[] getRawData();
+	
+	
+	/**
+	 * Set the database connection to be used to process the file
+	 * @param conn
+	 */
+	public void setConnection(Connection conn);
+	
+	public void setService(JRDataSource source);
+	
+	public void setParameters(Map parameters);
+}

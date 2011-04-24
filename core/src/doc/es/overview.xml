@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter id="overview">
+  <title>Introduction to Tabula</title>
+
+  <para>JDAL (Java Database Application Library) es una librería Java cuyo objetivo es facilitar el 
+  	desarrollo de aplicaciones de interfaz de usuario de base de datos.</para>
+ 
+ <para>JDAL provee DAOs, Servicios de persistencia y Componentes de interfaz de usuario listos para ser usados mediante ficheros de 
+ 	definición de contexto de <ulink url="http://www.springsource.org">Spring Framework</ulink> con la intención 
+ 	de minimizar el esfuerzo de desarrollo de componentes típicos en aplicaciones clientes de base de datos</para>
+
+ <para>Algunos de los beneficios de JDAL son:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>Objetos de Acceso a Datos (DAOs) genéricos</para>
+    </listitem>
+
+    <listitem>
+      <para>Servicios de persistencia genéricos</para>
+    </listitem>
+
+    <listitem>
+      <para>Componente visual de edición de tablas de base de datos.</para>
+    </listitem>
+
+    <listitem>
+      <para>Componente de listado de resultados tabulares con paginación y orden en el lado del servidor.</para>
+    </listitem>
+    
+    <listitem>
+      <para>Soporte de ORMs Hibernate e iBatis </para>
+    </listitem>
+    
+  </itemizedlist>
+
+  <section id="overview_quick_start">
+  	<title>Introducción Rápida a JDAL</title>	
+  		
+  	<para></para>
+
+  </section>
+</chapter>

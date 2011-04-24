@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jdal</groupId>
+	<artifactId>jdal</artifactId>
+	<name>Java Database Application Library</name>
+	<version>1.0</version>
+        <packaging>pom</packaging>
+	<developers>
+		<developer>
+			<id>jlm</id>
+			<name>Jose Luis Martin</name>
+			<email>jlm@joseluismartin.info</email>
+			<url>http://www.joseluismartin.info</url>
+		</developer>
+	</developers>
+	<scm>
+		<url>svn://joselulismartin.info/common/trunk</url>
+	</scm>
+	<organization>
+		<name>JDAL</name>
+		<url>http://www.jdal.org</url>
+	</organization>
+	
+	<modules>
+		<module>core</module>
+		<module>swing</module>
+	</modules>
+	<distributionManagement>
+	         <repository>
+		       <id>jlm</id>
+		       <name>jlm</name>
+                       <url>http://joseluismartin.info:8081/artifactory/libs-releases-local</url>
+                 </repository>
+        </distributionManagement>
+					       
+</project>
