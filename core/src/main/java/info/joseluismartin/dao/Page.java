@@ -15,7 +15,6 @@
  */
 package info.joseluismartin.dao;
 
-import info.joseluismartin.gui.Paginator;
 
 import java.util.ArrayList;
 import java.util.List;

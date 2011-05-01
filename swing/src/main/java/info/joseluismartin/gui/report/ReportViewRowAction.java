@@ -5,7 +5,6 @@ package info.joseluismartin.gui.report;
 
 import info.joseluismartin.gui.TableRowAction;
 import info.joseluismartin.reporting.Report;
-import info.joseluismartin.reporting.ReportManager;
 import info.joseluismartin.reporting.ReportingException;
 
 import java.awt.event.ActionEvent;

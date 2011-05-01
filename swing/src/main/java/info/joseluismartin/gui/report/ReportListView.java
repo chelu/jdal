@@ -20,7 +20,6 @@ import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.reporting.Report;
 import info.joseluismartin.reporting.ReportDataProvider;
 import info.joseluismartin.reporting.ReportEventListener;
-import info.joseluismartin.reporting.ReportManager;
 import info.joseluismartin.reporting.ReportType;
 import info.joseluismartin.reporting.ReportingException;
 import info.joseluismartin.service.ReportService;

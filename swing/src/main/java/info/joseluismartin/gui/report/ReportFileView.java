@@ -17,7 +17,6 @@ package info.joseluismartin.gui.report;
 
 import info.joseluismartin.gui.AbstractView;
 import info.joseluismartin.reporting.Report;
-import info.joseluismartin.reporting.ReportManager;
 import info.joseluismartin.reporting.ReportingException;
 import info.joseluismartin.service.ReportService;
 

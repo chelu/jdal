@@ -18,13 +18,17 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.data.JRAbstractBeanDataSource;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * @author Jose A. Corbacho
  *
  */
 public class ReportSource extends JRAbstractBeanDataSource {
-
+	
+	private static final Log log = LogFactory.getLog(ReportSource.class);
 	protected int index = 0;
     protected Object bean;
     private static Map fieldNameMap = new HashMap();
@@ -140,10 +144,13 @@ public class ReportSource extends JRAbstractBeanDataSource {
 	}
 
 	public final Object getObject(int index) {
-		System.out.println("ReportSource. getObject() index: " + index + "; pageStart: " + pageStart + " pageEnd: " + pageEnd + " resultPage: " + resultPage);
+		if (log.isDebugEnabled())
+			log.debug("ReportSource. getObject() index: " + index + "; pageStart: " + pageStart + " pageEnd: " + pageEnd + " resultPage: " + resultPage);
+		
 		if ((resultPage == null) || (index < pageStart) || (index > pageEnd)) {
 			resultPage = getObjects(index, Integer.MAX_VALUE);
 		}
+		
 		Object result = null;
 		int pos = index - pageStart;
 		if ((resultPage != null) && (resultPage.size() > pos)) {
