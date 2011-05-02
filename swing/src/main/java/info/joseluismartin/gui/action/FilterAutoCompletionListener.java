@@ -1,3 +1,18 @@
+/*
+ * Copyright 2008-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package info.joseluismartin.gui.action;
 
 import info.joseluismartin.dao.Page;
@@ -16,7 +31,7 @@ import javax.swing.JComboBox;
 public class FilterAutoCompletionListener extends AutoCompletionListener  {
 
 	public static final String DEFAULT_SORT_PROPERTY = "name";
-	private PersistentService<?,?>  persistentService;
+	private PersistentService<Object,?>  persistentService;
 	private int maxResults = Short.MAX_VALUE;
 	private String sortProperty;
 	
@@ -58,7 +73,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 
 	@Override
 	protected List<?> getList(String editing) {
-		Page page = new Page(maxResults);
+		Page<Object> page = new Page<Object>(maxResults);
 		PatternFilter filter = new PatternFilter();
 		filter.setPattern(editing.trim() + "%");
 		page.setFilter(filter);
@@ -77,7 +92,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 	/**
 	 * @param persistentService the persistentService to set
 	 */
-	public void setPersistentService(PersistentService<?, ?> persistentService) {
+	public void setPersistentService(PersistentService<Object, ?> persistentService) {
 		this.persistentService = persistentService;
 	}
 

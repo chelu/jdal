@@ -17,7 +17,6 @@ package info.joseluismartin.logic;
 
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.dao.hibernate.HibernateDao;
-import info.joseluismartin.hibernate.HibernateUtils;
 import info.joseluismartin.service.PersistentService;
 
 import java.io.Serializable;
@@ -41,66 +40,60 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	public static final int DEFAULT_DEPTH = 2;
 	protected HibernateDao<T, PK> dao;
 
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.service.PersistentService#delete(java.lang.Object)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void delete(T entity) {
 		dao.delete(entity);
 	}
 
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.service.PersistentService#initialize(java.lang.Object)
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public T initialize(T entity, int depth) {
 		dao.initialize(entity, depth);
 		return entity;
 	}
 	
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.service.PersistentService#initialize(java.lang.Object)
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public T initialize(T entity) {
 		dao.initialize(entity);
 		return entity;
 	}
 	
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.service.PersistentService#getAll()
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public List<T> getAll() {
 		return dao.getAll();
 	}
 
 
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.service.PersistentService#save(java.lang.Object)
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public T save(T entity) {
 		return dao.save(entity);
 	}
 
-	public HibernateDao<T, PK> getDao() {
-		return dao;
-	}
-
-	public void setDao(HibernateDao<T, PK> dao) {
-		this.dao = dao;
-	}
-
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.service.PersistentService#deleteCollection(java.util.Collection)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void delete(Collection<T> collection) {
 		for (T t : collection) {
 			dao.delete(t);
 		}
-		
 	}
 
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.service.PersistentService#saveCollection(java.util.Collection)
+	/**
+	 * {@inheritDoc}
 	 */
-
 	@SuppressWarnings("unchecked")
 	public Collection<T> save(Collection<T> collection) {
 		Collection<T> saved = null; 
@@ -119,22 +112,42 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 		return saved;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void deleteById(PK id) {
 		dao.deleteById(id);
 		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void deleteById(Collection<PK> ids) {
 		for (PK id : ids) 
 			dao.deleteById(id);
 		
 	}
 
-	public List<Serializable> getKeys(Page page) {
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Serializable> getKeys(Page<T> page) {
 		return dao.getKeys(page);
 	}
 
-	public Page getPage(Page page) {
+	/**
+	 * {@inheritDoc}
+	 */
+	public Page<T> getPage(Page<T> page) {
 		return dao.getPage(page);
+	}
+	
+	public HibernateDao<T, PK> getDao() {
+		return dao;
+	}
+
+	public void setDao(HibernateDao<T, PK> dao) {
+		this.dao = dao;
 	}
 }

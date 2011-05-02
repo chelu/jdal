@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--  
-	Proyect: Commons-MM
-	Client:  Java Factory
-	Author: Jose Luis Martin - (jolmarting@matchmind.es)
--->
+
 
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns="http://www.matchmind.es/commons-mm/test"
-	targetNamespace="http://www.matchmind.es/commons-mm/test">
+	xmlns="http://www.jdal.org/test"
+	targetNamespace="http://www.jdal.org/test">
 	
 	<xs:element name="test" type="Test"/>
 	

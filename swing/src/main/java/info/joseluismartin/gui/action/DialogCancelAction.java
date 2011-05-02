@@ -19,16 +19,16 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 /**
+ * Cancel Action for ViewDialog
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public class DialogCancelAction extends DialogAction {
 
 	private static final long serialVersionUID = 1L;
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
 		Window dialog = getDialog();

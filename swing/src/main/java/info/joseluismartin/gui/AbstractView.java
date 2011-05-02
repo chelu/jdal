@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 Jose Luis Martin.
+ * Copyright 2008-2011 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

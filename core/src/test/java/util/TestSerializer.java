@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 /**
  * Simple test for Serializer
  * 
- * @author Jose Luis Martin - (jolmarting@matchmind.es)
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class TestSerializer extends TestCase {
 	

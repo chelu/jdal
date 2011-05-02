@@ -10,7 +10,6 @@ import info.joseluismartin.auth.AuthPlain;
 import info.joseluismartin.auth.AuthStrategy;
 import info.joseluismartin.dao.UserDao;
 import info.joseluismartin.model.User;
-import info.joseluismartin.util.Base64Coder;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,9 +19,9 @@ import junit.framework.TestCase;
 import org.easymock.EasyMock;
 
 /**
- * Test es.matchmind.auth package
+ * Test info.joseluismartin.auth package
  * 
- * @author Jose Luis Martin - (jolmarting@matchmind.es)
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class AuthTest extends TestCase {
 	/** test username */
@@ -96,7 +95,7 @@ public class AuthTest extends TestCase {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(asuppliedPass.getBytes());
 	
-		return String.valueOf(Base64Coder.encode(md.digest()));
+		return String.valueOf(md.digest());
 	}
 
 	/**

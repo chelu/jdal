@@ -1,5 +1,17 @@
-/**
- * 
+/*
+ * Copyright 2008-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package info.joseluismartin.dao;
 
@@ -16,14 +28,14 @@ public interface Dao<T, PK extends Serializable> extends PageableDataSource<T> {
 	
 	/**
    	 * Get all models 
-     * @return List of populated objects
+     * @return List of entities
      */
     List<T> getAll();
 
     /**
 	 * Find object by id
      * @param id the identifier (primary key) of the object to get
-     * @return the object or null if none
+     * @return entity or null if none
      */
     T get(PK id);
 
@@ -43,12 +55,12 @@ public interface Dao<T, PK extends Serializable> extends PageableDataSource<T> {
 
     /**
      * Delete an object by primary key
-     * @param id the identifier (primary key) of the object to remove
+     * @param id the primary key
      */
     void deleteById(PK id);
     
     /**
-     * Delete a object 
+     * Delete an entity
      * @param entity to delete
      */
     void delete(T entity);
@@ -63,6 +75,18 @@ public interface Dao<T, PK extends Serializable> extends PageableDataSource<T> {
     List<T> findByNamedQuery(String queryName, Map<String, Object> queryParams);
 
     
+    /**
+     * Initalize entity at default depth
+     * @param entity to intialize
+     * @return intialized entity
+     */
     T initialize(T entity);
+    
+    /**
+     * Initalize entity
+     * @param entity to intialize
+     * @param depth to descend.
+     * @return intialized entity
+     */
 	T initialize(T entity, int depth);
 }

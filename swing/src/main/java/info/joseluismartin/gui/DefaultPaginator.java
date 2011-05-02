@@ -26,7 +26,7 @@ import javax.swing.JPanel;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @see info.joseluismartin.PaginatorView
  */
-public class DefaultPaginator extends JPanel implements Paginator {
+public class DefaultPaginator implements Paginator {
 
 	private static final long serialVersionUID = 1L;
 	/** Number of total records */

@@ -21,16 +21,16 @@ import org.xml.sax.SAXException;
 /**
  * Test for XMLUtils
  * 
- * @author Jose Luis Martin - (jolmarting@matchmind.es)
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 
 public class TestXMLUtils extends TestCase {
 	/** test document */
 	private static final String TEST_DOCUMENT = 
-		"/es/matchmind/xml/test/Test.xml";
+		"/info/joseluismartin/xml/test/Test.xml";
 	/** test schema */
 	private static final String TEST_SCHEMA = 
-		"/es/matchmind/xml/test/Test.xsd";
+		"/info.joseluismartin/xml/test/Test.xsd";
 
 	/**
 	 * 
@@ -40,7 +40,7 @@ public class TestXMLUtils extends TestCase {
 	 */
 	public void notestNewDocumentFromResource () throws 
 		ParserConfigurationException, SAXException, IOException {
-		String test = "<?xml version=\"1.0\"?>\n<test xmlns=\"http://www.matchmind.es/commons-mm/test\">\n    <name>Johnny</name>\n    <surname>Be Good</surname>\n</test>";
+		String test = "<?xml version=\"1.0\"?>\n<test xmlns=\"http://www.jdal.org/test\">\n    <name>Johnny</name>\n    <surname>Be Good</surname>\n</test>";
 
 		Document doc = getTestDocument();
 		String docString = XMLUtils.documentToString(doc);

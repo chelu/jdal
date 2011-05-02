@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2008-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import info.joseluismartin.dao.Page;
 import info.joseluismartin.dao.PageableDataSource;
 import info.joseluismartin.dao.Page.Order;
 import info.joseluismartin.gui.form.FormUtils;
-import info.joseluismartin.service.PersistentService;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -247,6 +246,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		tableModel.setList(page.getData());
 		Paginator paginator = paginatorView.getPaginator();
 		paginator.setTotalRecords(page.getCount());
+		paginatorView.refresh();
 	}
 	
 	/**
@@ -424,7 +424,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	
 	private class TableListener extends MouseAdapter {
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			Point point = e.getPoint();

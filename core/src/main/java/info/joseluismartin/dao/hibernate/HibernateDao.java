@@ -373,16 +373,13 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 		this.criteriaBuilderMap.putAll(criteriaBuilderMap);
 	}
 
-	   /**
+	/**
      * {@inheritDoc}
      */
     public List<T> getAll() {
         return new ArrayList<T>(getHibernateTemplate().loadAll(this.entityClass));
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     public List<T> getAllDistinct() {
         Collection result = new LinkedHashSet(getAll());

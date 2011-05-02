@@ -264,18 +264,6 @@
 			<version>3.6</version>
 		</dependency>
 
-		<!-- Librerias de mapas (JOSM) -->
-		<dependency>
-			<groupId>org.openstreetmap</groupId>
-			<artifactId>josm</artifactId>
-			<version>1669</version>
-		</dependency>
-		<dependency>
-			<groupId>org.josm</groupId>
-			<artifactId>wms-plugin</artifactId>
-			<version>15961</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.freixas</groupId>
 			<artifactId>jcalendar</artifactId>
