@@ -23,7 +23,6 @@ import java.awt.Window;
  * Base class for Dialog Actions
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public abstract class DialogAction extends IconAction {
 

@@ -11,11 +11,13 @@ import info.joseluismartin.auth.AuthStrategy;
 import info.joseluismartin.dao.UserDao;
 import info.joseluismartin.model.User;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import junit.framework.TestCase;
 
+import org.bouncycastle.util.encoders.Base64;
 import org.easymock.EasyMock;
 
 /**
@@ -91,11 +93,15 @@ public class AuthTest extends TestCase {
 	 * @throws NoSuchAlgorithmException from MessageDigester
 	 */
 	private String hashmd5(
-			String asuppliedPass) throws NoSuchAlgorithmException   {
+			String suppliedPassword) throws NoSuchAlgorithmException   {
 		MessageDigest md = MessageDigest.getInstance("MD5");
-		md.update(asuppliedPass.getBytes());
-	
-		return String.valueOf(md.digest());
+		md.update(suppliedPassword.getBytes());
+		String encriptedPassword = null;
+		try {
+			encriptedPassword = new String(Base64.encode(md.digest()), "ASCII");
+		} catch (UnsupportedEncodingException e) {}
+		
+		return encriptedPassword;
 	}
 
 	/**

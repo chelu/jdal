@@ -15,11 +15,14 @@
  */
 package info.joseluismartin.auth;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bouncycastle.util.encoders.Base64;
 
 
 /**
@@ -63,7 +66,11 @@ public class AuthHashMD5 implements AuthStrategy {
 			throws NoSuchAlgorithmException {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(suppliedPassword.getBytes());
-		String encriptedPassword = String.valueOf(md.digest());
+		String encriptedPassword = null;
+		try {
+			encriptedPassword = new String(Base64.encode(md.digest()), "ASCII");
+		} catch (UnsupportedEncodingException e) {
+		}
 		return encriptedPassword;
 	}
 }
