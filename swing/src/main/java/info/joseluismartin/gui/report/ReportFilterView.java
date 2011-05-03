@@ -19,6 +19,7 @@ import info.joseluismartin.dao.filter.ReportFilter;
 import info.joseluismartin.gui.AbstractView;
 import info.joseluismartin.gui.form.BoxFormBuilder;
 import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.gui.list.ListComboBoxModel;
 import info.joseluismartin.logic.PersistentManager;
 import info.joseluismartin.reporting.ReportType;
 
@@ -27,8 +28,6 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
-
-import org.springframework.richclient.list.ComboBoxListModel;
 
 
 
@@ -64,7 +63,7 @@ public class ReportFilterView extends AbstractView<ReportFilter> {
 	public void doRefresh() {
 		List<ReportType> reportTypeList = reportTypeService.getAll();
 		reportTypeList.add(0, null);
-		reportType.setModel(new ComboBoxListModel(reportTypeList));
+		reportType.setModel(new ListComboBoxModel(reportTypeList));
 	}
 
 	

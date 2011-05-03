@@ -268,18 +268,6 @@
 			<version>3.6</version>
 		</dependency>
 
-		<!-- Librerias de mapas (JOSM) -->
-		<dependency>
-			<groupId>org.openstreetmap</groupId>
-			<artifactId>josm</artifactId>
-			<version>1669</version>
-		</dependency>
-		<dependency>
-			<groupId>org.josm</groupId>
-			<artifactId>wms-plugin</artifactId>
-			<version>15961</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.freixas</groupId>
 			<artifactId>jcalendar</artifactId>
@@ -469,16 +457,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.richclient</groupId>
-			<artifactId>spring-richclient-resources</artifactId>
-			<version>${springRichclient.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.richclient</groupId>
-			<artifactId>spring-richclient-core</artifactId>
-			<version>${springRichclient.version}</version>
-		</dependency>
 
 
 	</dependencies>
@@ -486,7 +464,6 @@
 	<!-- Shared version number properties -->
 	<properties>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
-		<springRichclient.version>1.1.0</springRichclient.version>
 	</properties>
 
 </project>

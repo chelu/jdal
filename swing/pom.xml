@@ -458,24 +458,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.richclient</groupId>
-			<artifactId>spring-richclient-resources</artifactId>
-			<version>${springRichclient.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.richclient</groupId>
-			<artifactId>spring-richclient-core</artifactId>
-			<version>${springRichclient.version}</version>
-		</dependency>
-
-
 	</dependencies>
 
 	<!-- Shared version number properties -->
 	<properties>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
-		<springRichclient.version>1.1.0</springRichclient.version>
 	</properties>
 
 </project>

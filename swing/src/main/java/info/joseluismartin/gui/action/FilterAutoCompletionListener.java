@@ -28,10 +28,11 @@ import javax.swing.JComboBox;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@SuppressWarnings("unchecked")
 public class FilterAutoCompletionListener extends AutoCompletionListener  {
 
 	public static final String DEFAULT_SORT_PROPERTY = "name";
-	private PersistentService<Object,?>  persistentService;
+	private PersistentService  persistentService;
 	private int maxResults = Short.MAX_VALUE;
 	private String sortProperty;
 	
@@ -73,7 +74,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 
 	@Override
 	protected List<?> getList(String editing) {
-		Page<Object> page = new Page<Object>(maxResults);
+		Page page = new Page(maxResults);
 		PatternFilter filter = new PatternFilter();
 		filter.setPattern(editing.trim() + "%");
 		page.setFilter(filter);
@@ -92,7 +93,8 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 	/**
 	 * @param persistentService the persistentService to set
 	 */
-	public void setPersistentService(PersistentService<Object, ?> persistentService) {
+
+	public void setPersistentService(PersistentService persistentService) {
 		this.persistentService = persistentService;
 	}
 

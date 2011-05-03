@@ -17,6 +17,7 @@ package info.joseluismartin.gui.report;
 
 import info.joseluismartin.gui.AbstractView;
 import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.gui.list.ListComboBoxModel;
 import info.joseluismartin.reporting.Report;
 import info.joseluismartin.reporting.ReportDataProvider;
 import info.joseluismartin.reporting.ReportEventListener;
@@ -38,8 +39,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-
-import org.springframework.richclient.list.ComboBoxListModel;
 
 /**
  * @author Jose A. Corbacho
@@ -83,7 +82,7 @@ public class ReportListView extends AbstractView<Report> implements ReportEventL
 		// This may lead to printing the wrong report
 		Object selected = reportCombo.getSelectedItem() != null ? reportCombo.getSelectedItem() : getModel();
 		reportCombo.removeAllItems();
-		reportCombo.setModel(new ComboBoxListModel(reportList));
+		reportCombo.setModel(new ListComboBoxModel(reportList));
 		reportCombo.setSelectedItem(selected);
 	}
 
@@ -92,7 +91,7 @@ public class ReportListView extends AbstractView<Report> implements ReportEventL
 		Box box = Box.createHorizontalBox();
 		List<Report> reportList = reportService.getReportsByType(reportType);
 		
-		reportCombo.setModel(new ComboBoxListModel(reportList));
+		reportCombo.setModel(new ListComboBoxModel(reportList));
 		reportCombo.setSelectedItem(getModel());
 
 		box.add(reportCombo);

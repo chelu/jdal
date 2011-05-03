@@ -16,6 +16,7 @@
 package info.joseluismartin.gui.list;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
@@ -59,6 +60,28 @@ public class ListListModel extends AbstractListModel {
 	 */
 	public void setList(List list) {
 		this.list = list;
+		fireContentsChanged(this, -1, -1);
+	}
+
+	/**
+	 * @param asList
+	 */
+	public void removeAll(Collection c) {
+		list.removeAll(c);
+		fireContentsChanged(this, -1, -1);
+		
+	}
+
+	/**
+	 * @param asList
+	 */
+	public void addAll(Collection c) {
+		list.addAll(c);
+		fireContentsChanged(this, -1, -1);
+	}
+
+	public void clear() {
+		list.clear();
 		fireContentsChanged(this, -1, -1);
 	}
 }

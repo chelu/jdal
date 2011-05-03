@@ -19,6 +19,7 @@ import info.joseluismartin.gui.AbstractView;
 import info.joseluismartin.gui.ApplicationContextGuiFactory;
 import info.joseluismartin.gui.form.BoxFormBuilder;
 import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.gui.list.ListComboBoxModel;
 import info.joseluismartin.logic.PersistentManager;
 import info.joseluismartin.reporting.Report;
 import info.joseluismartin.reporting.ReportType;
@@ -31,8 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import org.springframework.richclient.list.ComboBoxListModel;
 
 /**
  * @author Jose A. Corbacho
@@ -109,7 +108,7 @@ public class ReportView extends AbstractView<Report> {
 		box.add(Box.createHorizontalStrut(5));
 		
 		// Report type
-		comboType.setModel(new ComboBoxListModel(typeService.getAll()));
+		comboType.setModel(new ListComboBoxModel(typeService.getAll()));
 		comboType.setSelectedItem(getModel().getType());
 		box.add(new JLabel("Tipo: "));
 		box.add(comboType);

@@ -17,6 +17,7 @@ package info.joseluismartin.gui.tree;
 
 import info.joseluismartin.gui.AbstractView;
 import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.gui.list.ListComboBoxModel;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -28,8 +29,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-
-import org.springframework.richclient.list.ComboBoxListModel;
 
 /**
  * Tree View that show a List of TreeModelBuilders
@@ -61,7 +60,7 @@ public class TreeView extends  AbstractView<TreeViewModel> implements ActionList
 	protected void doRefresh() {
 		TreeViewModel model = getModel();
 		if (model != null) {
-			combo.setModel(new ComboBoxListModel(model.getBuilders()));
+			combo.setModel(new ListComboBoxModel(model.getBuilders()));
 		}
 	}
 	
