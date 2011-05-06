@@ -5,10 +5,10 @@
 	<artifactId>jdal-aspects</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<parent>
-		<artifactId>telmma</artifactId>
-		<groupId>es.telvent</groupId>
+		<artifactId>org.jdal</artifactId>
+		<groupId>jdal</groupId>
 		<version>1.0</version>
-		<relativePath>../telmma/pom.xml</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<build>
 		<plugins>
@@ -37,6 +37,10 @@
 			<artifactId>aspectjrt</artifactId>
 			<version>1.6.7</version>
 		</dependency>
-
-	</dependencies>
+		<dependency>
+		        <groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>3.6.3.Final</version>
+	       <dependency>
+       </dependencies>
 </project>
