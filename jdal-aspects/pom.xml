@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jdal</groupId>
+	<artifactId>jdal-aspects</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<parent>
+		<artifactId>telmma</artifactId>
+		<groupId>es.telvent</groupId>
+		<version>1.0</version>
+		<relativePath>../telmma/pom.xml</relativePath>
+	</parent>
+	<build>
+		<plugins>
+<!--			<plugin>-->
+<!--				<groupId>org.codehaus.mojo</groupId>-->
+<!--				<artifactId>aspectj-maven-plugin</artifactId>-->
+<!--				<version>1.3</version>-->
+<!--				<configuration>-->
+<!--					<complianceLevel>1.6</complianceLevel>-->
+<!--					<aspectDirectory>src</aspectDirectory>-->
+<!--				</configuration>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<goals>-->
+<!--							<goal>compile</goal>-->
+<!--							<goal>test-compile</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.6.7</version>
+		</dependency>
+
+	</dependencies>
+</project>
