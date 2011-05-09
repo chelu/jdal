@@ -1,0 +1,2 @@
+# Module es.dacartec.widgetset.Dacartec_commonWidgetset
+# RPC service class, partial path of RPC policy file

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="User">
+
+  <typeAlias alias="User" type="es.dacartec.gesinprec.model.User"/>
+  <typeAlias alias="Page" type="info.joseluismartin.dao.Page"/>
+  
+  <resultMap id="User" class="User">
+    <result column="id"        jdbcType="INTEGER" property="id" /> 
+    <result column="nombre"    jdbcType="STRING"  property="name" /> 
+    <result column="edad"      jdbcType="INTEGER" property="age" /> 
+    <result column="password"  jdbcType="STRING"  property="password" /> 
+    <result column="apellido"  jdbcType="STRING"  property="surname"/>
+    <result column="usuario"   jdbcType="STRING"  property="username"/>
+  </resultMap>
+  
+  <!-- Sql fragments -->
+  <sql id="filter">
+   <dynamic prepend="WHERE">
+        <isNotNull property="filter">
+        	<isEqual property="filter.filterName" compareValue="userFilter">
+        		<include refid="userFilter"/>
+        	</isEqual>
+        </isNotNull>
+    </dynamic>        
+  </sql>
+  
+  <sql id="userFilter">
+  	<isNotNull property="name" prepend="AND">
+  		nombre LIKE #filter.name#
+  	</isNotNull>
+  	<isNotNull property="surname" prepend="AND">
+  		apellido LIKE #filter.surname#
+  	</isNotNull>
+  </sql>
+  
+  <sql id="orderBy">
+  	<isNotNull property="sortName"> 
+  		ORDER BY $sortName$ $order$
+  	</isNotNull>
+  </sql>
+  
+  <select id="selectUser" resultMap="User" parameterClass="Page">
+    select * from user 
+   	 <include refid="filter"/>
+     <include refid="orderBy"/> 
+  </select>
+  
+  <select id="selectUserCount" resultClass="java.lang.Integer">
+  	select count(*) as value from user
+  </select>
+
+  <select id="getUser" parameterClass="int" resultMap="User">
+    select * from user
+    where ID = #id#
+  </select>
+</sqlMap>

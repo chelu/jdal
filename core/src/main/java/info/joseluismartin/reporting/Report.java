@@ -1,35 +1,36 @@
-/*
- * Copyright 2008-2011 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package info.joseluismartin.reporting;
 
 
+
+import info.joseluismartin.util.ZipFileUtils;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.zip.ZipFile;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jose A. Corbacho
  *
  */
 
-public class Report{
+public class Report {
+
+	private static final Log log = LogFactory.getLog(Report.class);
 	
 	private Long id;
 	private String name;
@@ -39,6 +40,47 @@ public class Report{
 	private String description;
 	/**  Whether this report is built using a SQL query */
 	private Boolean hasQuery;
+	
+	/**
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public JasperReport newJasperReport() {
+		String suffix = FilenameUtils.getExtension(getFileName());
+		String prefix = FilenameUtils.getBaseName(getFileName());
+		JasperReport jasperReport = null;
+		
+		try {
+			File file =  File.createTempFile(prefix, "." + suffix);
+			org.apache.commons.io.FileUtils.writeByteArrayToFile(file, data);
+			
+			if ("zip".equalsIgnoreCase(suffix)) {
+				String dir = System.getProperty("java.io.tmpdir") + "/"  + prefix;
+				ZipFileUtils.unzip(new ZipFile(file), dir);
+				File dirFile = new File(dir);
+				Iterator<File> iter = org.apache.commons.io.FileUtils.iterateFiles(dirFile, 
+						new String[] {"jrxml", "jasper"}, false);
+				while (iter.hasNext()) {
+					file = iter.next();
+					break;
+				}
+			}
+			// now file points to jrxml or jasper file
+			
+			suffix = FilenameUtils.getExtension(file.getName());
+			FileInputStream reportStream = new FileInputStream(file);
+			
+			if ("jrxml".equalsIgnoreCase(suffix))
+				jasperReport = JasperCompileManager.compileReport(reportStream);
+			else if ("jasper".equalsIgnoreCase(suffix))
+				jasperReport = (JasperReport) JRLoader.loadObject(reportStream);
+			
+		} catch (Exception e) {
+			log.error(e);
+		}
+		
+		return jasperReport;
+	}
 	
 	/**
 	 * GETTERS AND SETTERS
@@ -81,7 +123,7 @@ public class Report{
 	}
 	
 	public void setFile(File file) throws IOException {
-		data = FileUtils.readFileToByteArray(file);
+		data = org.apache.commons.io.FileUtils.readFileToByteArray(file);
 	}
 	
 

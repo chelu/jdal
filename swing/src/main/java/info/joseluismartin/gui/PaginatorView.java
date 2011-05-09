@@ -15,6 +15,10 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.dao.PageChangedEvent;
+import info.joseluismartin.dao.Paginator;
+import info.joseluismartin.dao.PaginatorListener;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -140,7 +144,7 @@ public class PaginatorView extends JPanel implements PaginatorListener {
 	 */
 	public void refresh() {
 		statusLabel.setText("" + paginator.getPage() + " / " + paginator.getTotalPages());
-		countLabel.setText("Records: " + paginator.getToltalRecords());
+		countLabel.setText("Records: " + paginator.getCount());
 		boolean hasNext = paginator.hasNext();
 		boolean hasPrevious = paginator.hasPrevious();
 		nextPageButton.setEnabled(hasNext);

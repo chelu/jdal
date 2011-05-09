@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui;
+package info.joseluismartin.dao;
 
 /**
  * A interface for row data paginators.
@@ -57,7 +57,7 @@ public interface Paginator {
 	/**
 	 * @return the number of total records
 	 */
-	int getToltalRecords();
+	int getCount();
 
 	/**
 	 * @return the number of pages
@@ -94,7 +94,7 @@ public interface Paginator {
 	 * set the number of total records, ie the number of records in all pages
 	 * @param count the number of total records
 	 */
-	void setTotalRecords(int count);
+	void setCount(int count);
 
 	/**
 	 * get the page size, ie the number of records in one page

@@ -7,7 +7,7 @@
 	<groupId>org.jdal</groupId>
 	<artifactId>jdal</artifactId>
 	<name>Java Database Application Library</name>
-	<version>1.0</version>
+	<version>1.1</version>
         <packaging>pom</packaging>
 	<developers>
 		<developer>
@@ -52,6 +52,7 @@
 		<module>core</module>
 		<module>swing</module>
 		<module>aspects</module>
+		<module>vaadin</module>
 	</modules>
 
 					       

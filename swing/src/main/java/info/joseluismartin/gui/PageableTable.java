@@ -17,7 +17,10 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.beans.AppCtx;
 import info.joseluismartin.dao.Page;
+import info.joseluismartin.dao.PageChangedEvent;
 import info.joseluismartin.dao.PageableDataSource;
+import info.joseluismartin.dao.Paginator;
+import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.dao.Page.Order;
 import info.joseluismartin.gui.form.FormUtils;
 
@@ -245,7 +248,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		dataSource.getPage(page);
 		tableModel.setList(page.getData());
 		Paginator paginator = paginatorView.getPaginator();
-		paginator.setTotalRecords(page.getCount());
+		paginator.setCount(page.getCount());
 		paginatorView.refresh();
 	}
 	

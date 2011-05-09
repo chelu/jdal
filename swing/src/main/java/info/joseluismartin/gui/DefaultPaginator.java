@@ -15,9 +15,11 @@
  */
 package info.joseluismartin.gui;
 
-import java.util.ArrayList;
+import info.joseluismartin.dao.PageChangedEvent;
+import info.joseluismartin.dao.Paginator;
+import info.joseluismartin.dao.PaginatorListener;
 
-import javax.swing.JPanel;
+import java.util.ArrayList;
 
 
 /**
@@ -26,7 +28,7 @@ import javax.swing.JPanel;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @see info.joseluismartin.PaginatorView
  */
-public class DefaultPaginator implements Paginator {
+public class DefaultPaginator  implements Paginator {
 
 	private static final long serialVersionUID = 1L;
 	/** Number of total records */
@@ -43,7 +45,7 @@ public class DefaultPaginator implements Paginator {
 	 * {@inheritDoc}
 	 * @see info.joseluismartin.gui.Paginator#getToltalRecords()
 	 */
-	public int getToltalRecords() {
+	public int getCount() {
 		return totalRecords;
 	}
 
@@ -95,9 +97,10 @@ public class DefaultPaginator implements Paginator {
 	 * @see info.joseluismartin.gui.Paginator#getTotalPages()
 	 */
 	public int getTotalPages() {
-		if (pageSize > 0)
-			return (int) Math.ceil(totalRecords/pageSize) + 1;
-		
+		if (pageSize > 0) {
+			
+			return totalRecords/pageSize + (totalRecords%pageSize == 0 ? 0 : 1);
+		}
 		return 1;
 	}
 	
@@ -126,7 +129,7 @@ public class DefaultPaginator implements Paginator {
 	/**
 	 * @param totalRecords the totalRecords to set
 	 */
-	public void setTotalRecords(int totalRecords) {
+	public void setCount(int totalRecords) {
 		this.totalRecords = totalRecords;
 	}
 

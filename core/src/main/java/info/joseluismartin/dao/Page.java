@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package info.joseluismartin.dao;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  *  @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @SuppressWarnings("unchecked")
-public class Page<T> implements Cloneable {
+public class Page<T> implements Paginator, Cloneable {
 
 	private static final Log log = LogFactory.getLog(Page.class);
 	public static enum Order { ASC, DESC };
@@ -45,13 +46,17 @@ public class Page<T> implements Cloneable {
 	private Order order;
 	/** a Object used as filter */
 	private Object filter;
-	/** start index of the page */
-	private int startIndex;
+	/** page number  */
+	private int page;
+	/** PageableDataSource that loads the page */
+	private PageableDataSource<T> pageableDataSource;
+	/** Paginator Listeners */
+	private ArrayList<PaginatorListener> listeners = new ArrayList<PaginatorListener>();
 
-	public Page(int pageSize, int startIndex, String sortName, Order order) {
+	public Page(int pageSize, int page, String sortName, Order order) {
 	
 		this.pageSize = pageSize;
-		this.startIndex = startIndex;
+		this.page = page;
 		this.sortName = sortName;
 		this.order = order;
 	}
@@ -94,19 +99,6 @@ public class Page<T> implements Cloneable {
 		this.count = count;
 	}
 
-	/**
-	 * @return the pageSize
-	 */
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	/**
-	 * @param pageSize the pageSize to set
-	 */
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
 
 	/**
 	 * @return the sortName
@@ -165,19 +157,6 @@ public class Page<T> implements Cloneable {
 		this.filter = filter;
 	}
 
-	/**
-	 * @return the startIndex
-	 */
-	public int getStartIndex() {
-		return startIndex;
-	}
-
-	/**
-	 * @param startIndex the startIndex to set
-	 */
-	public void setStartIndex(int startIndex) {
-		this.startIndex = startIndex;
-	}
 	
 	public Page<T> clone() {
 		try {
@@ -186,5 +165,161 @@ public class Page<T> implements Cloneable {
 			log.error(e);
 			return null;
 		}
+	}
+
+	/**
+	 * @return the pageableDataSource
+	 */
+	public PageableDataSource<T> getPageableDataSource() {
+		return pageableDataSource;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#hasNext()
+	 */
+	public boolean hasNext() {
+		return page < getTotalPages();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#hasPage(int)
+	 */
+	public boolean hasPage(int indexPage) {
+		return indexPage <= getTotalPages() &&  indexPage > 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#hasPreviews()
+	 */
+	public boolean hasPrevious() {
+		return page > 1;
+	}
+
+	/**
+	 *  {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#setPage(int)
+	 */
+	public void setPage(int indexPage) {
+		page = indexPage;
+		load();
+		firePageChangedEvent();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getStartIndex() {
+		return (page - 1)*pageSize;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#getTotalPages()
+	 */
+	public int getTotalPages() {
+		if (pageSize > 0)
+			return (int) Math.ceil(count/pageSize) + 1;
+		
+		return 1;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void addPaginatorListener(PaginatorListener listener) {
+		if (!listeners.contains(listener))
+			listeners.add(listener);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void removePaginatorListener(PaginatorListener listener) {
+		listeners.remove(listener);
+	}
+	
+	/**
+	 * @return the pageSize
+	 */
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	/**
+	 * @param pageSize the pageSize to set
+	 */
+	public void setPageSize(int pageSize) {
+		if (pageSize > 0) {
+			// need to recalculate current page
+			page = (int) Math.ceil(getStartIndex()/pageSize) + 1;
+			this.pageSize = pageSize;
+			firePageChangedEvent();
+		}
+	}
+
+	/**
+	 * @return the page
+	 */
+	public int getPage() {
+		return page;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#firstPage()
+	 */
+	public void firstPage() {
+		setPage(1);
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#lastPage()
+	 */
+	public void lastPage() {
+		setPage(getTotalPages());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#nextPage()
+	 */
+	public void nextPage() {
+			setPage(page + 1);
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see info.joseluismartin.gui.Paginator#previousPage()
+	 */
+	public void previousPage() {
+			setPage(page - 1);
+	}
+	
+	/**
+	 * Notify Listener that current page changed
+	 */
+	private void firePageChangedEvent() {
+		for (PaginatorListener listener : listeners) {
+			listener.pageChanged(new PageChangedEvent(this, page, getStartIndex(), getTotalPages(), pageSize));
+		}
+	}
+
+	
+	public void load() {
+		if (pageableDataSource != null)
+			pageableDataSource.getPage(this);
+	}
+
+	/**
+	 * @param pageableDataSource the pageableDataSource to set
+	 */
+	public void setPageableDataSource(PageableDataSource<T> pageableDataSource) {
+		this.pageableDataSource = pageableDataSource;
 	}
 }

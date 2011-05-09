@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>jdal</artifactId>
+    <groupId>org.jdal</groupId>
+    <version>1.1</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jdal</groupId>
+  <artifactId>jdal-vaadin</artifactId>
+  <name>JDAL Vaadin UI Library</name>
+  <version>1.1-SNAPSHOT</version>
+  
+   <build>
+    <plugins>
+      <!-- Compiles your custom GWT components with the GWT compiler -->
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+	    <!-- Version 2.1.0-1 works at least with Vaadin 6.5 -->
+            <version>2.1.0-1</version>
+            <configuration>
+                <!-- if you don't specify any modules, the plugin will find them -->
+                <!--modules>
+                    ..
+                </modules-->
+                <webappDirectory>${project.build.directory}/${project.build.finalName}/VAADIN/widgetsets</webappDirectory>
+                <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                <runTarget>clean</runTarget>
+                <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
+                <noServer>true</noServer>
+                <port>8080</port>
+                <soyc>false</soyc>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>resources</goal>
+                        <goal>compile</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <!-- Updates Vaadin 6.2+ widgetset definitions based on project dependencies -->
+        <plugin>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-maven-plugin</artifactId>
+            <version>1.0.1</version>
+            <executions>
+                <execution>
+                    <configuration>
+                        <!-- if you don't specify any modules, the plugin will find them -->
+                        <!--
+                        <modules>
+                            <module>${package}.gwt.MyWidgetSet</module>
+                        </modules>
+                        -->
+                    </configuration>
+                    <goals>
+                        <goal>update-widgetset</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+  </build>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>codehaus-snapshots</id>
+      <url>[http://nexus.codehaus.org/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+  <dependencies>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin</artifactId>
+      <version>6.5.0</version>
+    </dependency>
+    <!-- This is also used by gwt-maven-plugin to deduce GWT version number. -->
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>2.1.1</version>
+      <scope>provided</scope>
+    </dependency>
+	<dependency>
+		<groupId>org.jdal</groupId>
+		<artifactId>jdal-core</artifactId>
+		<version>1.1-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jdal</groupId>
+		<artifactId>jdal-swing</artifactId>
+		<version>1.1-SNAPSHOT</version>
+	</dependency>
+  </dependencies>
+</project>

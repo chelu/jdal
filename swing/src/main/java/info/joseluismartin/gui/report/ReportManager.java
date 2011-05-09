@@ -1,66 +1,56 @@
-/*
- * Copyright 2008-2011 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package info.joseluismartin.gui.report;
 
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.reporting.Report;
 import info.joseluismartin.reporting.ReportingException;
-import info.joseluismartin.reporting.datasource.ReportSource;
+import info.joseluismartin.reporting.datasource.PageJRDatasourceAdapter;
 import info.joseluismartin.service.PersistentService;
+import info.joseluismartin.util.ZipFileUtils;
 import info.joseluismartin.util.processor.FileProcessor;
 import info.joseluismartin.util.processor.JasperReportFileProcessor;
 import info.joseluismartin.util.processor.JasperReportXMLFileProcessor;
 
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.zip.ZipFile;
 
 import javax.sql.DataSource;
 
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
  * This class is used to generate and display reports.
- * 
  * Combine it with info.joseluismartin.util.processor.FileProcessor
  * 
  * @author Jose A. Corbacho
- *
+ * @author Jose Luis Martin (jlm@joseluismartin.info)
  */
 public class ReportManager {
+	
+	/** apache common log */
+	private static final Log log = LogFactory.getLog(ReportManager.class);
 
+	/**
+	 * Default ctor.
+	 */
 	public ReportManager(){
-		
 	}
 
 	/**
@@ -72,18 +62,16 @@ public class ReportManager {
 	 * @param outputType
 	 */
 	public void showReport(Report report, PersistentService<Object, Serializable> service, Object filter, String sortPropertyName, Page.Order sortOrder, String outputType) throws Exception{
-		ReportSource dataSource = new ReportSource(true);
-		dataSource.setDataSource(service);
-		dataSource.setFilter(filter);
-		dataSource.setSortOrder(sortOrder);
-		dataSource.setSortPropertyName(sortPropertyName);
-
+		PageJRDatasourceAdapter dataSource = new PageJRDatasourceAdapter(true);
+		Page<Object> page = new Page<Object>(100, 0, sortPropertyName, sortOrder);
+		page.setPageableDataSource(service);
+		dataSource.setPage(page);
+		
 		ProcessFileStrategy st = new JRDataSourceFileStrategy();
 		try {
 			st.processFile(report, outputType, dataSource);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 
 	}
@@ -94,17 +82,13 @@ public class ReportManager {
 	 * @param report the report to be displayed
 	 * @throws ReportingException 
 	 */
-	public void showReport(Report report, DataSource dataSource, String outputType) throws ReportingException{
+	public void showReport(Report report, DataSource dataSource, String outputType) throws ReportingException {
 		ProcessFileStrategy st = new ConnectionFileStrategy();
 		try {
 			boolean continueWithReport = st.preprocessFile(report);
 			if (continueWithReport) st.processFile(report, outputType, dataSource.getConnection());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error(e);
 		}
 	}
 
@@ -127,7 +111,7 @@ public class ReportManager {
 	 * @author Jose A. Corbacho
 	 *
 	 */
-	public class JRDataSourceFileStrategy extends ProcessFileStrategy{
+	public class JRDataSourceFileStrategy extends ProcessFileStrategy {
 
 		@Override
 		public void setReportDataSource(FileProcessor fp, Object obj) {
@@ -154,9 +138,9 @@ public class ReportManager {
 	 * @author Jose A. Corbacho
 	 *
 	 */
-	public abstract class ProcessFileStrategy{
+	public abstract class ProcessFileStrategy {
 		
-		private Map parameters = new HashMap();;
+		private Map<String, Object> parameters = new HashMap<String, Object>();;
 		
 		/**
 		 * Set the data source in this file processor.
@@ -173,48 +157,24 @@ public class ReportManager {
 		 * @param file
 		 */
 		public boolean preprocessFile(Report report){
-			System.out.println("ReportManager. Preprocess file: hasQuery -> " + report.getHasQuery());
-			if (report.getHasQuery()){
-				File file = null;
-				String suffix = null;
-				try {
-					suffix = getSuffix(report.getFileName());
-	
-					file = File.createTempFile(getPrefix(report.getFileName()), suffix);
-					file.deleteOnExit();
-					FileUtils.writeByteArrayToFile(file, report.getData());
-				}catch(Exception e){
-					
-				}
-	
-			    InputStream reportStream = null;
-				try {
-					reportStream = new FileInputStream(file);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	
-				JasperReport jasperReport = null;
-				try {
-					if (".jrxml".equals(suffix))
-						jasperReport = JasperCompileManager.compileReport(reportStream);
-					else if (".jasper".equals(suffix))
-						jasperReport = (JasperReport) JRLoader.loadObject(reportStream);
-				} catch (JRException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.out.println("Parameters in jasperReport");
+			if (log.isDebugEnabled())
+				log.debug("ReportManager. Preprocess file: hasQuery -> " + report.getHasQuery());
+		
+			if (report.getHasQuery()) {
+				JasperReport jasperReport = report.newJasperReport();
+
+				if (log.isDebugEnabled())
+						log.debug("Parameters in jasperReport");
 				
 				Map<String, JRParameter> jrParameters = new HashMap<String, JRParameter>();
 				for (JRParameter param : jasperReport.getParameters()) {
 					if (!param.isSystemDefined() && param.isForPrompting()){
-						System.out.println("Param to fill from paramEntry: " + param.getName());
+						if (log.isDebugEnabled())
+							log.debug("Param to fill from paramEntry: " + param.getName());
 						jrParameters.put(param.getName(), param);					
 					}
 				}
-				if (!jrParameters.isEmpty()){
+				if (!jrParameters.isEmpty()) {
 					if (!showParameterDialog(jrParameters)) return false;
 				}
 			}
@@ -244,14 +204,26 @@ public class ReportManager {
 				return;
 
 			File file;
+			String suffix = getSuffix(report.getFileName());
+			
 			try {
-				String suffix = getSuffix(report.getFileName());
-
 				file = File.createTempFile(getPrefix(report.getFileName()), suffix);
 				file.deleteOnExit();
 				FileUtils.writeByteArrayToFile(file, report.getData());
-
-				
+			
+				if (".zip".equalsIgnoreCase(suffix)) {
+					String dir = System.getProperty("java.io.tmpdir") + "/" + getPrefix(report.getFileName());
+					ZipFileUtils.unzip(new ZipFile(file), dir);
+					File dirFile = new File(dir);
+					parameters.put(JRParameter.REPORT_FILE_RESOLVER, new ReportFileResolver(dirFile));
+					Iterator<File> iter = FileUtils.iterateFiles(dirFile, new String[] {"jrxml", "jasper"}, false);
+					while (iter.hasNext()) {
+						file = iter.next();
+						suffix = getSuffix(file.getName());
+						break;
+					}
+				}
+					
 				// The processor of this file
 				FileProcessor fp = null;
 				
@@ -265,6 +237,8 @@ public class ReportManager {
 				else {
 					throw new ReportingException("Process not yet implemented for file type " + suffix);
 				}
+				
+				
 				fp.setParameters(parameters);
 
 				setReportDataSource(fp, reportDataSource);
@@ -290,6 +264,7 @@ public class ReportManager {
 				throw new ReportingException("No ha sido posible abrir el fichero del informe: " + report.getFileName(), e);
 			}			
 		}
+		
 	}
 	
 	public static void main(String[] args){
@@ -312,7 +287,7 @@ public class ReportManager {
 	       Class.forName(DRIVER_CLASS_NAME).newInstance();
 	    }
 	    catch (Exception ex){
-	    	System.out.println("error coh el driver"  + ex);
+	    	log.error(ex);
 	    }
 	    
 
@@ -320,7 +295,7 @@ public class ReportManager {
 	      conn = DriverManager.getConnection(DB_CONN_STRING, USER_NAME, PASSWORD);
 	    }
 	    catch (SQLException e){
-	    	System.out.println("error conectando base de datos "  + e);
+	    	log.error(e);
 	    }
 
 		
@@ -340,11 +315,29 @@ public class ReportManager {
 				FileUtils.writeByteArrayToFile(outputFile, fp.getRawData());
 				desktop.open(outputFile);
 			} catch (IOException e) {
-				System.out
-						.println("No ha sido posible abrir el fichero del informe: "
+				log.error("No ha sido posible abrir el fichero del informe: "
 								+ fileName + " " + e);
 			}
 		}
-
 	}
+}
+
+class ReportFileResolver extends SimpleFileResolver {
+
+	/**
+	 * @param parentFolder
+	 */
+	public ReportFileResolver(File parentFolder) {
+		super(parentFolder);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public File resolveFile(String fileName) {
+		return super.resolveFile(FilenameUtils.getName((fileName)));
+	}
+	
+	
 }
