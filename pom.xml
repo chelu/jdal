@@ -37,7 +37,7 @@
 		<repository>
 			<id>jlm</id>
 			<name>jlm</name>
-			<url>http://joseluismartin.info:8081/artifactory/libs-releases-local</url>
+			<url>http://joseluismartin.info:8081/artifactory/repo</url>
 		</repository>
 	</repositories>
 	<distributionManagement>

@@ -61,7 +61,7 @@ privileged public aspect HibernateLazyGuard {
 		if (log.isDebugEnabled())
 			log.info(thisJoinPointStaticPart.toString());
 
-		if (!c.wasInitialized()) {
+		if (!c.isDetached()) {
 			log.info("PersistentCollection will throw exception: " + c.getOwner().toString());
 			Session session = sessionFactory.openSession();
 			attachToSession(c, session);
@@ -77,7 +77,9 @@ privileged public aspect HibernateLazyGuard {
 	 */
 	@SuppressWarnings("unchecked")
 	public void attachToSession(AbstractPersistentCollection ps, Session session) {
-		log.debug("Initalizing PersistentCollection of role: " + ps.getRole());	
+		if (log.isDebugEnabled())
+			log.debug("Initalizing PersistentCollection of role: " + ps.getRole());
+		
 		if (!ps.wasInitialized()) {
 			SessionImpl source = (SessionImpl) session;
 			PersistenceContext context = source.getPersistenceContext();

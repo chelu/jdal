@@ -69,17 +69,17 @@
 		<repository>
 			<id>jlm</id>
 			<name>jlm</name>
-			<url>http://joseluismartin.info:8081/artifactory/repo</url>
+			<url>http://joseluismartin.info:8081/repo</url>
 		</repository>
 	</repositories>
-
 	<distributionManagement>
 		<repository>
 			<id>jlm</id>
 			<name>jlm</name>
-			<url>http://joseluismartin:8081/artifactory/libs-releases-local</url>
+			<url>http://joseluismartin.info:8081/artifactory/libs-snapshots-local</url>
 		</repository>
 	</distributionManagement>
+
 
 	<dependencies>
 		<dependency>

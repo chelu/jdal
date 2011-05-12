@@ -1,6 +1,3 @@
-/**
- * 
- */
 package info.joseluismartin.vaadin.ui.table;
 
 import com.vaadin.terminal.Resource;
