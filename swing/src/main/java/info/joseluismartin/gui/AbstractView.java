@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 Jose Luis Martin.
+ * Copyright 2002-2010 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,26 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.bind.BinderFactory;
 import info.joseluismartin.gui.bind.CompositeBinder;
+import info.joseluismartin.gui.bind.PropertyBinder;
+import info.joseluismartin.gui.validation.ErrorProcessor;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 
@@ -54,6 +61,8 @@ public abstract class AbstractView<T> implements View<T> {
 	
 	protected int width = 0;
 	protected int height = 0;
+	private Map<JComponent, Color> backgroundMap = new HashMap<JComponent, Color>();
+	private List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
 	
 	public AbstractView() {
 		
@@ -63,8 +72,18 @@ public abstract class AbstractView<T> implements View<T> {
 		setModel(model);
 	}
 	
+	/**
+	 * @param state2
+	 * @param string
+	 * @param b
+	 */
+	public void bind(Object component, String propertyName, boolean readOnly) {
+		binder.bind(component, propertyName, readOnly);
+		
+	}
+	
 	public void bind(Object component, String propertyName) {
-		binder.bind(component, propertyName);
+		bind(component, propertyName, false);
 	}
 	
 	public JComponent getPanel() {
@@ -99,15 +118,15 @@ public abstract class AbstractView<T> implements View<T> {
 	}
 	
 	public final void update() {
+		// do custom update
+		doUpdate();
+		
 		binder.update();
 		
 		// update subviews
 		for (View<T>  v : subViews) {
 			v.update();
 		}
-	
-		// do custom update
-		doUpdate();
 	}
 	
 	protected void doUpdate() {
@@ -119,14 +138,17 @@ public abstract class AbstractView<T> implements View<T> {
 		view.setModel(model);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void refresh() {
+		doRefresh();
+		
 		binder.refresh();
 		
 		// refresh subviews
 		for (View<T> v : subViews)
 			v.refresh();
-		
-		doRefresh();
 	}
 	
 	protected void doRefresh() {
@@ -149,18 +171,30 @@ public abstract class AbstractView<T> implements View<T> {
 		if (validator == null)
 			return true;
 		
+		resetErrorProcessors();
 		Errors errors = new BeanPropertyBindingResult(getModel(), "");
 		validator.validate(getModel(), errors);
 		
 		if (errors.hasErrors()) {
 			String errorMessage = getErrorMessage(errors);
 			JOptionPane.showMessageDialog(getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+			for (FieldError error : errors.getFieldErrors()) {
+				for (ErrorProcessor ep : errorProcessors ) 
+					ep.processError(binder.getBinder(error.getField()), error);
+			}
 			return false;
 		}
 		
 		return true;
 	}
 	
+	private void resetErrorProcessors() {
+		for (ErrorProcessor ep : errorProcessors) {
+			ep.reset();
+		}
+		
+	}
+
 	@SuppressWarnings("unchecked")
 	protected String getErrorMessage(Errors errors) {
 		StringBuilder sb = new StringBuilder();
@@ -262,5 +296,19 @@ public abstract class AbstractView<T> implements View<T> {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the errorProcessors
+	 */
+	public List<ErrorProcessor> getErrorProcessors() {
+		return errorProcessors;
+	}
+
+	/**
+	 * @param errorProcessors the errorProcessors to set
+	 */
+	public void setErrorProcessors(List<ErrorProcessor> errorProcessors) {
+		this.errorProcessors = errorProcessors;
 	}
 }
