@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.gui.action.BeanAction;
 import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.service.PersistentService;
 
@@ -22,7 +23,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -30,6 +31,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -37,6 +39,7 @@ import javax.swing.event.TableModelListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.dao.DataAccessException;
 
 /**
  * Simple table editor 
@@ -49,6 +52,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	public static String DEFAULT_ADD_ICON = "/images/table/22x22/edit-new.png";
 	public static String DEFAULT_REMOVE_ICON = "/images/table/22x22/edit-delete.png";
 	public static String DEFAULT_SAVE_ICON = "/images/table/22x22/save.png";
+	public static String DEFAULT_REFRESH_ICON = "/images/reload.png";
 	
 	private static final Log log = LogFactory.getLog(TableEditor.class);
 	private JTable table;
@@ -57,8 +61,8 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	private Icon addIcon;
 	private Icon removeIcon;
 	private Icon saveIcon;
-	private List<T> dirty = new ArrayList<T>();
-	private List<T> deleted = new ArrayList<T>();
+	private Icon refreshIcon;
+	private List<T> dirty = new LinkedList<T>();
 	private Class<T> clazz;
 	private String name;
 	
@@ -98,12 +102,15 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		JButton addButton = new JButton(new AddAction());
 		JButton deleteButton = new JButton(new DeleteAction());
 		JButton saveButton = new JButton(new SaveAction());
+		JButton refreshButton = new JButton(new RefreshAction());
 		Box buttonBox = Box.createHorizontalBox();
 		buttonBox.add(addButton);
 		buttonBox.add(Box.createHorizontalStrut(5));
 		buttonBox.add(deleteButton);
 		buttonBox.add(Box.createHorizontalStrut(5));
 		buttonBox.add(saveButton);
+		buttonBox.add(Box.createHorizontalStrut(5));
+		buttonBox.add(refreshButton);
 		buttonBox.setAlignmentX(Container.LEFT_ALIGNMENT);
 		buttonBox.setMaximumSize(new Dimension(Short.MAX_VALUE, 25));
 		box.add(buttonBox);
@@ -117,8 +124,6 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	 */
 	public void doRefresh() {
 		tableModel.setList(service.getAll());
-		dirty.clear();
-		deleted.clear();
 	}
 	/**
 	 * @return
@@ -141,12 +146,16 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	@SuppressWarnings("unchecked")
 	public void delete() {
 		int[] rows = table.getSelectedRows();
-		List<T> toDeleteList = new ArrayList<T>();
 		for (int i : rows) {
-			toDeleteList.add((T) tableModel.getList().get(i));
+			T model = (T) tableModel.getList().get(table.convertRowIndexToModel(i));
+			try  {
+				service.delete(model);
+				tableModel.getList().remove(model);
+			} catch (DataAccessException dae) {
+				String errorMsg = "El registro " + model.toString() + " está en uso y no se puede eliminar";
+				JOptionPane.showMessageDialog(getPanel(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
-		tableModel.getList().removeAll(toDeleteList);
-		deleted.addAll(toDeleteList);
 		tableModel.fireTableChanged();
 	}
 	
@@ -209,8 +218,12 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 		 */
 		public void actionPerformed(ActionEvent e) {
-			service.save(dirty);
-			service.delete(deleted);
+			try {
+				service.save(dirty);
+			} catch (DataAccessException dae) {
+				JOptionPane.showMessageDialog(getPanel(), "Ha ocurrido un error guardando los cambios.", 
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}
 			refresh();
 		}
 		
@@ -243,6 +256,19 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 
 		public void actionPerformed(ActionEvent e) {
 			delete();
+		}
+		
+	}
+	
+	private class RefreshAction extends BeanAction {
+		private static final long serialVersionUID = 1L;
+
+		public RefreshAction() {
+			setIcon(refreshIcon);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			refresh();
 		}
 		
 	}
@@ -297,6 +323,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		addIcon = FormUtils.getIcon(addIcon, DEFAULT_ADD_ICON);
 		saveIcon = FormUtils.getIcon(saveIcon, DEFAULT_SAVE_ICON);
 		removeIcon = FormUtils.getIcon(removeIcon, DEFAULT_REMOVE_ICON);
+		refreshIcon = FormUtils.getIcon(refreshIcon, DEFAULT_REFRESH_ICON);
 	}
 
 	/**
@@ -311,5 +338,19 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	 */
 	public void setRemoveIcon(Icon removeIcon) {
 		this.removeIcon = removeIcon;
+	}
+
+	/**
+	 * @return the refreshIcon
+	 */
+	public Icon getRefreshIcon() {
+		return refreshIcon;
+	}
+
+	/**
+	 * @param refreshIcon the refreshIcon to set
+	 */
+	public void setRefreshIcon(Icon refreshIcon) {
+		this.refreshIcon = refreshIcon;
 	}
 }

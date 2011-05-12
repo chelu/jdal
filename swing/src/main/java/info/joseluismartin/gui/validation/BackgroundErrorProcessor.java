@@ -28,8 +28,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;
 
 /**
- * ErrorProcessor that change background color of JComponent when
- * there are binding errors.
+ * ErrorProcessor that change background color of JComponent and add a tooltip with error message 
+ * when there are binding errors.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */

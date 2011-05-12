@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,33 +15,34 @@
  */
 package info.joseluismartin.gui;
 
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 
-import javax.swing.JDialog;
-
 /**
- * Action for show a DialogView when clicking in a table row.
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
 public class ShowRowAction extends TableRowAction {
 	
 	private static final long serialVersionUID = 1L;
 	private String viewName;
 	private GuiFactory guiFactory;
+	private boolean modal = false;
 
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.gui.TableRowAction#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JDialog dialog = guiFactory.getDialog(viewName);
-		View view = (View) dialog;
-		view.setModel(getRow());
-		view.refresh();
-		dialog.setVisible(true);
+		Window dlg = getTable().getEditor(getRow());
+		if (dlg != null) {
+			if (dlg instanceof Frame) {
+				((Frame) dlg).setState(Frame.NORMAL);
+				((Frame) dlg).requestFocus();
+			}
+			dlg.setVisible(true);
+		}
 	}
 
 	public String getViewName() {
@@ -59,4 +60,22 @@ public class ShowRowAction extends TableRowAction {
 	public void setGuiFactory(GuiFactory guiFactory) {
 		this.guiFactory = guiFactory;
 	}
+
+	/**
+	 * @return the modal
+	 */
+	public boolean isModal() {
+		return modal;
+	}
+
+	/**
+	 * @param modal the modal to set
+	 */
+	public void setModal(boolean modal) {
+		this.modal = modal;
+	}
+	
+	
 }
+
+	

@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.table.TableModel;
 
 /**
- * Base class for table row actions.
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ *
  */
 public abstract class TableRowAction extends IconAction implements Cloneable {
 
@@ -30,7 +29,7 @@ public abstract class TableRowAction extends IconAction implements Cloneable {
 	/** the row object */
 	private Object row;
 	/** the table model */
-	private TableModel tableModel;
+	private PageableTable table;
 	
 	/** 
 	 * {@inheritDoc}
@@ -54,10 +53,20 @@ public abstract class TableRowAction extends IconAction implements Cloneable {
 	}
 
 	public TableModel getTableModel() {
-		return tableModel;
+		return table.getTableModel();
 	}
 
-	public void setTableModel(TableModel tableModel) {
-		this.tableModel = tableModel;
+	/**
+	 * @return the table
+	 */
+	public PageableTable getTable() {
+		return table;
+	}
+
+	/**
+	 * @param table the table to set
+	 */
+	public void setTable(PageableTable table) {
+		this.table = table;
 	}
 }

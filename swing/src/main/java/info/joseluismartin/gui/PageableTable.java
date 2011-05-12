@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,7 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.beans.AppCtx;
 import info.joseluismartin.dao.Page;
-import info.joseluismartin.dao.PageChangedEvent;
 import info.joseluismartin.dao.PageableDataSource;
-import info.joseluismartin.dao.Paginator;
-import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.dao.Page.Order;
 import info.joseluismartin.gui.form.FormUtils;
 
@@ -28,15 +25,22 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Box;
@@ -106,6 +110,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	GuiFactory guiFactory;
 	/** editor name */
 	String editorName;
+	private Map<Object, Window> openDialogs = Collections.synchronizedMap(new HashMap<Object, Window>()); 
 	
 	// Menus
 	JMenuBar rightMenuBar;
@@ -220,7 +225,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		}
 			
 		Paginator paginator = paginatorView.getPaginator();
-		Page page = new Page(paginator.getPageSize(), paginator.getStartIndex(), sortPropertyName, order);
+		Page page = new Page(paginator.getPageSize(), paginator.getPage(), sortPropertyName, order);
 	
 		page.setFilter(filter);
 
@@ -265,10 +270,27 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 * Get a dialog for editing a row
 	 */
 	
-	public JDialog getEditor() {
-		return guiFactory.getDialog(editorName);
+	public Window getEditor() {
+		Window dlg = (Window) guiFactory.getObject(editorName);
+		return dlg;
 	}
 	
+	/**
+	 * @param toEdit
+	 * @return
+	 */
+	public Window getEditor(Object toEdit) {
+		Window dlg = openDialogs.get(toEdit);
+		if (dlg == null) {
+			dlg = getEditor();
+			openDialogs.put(toEdit, dlg);
+			((View) dlg).setModel(toEdit);
+			((View) dlg).refresh();
+			dlg.addWindowListener(new DialogWindowListener());
+		}
+		
+		return dlg;
+	}
 	/**
 	 * @return the paginatorView
 	 */
@@ -435,23 +457,37 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 			// check Actions
 			if (col != -1 && row != -1 && tableModel.isActionColumn(col)) {
 				TableRowAction action = (TableRowAction) tableModel.getValueAt(row, col);
-				action.setTableModel(tableModel);
+				action.setTable(PageableTable.this);
 				action.setRow(tableModel.getList().get(row));
 				action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "clicked"));
 				
 			}
 			// check double click on rows
 			if (row != -1 && e.getClickCount() == 2) {
-				JDialog dlg = getEditor();
+				Object toEdit = tableModel.getList().get(row);
+				Window dlg = getEditor(toEdit);
 				if (dlg != null) {
-					Object toEdit = tableModel.getList().get(row);
-			//		((PersistentService) dataSource).initialize(toEdit);
-					((View) dlg).setModel(toEdit);
-					((View) dlg).refresh();
-					dlg.setModal(false);
+					if (dlg instanceof Frame) {
+						((Frame) dlg).setState(Frame.NORMAL);
+						((Frame) dlg).requestFocus();
+					}
 					dlg.setVisible(true);
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Remove dialogs from openDialog Map when closed. Will fail if the model 
+	 * hashcode change after editing it.
+	 *
+	 * @author Jose Luis Martin - (jlm@joseluismartin.info)
+	 */
+	private class DialogWindowListener extends WindowAdapter {
+		@Override
+		public void windowClosed(WindowEvent e) {
+			if (openDialogs.remove(((View) e.getWindow()).getModel()) == null)
+				log.warn("Tray to remove a non existant Dialog, ¿may be model hashcode changed?");
 		}
 	}
 	

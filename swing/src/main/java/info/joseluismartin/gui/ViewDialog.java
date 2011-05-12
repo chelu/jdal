@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,12 +40,14 @@ public class ViewDialog extends JDialog implements View<Object>  {
 	private View<Object> view;
 	private ViewAction acceptAction;
 	private DialogCancelAction cancelAction;
-	private int dialogWidth = 1024;
-	private int dialogHeight = 900;
+	private int dialogWidth = 750;
+	private int dialogHeight = 750;
 	private int value = CANCEL;
 	
 	public void init() {
 		add(view.getPanel(), BorderLayout.CENTER);
+		if (view.getModel() != null)
+			setTitle(view.getModel().toString());
 		add(createButtonBox(), BorderLayout.SOUTH);
 		setSize(dialogWidth, dialogHeight);
 		pack();

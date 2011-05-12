@@ -20,12 +20,24 @@ import org.springframework.validation.FieldError;
 import info.joseluismartin.gui.Binder;
 
 /**
+ * Process binding erros. <code>AbstractView</code> execute configured ErrorProcessors 
+ * when there are binding errors. 
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public interface ErrorProcessor {
+	
+	/**
+	 * Process binding error. Usefull for to do control interaction on binding erros, 
+	 * like set a tooltip with error, change background and so.
+	 * @param binder the binder that gerenate the error
+	 * @param error the spring validation error Object
+	 */
 	void processError(Binder<?> binder, FieldError error);
+	
+	/**
+	 * clear state of ErrorProcessor. Usefull for undo control changes made in processError.
+	 */
 	void reset();
 
 }
