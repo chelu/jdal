@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2009-2011 Jose Lus Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,49 +15,28 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JComboBox;
+import javax.swing.JToggleButton;
 
 /**
- * Binder for JComboBox
+ * Property binder for ToggleButtons
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ComboBinder extends AbstractBinder implements ActionListener {
-	
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void doBind(Object component) {
-		JComboBox combo = (JComboBox) component;
-		combo.addActionListener(this);
-		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void actionPerformed(ActionEvent e) {
-	}
+public class ToggleButtonBinder extends AbstractBinder {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void doRefresh() {
-		((JComboBox) component).setSelectedItem(getValue());
-		
+		((JToggleButton) component).setSelected((Boolean) getValue() == null ?
+				Boolean.FALSE : (Boolean) getValue());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void doUpdate() {
-		JComboBox combo = (JComboBox) component;
-		setValue(combo.getSelectedItem());
+		setValue(((JToggleButton) component).isSelected());
 	}
-
+	
 }

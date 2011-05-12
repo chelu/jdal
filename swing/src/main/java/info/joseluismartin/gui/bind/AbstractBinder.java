@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.ModelHolder;
+
+import javax.swing.JComponent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,15 +43,25 @@ public abstract class AbstractBinder implements PropertyBinder {
 	private Object model;
 	/** component object */
 	protected Object component;
+	/** if true, binding is readOnly, ie from model to control */
+	protected boolean readOnly = false;
 	
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public final void bind(Object component, String propertyName, Object model) {
+		bind(component, propertyName, model, false);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public final void bind(Object component, String propertyName, Object model, boolean readOnly) {
 		this.propertyName = propertyName;
 		this.model = model;
 		this.component = component;
+		this.readOnly = readOnly;
 		doBind(component);
 	}
 
@@ -61,6 +73,18 @@ public abstract class AbstractBinder implements PropertyBinder {
 	protected void doBind(Object component) {
 		
 	}
+	
+	public final void refresh() {
+		doRefresh();
+	}
+	
+	public final void update() {
+		if (!readOnly)
+			doUpdate();
+	}
+	
+	abstract protected void doRefresh();
+	abstract protected void doUpdate();
 
 	/**
 	 * Set value on binded object using the property name.
@@ -129,6 +153,20 @@ public abstract class AbstractBinder implements PropertyBinder {
 
 	public void setModel(Object model) {
 		this.model = model;
+	}
+
+	/**
+	 * @return the component
+	 */
+	public Object getComponent() {
+		return component;
+	}
+
+	/**
+	 * @param component the component to set
+	 */
+	public void setComponent(Object component) {
+		this.component = component;
 	}
 
 }

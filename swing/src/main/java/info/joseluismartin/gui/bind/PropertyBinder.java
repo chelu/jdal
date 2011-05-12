@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package info.joseluismartin.gui.bind;
+
+import javax.swing.JComponent;
 
 import info.joseluismartin.gui.Binder;
 
@@ -32,4 +34,25 @@ public interface PropertyBinder extends Binder<Object> {
 	 * @param model model to bind.
 	 */
 	void bind(Object component, String propertyName, Object model);
+	
+	/**
+	 * Bind changes on component to a property of model.
+	 * @param component component to bind
+	 * @param propertyName the property name to bind
+	 * @param model model to bind.
+	 * @param readOnly if true, the binding is readOnly, ie from model to control.
+	 */
+	void bind(Object component, String propertyName, Object model, boolean readOnly);
+
+	
+	/**
+	 * @return component
+	 */
+	 Object getComponent();
+	 
+	 /**
+	  * return property name
+	  * @return
+	  */
+	 String getPropertyName();
 }

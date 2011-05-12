@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2009-2011 Jose Lus Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,40 +15,29 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import info.joseluismartin.gui.list.ListListModel;
 
-import javax.swing.JComboBox;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.swing.JList;
+import javax.swing.ListModel;
 
 /**
- * Binder for JComboBox
+ * Binder for JList
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ComboBinder extends AbstractBinder implements ActionListener {
-	
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void doBind(Object component) {
-		JComboBox combo = (JComboBox) component;
-		combo.addActionListener(this);
-		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void actionPerformed(ActionEvent e) {
-	}
+public class ListBinder extends AbstractBinder {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void doRefresh() {
-		((JComboBox) component).setSelectedItem(getValue());
+		Collection<?> value = (Collection<?>) getValue();
+		if (value != null)
+			((JList) component).setModel(new ListListModel(new ArrayList<Object>(value))); 
 		
 	}
 
@@ -56,8 +45,12 @@ public class ComboBinder extends AbstractBinder implements ActionListener {
 	 * {@inheritDoc}
 	 */
 	public void doUpdate() {
-		JComboBox combo = (JComboBox) component;
-		setValue(combo.getSelectedItem());
+		List <Object> l = new ArrayList<Object>();
+		ListModel lm = ((JList) component).getModel();
+		
+		for (int i = 0; i < lm.getSize(); i++)
+			l.add(lm.getElementAt(i));
+		
+		setValue(l);
 	}
-
 }
