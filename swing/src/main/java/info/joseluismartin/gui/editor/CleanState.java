@@ -13,17 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui;
+package info.joseluismartin.gui.editor;
+
+import info.joseluismartin.gui.Editor;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public interface Editor {
-	
-	void addEditorListener(EditorListener listener);
-	void save();
-	void setClean();
-	void setDirty();
-	void cancel();
+public class CleanState implements EditorState {
+	private Editor editor;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void cancel() {
+		editor.cancel();
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void save() {
+		// nothing to save
+		editor.cancel();
+	}
+
+	/**
+	 * @return the editor
+	 */
+	public Editor getEditor() {
+		return editor;
+	}
+
+	/**
+	 * @param editor the editor to set
+	 */
+	public void setEditor(Editor editor) {
+		this.editor = editor;
+	}
+
 }

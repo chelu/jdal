@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui;
+package info.joseluismartin.gui.editor;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public interface Editor {
+public interface EditorState {
 	
-	void addEditorListener(EditorListener listener);
 	void save();
-	void setClean();
-	void setDirty();
 	void cancel();
+
 }
