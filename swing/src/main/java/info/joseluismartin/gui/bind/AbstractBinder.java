@@ -91,7 +91,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	 * @param value the value to set
 	 */
 	protected void setValue(Object value) {
-		if (value != oldValue) {
+		if (value == null || value != oldValue) {
 			BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
 			try {
 				wrapper.setPropertyValue(propertyName, value);

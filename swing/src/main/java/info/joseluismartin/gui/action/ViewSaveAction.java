@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui.action;
 
+import info.joseluismartin.gui.Editor;
 import info.joseluismartin.gui.View;
 import info.joseluismartin.gui.ViewDialog;
 import info.joseluismartin.service.PersistentService;
@@ -43,8 +44,13 @@ public class ViewSaveAction extends ViewAction {
 			getDialog().setVisible(false);
 			getDialog().dispose();
 			
+			// FIXME: move to Editor
 			if (getDialog() instanceof ViewDialog) {
 				((ViewDialog) getDialog()).setValue(ViewDialog.OK);
+			}
+			
+			if (getDialog() instanceof Editor) {
+				((Editor) getDialog()).save();
 			}
 		}
 	}

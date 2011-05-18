@@ -41,6 +41,8 @@ public class ShowRowAction extends TableRowAction {
 				((Frame) dlg).setState(Frame.NORMAL);
 				((Frame) dlg).requestFocus();
 			}
+			dlg.setLocationRelativeTo(null);
+			dlg.setAlwaysOnTop(true);
 			dlg.setVisible(true);
 		}
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 Jose Luis Martin.
+ * Copyright 2002-2010 original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,14 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.bind.BinderFactory;
 import info.joseluismartin.gui.bind.CompositeBinder;
-import info.joseluismartin.gui.bind.PropertyBinder;
 import info.joseluismartin.gui.validation.ErrorProcessor;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,44 +43,68 @@ import org.springframework.validation.Validator;
 public abstract class AbstractView<T> implements View<T> {
 	
 	public final static String DEFAULT_BINDER_FACTORY_NAME = "binderFactory";
+	/** log */
 	private static final Log log = LogFactory.getLog(AbstractView.class);
-	
+	/** view name */
 	private String name;
+	/** binder factory to make property binders */
 	private BinderFactory binderFactory;
+	/** hold binders */
 	private CompositeBinder<T> binder = new CompositeBinder<T>();
+	/** data model */
 	private T model;
+	/** JComponent that hold controls */
 	private JComponent panel;
+	/** subviews list */
 	private List<View<T>> subViews = new ArrayList<View<T>>();
+	/** validator to check binding and model values */
 	private Validator validator;
+	/** message source for internationalization */
 	private MessageSource messageSource;
-	
+	/** List of error handlers */
+	private List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
+
 	protected int width = 0;
 	protected int height = 0;
-	private Map<JComponent, Color> backgroundMap = new HashMap<JComponent, Color>();
-	private List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
 	
+	/**
+	 * Default ctor
+	 */
 	public AbstractView() {
 		
 	}
 	
+	/**
+	 * Create the view and set the model
+	 * @param model model to set
+	 */
 	public AbstractView(T model) {
 		setModel(model);
 	}
 	
 	/**
-	 * @param state2
-	 * @param string
-	 * @param b
+	 * add a binding for control and model property name
+	 * @param comoponent control
+	 * @param propertyName the model property path to bind
+	 * @param readOnly if true, binding only do refresh()
 	 */
 	public void bind(Object component, String propertyName, boolean readOnly) {
 		binder.bind(component, propertyName, readOnly);
 		
 	}
 	
+	/**
+	 * add a binding for control and model property name
+	 * @param comoponent control
+	 * @param propertyName the model property path to bind
+	 */
 	public void bind(Object component, String propertyName) {
 		bind(component, propertyName, false);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public JComponent getPanel() {
 		if (panel == null) {
 			panel = buildPanel();
@@ -95,13 +114,23 @@ public abstract class AbstractView<T> implements View<T> {
 		return panel;
 	}
 	
+	/**
+	 * Build the JComponent that hold controls.
+	 * @return a JCompoent
+	 */
 	protected abstract JComponent buildPanel();
 
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public T getModel() {
 		return model;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void setModel(T model) {
 		this.model = model;
 		binder.setModel(model);
@@ -113,10 +142,17 @@ public abstract class AbstractView<T> implements View<T> {
 		onSetModel(model);
 	}
 	
+	/**
+	 * Callback method to handle model changes
+	 * @param model the new model
+	 */
 	protected void onSetModel(T model) {
 		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void update() {
 		// do custom update
 		doUpdate();
@@ -128,11 +164,19 @@ public abstract class AbstractView<T> implements View<T> {
 			v.update();
 		}
 	}
-	
+
+	/**
+	 * Callback method on update()
+	 */
 	protected void doUpdate() {
 		
 	}
 	
+	/**
+	 * Add a subview, the subview is refreshed, updated and hold the same model
+	 * that this view, for adding views with other models, use bind()
+	 * @param view
+	 */
 	public void addView(View<T> view) {
 		subViews.add(view);
 		view.setModel(model);
@@ -151,14 +195,25 @@ public abstract class AbstractView<T> implements View<T> {
 			v.refresh();
 	}
 	
+	/**
+	 * Callback method for refresh()
+	 */
 	protected void doRefresh() {
 		
 	}
 
+	/**
+	 * Gets the binder factory
+	 * @return the binder factory
+	 */
 	public BinderFactory getBinderFactory() {
 		return binderFactory;
 	}
 
+	/**
+	 * Sets the binder factory, propagate it to composite binder.
+	 * @param binderFactory to set
+	 */
 	public void setBinderFactory(BinderFactory binderFactory) {
 		this.binderFactory = binderFactory;
 		binder.setBinderFactory(binderFactory);
@@ -195,6 +250,11 @@ public abstract class AbstractView<T> implements View<T> {
 		
 	}
 
+	/**
+	 * Build a error message with all errors.
+	 * @param errors erros to use 
+	 * @return String with error message
+	 */
 	@SuppressWarnings("unchecked")
 	protected String getErrorMessage(Errors errors) {
 		StringBuilder sb = new StringBuilder();
@@ -212,6 +272,9 @@ public abstract class AbstractView<T> implements View<T> {
 		return sb.toString();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	public void clear() {
 		T model = getModel();

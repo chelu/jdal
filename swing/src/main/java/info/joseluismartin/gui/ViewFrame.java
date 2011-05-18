@@ -26,13 +26,15 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.EventListenerList;
 
 /**
  * A JFrame for use as View Container
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ViewFrame extends JFrame implements View<Object> {
+public class ViewFrame extends JFrame implements View<Object>, Editor {
+
 
 	private static final long serialVersionUID = 1L;
 	private View<Object> view;
@@ -40,6 +42,7 @@ public class ViewFrame extends JFrame implements View<Object> {
 	private DialogCancelAction cancelAction;
 	private int windowWidth;
 	private int windowHeight;
+	private EventListenerList listenerList = new EventListenerList();
 
 
 	public void init() {
@@ -59,6 +62,24 @@ public class ViewFrame extends JFrame implements View<Object> {
 		p.add(cancelButton);
 		
 		return p;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void save() {
+		Object[] listeners = listenerList.getListenerList();
+		EditorEvent e = null;
+
+		for (int i = listeners.length - 2; i >= 0; i -= 2) {
+			if (listeners[i] == EditorListener.class) {
+				if (e == null) {
+					e = new EditorEvent(this, getModel());
+				}
+				((EditorListener)listeners[i+1]).modelChanged(e);
+			}	       
+		}
+		
 	}
 
 	public View<Object> getView() {
@@ -144,5 +165,42 @@ public class ViewFrame extends JFrame implements View<Object> {
 	 */
 	public void setWindowHeight(int windowHeight) {
 		this.windowHeight = windowHeight;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void addEditorListener(EditorListener l) {
+		listenerList.add(EditorListener.class, l);
+		
+	}
+	 
+	public void removeEditorListener(EditorListener l) {
+		listenerList.remove(EditorListener.class, l);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void cancel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setClean() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setDirty() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -16,6 +16,7 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.form.BoxFormBuilder;
+import info.joseluismartin.gui.list.ListListModel;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -37,8 +38,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.EventListenerList;
-
-import org.springframework.binding.value.support.ListListModel;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -193,7 +192,7 @@ public class Selector<T> extends JPanel {
 
 	@SuppressWarnings("unchecked")
 	public List<T> getAvailable() {
-		return available;
+		return available.getList();
 	}
 
 	public void setAvailable(List<T> available) {
@@ -207,7 +206,7 @@ public class Selector<T> extends JPanel {
 
 	@SuppressWarnings("unchecked")
 	public List<T> getSelected() {
-		return selected;
+		return selected.getList();
 	}
 
 	public void setSelected(List<T> selected) {

@@ -51,7 +51,6 @@ public class ActionTableCellEditor extends AbstractCellEditor implements TableCe
 		action = (Action) value;
 		
 		if (action instanceof TableRowAction) {
-			((TableRowAction) action).setTableModel(table.getModel());
 			((TableRowAction) action).setRow(row);
 		}
 	

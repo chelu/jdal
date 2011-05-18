@@ -51,8 +51,8 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
+ * 
  * @author Jose A. Corbacho
- *
  */
 public class ReportFileView extends AbstractView<Report> {
 

@@ -17,7 +17,10 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.beans.AppCtx;
 import info.joseluismartin.dao.Page;
+import info.joseluismartin.dao.PageChangedEvent;
 import info.joseluismartin.dao.PageableDataSource;
+import info.joseluismartin.dao.Paginator;
+import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.dao.Page.Order;
 import info.joseluismartin.gui.form.FormUtils;
 
@@ -48,7 +51,6 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -287,6 +289,14 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 			((View) dlg).setModel(toEdit);
 			((View) dlg).refresh();
 			dlg.addWindowListener(new DialogWindowListener());
+			if (dlg instanceof Editor) {
+				((Editor) dlg).addEditorListener(new EditorListener() {
+					
+					public void modelChanged(EditorEvent e) {
+						refresh();
+					}
+				});
+			}
 		}
 		
 		return dlg;
@@ -471,6 +481,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 						((Frame) dlg).setState(Frame.NORMAL);
 						((Frame) dlg).requestFocus();
 					}
+					dlg.setLocationRelativeTo(null);
+					dlg.setAlwaysOnTop(true);
 					dlg.setVisible(true);
 				}
 			}

@@ -50,7 +50,6 @@ public class TableListener extends MouseAdapter {
 		// check Actions
 		if (col != -1 && row != -1 && tableModel.isActionColumn(col)) {
 			TableRowAction action = (TableRowAction) tableModel.getValueAt(row, col);
-			action.setTableModel(tableModel);
 			action.setRow(tableModel.getList().get(row));
 			action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "clicked"));
 			

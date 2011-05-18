@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -30,14 +31,14 @@ import edu.emory.mathcs.backport.java.util.Collections;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @SuppressWarnings("unchecked")
-public class ListTreeNode implements TreeNode {
+public class ListTreeNode implements MutableTreeNode {
 
-	TreeNode parent;
-	List children = new ArrayList();
-	String name;
+	private MutableTreeNode parent;
+	private List children = new ArrayList();
+	private Object userObject = null;
 
 	public ListTreeNode(String name) {
-		this.name = name;
+		this.userObject = name;
 	}
 	/**
 	 * {@inheritDoc}
@@ -105,12 +106,41 @@ public class ListTreeNode implements TreeNode {
 	}
 	
 	public String toString() {
-		return name;
+		return userObject.toString();
 	}
+	
 	/**
 	 * @return
 	 */
 	public List getList() {
 		return children;
+	}
+	
+	public void insert(MutableTreeNode child, int index) {
+		children.add(index, child);
+		
+	}
+
+	public void remove(int index) {
+		children.remove(index);
+	}
+	
+	public void remove(MutableTreeNode node) {
+		children.remove(node);
+	}
+	
+	public void removeFromParent() {
+		if (parent != null) {
+			parent.remove(this);
+		}
+	}
+
+	public void setParent(MutableTreeNode newParent) {
+		parent = newParent;
+		parent.insert(this, newParent.getChildCount());
+	}
+	
+	public void setUserObject(Object object) {
+		
 	}
 }

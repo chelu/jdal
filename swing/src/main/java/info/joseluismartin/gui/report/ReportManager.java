@@ -64,6 +64,7 @@ public class ReportManager {
 	public void showReport(Report report, PersistentService<Object, Serializable> service, Object filter, String sortPropertyName, Page.Order sortOrder, String outputType) throws Exception{
 		PageJRDatasourceAdapter dataSource = new PageJRDatasourceAdapter(true);
 		Page<Object> page = new Page<Object>(100, 0, sortPropertyName, sortOrder);
+		page.setFilter(filter);
 		page.setPageableDataSource(service);
 		dataSource.setPage(page);
 		
