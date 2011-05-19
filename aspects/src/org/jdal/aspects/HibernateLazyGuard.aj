@@ -21,6 +21,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.collection.AbstractPersistentCollection;
+import org.hibernate.collection.PersistentCollection;
 import org.hibernate.engine.PersistenceContext;
 import org.hibernate.impl.SessionImpl;
 import org.hibernate.persister.collection.CollectionPersister;
@@ -49,7 +50,7 @@ privileged public aspect HibernateLazyGuard {
 	}
 
     /** pointcut to match PersistentCollection public methods calls */
-	pointcut proxy(AbstractPersistentCollection c) : call (* PersistentCollection.*(..)) && target(c);
+	pointcut proxy(PersistentCollection c) : call (* PersistentCollection.*(..)) && target(c);
 
 	
 	/**
@@ -57,14 +58,16 @@ privileged public aspect HibernateLazyGuard {
 	 * to initialize Collection
 	 * @param c AbstractPersistentCollection 
 	 */
-	before(AbstractPersistentCollection c) : proxy(c) && !within(HibernateLazyGuard) {
+	before(PersistentCollection c) : proxy(c) && !within(HibernateLazyGuard) {
 		if (log.isDebugEnabled())
 			log.info(thisJoinPointStaticPart.toString());
+		
+		AbstractPersistentCollection apc = (AbstractPersistentCollection) c;
 
-		if (!c.isDetached()) {
-			log.info("PersistentCollection will throw exception: " + c.getOwner().toString());
+		if (!apc.isDetached()) {
+			log.info("PersistentCollection will throw exception: " + apc.getRole());
 			Session session = sessionFactory.openSession();
-			attachToSession(c, session);
+			attachToSession(apc, session);
 			session.close();
 		}
 	}

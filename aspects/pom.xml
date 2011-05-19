@@ -39,6 +39,13 @@
 			<url>http://joseluismartin.info:8081/artifactory/repo</url>
 		</repository>
 	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>jlm</id>
+			<name>jlm</name>
+			<url>http://joseluismartin.info:8081/artifactory/libs-snapshots-local</url>
+		</repository>
+	</distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.aspectj</groupId>
