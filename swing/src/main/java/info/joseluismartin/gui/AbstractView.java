@@ -17,6 +17,10 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.bind.BinderFactory;
 import info.joseluismartin.gui.bind.CompositeBinder;
+import info.joseluismartin.gui.bind.ControlAccessor;
+import info.joseluismartin.gui.bind.ControlAccessorFactory;
+import info.joseluismartin.gui.bind.ControlChangeListener;
+import info.joseluismartin.gui.bind.ControlEvent;
 import info.joseluismartin.gui.validation.ErrorProcessor;
 
 import java.util.ArrayList;
@@ -40,7 +44,7 @@ import org.springframework.validation.Validator;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class AbstractView<T> implements View<T> {
+public abstract class AbstractView<T> implements View<T>, ControlChangeListener {
 	
 	public final static String DEFAULT_BINDER_FACTORY_NAME = "binderFactory";
 	/** log */
@@ -49,6 +53,8 @@ public abstract class AbstractView<T> implements View<T> {
 	private String name;
 	/** binder factory to make property binders */
 	private BinderFactory binderFactory;
+	/** control accessor factory */
+	private ControlAccessorFactory controlAccessorFactory;
 	/** hold binders */
 	private CompositeBinder<T> binder = new CompositeBinder<T>();
 	/** data model */
@@ -63,7 +69,9 @@ public abstract class AbstractView<T> implements View<T> {
 	private MessageSource messageSource;
 	/** List of error handlers */
 	private List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
-
+	/** dirty state */
+	boolean dirty;
+	
 	protected int width = 0;
 	protected int height = 0;
 	
@@ -90,6 +98,7 @@ public abstract class AbstractView<T> implements View<T> {
 	 */
 	public void bind(Object component, String propertyName, boolean readOnly) {
 		binder.bind(component, propertyName, readOnly);
+		listen(component);
 		
 	}
 	
@@ -203,12 +212,31 @@ public abstract class AbstractView<T> implements View<T> {
 	}
 
 	/**
+	 * Listen control for changes.
+	 */
+	public void listen(Object control) {
+		ControlAccessor c = controlAccessorFactory.getControlAccessor(control);
+		if (c != null) {
+			c.addControlChangeListener(this);
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void controlChange(ControlEvent e) {
+		setDirty(true);
+	}
+	
+	/**
 	 * Gets the binder factory
 	 * @return the binder factory
 	 */
 	public BinderFactory getBinderFactory() {
 		return binderFactory;
 	}
+	
+	
 
 	/**
 	 * Sets the binder factory, propagate it to composite binder.
@@ -373,5 +401,33 @@ public abstract class AbstractView<T> implements View<T> {
 	 */
 	public void setErrorProcessors(List<ErrorProcessor> errorProcessors) {
 		this.errorProcessors = errorProcessors;
+	}
+
+	/**
+	 * @return the dirty
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * @param dirty the dirty to set
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	/**
+	 * @return the controlAccessorFactory
+	 */
+	public ControlAccessorFactory getControlAccessorFactory() {
+		return controlAccessorFactory;
+	}
+
+	/**
+	 * @param controlAccessorFactory the controlAccessorFactory to set
+	 */
+	public void setControlAccessorFactory(ControlAccessorFactory controlAccessorFactory) {
+		this.controlAccessorFactory = controlAccessorFactory;
 	}
 }

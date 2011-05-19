@@ -25,9 +25,31 @@ import javax.swing.JComponent;
  */
 public interface View<T> extends Binder<T>{
 
+	/** 
+	 * Gets the view name 
+	 */
 	String getName();
+	
+	/**
+	 * Gets the view JComponent 
+	 */
 	JComponent getPanel();
+	
+	/**
+	 *  validate
+	 * @return
+	 */
 	boolean validateView();
+	
+	/** 
+	 * Reset view state to default values
+	 */
 	void clear();
+	
+	/**
+	 * Check if user change any controls of view
+	 * @return true if any control has changed
+	 */
+	boolean isDirty();
 
 }
