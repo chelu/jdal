@@ -63,7 +63,7 @@ public class PageJRDatasourceAdapter extends JRAbstractBeanDataSource {
 	 */
 	public Object getFieldValue(JRField field) throws JRException {
 		try {
-			return BeanUtils.getProperty(currentObject, field.getName());
+			return getBeanProperty(currentObject, field.getName());
 		} catch (Exception e) {
 			// rethrow
 			throw new JRException(e);
@@ -74,24 +74,28 @@ public class PageJRDatasourceAdapter extends JRAbstractBeanDataSource {
 	 * {@inheritDoc}
 	 */
 	public boolean next() throws JRException {
-		if (index < page.getPageSize()) {
-			getCurrentObject();
+		if (getCurrentObject()) {
 			return true;
 		}
 	
 		if (page.hasNext()) {
 			page.nextPage();
 			index = 0;
-			getCurrentObject();
-			return true;
+			if (getCurrentObject());
+				return true;
 		}
 		
 		return false;
 		
 	}
 
-	private void getCurrentObject() {
-		currentObject = page.getData().get(index++);
+	private boolean getCurrentObject() {
+		if (index < page.getData().size()) {
+			currentObject = page.getData().get(index++);
+			return true;
+		}
+		
+		return false;
 	}
 
 	/**
@@ -106,5 +110,8 @@ public class PageJRDatasourceAdapter extends JRAbstractBeanDataSource {
 	 */
 	public void setPage(Page<Object> page) {
 		this.page = page;
+		// ensure that data is loaded
+		if (page.getData() == null || page.getData().size() == 0)
+			page.load();
 	}
 }

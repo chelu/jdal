@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+
 /**
  * Base interface for persistent services.
  * 
@@ -47,5 +48,11 @@ public interface PersistentService<T, PK extends Serializable> extends PageableD
 	void delete(Collection<T> collection);
 	
 	void deleteById(Collection<PK> ids);
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	T get(PK id);
 	
 }

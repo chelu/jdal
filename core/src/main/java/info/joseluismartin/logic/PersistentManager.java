@@ -150,4 +150,11 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	public void setDao(HibernateDao<T, PK> dao) {
 		this.dao = dao;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public T get(PK id) {
+		return dao.get(id);
+	}
 }
