@@ -15,11 +15,10 @@
  */
 package info.joseluismartin.gui.editor;
 
-import java.awt.Component;
-import java.awt.Window;
-import java.util.Locale;
-
 import info.joseluismartin.gui.Editor;
+
+import java.awt.Component;
+import java.util.Locale;
 
 import javax.swing.JOptionPane;
 

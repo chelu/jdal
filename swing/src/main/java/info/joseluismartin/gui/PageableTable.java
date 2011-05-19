@@ -75,7 +75,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * A Paginable JTable with paginator and filter. 
  * 
- * This table view uses a PageableDataSource to query for data page by page.
+ * <p>This table view uses a {@link PageableDataSource} to query for data page by page.
  * Has a paginator control to navigate and show page info.
  *  
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -84,7 +84,6 @@ import org.apache.commons.logging.LogFactory;
 public class PageableTable extends JPanel implements RowSorterListener, PaginatorListener {
 	
 	private static final long serialVersionUID = 1L;
-	@SuppressWarnings("unused")
 	private static final Log log = LogFactory.getLog(PageableTable.class);
 	
 	/** Border layout */
@@ -94,7 +93,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	/** the paginator view */
 	private PaginatorView paginatorView;
 	/** pageable datasource to request data page by page */
-	
 	private PageableDataSource dataSource;
 	/** list table model for the table */
 	private ListTableModel tableModel;
@@ -278,8 +276,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	}
 	
 	/**
-	 * @param toEdit
-	 * @return
+	 * @param toEdit model to edit
+	 * @return model editor.
 	 */
 	public Window getEditor(Object toEdit) {
 		Window dlg = openDialogs.get(toEdit);
