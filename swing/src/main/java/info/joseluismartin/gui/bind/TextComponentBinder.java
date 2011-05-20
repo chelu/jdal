@@ -29,18 +29,9 @@ import org.springframework.beans.PropertyEditorRegistrySupport;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class TextComponentBinder extends AbstractBinder implements FocusListener {
+public class TextComponentBinder extends AbstractBinder {
 	
 	private PropertyEditorRegistry registry = new PropertyEditorRegistrySupport();
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void doBind(Object component) {
-		((JTextComponent) component).addFocusListener(this);
-		
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -74,19 +65,6 @@ public class TextComponentBinder extends AbstractBinder implements FocusListener
 	public void doUpdate() {
 		String newValue = ((JTextComponent) component).getText();
 		setValue(newValue);
-		
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void focusGained(FocusEvent e) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void focusLost(FocusEvent e) {
 		
 	}
 }

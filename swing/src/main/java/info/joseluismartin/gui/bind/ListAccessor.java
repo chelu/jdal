@@ -32,9 +32,9 @@ import javax.swing.event.ListDataListener;
  */
 public class ListAccessor extends AbstractControlAccessor implements ListDataListener {
 
-	public ListAccessor(JList list) {
+	public ListAccessor(Object list) {
 		super(list);
-		list.getModel().addListDataListener(this);
+		getControl().getModel().addListDataListener(this);
 	}
 	
 	/**

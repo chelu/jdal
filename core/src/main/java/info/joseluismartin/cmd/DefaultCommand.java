@@ -18,7 +18,7 @@ package info.joseluismartin.cmd;
 /** 
  * Simple base command to extends that do nothing
  * 
- * @author Jose Luis Martin - (chelu.es@gmail.com)
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 
 
@@ -64,6 +64,4 @@ public class DefaultCommand implements Command {
 	public void undo() {
 		
 	}
-    
-
 }

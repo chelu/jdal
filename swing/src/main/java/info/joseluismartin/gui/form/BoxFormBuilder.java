@@ -64,10 +64,6 @@ public class BoxFormBuilder {
 		this.binderFactory = binderFactory;
 	}
 	
-//	public BoxFormBuilder(View view) {
-//		this.binderFactory = 
-//	}
-	
 	/**
 	 * Add a component to Form at position pointer by cursor, 
 	 * Increments cursor by one.

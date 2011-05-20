@@ -15,18 +15,8 @@ import org.freixas.jcalendar.JCalendarCombo;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class JCalendarComboBinder extends AbstractBinder implements ActionListener {
+public class JCalendarComboBinder extends AbstractBinder {
 
-	@Override
-	protected void doBind(Object component) {
-		((JCalendarCombo) component).addActionListener(this);
-		
-	}
-
-	public void actionPerformed(ActionEvent e) {
-		
-		
-	}
 
 	public void doRefresh() {
 		JCalendarCombo combo = (JCalendarCombo) component;

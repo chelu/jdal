@@ -164,4 +164,12 @@ public class ViewDialog extends JDialog implements View<Object>  {
 	public boolean validateView() {
 		return view.validateView();
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isDirty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

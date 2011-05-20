@@ -26,9 +26,9 @@ import javax.swing.JToggleButton;
  */
 public class ToggleButtonAccessor extends AbstractControlAccessor implements ActionListener {
 
-	public ToggleButtonAccessor(JToggleButton button) {
+	public ToggleButtonAccessor(Object button) {
 		super(button);
-		button.addActionListener(this);
+		getControl().addActionListener(this);
 	}
 	
 	/**

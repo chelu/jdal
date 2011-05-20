@@ -25,6 +25,8 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.ReflectionUtils;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -59,7 +61,7 @@ public class ConfigurableControlAccesorFactory implements ControlAccessorFactory
 		
 		if (accessorClass  != null) {	
 			try {
-				Constructor<ControlAccessor> ctor = accessorClass.getDeclaredConstructor(clazz);
+				Constructor<ControlAccessor> ctor = accessorClass.getConstructor(Object.class);
 				accessor = ctor.newInstance(control);
 			} catch (InstantiationException e) {
 				log.error(e);
@@ -88,7 +90,10 @@ public class ConfigurableControlAccesorFactory implements ControlAccessorFactory
 		return accessors;
 	}
 
-	public void setaccessors(Map<Class<?>, Class<ControlAccessor>> accessors) {
+	/**
+	 * @param accessors the accessors to set
+	 */
+	public void setAccessors(Map<Class<?>, Class<ControlAccessor>> accessors) {
 		this.accessors = accessors;
 	}
 

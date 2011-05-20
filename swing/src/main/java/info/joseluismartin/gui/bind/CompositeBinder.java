@@ -4,6 +4,7 @@ import info.joseluismartin.gui.Binder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Composite Binder methods to a collection of
@@ -68,6 +69,10 @@ public class CompositeBinder<T> implements Binder<T> {
 	
 	public Binder<?> getBinder(String propertyName) {
 		return binders.get(propertyName);
+	}
+	
+	public Set<String> getPropertyNames() {
+		return binders.keySet();
 	}
 
 	/**

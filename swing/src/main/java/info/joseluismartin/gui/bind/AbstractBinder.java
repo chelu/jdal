@@ -62,7 +62,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 		this.model = model;
 		this.component = component;
 		this.readOnly = readOnly;
-		doBind(component);
+		doBind();
 	}
 
 	/**
@@ -70,7 +70,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	 * By default, do nothing
 	 * @param component Component to bind
 	 */
-	protected void doBind(Object component) {
+	protected void doBind() {
 		
 	}
 	

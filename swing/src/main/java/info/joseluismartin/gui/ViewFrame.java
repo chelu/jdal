@@ -203,4 +203,12 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		// TODO Auto-generated method stub
 		
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isDirty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

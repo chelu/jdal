@@ -27,9 +27,8 @@ import java.util.List;
  */
 public class SelectorAccessor extends AbstractControlAccessor implements ActionListener {
 
-	public SelectorAccessor(Selector<?> selector) {
+	public SelectorAccessor(Object selector) {
 		super(selector);
-		selector.addActionListener(this);
 	}
 	
 	/**

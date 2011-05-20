@@ -24,12 +24,12 @@ import javax.swing.JComboBox;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class ComboBoxControlAccessor extends AbstractControlAccessor implements ActionListener {
+public class ComboAccessor extends AbstractControlAccessor implements ActionListener {
 
-
-	public ComboBoxControlAccessor(JComboBox combo) {
+	
+	public ComboAccessor(Object combo) {
 		super(combo);
-		combo.addActionListener(this);
+		getControl().addActionListener(this);
 	}
 	/**
 	 * {@inheritDoc}

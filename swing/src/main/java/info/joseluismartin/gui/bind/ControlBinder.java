@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,40 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JComboBox;
-
 /**
- * Binder for JComboBox
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ *
  */
-public class ComboBinder extends AbstractBinder {
+public class ControlBinder extends AbstractBinder {
+	
+	private ControlAccessorFactory controlAccessorFactory;
+	private ControlAccessor controlAccessor;
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public void doRefresh() {
-		((JComboBox) component).setSelectedItem(getValue());
+	@Override
+	public void doBind() {
+		controlAccessor = controlAccessorFactory.getControlAccessor(component);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void doRefresh() {
+		controlAccessor.setControlValue(getValue());
 		
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void doUpdate() {
-		JComboBox combo = (JComboBox) component;
-		setValue(combo.getSelectedItem());
+	@Override
+	protected void doUpdate() {
+		setValue(controlAccessor.getControlValue());
+		
 	}
 
+	
 }

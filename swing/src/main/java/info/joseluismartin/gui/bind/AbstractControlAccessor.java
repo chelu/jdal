@@ -68,20 +68,7 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 		
 	}
 	
-	/**
-	 * @return the control
-	 */
-	public Object getControl() {
-		return control;
-	}
-
-	/**
-	 * @param control the control to set
-	 */
-	public void setControl(Object control) {
-		this.control = control;
-	}
-
+	
 	/**
 	 * Convert Object to required type using <code>SimpleTypeConverter</code>
 	 * @param <T>
@@ -102,4 +89,19 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 		for (ControlChangeListener l : listeners)
 			l.controlChange(new ControlEvent(this));
 	}
+	
+	/**
+	 * @return the control
+	 */
+	public Object getControl() {
+		return control;
+	}
+
+	/**
+	 * @param control the control to set
+	 */
+	public void setControl(Object control) {
+		this.control = control;
+	}
+
 }

@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.gui.bind.AutoBinder;
 import info.joseluismartin.gui.bind.BinderFactory;
 import info.joseluismartin.gui.bind.CompositeBinder;
 import info.joseluismartin.gui.bind.ControlAccessor;
@@ -57,6 +58,10 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	private ControlAccessorFactory controlAccessorFactory;
 	/** hold binders */
 	private CompositeBinder<T> binder = new CompositeBinder<T>();
+	/** auto binder using reflection */
+	private AutoBinder<T> autoBinder = new AutoBinder<T>(this);
+	/** if true, do an automatic binding using property names */
+	private boolean autobinding = false;
 	/** data model */
 	private T model;
 	/** JComponent that hold controls */
@@ -70,7 +75,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	/** List of error handlers */
 	private List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
 	/** dirty state */
-	boolean dirty;
+	boolean dirty = false;
 	
 	protected int width = 0;
 	protected int height = 0;
@@ -165,8 +170,13 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	public final void update() {
 		// do custom update
 		doUpdate();
-		
 		binder.update();
+
+		if (autobinding) {
+			autoBinder.setIgnoredProperties(binder.getPropertyNames());
+			autoBinder.setControlAccessorFactory(controlAccessorFactory);
+			autoBinder.update();
+		}
 		
 		// update subviews
 		for (View<T>  v : subViews) {
@@ -196,9 +206,14 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public final void refresh() {
 		doRefresh();
-		
 		binder.refresh();
 		
+		if (autobinding) {
+			autoBinder.setIgnoredProperties(binder.getPropertyNames());
+			autoBinder.setControlAccessorFactory(controlAccessorFactory);
+			autoBinder.refresh();
+		}
+
 		// refresh subviews
 		for (View<T> v : subViews)
 			v.refresh();
@@ -429,5 +444,19 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public void setControlAccessorFactory(ControlAccessorFactory controlAccessorFactory) {
 		this.controlAccessorFactory = controlAccessorFactory;
+	}
+
+	/**
+	 * @return the autobinding
+	 */
+	public boolean isAutobinding() {
+		return autobinding;
+	}
+
+	/**
+	 * @param autobinding the autobinding to set
+	 */
+	public void setAutobinding(boolean autobinding) {
+		this.autobinding = autobinding;
 	}
 }

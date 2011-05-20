@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui.bind;
 
+import java.awt.TextComponent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
