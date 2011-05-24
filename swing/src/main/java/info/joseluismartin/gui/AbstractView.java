@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 original author or authors.
+ * Copyright 2009-2011 original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,32 @@
  */
 package info.joseluismartin.gui;
 
-import info.joseluismartin.gui.bind.AutoBinder;
 import info.joseluismartin.gui.bind.BinderFactory;
 import info.joseluismartin.gui.bind.CompositeBinder;
 import info.joseluismartin.gui.bind.ControlAccessor;
 import info.joseluismartin.gui.bind.ControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlChangeListener;
 import info.joseluismartin.gui.bind.ControlEvent;
+import info.joseluismartin.gui.bind.PropertyBinder;
 import info.joseluismartin.gui.validation.ErrorProcessor;
 
+import java.awt.Component;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessor;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -41,9 +49,30 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 
 /**
- * Default Abstract View with Composite support for refresh and update.
+ * Template class that simplifies {@link View} implementation.
+ * 
+ * <p> The central method is <code>buildPanel<code> that builds the <code>JComponent</code>
+ * that hold the view controls. You may use custom binding of the view overwriting the methods 
+ * <code>doUpdate</code> and <code>doRefresh</code>.
+ * 
+ * <p> For common binding code, you usually use autobinding facitility, that is, using 
+ * the same name to the field control and model property name, and setting autobinding to true.
+ * When using autobinding, you may exclude model properties from binding using some
+ * of <code>ignoreProperty</code> methods.
+ * 
+ * <p> Manual binding is also supported via <code>bind</code> methods. When binding a control, a
+ * <code>StateChangeListener</code> is added to the control for setting dirty property on control
+ * changes.
+ * 
+ * <p> Only <code>org.springframework.util.validation.Validator</code> validators are supported
+ * to add validations to the model. The <code>validateView</code> method calls configured
+ * <code>ErrorProcessors</code> to process erros found in validation.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @since 1.0
+ * @see BinderFactory
+ * @see ControlAccessorFactory
+ * @see ErrorProcessor
  */
 public abstract class AbstractView<T> implements View<T>, ControlChangeListener {
 	
@@ -58,10 +87,10 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	private ControlAccessorFactory controlAccessorFactory;
 	/** hold binders */
 	private CompositeBinder<T> binder = new CompositeBinder<T>();
-	/** auto binder using reflection */
-	private AutoBinder<T> autoBinder = new AutoBinder<T>(this);
 	/** if true, do an automatic binding using property names */
 	private boolean autobinding = false;
+	/** Set with property names to ingnore on binding commands */
+	private Set<String> ignoredProperties = new HashSet<String>();
 	/** data model */
 	private T model;
 	/** JComponent that hold controls */
@@ -74,6 +103,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	private MessageSource messageSource;
 	/** List of error handlers */
 	private List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
+	/** Validation Errors */
+	protected Errors errors;
 	/** dirty state */
 	boolean dirty = false;
 	
@@ -84,7 +115,6 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * Default ctor
 	 */
 	public AbstractView() {
-		
 	}
 	
 	/**
@@ -93,6 +123,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public AbstractView(T model) {
 		setModel(model);
+		if (autobinding)
+			autobind();
 	}
 	
 	/**
@@ -168,20 +200,26 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * {@inheritDoc}
 	 */
 	public final void update() {
+		clearErrors();
 		// do custom update
 		doUpdate();
+		
 		binder.update();
-
-		if (autobinding) {
-			autoBinder.setIgnoredProperties(binder.getPropertyNames());
-			autoBinder.setControlAccessorFactory(controlAccessorFactory);
-			autoBinder.update();
-		}
 		
 		// update subviews
 		for (View<T>  v : subViews) {
 			v.update();
 		}
+	}
+
+	/**
+	 * Clear validation erros
+	 */
+	private void clearErrors() {
+		if (getModel() != null)
+			errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+		resetErrorProcessors();
+		
 	}
 
 	/**
@@ -205,14 +243,9 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * {@inheritDoc}
 	 */
 	public final void refresh() {
+		clearErrors();
 		doRefresh();
 		binder.refresh();
-		
-		if (autobinding) {
-			autoBinder.setIgnoredProperties(binder.getPropertyNames());
-			autoBinder.setControlAccessorFactory(controlAccessorFactory);
-			autoBinder.refresh();
-		}
 
 		// refresh subviews
 		for (View<T> v : subViews)
@@ -266,16 +299,16 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * {@inheritDoc}
 	 */
 	public boolean validateView() {
-		if (validator == null)
+		if (validator == null && !errors.hasErrors())
 			return true;
 		
-		resetErrorProcessors();
-		Errors errors = new BeanPropertyBindingResult(getModel(), "");
-		validator.validate(getModel(), errors);
+		if (validator != null) 
+			validator.validate(getModel(), errors);
 		
 		if (errors.hasErrors()) {
 			String errorMessage = getErrorMessage(errors);
 			JOptionPane.showMessageDialog(getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+			
 			for (FieldError error : errors.getFieldErrors()) {
 				for (ErrorProcessor ep : errorProcessors ) 
 					ep.processError(binder.getBinder(error.getField()), error);
@@ -331,6 +364,76 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 				log.error(e);
 			}
 		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void enableView(boolean enabled) {
+		for (Binder<?> b : binder.getPropertyBinders()) {
+			Object control = ((PropertyBinder) b).getComponent();
+			
+			if (control instanceof Component) 
+				((Component) control).setEnabled(enabled);
+			else if (control instanceof View<?>) 
+				((View<?>) control).enableView(enabled);
+			
+			for (View<?> v : subViews) 
+				v.enableView(enabled);
+		}
+	}
+	
+	/**
+	 * Bind Controls with the same name that a property in the model.
+	 */
+	protected void autobind() {
+		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
+		PropertyAccessor  viewPropertyAccessor = PropertyAccessorFactory.forDirectFieldAccess(this);
+		// iterate on model properties
+		for (PropertyDescriptor pd : bw.getPropertyDescriptors()) {
+			String propertyName = pd.getName();
+			if ( !ignoredProperties.contains(propertyName) && viewPropertyAccessor.isReadableProperty(propertyName)) {
+				Object control = viewPropertyAccessor.getPropertyValue(propertyName);
+				if (control != null) {
+					if (log.isDebugEnabled()) 
+						log.debug("Found control: " + control.getClass().getSimpleName() + 
+								" for property: " + propertyName);
+					// do bind
+					bind(control, propertyName);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Add a property name  to ignore on binding.
+	 * @param propertyName property name to ignore
+	 */
+	public void ignoreProperty(String propertyName) {
+		ignoredProperties.add(propertyName);
+	}
+	
+
+	/**
+	 * @return the ignoredProperties
+	 */
+	public Set<String> getIgnoredProperties() {
+		return ignoredProperties;
+	}
+
+	/**
+	 * @param ignoredProperties the ignoredProperties to set
+	 */
+	public void setIgnoredProperties(Set<String> ignoredProperties) {
+		this.ignoredProperties = ignoredProperties;
+	}
+
+	/**
+	 * Add a Collection of property names to ignore on binding
+	 * @param c Collection of property names.
+	 */
+	public void ignoreProperties(Collection<? extends String> c) {
+		ignoredProperties.addAll(c);
 	}
 
 	/**

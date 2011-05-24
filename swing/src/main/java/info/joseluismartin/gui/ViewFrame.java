@@ -40,6 +40,8 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	private View<Object> view;
 	private ViewAction acceptAction;
 	private DialogCancelAction cancelAction;
+	private JButton acceptButton;
+	private JButton cancelButton;
 	private int windowWidth;
 	private int windowHeight;
 	private EventListenerList listenerList = new EventListenerList();
@@ -55,8 +57,8 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	}
 
 	protected Component createButtonBox() {
-		JButton acceptButton = new JButton(acceptAction);
-		JButton cancelButton = new JButton(cancelAction);
+		acceptButton = new JButton(acceptAction);
+		cancelButton = new JButton(cancelAction);
 		JPanel p = new JPanel();
 		p.add(acceptButton);
 		p.add(cancelButton);
@@ -210,5 +212,13 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	public boolean isDirty() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void enableView(boolean enabled) {
+		view.enableView(enabled);
+		acceptButton.setEnabled(enabled);
 	}
 }

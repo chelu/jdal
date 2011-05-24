@@ -51,5 +51,10 @@ public interface View<T> extends Binder<T>{
 	 * @return true if any control has changed
 	 */
 	boolean isDirty();
+	
+	/**
+	 * Enable/Disable All controls
+	 */
+	void enableView(boolean enabled);
 
 }

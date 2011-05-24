@@ -39,12 +39,17 @@
 			<name>jlm</name>
 			<url>http://joseluismartin.info:8081/artifactory/repo</url>
 		</repository>
+		<repository>
+			<id>jdal</id>
+			<name>jdal</name>
+			<url>http://jdal.org/repo</url>
+		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
-			<id>jlm</id>
-			<name>jlm</name>
-			<url>http://www.joseluismartin.info:8081/artifactory/libs-releases-local</url>
+			<id>jdal</id>
+			<name>jdal</name>
+			<url>scpexe://jdal.org/var/www/jdal/repo</url>
 		</repository>
 	</distributionManagement>
 

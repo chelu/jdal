@@ -18,17 +18,23 @@ public class ListComboBoxModel extends ListListModel implements MutableComboBoxM
 
 	private static final long serialVersionUID = 1L;
 	private Object selectedItem;
+	private boolean allowNullSelection = true;
 	
 	public ListComboBoxModel() {
 		this(new ArrayList());
 	}
 	
 	public ListComboBoxModel(List list) {
+		this(list, true);
+	}
+
+	public ListComboBoxModel(List list, boolean allowNullSelection) {
 		super(list);
 		if (list != null && list.size() > 0)
 			setSelectedItem(list.get(0));
+		this.allowNullSelection = allowNullSelection;
+		
 	}
-
 	
 	public void addElement(Object obj) {
 		getList().add(obj);
@@ -64,7 +70,7 @@ public class ListComboBoxModel extends ListListModel implements MutableComboBoxM
 
 	public void setSelectedItem(Object item) {
 		if (item == null) {
-			selectedItem = null;
+			selectNullItem();
 			fireContentsChanged(this, -1, -1);
 		}
 		else if (!item.equals(selectedItem)) {
@@ -72,9 +78,18 @@ public class ListComboBoxModel extends ListListModel implements MutableComboBoxM
 			if (index != -1) 
 				selectedItem = item;
 			else
-				selectedItem = null;
+				selectNullItem();
 			
 				fireContentsChanged(this, index, index);
+		}
+	}
+
+	private void selectNullItem() {
+		if (allowNullSelection)
+			selectedItem = null;
+		else {
+			if (getList().size() > 0)
+				setSelectedItem(getList().get(0));
 		}
 	}
 }

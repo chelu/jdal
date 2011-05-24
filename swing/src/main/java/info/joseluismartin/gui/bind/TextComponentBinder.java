@@ -15,14 +15,15 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.beans.PropertyEditor;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.text.JTextComponent;
 
 import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.beans.PropertyEditorRegistrySupport;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 
 /**
  * Binder for JComponentText
@@ -33,6 +34,10 @@ public class TextComponentBinder extends AbstractBinder {
 	
 	private PropertyEditorRegistry registry = new PropertyEditorRegistrySupport();
 
+	public TextComponentBinder() {
+		registry.registerCustomEditor(Date.class,
+				new CustomDateEditor(SimpleDateFormat.getDateTimeInstance(), true));
+	}
 	/**
 	 * {@inheritDoc}
 	 */

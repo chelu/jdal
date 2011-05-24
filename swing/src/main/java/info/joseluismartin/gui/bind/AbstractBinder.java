@@ -17,13 +17,15 @@ package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.ModelHolder;
 
-import javax.swing.JComponent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 
 /**
  * Base class for Binders. Implement doBind() to do the binding.
@@ -92,7 +94,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	 */
 	protected void setValue(Object value) {
 		if (value == null || value != oldValue) {
-			BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
+			BeanWrapper wrapper = getBeanWrapper();
 			try {
 				wrapper.setPropertyValue(propertyName, value);
 				oldValue = value;
@@ -103,13 +105,14 @@ public abstract class AbstractBinder implements PropertyBinder {
 			}
 		}
 	}
+
 	
 	/**
 	 * Get value from model
 	 * @return
 	 */
 	protected Object getValue() {
-		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
+		BeanWrapper wrapper = getBeanWrapper();
 		Object value = null;
 		try {
 			value = wrapper.getPropertyValue(propertyName);
@@ -121,6 +124,13 @@ public abstract class AbstractBinder implements PropertyBinder {
 		return value;
 		
 		
+	}
+	
+	private BeanWrapper getBeanWrapper() {
+		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
+		wrapper.registerCustomEditor(Date.class, 
+				new CustomDateEditor(SimpleDateFormat.getDateTimeInstance(), true));
+		return wrapper;
 	}
 	// Getters and Setters
 

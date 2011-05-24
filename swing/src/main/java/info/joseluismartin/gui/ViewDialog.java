@@ -40,6 +40,8 @@ public class ViewDialog extends JDialog implements View<Object>  {
 	private View<Object> view;
 	private ViewAction acceptAction;
 	private DialogCancelAction cancelAction;
+	private JButton acceptButton;
+	private JButton cancelButton;
 	private int dialogWidth = 750;
 	private int dialogHeight = 750;
 	private int value = CANCEL;
@@ -55,8 +57,8 @@ public class ViewDialog extends JDialog implements View<Object>  {
 	}
 
 	protected Component createButtonBox() {
-		JButton acceptButton = new JButton(acceptAction);
-		JButton cancelButton = new JButton(cancelAction);
+		acceptButton = new JButton(acceptAction);
+		cancelButton = new JButton(cancelAction);
 		JPanel p = new JPanel();
 		p.add(acceptButton);
 		p.add(cancelButton);
@@ -172,4 +174,13 @@ public class ViewDialog extends JDialog implements View<Object>  {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void enableView(boolean enabled) {
+		view.enableView(enabled);
+		acceptButton.setEnabled(enabled);
+	}
+		
 }

@@ -82,9 +82,9 @@
 	</repositories>
 	<distributionManagement>
 		<repository>
-			<id>jlm</id>
-			<name>jlm</name>
-			<url>http://joseluismartin.info:8081/artifactory/libs-snapshots-local</url>
+			<id>jdal</id>
+			<name>jdal</name>
+			<url>scpexe://jdal.org/var/www/jdal/repo</url>
 		</repository>
 	</distributionManagement>
 	<dependencies>

@@ -25,6 +25,7 @@ import org.hibernate.collection.PersistentCollection;
 import org.hibernate.engine.PersistenceContext;
 import org.hibernate.impl.SessionImpl;
 import org.hibernate.persister.collection.CollectionPersister;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
 
 /**
  * Hibernate Guard for LazyInitializationException. Open read only session and 
@@ -46,7 +47,7 @@ privileged public aspect HibernateLazyGuard {
 	 * @return true if not connected (detached)
 	 */
 	public boolean  AbstractPersistentCollection.isDetached() {
-		return  this.isConnectedToSession();
+		return  ! (this.isConnectedToSession());
 	}
 
     /** pointcut to match PersistentCollection public methods calls */
@@ -64,7 +65,7 @@ privileged public aspect HibernateLazyGuard {
 		
 		AbstractPersistentCollection apc = (AbstractPersistentCollection) c;
 
-		if (!apc.isDetached()) {
+		if (apc.isDetached() && SessionFactoryUtils.hasTransactionalSession(sessionFactory)) {
 			log.info("PersistentCollection will throw exception: " + apc.getRole());
 			Session session = sessionFactory.openSession();
 			attachToSession(apc, session);
@@ -82,19 +83,25 @@ privileged public aspect HibernateLazyGuard {
 	public void attachToSession(AbstractPersistentCollection ps, Session session) {
 		if (log.isDebugEnabled())
 			log.debug("Initalizing PersistentCollection of role: " + ps.getRole());
-		
-		if (!ps.wasInitialized()) {
-			SessionImpl source = (SessionImpl) session;
-			PersistenceContext context = source.getPersistenceContext();
-			CollectionPersister cp = source.getFactory().getCollectionPersister(ps.getRole());
 
-			if (context.getCollectionEntry(ps) == null) {  // detached
-				context.addUninitializedDetachedCollection(cp, ps);
+		try {
+			if (!ps.wasInitialized()) {
+				SessionImpl source = (SessionImpl) session;
+				PersistenceContext context = source.getPersistenceContext();
+				CollectionPersister cp = source.getFactory().getCollectionPersister(ps.getRole());
+
+				if (context.getCollectionEntry(ps) == null) {  // detached
+					context.addUninitializedDetachedCollection(cp, ps);
+				}
+
+				ps.setCurrentSession(context.getSession());
+				Hibernate.initialize(ps);
 			}
-
-			ps.setCurrentSession(context.getSession());
-			Hibernate.initialize(ps);
 		}
+		catch (Throwable t) {
+			log.debug(t);
+		}
+
 	}
 
 	public SessionFactory getSessionFactory() {

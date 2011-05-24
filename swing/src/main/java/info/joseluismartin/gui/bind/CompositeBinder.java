@@ -2,6 +2,7 @@ package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.Binder;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -73,6 +74,10 @@ public class CompositeBinder<T> implements Binder<T> {
 	
 	public Set<String> getPropertyNames() {
 		return binders.keySet();
+	}
+	
+	public Collection<Binder<?>> getPropertyBinders() {
+		return binders.values();
 	}
 
 	/**
