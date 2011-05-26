@@ -73,9 +73,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * A Paginable JTable with paginator and filter. 
+ * A JPanel with  a JTable and paginator. 
  * 
- * <p>This table view uses a {@link PageableDataSource} to query for data page by page.
+ * <p>This table view uses a {@link PageableDataSource} to query for data by pages.
  * Has a paginator control to navigate and show page info.
  *  
  * @author Jose Luis Martin - (jlm@joseluismartin.info)

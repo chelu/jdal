@@ -24,11 +24,12 @@ import info.joseluismartin.gui.Binder;
  * when there are binding errors. 
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @since 1.1
  */
 public interface ErrorProcessor {
 	
 	/**
-	 * Process binding error. Usefull for to do control interaction on binding erros, 
+	 * Process binding error. Usefull for do control interaction on binding erros, 
 	 * like set a tooltip with error, change background and so.
 	 * @param binder the binder that gerenate the error
 	 * @param error the spring validation error Object

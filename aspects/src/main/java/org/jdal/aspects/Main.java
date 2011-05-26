@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui;
+package org.jdal.aspects;
+
+import info.joseluismartin.beans.AppCtx;
+import info.joseluismartin.dao.Dao;
+import lazy.Cat;
+import lazy.Dog;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * Interface for classes that holds models, ie a model pointer interface
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
-
- * @param <T> model class
+ *
  */
-public interface ModelHolder<T> {
+public class Main {
 	
-	/**
-	 * Gets model
-	 * @return the model
-	 */
-	T getModel();
-	
-	/**
-	 * Sets model
-	 * @param model
-	 */
-	void setModel(T model);
+	private static final Log log = LogFactory.getLog(Main.class);
+	public static void main (String[] arg) {
+		AppCtx.getInstance();
+		Dao<Dog, Long> dogDao = (Dao<Dog, Long>) AppCtx.getInstance().getBean("dogDao");
+		Dog dog = dogDao.get(1l);
+		
+		for (Cat cat : dog.getCats()) 
+			log.info(cat.getName());
+	}
+
 }

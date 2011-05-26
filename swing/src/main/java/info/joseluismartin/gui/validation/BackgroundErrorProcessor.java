@@ -29,9 +29,12 @@ import org.springframework.validation.FieldError;
 
 /**
  * ErrorProcessor that change background color of JComponent and add a tooltip with error message 
- * when there are binding errors.
+ * on binding errors.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @since 1.1 
+ * @see ErrorProcessor
+ * @see AbstracView
  */
 public class BackgroundErrorProcessor implements ErrorProcessor {
 
@@ -65,7 +68,6 @@ public class BackgroundErrorProcessor implements ErrorProcessor {
 		colorMap.clear();
 	}
 
-
 	/**
 	 * @return the errorColor
 	 */
@@ -89,13 +91,10 @@ public class BackgroundErrorProcessor implements ErrorProcessor {
 		return messageSource;
 	}
 
-
 	/**
 	 * @param messageSource the messageSource to set
 	 */
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
-
-	
 }

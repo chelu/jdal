@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jose Lus Martin.
+ * Copyright 2009-2011 original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package info.joseluismartin.gui;
 
 /**
  * Binder interface define methods common to model based
- * representation of data like Views. 
+ * representation of data like Views.
+ *  
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.0
  * @param <T> model type
  */
 public interface Binder<T> extends ModelHolder<T> {

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false" default-init-method="init">
+	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+  
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+			
+		<property name="acquireIncrement" value="3" />
+		<property name="minPoolSize" value="2" />
+		<property name="maxPoolSize" value="10" />
+		<property name="maxIdleTime" value="5" />
+		<property name="numHelperThreads" value="5" />
+		
+		<property name="idleConnectionTestPeriod" value="10" />
+		<property name="autoCommitOnClose" value="false" />
+		<property name="preferredTestQuery" value="select 1;" />
+		<property name="testConnectionOnCheckin" value="true" />
+		
+		<property name="checkoutTimeout" value="60000" />
+	</bean>
+	
+	<!-- Hibernate SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+    </bean>
+	
+	 <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+	<bean id="catDao" class="info.joseluismartin.dao.hibernate.HibernateDao">
+		<constructor-arg value="lazy.Cat"/>
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="dogDao" class="info.joseluismartin.dao.hibernate.HibernateDao">
+		<constructor-arg value="lazy.Dog"/>
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean> 
+	       
+	
+	<!-- Tx Advice -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <!-- the transactional semantics... -->
+    <tx:attributes>
+      <!-- all methods starting with 'get' and 'load' are read-only -->
+      <tx:method name="get*" read-only="true"/>
+      <tx:method name="load*" read-only="true"/>
+      <!-- other methods use the default transaction settings -->
+      <tx:method name="*"/>
+    </tx:attributes>
+  </tx:advice>
+  
+	 <aop:config>
+       <!-- Make all methods on package service transactional  -->
+       <aop:pointcut id="daoOperation" expression="execution(* info.joseluismartin.dao.*.*(..))"/>
+       <aop:advisor advice-ref="txAdvice" pointcut-ref="daoOperation" order="1"/>
+	</aop:config>
+	
+	<context:load-time-weaver/>
+	
+	<bean id="lazyGuard" class="org.jdal.aspects.HibernateLazyGuard" factory-method="aspectOf">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+</beans>

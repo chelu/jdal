@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jose Lus Martin.
+ * Copyright 2009-2011 original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import javax.swing.table.TableCellRenderer;
  * inner beans in context.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @since 1.1
  */
 public class ColumnDefinition {
 

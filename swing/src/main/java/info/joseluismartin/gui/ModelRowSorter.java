@@ -23,11 +23,12 @@ import javax.swing.SortOrder;
 import javax.swing.table.TableModel;
 
 /**
- * A RowSorter with server side sorting.
- * so no mapping between view columns and model columns are needed.
- * Query data to a PageDataSource to get new model list
+ * A RowSorter for server side sorting.
+ * No mapping between view columns and model columns are needed.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @since 1.0
+ * @see PageableTable
  */
 public class ModelRowSorter<M extends TableModel> extends RowSorter<M> {
 
@@ -70,7 +71,6 @@ public class ModelRowSorter<M extends TableModel> extends RowSorter<M> {
 	 */
 	@Override
 	public M getModel() {
-		// TODO Auto-generated method stub
 		return model;
 	}
 	/**

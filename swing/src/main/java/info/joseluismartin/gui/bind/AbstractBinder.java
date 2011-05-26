@@ -122,8 +122,6 @@ public abstract class AbstractBinder implements PropertyBinder {
 		}
 		
 		return value;
-		
-		
 	}
 	
 	private BeanWrapper getBeanWrapper() {

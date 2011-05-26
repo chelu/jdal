@@ -49,7 +49,7 @@ import org.springframework.beans.PropertyAccessorFactory;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @see info.joseluismartin.PageableTable
- * @version 1.0
+ * @since 1.0
  */
 // FIXME: - jlm - This class is growing quicky, revise design.
 @SuppressWarnings("unchecked")
