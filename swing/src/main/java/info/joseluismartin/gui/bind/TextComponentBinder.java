@@ -69,7 +69,7 @@ public class TextComponentBinder extends AbstractBinder {
 	 */
 	public void doUpdate() {
 		String newValue = ((JTextComponent) component).getText();
-		setValue(newValue);
+		setValue(newValue.trim());
 		
 	}
 }

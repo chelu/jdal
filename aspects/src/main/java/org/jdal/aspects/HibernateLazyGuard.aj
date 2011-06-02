@@ -28,6 +28,7 @@ import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.engine.PersistenceContext;
 import org.hibernate.impl.SessionImpl;
 import org.hibernate.persister.collection.CollectionPersister;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
 
 /**
  * Hibernate Guard for LazyInitializationException. Open read only session and 
@@ -60,7 +61,7 @@ privileged public aspect HibernateLazyGuard {
 	/** match access to intialized flag on APC, only if call is in flow of woven collection method */
 	pointcut initialized(AbstractPersistentCollection apc) : 
 		get(boolean org.hibernate.collection.AbstractPersistentCollection.initialized) && 
-		this(apc) && cflow(collection());
+		this(apc);
 	
 	/**
 	 * Before Advice, if Collection is unitialized open a new Session
@@ -71,8 +72,9 @@ privileged public aspect HibernateLazyGuard {
 		if (log.isDebugEnabled())
 			log.debug(thisJoinPointStaticPart.toString());
 
-		if (!apc.wasInitialized() && apc.isDetached()) {
-			log.error("PersistentCollection will throw exception: " + apc.getRole());
+		if (!SessionFactoryUtils.hasTransactionalSession(sessionFactory) &&
+				!apc.wasInitialized() && apc.isDetached()) {
+			log.warn("PersistentCollection will throw exception: " + apc.getRole());
 			Session session = sessionFactory.openSession();
 			session.setFlushMode(FlushMode.MANUAL);
 			Transaction tx = null;
@@ -90,7 +92,7 @@ privileged public aspect HibernateLazyGuard {
 				session.close();
 			}
 		}
-		// will return true :)
+		// return true
 		return proceed(apc);
 	}
 	
@@ -111,7 +113,7 @@ privileged public aspect HibernateLazyGuard {
 			PersistenceContext context = source.getPersistenceContext();
 			CollectionPersister cp = source.getFactory().getCollectionPersister(ps.getRole());
 
-			if (context.getCollectionEntry(ps) == null) {  // detached
+			if (!context.containsCollection(ps)) {  // detached
 				context.addUninitializedDetachedCollection(cp, ps);
 			}
 
@@ -122,6 +124,7 @@ privileged public aspect HibernateLazyGuard {
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
+	
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;

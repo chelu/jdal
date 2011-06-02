@@ -3,8 +3,7 @@
 	<aspects>
 		<aspect name="org.jdal.aspects.HibernateLazyGuard" />
 	</aspects>
-	<weaver options="-verbose">
-		<include within="org.jdal.*" />
-		<include within="org.hibernate.collection.*"/>
+	<weaver>
+		<include within="org.hibernate.collection.AbstractPersistentCollection"/>
 	</weaver>
 </aspectj>
