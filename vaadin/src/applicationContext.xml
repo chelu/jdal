@@ -46,7 +46,7 @@
 
    <!-- Dao -->
    <bean id="userDao" class="es.dacartec.dao.ibatis.IBatisDao">
-   		<property name="entityClass" value="es.dacartec.gesinprec.model.User"/>
+   		<property name="entityClass" value="info.joseliusmartin.model.User"/>
    		<property name="sqlMapClient" ref="sqlMapClient"/>
    	</bean>
    	
@@ -55,11 +55,11 @@
    		<property name="dao" ref="userDao"/>
    	</bean>
    	
-   	<bean id="userServiceStub" class="es.dacartec.gesinprec.service.stub.UserServiceStub" />
+   	<bean id="userServiceStub" class="info.joseluismartin.service.stub.UserServiceStub" />
    		
    <!-- UI Widgets -->
    
-	<bean id="userPageableTable" class="es.dacartec.ui.table.PageableTable"
+	<bean id="userPageableTable" class="info.joseluismartin.vaadin.ui.table.PageableTable"
 		scope="prototype">
 		<property name="table" ref="table" />
 		<property name="paginator" ref="paginator" />
@@ -175,7 +175,7 @@
    <aop:config>
     <!-- Make all methods on package service transactional  -->
      <aop:pointcut id="serviceOperation" 
-     	expression="execution(* es.dacartec.gesinprec.service.*.*(..)) or execution(* info.joseluismartin.service.*.*(..))"/>
+     	expression="execution(* info.joseluismartin.service.*.*(..))"/>
      <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
   </aop:config>
 	
