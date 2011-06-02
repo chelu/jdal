@@ -7,17 +7,17 @@ import com.vaadin.ui.Table;
 
 /**
  * Add methods to vaadin Table for friendly configuration on spring bean defintion file.
- * Use <code>es.dacartec.ui.table.Column</code> as inner bean for configure columns:
+ * Use <code>info.joseluismartin.ui.table.Column</code> as inner bean for configure columns:
  * 
  * <property name="columns">
  * 	<list>
- * 		<bean class="es.dacartec.ui.table.Column"/>
+ * 		<bean class="info.joseluismartin.ui.table.Column"/>
  * 			<property name="name" value="a_bean_property_name"/>
  * 			<property name="displayName" value="String_to_show_in_table_header"/>
  * 			<property name="width" value="column_width"/>
  * 			...
  * 		</bean>
- * 		<bean class="es.dacartac.ui.table.Column">
+ * 		<bean class="info.joseluismartin.vaadin.ui.table.Column">
  * 			...
  * 		</bean>
  * 	</list>

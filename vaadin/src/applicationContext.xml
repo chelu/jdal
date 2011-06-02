@@ -45,7 +45,7 @@
 	</bean>
 
    <!-- Dao -->
-   <bean id="userDao" class="es.dacartec.dao.ibatis.IBatisDao">
+   <bean id="userDao" class="info.joseluismartin.dao.ibatis.IBatisDao">
    		<property name="entityClass" value="info.joseliusmartin.model.User"/>
    		<property name="sqlMapClient" ref="sqlMapClient"/>
    	</bean>
@@ -66,36 +66,36 @@
 		<property name="service" ref="userService" />
 	</bean>
 
-	<bean id="table" class="es.dacartec.ui.table.ConfigurableTable"
+	<bean id="table" class="info.joseluismartin.ui.table.ConfigurableTable"
 		scope="prototype">
 
 		<property name="columns">
-			<list value-type="es.dacartec.ui.table.Column">
-				<bean class="es.dacartec.ui.table.Column">
+			<list value-type="info.joseluismartin.ui.table.Column">
+				<bean class="info.joseluismartin.ui.table.Column">
 					<property name="name" value="id" />
 					<property name="displayName" value="ID" />
 					<property name="width" value="60" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="es.dacartec.ui.table.Column">
+				<bean class="info.joseluismartin.ui.table.Column">
 					<property name="name" value="username" />
 					<property name="displayName" value="Usuario" />
 					<property name="width" value="100" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="es.dacartec.ui.table.Column">
+				<bean class="info.joseluismartin.ui.table.Column">
 					<property name="name" value="name" />
 					<property name="displayName" value="Nombre" />
 					<property name="width" value="300" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="es.dacartec.ui.table.Column">
+				<bean class="info.joseluismartin.ui.table.Column">
 					<property name="name" value="age" />
 					<property name="displayName" value="Edad" />
 					<property name="width" value="30" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="es.dacartec.ui.table.Column">
+				<bean class="info.joseluismartin.ui.table.Column">
 					<property name="name" value="admin" />
 					<property name="displayName" value="Administrador" />
 					<property name="width" value="30" />
@@ -105,7 +105,7 @@
 		</property>
 	</bean>
 
-	<bean id="paginator" class="es.dacartec.ui.table.VaadinPaginator"
+	<bean id="paginator" class="info.joseluismartin.ui.table.VaadinPaginator"
 		scope="prototype">
 		<property name="first" ref="paginatorFirstButton" />
 		<property name="last" ref="paginatorLastButton" />
@@ -134,11 +134,11 @@
 		scope="prototype" />
 
 
-	<bean id="dataSourceTable" class="es.dacartec.ui.table.ConfigurableTable" parent="table">
+	<bean id="dataSourceTable" class="info.joseluismartin.ui.table.ConfigurableTable" parent="table">
 		<property name="containerDataSource" ref="userContainerDataSource"/>
 	</bean>
 	
-	<bean id="userContainerDataSource" class="es.dacartec.data.ContainerDataSource">
+	<bean id="userContainerDataSource" class="info.joseluismartin.data.ContainerDataSource">
 		<property name="service" ref="userService"/>
 	</bean>
 	
