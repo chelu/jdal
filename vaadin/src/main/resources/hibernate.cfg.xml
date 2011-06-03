@@ -11,6 +11,8 @@
 		<property name="hibernate.cache.use_second_level_cache">true</property>
 		<property name="hibernate.cache.use_query_cache">true</property>
 		
-		<mapping class="info.joseluismartin.vaadin.model.User"/>
+		<mapping class="info.joseluismartin.vaadin.model.Book"/>
+		<mapping class="info.joseluismartin.vaadin.model.Author"/>
+		<mapping class="info.joseluismartin.vaadin.model.Category"/>
 	</session-factory>
 </hibernate-configuration>

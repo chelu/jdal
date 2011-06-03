@@ -13,6 +13,19 @@
 		<groupId>org.jdal</groupId>
 		<version>1.1</version>
 	</parent>
+	
+	<developers>
+		<developer>
+			<id>jlm</id>
+			<name>Jose Luis Martin</name>
+			<email>jlm@joseluismartin.info</email>
+			<url>http://www.joseluismartin.info</url>
+		</developer>
+	</developers>
+	<organization>
+		<name>JDAL</name>
+		<url>http://www.jdal.org</url>
+	</organization>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,6 +79,10 @@
 							<Vaadin-Widgetsets>info.joseluismartin.vaadin.widgetset.jdal</Vaadin-Widgetsets>
 						</manifestEntries>
 					</archive>
+					<excludes>
+						<exclude>*.xml</exclude>
+						<exclude>*.properties</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 
@@ -186,9 +203,6 @@
 		-->
 		<resources>
 			<resource>
-				<directory>src/main/java</directory>
-			</resource>
-			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
@@ -208,6 +222,11 @@
 		<repository>
 			<id>vaadin-addons</id>
 			<url>http://maven.vaadin.com/vaadin-addons</url>
+		</repository>
+		
+		<repository>
+			<id>jdal</id>
+			<url>http://www.jdal.org/repo</url>
 		</repository>
 	</repositories>
 
@@ -233,6 +252,14 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
+	
+	<distributionManagement>
+		<repository>
+			<id>jdal</id>
+			<name>jdal</name>
+			<url>scpexe://jdal.org/var/www/jdal/repo</url>
+		</repository>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>

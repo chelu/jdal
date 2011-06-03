@@ -15,6 +15,11 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
+/**
+ * Table Sorter interface for use in server side sorting
+ * 
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ */
 public interface TableSorter {
 
 	void sort(Object[] propertyId, boolean[] ascending);

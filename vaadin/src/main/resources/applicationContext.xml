@@ -49,23 +49,23 @@
     </bean>
 
    <!-- Dao -->
-   <bean id="userDao" class="info.joseluismartin.dao.hibernate.HibernateDao">
-   		<property name="entityClass" value="info.joseluismartin.vaadin.model.User"/>
+   <bean id="bookDao" class="info.joseluismartin.dao.hibernate.HibernateDao">
+   		<property name="entityClass" value="info.joseluismartin.vaadin.model.Book"/>
    		<property name="sessionFactory" ref="sessionFactory"/>
    	</bean>
    	
    	<!-- Persistent Service -->
-   	<bean id="userService" class="info.joseluismartin.logic.PersistentManager">
-   		<property name="dao" ref="userDao"/>
+   	<bean id="bookService" class="info.joseluismartin.logic.PersistentManager">
+   		<property name="dao" ref="bookDao"/>
    	</bean>
    	
    <!-- UI Widgets -->
    
-	<bean id="userPageableTable" class="info.joseluismartin.vaadin.ui.table.PageableTable"
+	<bean id="bookPageableTable" class="info.joseluismartin.vaadin.ui.table.PageableTable"
 		scope="prototype">
 		<property name="table" ref="table" />
 		<property name="paginator" ref="paginator" />
-		<property name="service" ref="userService" />
+		<property name="service" ref="bookService" />
 	</bean>
 
 	<bean id="table" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable"
@@ -80,28 +80,28 @@
 					<property name="align" value="c" />
 				</bean>
 				<bean class="info.joseluismartin.vaadin.ui.table.Column">
-					<property name="name" value="username" />
-					<property name="displayName" value="Username" />
-					<property name="width" value="100" />
-					<property name="align" value="c" />
-				</bean>
-				<bean class="info.joseluismartin.vaadin.ui.table.Column">
 					<property name="name" value="name" />
-					<property name="displayName" value="Name" />
+					<property name="displayName" value="Title" />
 					<property name="width" value="300" />
-					<property name="align" value="c" />
+					<property name="align" value="b" />
 				</bean>
 				<bean class="info.joseluismartin.vaadin.ui.table.Column">
-					<property name="name" value="age" />
-					<property name="displayName" value="Age" />
-					<property name="width" value="30" />
-					<property name="align" value="c" />
+					<property name="name" value="author" />
+					<property name="displayName" value="Author" />
+					<property name="width" value="300" />
+					<property name="align" value="b" />
 				</bean>
 				<bean class="info.joseluismartin.vaadin.ui.table.Column">
-					<property name="name" value="admin" />
-					<property name="displayName" value="Admin" />
-					<property name="width" value="30" />
-					<property name="align" value="c" />
+					<property name="name" value="category" />
+					<property name="displayName" value="Category" />
+					<property name="width" value="200" />
+					<property name="align" value="b" />
+				</bean>
+				<bean class="info.joseluismartin.vaadin.ui.table.Column">
+					<property name="name" value="isbn" />
+					<property name="displayName" value="ISBN" />
+					<property name="width" value="200" />
+					<property name="align" value="b" />
 				</bean>
 			</list>
 		</property>
@@ -137,11 +137,11 @@
 
 
 	<bean id="dataSourceTable" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable" parent="table">
-		<property name="containerDataSource" ref="userContainerDataSource"/>
+		<property name="containerDataSource" ref="bookContainerDataSource"/>
 	</bean>
 	
-	<bean id="userContainerDataSource" class="info.joseluismartin.vaadin.data.ContainerDataSource">
-		<property name="service" ref="userService"/>
+	<bean id="bookContainerDataSource" class="info.joseluismartin.vaadin.data.ContainerDataSource">
+		<property name="service" ref="bookService"/>
 	</bean>
 	
 

@@ -29,6 +29,8 @@ public class Column {
 	private int width = -1;
  	private String align;
 	private Resource icon;
+	private boolean sortable = true;
+	private String sortPropertyName;
 	
 	/**
 	 * @return the name
@@ -75,7 +77,7 @@ public class Column {
 	/**
 	 * @return the icon
 	 */
-	public Resource getIcon() {
+	public Resource getIcon() {// TODO Auto-generated method stub
 		return icon;
 	}
 	
@@ -98,5 +100,33 @@ public class Column {
 	 */
 	public void setAlign(String align) {
 		this.align = align;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isSortable() {
+		return sortable;
+	}
+
+	/**
+	 * @param sortable the sortable to set
+	 */
+	public void setSortable(boolean sortable) {
+		this.sortable = sortable;
+	}
+
+	/**
+	 * @return the sortPropertyName
+	 */
+	public String getSortPropertyName() {
+		return sortPropertyName != null ? sortPropertyName : name;
+	}
+
+	/**
+	 * @param sortPropertyName the sortPropertyName to set
+	 */
+	public void setSortPropertyName(String sortPropertyName) {
+		this.sortPropertyName = sortPropertyName;
 	}
 }

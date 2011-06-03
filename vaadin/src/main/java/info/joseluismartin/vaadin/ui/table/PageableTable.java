@@ -60,15 +60,17 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		loadPage();
 		// set external sorting, ie do't call Container.sort()
 		table.setSorter(new PageSorter());
+		table.setPageLength(page.getPageSize());
 	
 		// build Componenet
 		VerticalLayout vbox = new VerticalLayout();
+		vbox.setSizeUndefined();
 		vbox.addComponent(table);
 		Box.addVerticalStruct(vbox, 5);
-		paginator.getComponent().setWidth(table.getWidth() + "px");
 		vbox.addComponent(paginator.getComponent());
 	
 		this.setCompositionRoot(vbox);
+		this.setSizeUndefined();
 	}
 
 	
@@ -97,7 +99,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			}
 		}
 		
-		paginator.getComponent().setWidth(table.getWidth());
 		paginator.refresh();
 	}
 
@@ -135,9 +136,12 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	class PageSorter implements TableSorter {
 		
 		public void sort(Object[] propertyId, boolean[] ascending) {
-			page.setSortName(propertyId[0].toString());
-			page.setOrder(ascending[0] ? Page.Order.ASC : Page.Order.DESC);
-			loadPage();
+			Column c = table.getColumn(propertyId[0].toString());
+			if (c != null && c.isSortable()) {
+				page.setSortName(c.getSortPropertyName());
+				page.setOrder(ascending[0] ? Page.Order.ASC : Page.Order.DESC);
+				paginator.firstPage();
+			}
 		}
 	}
 }

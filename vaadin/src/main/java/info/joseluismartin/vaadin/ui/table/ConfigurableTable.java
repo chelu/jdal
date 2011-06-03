@@ -15,7 +15,11 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.vaadin.data.Container;
 import com.vaadin.ui.Table;
@@ -49,6 +53,7 @@ public class ConfigurableTable extends Table {
 	private boolean usingChecks = false;
 	private List<Column> columns;
 	private TableSorter sorter;
+	private Map<String, Column> columnMap = new HashMap<String, Column>();
 	
 	public List<Column> getColumns() {
 		return this.columns;
@@ -62,6 +67,9 @@ public class ConfigurableTable extends Table {
 	 */
 	public void setColumns(List<Column> columns) {
 		this.columns = columns;
+		columnMap.clear();
+		for (Column c : columns)
+			columnMap.put(c.getName(), c);
 	}
 	
 	
@@ -136,6 +144,24 @@ public class ConfigurableTable extends Table {
 		}
 	}
 
+	/**
+	 * Override to handle server side sorting
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Collection<?> getSortableContainerPropertyIds() {
+		List<Object> sortableIds = new LinkedList<Object>();
+		for (Column c :columns ) {
+			if (c.isSortable())
+				sortableIds.add(c.getName());
+		}
+		
+		return sortableIds;
+	}
+	
+	public Column getColumn(String name) {
+		return columnMap.get(name);
+	}
 
 	public TableSorter getSorter() {
 		return sorter;

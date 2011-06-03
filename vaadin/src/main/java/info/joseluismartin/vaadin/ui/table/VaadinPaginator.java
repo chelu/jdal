@@ -21,6 +21,7 @@ import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.vaadin.ui.AbstractView;
 import info.joseluismartin.vaadin.ui.Box;
 
+import com.lowagie.text.html.simpleparser.ALink;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
@@ -101,19 +102,22 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		hbox.setComponentAlignment(statusLayout, Alignment.MIDDLE_CENTER);
 		hbox.addComponent(next);
 		hbox.addComponent(last);
-		Box.addHorizontalGlue(hbox);
+		Box.addHorizontalStruct(hbox, 10);
 		
 		// goto page select
 		Label goToLabel = new Label("GoTo: ");
+		goToLabel.setSizeUndefined();
 		hbox.addComponent(goToLabel);
 		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
 		goTo.setWidth("5em");
 		goTo.setImmediate(true);
 		hbox.addComponent(goTo);
-		Box.addHorizontalStruct(hbox, 10);
+		Box.addHorizontalGlue(hbox);
+	
 		
 		// records by page select
 		Label showRecords = new Label("Page size: ");
+		showRecords.setSizeUndefined();
 		hbox.addComponent(showRecords);
 		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_RIGHT);
 		
@@ -124,13 +128,15 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		pgs.setValue(String.valueOf(getModel().getPageSize()));
 		pgs.setWidth("6em");
 		pgs.setImmediate(true);
-		Box.addHorizontalStruct(hbox, 10);
 		hbox.addComponent(pgs);
+		hbox.setComponentAlignment(pgs, Alignment.MIDDLE_RIGHT);
 	
 		pgs.addListener(new PgsValueChangeListener());
 		goTo.addListener(new GoToValueChangeListener());
 		
-		return new CustomComponent(hbox);
+		hbox.setWidth("100%");
+		
+		return hbox;
 	}
 
 	// Paginator Interface Implementation //

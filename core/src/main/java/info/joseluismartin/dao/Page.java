@@ -47,7 +47,7 @@ public class Page<T> implements Paginator, Cloneable {
 	/** a Object used as filter */
 	private Object filter;
 	/** page number  */
-	private int page;
+	private int page = 1;
 	/** PageableDataSource that loads the page */
 	private PageableDataSource<T> pageableDataSource;
 	/** Paginator Listeners */
@@ -221,7 +221,7 @@ public class Page<T> implements Paginator, Cloneable {
 	 */
 	public int getTotalPages() {
 		if (pageSize > 0)
-			return (int) Math.ceil(count/pageSize) + 1;
+			return (int) Math.ceil(count/pageSize) + (count % pageSize == 0 ? 0 : 1);
 		
 		return 1;
 	}

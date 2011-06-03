@@ -33,13 +33,13 @@ public class TestApp extends Application {
 	@Override
 	public void init() {
 		Window mainWindow = new Window("Application");
-		Component pageableTable = (Component) context.getBean("userPageableTable");
+		Component pageableTable = (Component) context.getBean("bookPageableTable");
 		Component dataSourceTable = (Component) context.getBean("dataSourceTable");	
-		pageableTable.setWidth("100%");
-		dataSourceTable.setWidth("100%");
-		Panel panel = new Panel("Table with external paginator");
+		// pageableTable.setWidth("100%");
+		// dataSourceTable.setWidth("100%");
+		Panel panel = new Panel("Table with external paginator and server side paging and sorting");
 		panel.addComponent(pageableTable);
-		Panel otherPanel = new Panel("Table with paginator in datasource");
+		Panel otherPanel = new Panel("Table with paginator in datasource and server side paging and sorting ");
 		otherPanel.addComponent(dataSourceTable);
 		VerticalLayout layout = new VerticalLayout();
 		layout.addComponent(panel);

@@ -34,14 +34,14 @@ public abstract class Box {
 		Label label = new Label();
 		label.setWidth("100%");
 		layout.addComponent(label);
-		layout.setExpandRatio(label, 100);
+		layout.setExpandRatio(label, 1.0f);
 	}
 	
 	/**
 	 * Try to imitate a VerticalGlue of Swing BoxLayout
 	 */
 	public static void addVerticalGlue(AbstractOrderedLayout layout) {
-		Label label = new Label();
+		Label label = new Label(" ");
 		label.setHeight("100%");
 		layout.addComponent(label);
 		layout.setExpandRatio(label, 1.0f);
