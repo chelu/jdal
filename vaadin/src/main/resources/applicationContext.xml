@@ -17,7 +17,7 @@
 		</property>
 	</bean>
 
-	<!-- DataSource and iBatis sqlMapClient -->
+	<!-- DataSource -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driverClassName}" />
 		<property name="jdbcUrl" value="${jdbc.url}" />
@@ -37,17 +37,21 @@
 
 		<property name="checkoutTimeout" value="60000" />
 	</bean>
-
-
-	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
-		<property name="configLocation" value="classpath:sqlmap-config.xml"/>
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+	
+	<!-- Hibernate SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+    </bean>
+    
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
    <!-- Dao -->
-   <bean id="userDao" class="info.joseluismartin.dao.ibatis.IBatisDao">
-   		<property name="entityClass" value="info.joseliusmartin.model.User"/>
-   		<property name="sqlMapClient" ref="sqlMapClient"/>
+   <bean id="userDao" class="info.joseluismartin.dao.hibernate.HibernateDao">
+   		<property name="entityClass" value="info.joseluismartin.vaadin.model.User"/>
+   		<property name="sessionFactory" ref="sessionFactory"/>
    	</bean>
    	
    	<!-- Persistent Service -->
@@ -55,8 +59,6 @@
    		<property name="dao" ref="userDao"/>
    	</bean>
    	
-   	<bean id="userServiceStub" class="info.joseluismartin.service.stub.UserServiceStub" />
-   		
    <!-- UI Widgets -->
    
 	<bean id="userPageableTable" class="info.joseluismartin.vaadin.ui.table.PageableTable"
@@ -66,38 +68,38 @@
 		<property name="service" ref="userService" />
 	</bean>
 
-	<bean id="table" class="info.joseluismartin.ui.table.ConfigurableTable"
+	<bean id="table" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable"
 		scope="prototype">
 
 		<property name="columns">
-			<list value-type="info.joseluismartin.ui.table.Column">
-				<bean class="info.joseluismartin.ui.table.Column">
+			<list value-type="info.joseluismartin.vaadin.ui.table.Column">
+				<bean class="info.joseluismartin.vaadin.ui.table.Column">
 					<property name="name" value="id" />
 					<property name="displayName" value="ID" />
 					<property name="width" value="60" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="info.joseluismartin.ui.table.Column">
+				<bean class="info.joseluismartin.vaadin.ui.table.Column">
 					<property name="name" value="username" />
-					<property name="displayName" value="Usuario" />
+					<property name="displayName" value="Username" />
 					<property name="width" value="100" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="info.joseluismartin.ui.table.Column">
+				<bean class="info.joseluismartin.vaadin.ui.table.Column">
 					<property name="name" value="name" />
-					<property name="displayName" value="Nombre" />
+					<property name="displayName" value="Name" />
 					<property name="width" value="300" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="info.joseluismartin.ui.table.Column">
+				<bean class="info.joseluismartin.vaadin.ui.table.Column">
 					<property name="name" value="age" />
-					<property name="displayName" value="Edad" />
+					<property name="displayName" value="Age" />
 					<property name="width" value="30" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="info.joseluismartin.ui.table.Column">
+				<bean class="info.joseluismartin.vaadin.ui.table.Column">
 					<property name="name" value="admin" />
-					<property name="displayName" value="Administrador" />
+					<property name="displayName" value="Admin" />
 					<property name="width" value="30" />
 					<property name="align" value="c" />
 				</bean>
@@ -105,13 +107,13 @@
 		</property>
 	</bean>
 
-	<bean id="paginator" class="info.joseluismartin.ui.table.VaadinPaginator"
+	<bean id="paginator" class="info.joseluismartin.vaadin.ui.table.VaadinPaginator"
 		scope="prototype">
 		<property name="first" ref="paginatorFirstButton" />
 		<property name="last" ref="paginatorLastButton" />
 		<property name="next" ref="paginatorNextButton" />
 		<property name="previous" ref="paginatorPreviousButton" />
-		<property name="pageSizes" value="10,20,30,40,50,100,200,Todas" />
+		<property name="pageSizes" value="10,20,30,40,50,100,200,All" />
 	</bean>
 
 	<bean id="paginatorFirstButton" class="com.vaadin.ui.Button">
@@ -134,11 +136,11 @@
 		scope="prototype" />
 
 
-	<bean id="dataSourceTable" class="info.joseluismartin.ui.table.ConfigurableTable" parent="table">
+	<bean id="dataSourceTable" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable" parent="table">
 		<property name="containerDataSource" ref="userContainerDataSource"/>
 	</bean>
 	
-	<bean id="userContainerDataSource" class="info.joseluismartin.data.ContainerDataSource">
+	<bean id="userContainerDataSource" class="info.joseluismartin.vaadin.data.ContainerDataSource">
 		<property name="service" ref="userService"/>
 	</bean>
 	
@@ -149,17 +151,13 @@
 		<property name="customEditors">
 			<map>
 				<entry key="com.vaadin.terminal.Resource">
-					<bean class="info.joseluismartin.beans.VaadinResourcePropertyEditor" />
+					<bean class="info.joseluismartin.vaadin.beans.VaadinResourcePropertyEditor" />
 				</entry>
 			</map>
 		</property>
 	</bean>
 	
-	<!--  Transactions -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"/>
-	</bean>
-	
+
 	<!-- Tx Advice -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
     <!-- the transactional semantics... -->
@@ -178,7 +176,6 @@
      	expression="execution(* info.joseluismartin.service.*.*(..))"/>
      <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
   </aop:config>
-	
 
 </beans>
 

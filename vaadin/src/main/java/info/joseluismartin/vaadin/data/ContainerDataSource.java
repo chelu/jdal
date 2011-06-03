@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package info.joseluismartin.vaadin.data;
 
 import info.joseluismartin.dao.Page;
@@ -63,7 +78,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object nextItemId(Object itemId) {
 		Integer index = (Integer) itemId;
 		return index < page.getCount() - 1 ? index + 1 : null;
@@ -72,7 +86,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object prevItemId(Object itemId) {
 		Integer index = (Integer) itemId;
 		return index > 0 ? index - 1 :  null;
@@ -81,7 +94,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object firstItemId() {
 		return 0;
 	}
@@ -89,7 +101,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object lastItemId() {
 		return page.getCount() - 1;
 	}
@@ -97,7 +108,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean isFirstId(Object itemId) {
 		return ((Integer) itemId) == 0;
 	}
@@ -105,7 +115,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean isLastId(Object itemId) {
 		return ((Integer) itemId) == page.getCount() - 1;
 	}
@@ -113,7 +122,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object addItemAfter(Object previousItemId)
 			throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new Items after to container");
@@ -122,7 +130,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Item addItemAfter(Object previousItemId, Object newItemId)
 			throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new records after to container");
@@ -131,7 +138,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int indexOfId(Object itemId) {
 		return (Integer) itemId;
 	}
@@ -139,7 +145,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object getIdByIndex(int index) {
 		return index;
 	}
@@ -147,7 +152,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object addItemAt(int index) throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new records to container");
 	}
@@ -155,7 +159,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Item addItemAt(int index, Object newItemId)
 			throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new records to container");
@@ -164,7 +167,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void sort(Object[] propertyId, boolean[] ascending) {
 		// only use the first property :I
 		page.setSortName(propertyId[0].toString());
@@ -174,7 +176,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Collection<?> getSortableContainerPropertyIds() {
 		if (sortableProperties != null)
 			return sortableProperties;
@@ -191,15 +192,14 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Item getItem(Object itemId) {
 		int index = (Integer) itemId;
 		
 		if (!containsId(itemId))
 			return null;
 		
-		if (!isInPage(index)) {
-			page.setPage(index);
+		if (!isInPage(index) && page.getCount() != 0) {
+			page.setPage(index/page.getPageSize() + 1);
 			loadPage();
 		}
 		return items.get(globalToPage(index));
@@ -208,7 +208,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Collection<?> getContainerPropertyIds() {
 		// if we have data will try introspection
 		if (page.getData().size() > 0) {
@@ -222,7 +221,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Collection<?> getItemIds() {
 		LinkedList<Integer> ids = new LinkedList<Integer>();
 		for (int i = 0; i < page.getCount(); i++) {
@@ -234,7 +232,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Property getContainerProperty(Object itemId, Object propertyId) {
 		Item item =  getItem(itemId);
 		return item.getItemProperty(propertyId);
@@ -243,7 +240,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Class<?> getType(Object propertyId) {
 		// if we have data will try introspection
 		if (page.getData().size() > 0) {
@@ -257,7 +253,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int size() {
 		return page.getCount();
 	}
@@ -265,7 +260,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean containsId(Object itemId) {
 		int index = (Integer) itemId;
 		return index >= 0 && index < page.getCount();
@@ -274,7 +268,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Item addItem(Object itemId) throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new records to container");
 	}
@@ -282,7 +275,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object addItem() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new records to container");
 	}
@@ -290,7 +282,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean removeItem(Object itemId) {
 		if (!containsId(itemId))
 			return false;
@@ -315,7 +306,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean addContainerProperty(Object propertyId, Class<?> type,
 			Object defaultValue) throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new properties to container");
@@ -324,7 +314,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean removeContainerProperty(Object propertyId)
 			throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new properties to container");
@@ -333,7 +322,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean removeAllItems() throws UnsupportedOperationException {
 		Page all = (Page) page.clone();
 		all.setPageSize(Integer.MAX_VALUE);
@@ -361,7 +349,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	}
 
 	private boolean isInPage(int index) {
-		return globalToPage(index) > 0 && globalToPage(index) < page.getPageSize();
+		return globalToPage(index) >= 0 && globalToPage(index) < page.getPageSize();
 	}
 	
 	public PersistentService<T, Serializable> getService() {
@@ -386,13 +374,11 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		this.sortableProperties = sortableProperties;
 	}
 
-	@Override
 	public void addListener(ItemSetChangeListener listener) {
 		if (listeners.contains(listener))
 			listeners.add(listener);
 	}
 
-	@Override
 	public void removeListener(ItemSetChangeListener listener) {
 		listeners.remove(listener);
 	}
@@ -400,7 +386,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	private void fireItemSetChange() {
 		ItemSetChangeEvent isce = new ItemSetChangeEvent() {
 
-			@Override
 			public Container getContainer() {
 				return ContainerDataSource.this;
 			}

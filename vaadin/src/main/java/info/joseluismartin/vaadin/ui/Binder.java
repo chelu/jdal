@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2011 original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.vaadin.ui.table;
+package info.joseluismartin.vaadin.ui;
+
 
 /**
+ * Binder interface define methods common to model based
+ * representation of data like Views.
+ *  
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.0
+ * @param <T> model type
  */
-public class PaginatorModel {
+public interface Binder<T> extends ModelHolder<T> {
 
+	/**
+	 * Update Model from Component
+	 */
+	void update();
+	
+	/**
+	 * Update Component from model
+	 */
+	void refresh();
 }

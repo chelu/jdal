@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package info.joseluismartin.vaadin.ui.table;
 
 import info.joseluismartin.dao.Page;
@@ -7,6 +22,9 @@ import info.joseluismartin.service.PersistentService;
 import info.joseluismartin.vaadin.ui.Box;
 
 import java.io.Serializable;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
@@ -28,6 +46,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	Container.ItemSetChangeListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log log = LogFactory.getLog(PageableTable.class);
 	
 	private ConfigurableTable table;
 	private VaadinPaginator<T> paginator;
@@ -56,7 +75,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void pageChanged(PageChangedEvent event) {
 		table.setPageLength(page.getPageSize());
 		loadPage();
@@ -65,33 +83,32 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/**
 	 * Load models from page and add to bean item container
 	 */
+	@SuppressWarnings("unchecked")
 	private void loadPage() {
 		page = service.getPage(paginator.getModel());
 		if (page.getData() != null && page.getData().size() > 0) {
 			if (container == null) {
-				container = new BeanItemContainer<T>(page.getData());
+				container = new BeanItemContainer(page.getData().get(0).getClass(), page.getData());
 				table.setContainerDataSource(container);
 			}
 			else {
 				container.removeAllItems();
-				for (T bean : page.getData()) {
-					container.addBean(bean);
-				}
+				container.addAll(page.getData());
 			}
 		}
 		
+		paginator.getComponent().setWidth(table.getWidth());
 		paginator.refresh();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void containerItemSetChange(ItemSetChangeEvent event) {
 		paginator.refresh();
 	}
 	
-	public ConfigurableTable getTable() {table.removeAllItems();
+	public ConfigurableTable getTable() {		
 		return table;
 	}
 
@@ -117,7 +134,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	
 	class PageSorter implements TableSorter {
 		
-		@Override
 		public void sort(Object[] propertyId, boolean[] ascending) {
 			page.setSortName(propertyId[0].toString());
 			page.setOrder(ascending[0] ? Page.Order.ASC : Page.Order.DESC);

@@ -1,13 +1,25 @@
+/*
+ * Copyright 2009-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package info.joseluismartin.vaadin.ui.table;
 
 import info.joseluismartin.dao.Page;
-import info.joseluismartin.dao.PageChangedEvent;
 import info.joseluismartin.dao.Paginator;
 import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.vaadin.ui.AbstractView;
 import info.joseluismartin.vaadin.ui.Box;
-
-import java.util.ArrayList;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -45,8 +57,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	private Select pgs = new Select();
 	/** select with all pages for jump to page number */
 	private Select goTo = new Select();
-	/** paginator listener container */
-	private ArrayList<PaginatorListener> listeners = new ArrayList<PaginatorListener>();
 	/** Listen buttons clicks */
 	private ButtonClickListener buttonClickListener = new ButtonClickListener();
 	
@@ -63,6 +73,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	 */
 	public VaadinPaginator(Page<T> page) {
 		setModel(page);
+		page.setPage(1);
 	}
 
 	/**
@@ -80,6 +91,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		statusLayout.setComponentAlignment(status, Alignment.MIDDLE_CENTER);
 		
 		HorizontalLayout hbox = new HorizontalLayout();
+		hbox.setSpacing(true);
 		Box.addHorizontalGlue(hbox);
 		
 		// buttons and status
@@ -92,15 +104,16 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		Box.addHorizontalGlue(hbox);
 		
 		// goto page select
-		Label goToLabel = new Label("Ir a: ");
+		Label goToLabel = new Label("GoTo: ");
 		hbox.addComponent(goToLabel);
 		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
 		goTo.setWidth("5em");
 		goTo.setImmediate(true);
 		hbox.addComponent(goTo);
+		Box.addHorizontalStruct(hbox, 10);
 		
 		// records by page select
-		Label showRecords = new Label("Mostrar:");
+		Label showRecords = new Label("Page size: ");
 		hbox.addComponent(showRecords);
 		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_RIGHT);
 		
@@ -111,6 +124,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		pgs.setValue(String.valueOf(getModel().getPageSize()));
 		pgs.setWidth("6em");
 		pgs.setImmediate(true);
+		Box.addHorizontalStruct(hbox, 10);
 		hbox.addComponent(pgs);
 	
 		pgs.addListener(new PgsValueChangeListener());
@@ -123,44 +137,35 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean hasNext() {
-		return getModel().getPage() < getTotalPages();
+		return getModel().hasNext();
 	}
 
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean hasPrevious() {
-		return getModel().getPage() > 1;
+		return getModel().hasPrevious();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean hasPage(int indexPage) {
-		return indexPage <= getTotalPages() &&  indexPage > 0;
+		return getModel().hasPage(indexPage);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void setPage(int indexPage) {
-		if (hasPage(indexPage)) {
-			getModel().setPage(indexPage);
-			firePageChanged();
-			
-		}
+		getModel().setPage(indexPage);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int getPage() {
 		return getModel().getPage();
 	}
@@ -169,7 +174,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public int getTotalPages() {
 		return getModel().getTotalPages();
 	}
@@ -177,7 +181,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public void nextPage() {
 		getModel().nextPage();
 		
@@ -186,7 +189,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public void previousPage() {
 		getModel().previousPage();
 		
@@ -195,7 +197,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public void lastPage() {
 		setPage(getTotalPages());
 	}
@@ -203,14 +204,12 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public void firstPage() {
 		setPage(1);
 	}
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public int getStartIndex() {
 		return getModel().getStartIndex();
 	}
@@ -219,7 +218,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public int getPageSize() {
 		return getModel().getPageSize();
 	}
@@ -227,7 +225,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public void setPageSize(int pageSize) {
 		if (pageSize > getModel().getCount())
 			pageSize = getModel().getCount();
@@ -239,35 +236,17 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public void addPaginatorListener(PaginatorListener listener) {
-		if (!listeners.contains(listener))
-			listeners.add(listener);
-		
+		getModel().addPaginatorListener(listener);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */	
-	@Override
 	public void removePaginatorListener(PaginatorListener listener) {
-		listeners.remove(listener);
-		
+		getModel().removePaginatorListener(listener);
 	}
 	
-	/**
-	 * Notify Listener that current page changed
-	 */
-	private void firePageChanged() {
-		for (PaginatorListener listener : listeners) {
-			Page<T> page = getModel();
-			listener.pageChanged(new PageChangedEvent(getComponent(), page.getPage(),
-					page.getStartIndex(), page.getTotalPages(), getPageSize()));
-		}
-		
-		refresh();
-	}
-
 	/**
 	 * Parse string with page number
 	 * @param item
@@ -276,11 +255,10 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	private int parsePageSize(String item) {
 		int pageSize = 20;
 		if (item != null) {
-			if ("Todas".equals(item.trim())) {
-			pageSize = Integer.MAX_VALUE;
-			}
-			else {
+			try {
 				pageSize = Integer.parseInt(item.trim());
+			} catch (NumberFormatException e) {
+				pageSize = Integer.MAX_VALUE;
 			}
 		}
 		return pageSize;
@@ -289,7 +267,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void refresh() {
 		// update status
 		status.setValue(getPage() + "/" + getTotalPages());
@@ -361,12 +338,10 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 
 		private static final long serialVersionUID = 1L;
 
-		@Override
 		public void valueChange(ValueChangeEvent event) {
 			int pageSize = parsePageSize((String) pgs.getValue());
 			if (pageSize != getModel().getPageSize()) {
 				setPageSize(pageSize);
-				firePageChanged();
 			}
 		}
 	}
@@ -375,7 +350,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 
 		private static final long serialVersionUID = 1L;
 
-		@Override
 		public void valueChange(ValueChangeEvent event) {
 			if (goTo.getValue() instanceof Integer) {
 				if (!goTo.getValue().equals(getModel().getPage()))
@@ -388,7 +362,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 
 		private static final long serialVersionUID = 1L;
 
-		@Override
 		public void buttonClick(ClickEvent event) {
 			if (event.getComponent() == next) {
 				nextPage();
@@ -408,27 +381,21 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getModel().getCount();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void setCount(int count) {
-		// TODO Auto-generated method stub
-		
+		getModel().setCount(count);
 	}
 }

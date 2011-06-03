@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2008-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.vaadin.ui.table;
+package info.joseluismartin.vaadin.ui;
 
 /**
+ * Interface for classes that holds models, ie a model pointer interface
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
- */
-public class PaginatorModel {
 
+ * @param <T> model class
+ */
+public interface ModelHolder<T> {
+	
+	/**
+	 * Gets model
+	 * @return the model
+	 */
+	T getModel();
+	
+	/**
+	 * Sets model
+	 * @param model
+	 */
+	void setModel(T model);
 }
