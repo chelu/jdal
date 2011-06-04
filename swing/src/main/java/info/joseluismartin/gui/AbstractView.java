@@ -28,9 +28,11 @@ import java.awt.Component;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -123,8 +125,6 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public AbstractView(T model) {
 		setModel(model);
-		if (autobinding)
-			autobind();
 	}
 	
 	/**
@@ -156,6 +156,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 			panel = buildPanel();
 			if (width != 0 && height != 0)
 				panel.setSize(width, height);
+			
 		}
 		return panel;
 	}

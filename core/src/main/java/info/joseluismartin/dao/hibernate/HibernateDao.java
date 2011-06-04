@@ -53,9 +53,12 @@ import org.springframework.util.ClassUtils;
 
 
 /**
- * Hibernate generic dao implementation
+ * Hibernate generic DAO implementation. Support pagination of results with filters
+ * using getPage(Page page) method.
+ * 
  *
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin - (jlm@joseluismartin.info).
+ * @see info.joseluismartin.dao.Dao
  */
 public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSupport implements Dao<T, PK>  {
 
@@ -101,7 +104,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 			Criteria criteria = getCriteria(page);
 			ResultTransformer rt = ((CriteriaImpl) criteria).getResultTransformer(); 
 			criteria.setProjection(Projections.rowCount());
-			page.setCount(((Long) criteria.uniqueResult()).intValue());
+			 page.setCount(((Long) criteria.uniqueResult()).intValue());
 			// reset criteria
 			criteria.setProjection(null);
 			criteria.setResultTransformer(rt);
@@ -119,10 +122,15 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 		return page;
 	}
 
+	/**
+	 * Get Hibernate named Query and configure with filter from page. 
+	 * Set the result count on page also. 
+	 * @param page page 
+	 * @return Hibernate named Query.
+	 */
 	private Query getQuery(Page<T> page) {
 		Object filter = page.getFilter();
 		
-
 		try {
 			if (filter instanceof Filter) {
 				Filter f = (Filter) filter;
@@ -169,7 +177,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 
 				if (!enableFilter(f)) {
 					if (log.isDebugEnabled()) 
-						log.debug("No hibenate filter found with name: " + f.getFilterName() +
+						log.debug("No hibernate filter found with name: " + f.getFilterName() +
 								", try criteria builder.");
 					// if no filter, try criteria builder
 					if (criteriaBuilderMap.containsKey(f.getFilterName())) {

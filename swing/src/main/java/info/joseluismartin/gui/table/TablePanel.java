@@ -20,7 +20,6 @@ import info.joseluismartin.dao.PageableDataSource;
 import info.joseluismartin.gui.GuiFactory;
 import info.joseluismartin.gui.PageableTable;
 import info.joseluismartin.gui.View;
-import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.gui.report.ReportListView;
 import info.joseluismartin.reporting.ReportDataProvider;
 import info.joseluismartin.service.PersistentService;
@@ -29,6 +28,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Action;
@@ -40,7 +40,8 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 /**
- * A Panel with PageableTable, Filter and Button Box.
+ * A Panel with PageableTable, Filter and Button Box to hold TablePanelActions.
+ * Hold a Paginator to navigate across pages.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
@@ -49,25 +50,32 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 
 	private static final long serialVersionUID = 1L;
 	
-	
+	/** Persistent Service used to get data */
 	private PersistentService<Object, Serializable> persistentService;
+	/** Bean name of the editor component */
 	private String editorName;
+	/** GuiFactory to get model editor */
 	private GuiFactory guiFactory;
-	
+	/** TablePanel name */
 	private String name;
+	/** Pageable table used to show records */
 	private PageableTable table;
-	
+	/** A filter view */
 	private View<Object> filterView;
-
+	/** ComboBox with reports available to execute on filtered data */
 	private ReportListView reportListView;
+	/** the TablePanelAction list */
+	private List<Action> actions = new ArrayList<Action>();
 	
-	private List<Action> actions;
-	
-	
+	/** 
+	 * Creates new TablePanel
+	 */
 	public TablePanel() {
 	}
 	
-	
+	/**
+	 * Initialize TablePanel after property set. Usally called by container.
+	 */
 	public void init() {
 		BorderLayout layout = new BorderLayout();
 		layout.setVgap(10);
@@ -93,6 +101,10 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	}
 	
 	
+	/**
+	 * Creates a new Component that holds the ReportListView
+	 * @return ReportListView Component
+	 */
 	@SuppressWarnings("unused")
 	private Component createReportListBox(){
 		Box tableBox = Box.createHorizontalBox();
@@ -102,7 +114,8 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	}
 	
 	/**
-	 * @return
+	 * Creates a new Component with PageableTable.
+	 * @return PageableTableComponent.
 	 */
 	private Component createTableBox() {
 		Box tableBox = Box.createVerticalBox();
@@ -115,7 +128,8 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	}
 
 	/**
-	 * @return
+	 * Creates a new Component with FilterView.
+	 * @return new Component.
 	 */
 	private Component createFilterBox() {
 		Box header = Box.createVerticalBox();
@@ -132,8 +146,7 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 
 	/**
 	 * Create the control button Box from action list.
-	 *  
-	 * @return Box with buttons
+	 * @return Box with buttons from actions
 	 */
 	protected Box createControlBox() {
 		Box controlBox = Box.createHorizontalBox();
@@ -153,6 +166,9 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 		return controlBox;
 	}
 	
+	/**
+	 * Refresh View
+	 */
 	public void refresh() {
 		if (reportListView != null) 
 			reportListView.refresh();
@@ -161,22 +177,33 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 		table.refresh();
 	}
 	
-	
-	public PageableTable getTable() {
-		return table;
-	}
-	public void setTable(PageableTable table) {
-		this.table = table;
-	}
-
-
+	/**
+	 * Selects records in all pages. Query only forkeys and check 
+	 * them in PageableTable.
+	 */
 	public void selectAll() {
 		PageableDataSource dataSource = table.getDataSource();
 		Page page = new Page(Integer.MAX_VALUE);
 		page.setFilter(filterView.getModel());
 		table.getTableModel().check(dataSource.getKeys(page));
 	}
+	
+	// Getters and Setters
 
+	/**
+	 * @return the PagebleTable.
+	 */
+	public PageableTable getTable() {
+		return table;
+	}
+	
+	/**
+	 * @param the PageableTable to set.
+	 */
+	public void setTable(PageableTable table) {
+		this.table = table;
+	}
+	
 	public View<Object> getFilterView() {
 		return filterView;
 	}

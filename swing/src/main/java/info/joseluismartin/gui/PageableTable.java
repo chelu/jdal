@@ -76,7 +76,9 @@ import org.apache.commons.logging.LogFactory;
  * A JPanel with  a JTable and paginator. 
  * 
  * <p>This table view uses a {@link PageableDataSource} to query for data by pages.
- * Has a paginator control to navigate and show page info.
+ * Has a paginator control to navigate on records and show page info.
+ * 
+ * <p> You need to configure the PageableDatasource and the ListTableModel before usage. 
  *  
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
@@ -92,6 +94,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private JTable table;
 	/** the paginator view */
 	private PaginatorView paginatorView;
+	/** Page used to query PageableDataSource */
+	private Page page  = new Page();
 	/** pageable datasource to request data page by page */
 	private PageableDataSource dataSource;
 	/** list table model for the table */
@@ -110,6 +114,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	GuiFactory guiFactory;
 	/** editor name */
 	String editorName;
+	/** Open editors Map hold editors that are open for a  model */
 	private Map<Object, Window> openDialogs = Collections.synchronizedMap(new HashMap<Object, Window>()); 
 	
 	// Menus
@@ -133,10 +138,14 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		okIcon = FormUtils.getIcon(okIcon, "/images/16x16/dialog-ok.png");
 		cancelIcon = FormUtils.getIcon(cancelIcon, "/images/16x16/dialog-cancel.png");
 		visibilityMenuIcon = FormUtils.getIcon(visibilityMenuIcon, "/images/16x16/view-choose.png");
-		
+		// Server side sorter
 		sorter = new ModelRowSorter<ListTableModel>(tableModel);
 		sorter.addRowSorterListener(this);
-		getInitialData();
+		// configure paginator
+		page.addPaginatorListener(this);
+		paginatorView.setPaginator(page);
+	
+		createColumnDescriptos();
 		table = new JTable(tableModel, tableModel.getTableColumnModel());
 		table.setAutoCreateRowSorter(false);
 		table.setRowSorter(sorter);
@@ -147,10 +156,11 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		setLayout(layout);
 		this.setBackground(Color.WHITE);
 		add(tableScrollPane, BorderLayout.CENTER);
-		add(paginatorView, BorderLayout.SOUTH);
-		paginatorView.getPaginator().addPaginatorListener(this);
+		add(paginatorView.getPanel(), BorderLayout.SOUTH);
 		createMenu();
-		paginatorView.refresh();
+		
+		// goto first page
+		page.firstPage();
 	}
 	
 	/**
@@ -180,10 +190,9 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	}
 
 	/**
-	 * Get intial data and create columns desciptors list for visibility menu
+	 * Create columns desciptors list for visibility menu
 	 */
-	private void getInitialData() {
-		loadPage(createPage());
+	private void createColumnDescriptos() {
 		// get info about columns on table model
 		columnDescriptors = new ArrayList<ColumnDescriptor>(tableModel.getPropertyCount());
 		for (int i = 0; i < tableModel.getPropertyCount(); i++) {
@@ -201,35 +210,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		if (sorter.getSortKeys().size() > 0 && 
 				tableModel.isPropertyColumn(sorter.getSortKeys().get(0).getColumn())) {
 			// set first page
-			paginatorView.getPaginator().firstPage();
+			page.firstPage();
 		}
-	}
-
-	/**
-	 * Create a new Page for query to DataSource
-	 * with data from sorter and paginator.
-	 * @return a new Page ready to call dataSource.getPage() or null to abort.
-	 */
-	private Page createPage() {
-		Page.Order order = Page.Order.ASC;
-		String sortPropertyName = null;
-		List<? extends SortKey> keys = sorter.getSortKeys();
-		// If sorting, get values to set in page
-		if (keys.size() > 0) {
-			RowSorter.SortKey key = sorter.getSortKeys().get(0);
-			if (tableModel.isPropertyColumn(key.getColumn())) {
-				sortPropertyName = tableModel.getSortPropertyName(key.getColumn());
-				order = converSortOrder(key);
-			}
-			
-		}
-			
-		Paginator paginator = paginatorView.getPaginator();
-		Page page = new Page(paginator.getPageSize(), paginator.getPage(), sortPropertyName, order);
-	
-		page.setFilter(filter);
-
-		return page;
 	}
 
 	/**
@@ -249,12 +231,25 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 * Load new page from data source
 	 * @param page
 	 */
-	private void loadPage(Page page) {
+	private void loadPage() {
+		Page.Order order = Page.Order.ASC;
+		String sortPropertyName = null;
+		List<? extends SortKey> keys = sorter.getSortKeys();
+		// If sorting, get values to set in page
+		if (keys.size() > 0) {
+			RowSorter.SortKey key = sorter.getSortKeys().get(0);
+			if (tableModel.isPropertyColumn(key.getColumn())) {
+				sortPropertyName = tableModel.getSortPropertyName(key.getColumn());
+				order = converSortOrder(key);
+			}
+			
+		}
+		page.setSortName(sortPropertyName);
+		page.setOrder(order);
+		page.setFilter(filter);
 		dataSource.getPage(page);
 		tableModel.setList(page.getData());
-		Paginator paginator = paginatorView.getPaginator();
-		paginator.setCount(page.getCount());
-		paginatorView.refresh();
+		
 	}
 	
 	/**
@@ -262,8 +257,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 * @see info.joseluismartin.gui.PaginatorListener#pageChanged(info.joseluismartin.gui.PageChangedEvent)
 	 */
 	public void pageChanged(PageChangedEvent event) {
-		Page page = createPage();
-		loadPage(page);
+		loadPage();
+		tableModel.setList(page.getData());
 	}
 	
 	/**

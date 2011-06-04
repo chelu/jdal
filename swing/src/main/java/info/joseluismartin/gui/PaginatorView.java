@@ -30,20 +30,19 @@ import java.awt.event.ItemListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
- * Paginator Panel to show controls that manage the paginator
+ * PaginatorView with control buttons to manage paginator.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @see info.joseluismartin.gui.PageableTable
  */
-public class PaginatorView extends JPanel implements PaginatorListener {
+public class PaginatorView extends AbstractView<Paginator> implements PaginatorListener {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -93,8 +92,14 @@ public class PaginatorView extends JPanel implements PaginatorListener {
 	 * with init-method.
 	 */
 	public void init() {
-		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-		setBackground(Color.LIGHT_GRAY);
+		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected JComponent buildPanel() {
 		pageSizeCombo = new JComboBox(pageSizes);
 		pageSizeCombo.addItemListener(new PageSizeComboListener());
 		nextPageButton = new JButton(new NextPageAction());
@@ -108,6 +113,8 @@ public class PaginatorView extends JPanel implements PaginatorListener {
 		numberPagesLabel.setAlignmentX(Container.RIGHT_ALIGNMENT);
 		
 		Box box = Box.createHorizontalBox();
+		box.setBackground(Color.LIGHT_GRAY);
+		box.setOpaque(true);
 		box.add(countLabel);
 		box.add(Box.createHorizontalStrut( 100 	/*180 + numberPagesLabel.getSize().width */));
 		box.add(Box.createHorizontalGlue());
@@ -123,10 +130,11 @@ public class PaginatorView extends JPanel implements PaginatorListener {
 		box.add(pageSizeCombo);
 		box.add(Box.createHorizontalStrut(30));
 		
-		add(box);
 		// set page size from combo box
 		String pageSize = (String) pageSizeCombo.getSelectedItem();
 		paginator.setPageSize(parsePageSize(pageSize));
+		
+		return box;
 	}
 
 	/**
@@ -142,17 +150,27 @@ public class PaginatorView extends JPanel implements PaginatorListener {
 	/**
 	 * Refresh view with data of model
 	 */
-	public void refresh() {
+	public void doRefresh() {
 		statusLabel.setText("" + paginator.getPage() + " / " + paginator.getTotalPages());
 		countLabel.setText("Records: " + paginator.getCount());
+        // disable buttons on fist and last page
 		boolean hasNext = paginator.hasNext();
 		boolean hasPrevious = paginator.hasPrevious();
 		nextPageButton.setEnabled(hasNext);
 		lastPageButton.setEnabled(hasNext);
 		previousPageButton.setEnabled(hasPrevious);
 		firstPageButton.setEnabled(hasPrevious);
-		
 	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public void doUpdate() {
+		paginator.setPageSize(
+				 parsePageSize((String) this.pageSizeCombo.getSelectedItem()));
+	}
+	
 	/**
 	 * @return the nextIcon
 	 */
@@ -234,7 +252,11 @@ public class PaginatorView extends JPanel implements PaginatorListener {
 	 * @param paginator the paginator to set
 	 */
 	public void setPaginator(Paginator paginator) {
+		if (paginator != null)
+			paginator.removePaginatorListener(this);
+		
 		this.paginator = paginator;
+		paginator.addPaginatorListener(this);
 	}
 	
 	private int parsePageSize(String item) {

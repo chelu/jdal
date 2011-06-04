@@ -78,10 +78,8 @@ public class DefaultPaginator  implements Paginator {
 	 * @see info.joseluismartin.gui.Paginator#setPage(int)
 	 */
 	public void setPage(int indexPage) {
-		if (hasPage(indexPage)) {
-			page = indexPage;
-			firePageChangedEvent();
-		}
+		page = indexPage;
+		firePageChangedEvent();
 		
 	}
 
