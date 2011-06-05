@@ -44,6 +44,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	private static final long serialVersionUID = 1L;
 	/** Label to show pagenation status. */
 	private Label status = new Label("-/-");
+	private Label resultCount = new Label("       ");
 	/** String array with available page sizes */
 	private String[] pageSizes;
 	/** goto next page button */
@@ -65,7 +66,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	 * Creates a new paginator with default page size of 20 records
 	 */
 	public VaadinPaginator() {
-		this (new Page<T>(20));
+		this (new Page<T>(10));
 	}
 	
 	/**
@@ -74,7 +75,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	 */
 	public VaadinPaginator(Page<T> page) {
 		setModel(page);
-		page.setPage(1);
+		page.firstPage();
 	}
 
 	/**
@@ -93,13 +94,16 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		
 		HorizontalLayout hbox = new HorizontalLayout();
 		hbox.setSpacing(true);
+		resultCount.setSizeUndefined();
+		hbox.addComponent(resultCount);
+		
 		Box.addHorizontalGlue(hbox);
 		
 		// buttons and status
 		hbox.addComponent(first);
 		hbox.addComponent(previous);
 		hbox.addComponent(statusLayout);
-		hbox.setComponentAlignment(statusLayout, Alignment.MIDDLE_CENTER);
+//		hbox.setComponentAlignment(statusLayout, Alignment.MIDDLE_CENTER);
 		hbox.addComponent(next);
 		hbox.addComponent(last);
 		Box.addHorizontalStruct(hbox, 10);
@@ -108,18 +112,17 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		Label goToLabel = new Label("GoTo: ");
 		goToLabel.setSizeUndefined();
 		hbox.addComponent(goToLabel);
-		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
+//		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
 		goTo.setWidth("5em");
 		goTo.setImmediate(true);
 		hbox.addComponent(goTo);
 		Box.addHorizontalGlue(hbox);
 	
-		
 		// records by page select
 		Label showRecords = new Label("Page size: ");
 		showRecords.setSizeUndefined();
 		hbox.addComponent(showRecords);
-		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_RIGHT);
+//		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_RIGHT);
 		
 		for (String size : pageSizes) {
 			pgs.addItem(size);
@@ -129,7 +132,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		pgs.setWidth("6em");
 		pgs.setImmediate(true);
 		hbox.addComponent(pgs);
-		hbox.setComponentAlignment(pgs, Alignment.MIDDLE_RIGHT);
+//		hbox.setComponentAlignment(pgs, Alignment.MIDDLE_RIGHT);
 	
 		pgs.addListener(new PgsValueChangeListener());
 		goTo.addListener(new GoToValueChangeListener());
@@ -276,6 +279,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	public void refresh() {
 		// update status
 		status.setValue(getPage() + "/" + getTotalPages());
+		resultCount.setValue("Records: " + getModel().getCount());
 
 		// fill goto page select
 		goTo.removeAllItems();

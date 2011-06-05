@@ -55,7 +55,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	private Page<T> page = new Page<T>();
 	
 	private PersistentService<T, Serializable> service; 
-	List<String> sortableProperties;
+	private List<String> sortableProperties;
 	private List<BeanItem<T> > items = new LinkedList<BeanItem<T>>();
 	private Class<T> entityClass;
 	private List<ItemSetChangeListener> listeners = new ArrayList<ItemSetChangeListener>();
