@@ -1,5 +1,5 @@
-JDAL Library 1.1-SNAPSHOT (Jun 2011)
------------------------------------
+JDAL Library 1.1-1 (Jun 2011)
+-----------------------------
 http://www.jdal.org
 
 INTRODUCTION
@@ -22,12 +22,19 @@ JDAL is freely usable, licensed under the Apache 2.0 license.
 
 CONTENT
 
-dist/jdal-core-1.1-SNAPSHOT.jar:     JDAL Core Library
-dist/jdal-swing-1.1-SNAPSHOT.jar:    JDAL Swing UI Components
-dist/jdal-aspects-1.1-SNAPSHOT.jar:  JDAL Aspects Library
-library-sample:                      JDAL Library Sample Application
-aspect-sample:                       JDAL Aspects Sample
+core:              JDAL Core Library
+swing:             JDAL Swing UI Library
+aspects:           JDAL Aspects Library
+vaadin:            JDAL Vaadin UI Library
   
+
+COMPILE
+
+mvn package 
+
+INSTALL
+
+mvn install
 
 AUTHOR
 
