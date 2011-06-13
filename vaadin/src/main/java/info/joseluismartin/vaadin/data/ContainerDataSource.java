@@ -18,22 +18,23 @@ package info.joseluismartin.vaadin.data;
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.service.PersistentService;
 
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
 
 import com.vaadin.data.Container;
+import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.data.Container.Indexed;
 import com.vaadin.data.Container.ItemSetChangeNotifier;
 import com.vaadin.data.Container.Sortable;
-import com.vaadin.data.Item;
-import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 
 /**
@@ -45,7 +46,6 @@ import com.vaadin.data.util.BeanItem;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("rawtypes")
 public class ContainerDataSource<T> implements Container, Sortable, Indexed, 
 	ItemSetChangeNotifier {
 
@@ -59,16 +59,20 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	private List<BeanItem<T> > items = new LinkedList<BeanItem<T>>();
 	private Class<T> entityClass;
 	private List<ItemSetChangeListener> listeners = new ArrayList<ItemSetChangeListener>();
+	private ItemIdStrategy itemIdStrategy;
 	
-	public ContainerDataSource() {}
-	
-	public ContainerDataSource(Class<T> entityClass) {
-		this.entityClass = entityClass;
+	public ContainerDataSource() {
+		this(null, null);
 	}
 	
-	public ContainerDataSource(PersistentService<T, Serializable> service) {
+	public ContainerDataSource(Class<T> entityClass) {
+		this(entityClass, null);
+	}
+	
+	public ContainerDataSource(Class<T> entityClass, PersistentService<T, Serializable> service) {
 		this.service = service;
-		loadPage();
+		this.entityClass = entityClass;
+		setItemIdStrategy(new IndexedItemIdStrategy());
 	}
 
 	public void init() {
@@ -79,45 +83,44 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public Object nextItemId(Object itemId) {
-		Integer index = (Integer) itemId;
-		return index < page.getCount() - 1 ? index + 1 : null;
+		return isLastId(itemId) ? null : getIdByIndex(indexOfId(itemId) + 1);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object prevItemId(Object itemId) {
-		Integer index = (Integer) itemId;
-		return index > 0 ? index - 1 :  null;
+		return isFirstId(itemId) ? null : getIdByIndex(indexOfId(itemId) - 1);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object firstItemId() {
-		return 0;
+		return itemIdStrategy.firstItemId();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object lastItemId() {
-		return page.getCount() - 1;
+		return itemIdStrategy.lastItemId();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isFirstId(Object itemId) {
-		return ((Integer) itemId) == 0;
+		return indexOfId(itemId) == 0;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isLastId(Object itemId) {
-		return ((Integer) itemId) == page.getCount() - 1;
+		return indexOfId(itemId) == page.getCount() - 1;
 	}
+
 
 	/**
 	 * {@inheritDoc}
@@ -139,14 +142,14 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public int indexOfId(Object itemId) {
-		return (Integer) itemId;
+		return itemIdStrategy.indexOfId(itemId);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object getIdByIndex(int index) {
-		return index;
+		return itemIdStrategy.getIdByIndex(index);
 	}
 
 	/**
@@ -171,6 +174,8 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		// only use the first property :I
 		page.setSortName(propertyId[0].toString());
 		page.setOrder(ascending[0] ? Page.Order.ASC : Page.Order.DESC);
+		loadPage();
+		fireItemSetChange();
 	}
 
 	/**
@@ -180,31 +185,39 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		if (sortableProperties != null)
 			return sortableProperties;
 		
+		if (entityClass != null) {
+			List<String> properties = new LinkedList<String>();
+			PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(entityClass);
+			for (PropertyDescriptor pd : pds)
+				properties.add(pd.getName());
+			
+			return properties;
+		}
+		
 		// if we have data will try introspection
 		if (page.getData().size() > 0) {
 			BeanItem<T> item = items.get(0);
 			return item.getItemPropertyIds();
 		}
-		
-		return new LinkedList();
+
+		return new LinkedList<Object>();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Item getItem(Object itemId) {
-		int index = (Integer) itemId;
 		
 		if (!containsId(itemId))
 			return null;
-		
-		if (!isInPage(index) && page.getCount() != 0) {
-			page.setPage(index/page.getPageSize() + 1);
-			loadPage();
-		}
-		return items.get(globalToPage(index));
+
+		return getItemByIndex(indexOfId(itemId));
 	}
 
+	public int getPageContaining(int index) {
+		return index/page.getPageSize() + 1;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -222,11 +235,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public Collection<?> getItemIds() {
-		LinkedList<Integer> ids = new LinkedList<Integer>();
-		for (int i = 0; i < page.getCount(); i++) {
-			ids.add(i);
-		}
-		return Collections.unmodifiableCollection(ids);
+		return itemIdStrategy.getItemIds();
 	}
 
 	/**
@@ -234,13 +243,18 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 */
 	public Property getContainerProperty(Object itemId, Object propertyId) {
 		Item item =  getItem(itemId);
-		return item.getItemProperty(propertyId);
+		return item != null ? item.getItemProperty(propertyId) : null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Class<?> getType(Object propertyId) {
+		if (entityClass != null) {
+			return BeanUtils.getPropertyDescriptor(entityClass, (String)propertyId)
+				.getPropertyType();
+		}
+		
 		// if we have data will try introspection
 		if (page.getData().size() > 0) {
 			BeanItem<T> item = items.get(0);
@@ -261,7 +275,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public boolean containsId(Object itemId) {
-		int index = (Integer) itemId;
+		int index = indexOfId(itemId);
 		return index >= 0 && index < page.getCount();
 	}
 
@@ -323,13 +337,33 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public boolean removeAllItems() throws UnsupportedOperationException {
-		Page all = (Page) page.clone();
+		Page<T> all =  page.clone();
 		all.setPageSize(Integer.MAX_VALUE);
 		service.delete(all.getData());
 	
 		return true;
 	}
+
+	private void loadPage() {
+		service.getPage(page);
+		int index = 0;
+		items.clear();
+		for (T t : page.getData()) {
+			BeanItem<T> item = new BeanItem<T>(t);
+			items.add(item);
+			itemIdStrategy.itemLoaded(pageToGlobal(index++), item);
+		}
+	}
+
+	/**
+	 * @param i
+	 * @return
+	 */
+	private int pageToGlobal(int index) {
+		return page.getStartIndex() + index;
+	}
 	
+
 	/**
 	 * Convert global index to page index.
 	 * @param index global index
@@ -337,15 +371,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 */
 	private int globalToPage(int index) {
 		return index - page.getStartIndex();
-	}
-
-	private void loadPage() {
-		service.getPage(page);
-		items.clear();
-		for (T t : page.getData()) {
-			items.add(new BeanItem<T>(t));
-		}
-		fireItemSetChange();
 	}
 
 	private boolean isInPage(int index) {
@@ -375,7 +400,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	}
 
 	public void addListener(ItemSetChangeListener listener) {
-		if (listeners.contains(listener))
+		if (!listeners.contains(listener))
 			listeners.add(listener);
 	}
 
@@ -390,10 +415,82 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 				return ContainerDataSource.this;
 			}
 		};
+		// must be first 
+		itemIdStrategy.containerItemSetChange(isce);
 		
 		for (ItemSetChangeListener listener : listeners) {
 			listener.containerItemSetChange(isce);
 		}
+	}
+	
+	public void setPageSize(int pageSize) {
+		page.setPageSize(pageSize);
+		loadPage();
+	}
+	
+	public int getPageSize() {
+		return page.getPageSize();
+	}
+
+	/**
+	 * @return
+	 * @see info.joseluismartin.dao.Page#getFilter()
+	 */
+	public Object getFilter() {
+		return page.getFilter();
+	}
+
+	/**
+	 * @param filter
+	 * @see info.joseluismartin.dao.Page#setFilter(java.lang.Object)
+	 */
+	public void setFilter(Object filter) {
+		page.setFilter(filter);
+		loadPage();
+		fireItemSetChange();
+	}
+
+	/**
+	 * 
+	 */
+	public List<Serializable> getKeys() {
+		Page<T> p = new Page<T>(Integer.MAX_VALUE);
+		p.setFilter(page.getFilter());
+		p.setSortName(page.getSortName());
+		p.setOrder(page.getOrder());
+		
+		return service.getKeys(p);
+	}
+
+	/**
+	 * @return the itemIdStrategy
+	 */
+	public ItemIdStrategy getItemIdStrategy() {
+		return itemIdStrategy;
+	}
+
+	/**
+	 * @param itemIdStrategy the itemIdStrategy to set
+	 */
+	public void setItemIdStrategy(ItemIdStrategy itemIdStrategy) {
+		this.itemIdStrategy = itemIdStrategy;
+		itemIdStrategy.setContainerDataSource(this);
+	}
+
+	/**
+	 * @param index
+	 */
+	public Item getItemByIndex(int index) {
+		
+		if (!isInPage(index)) {
+			if (log.isDebugEnabled())
+				log.debug("Page fault on index: " + index);
+			page.setPage(getPageContaining(index));
+			loadPage();
+		}
+		int pageIndex = globalToPage(index);
+		
+		return pageIndex < items.size() ? items.get(pageIndex) : null;		
 	}
 
 }

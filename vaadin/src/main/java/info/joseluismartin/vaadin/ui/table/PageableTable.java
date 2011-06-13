@@ -98,6 +98,10 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 				container.addAll(page.getData());
 			}
 		}
+		else {
+			if (container != null)
+				container.removeAllItems();
+		}
 		
 		paginator.refresh();
 	}
@@ -143,5 +147,22 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 				paginator.firstPage();
 			}
 		}
+	}
+
+	/**
+	 * @return
+	 * @see info.joseluismartin.dao.Page#getFilter()
+	 */
+	public Object getFilter() {
+		return page.getFilter();
+	}
+
+
+	/**
+	 * @param filter
+	 * @see info.joseluismartin.dao.Page#setFilter(java.lang.Object)
+	 */
+	public void setFilter(Object filter) {
+		page.setFilter(filter);
 	}
 }

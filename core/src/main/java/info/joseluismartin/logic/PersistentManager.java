@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.logic;
 
+import info.joseluismartin.dao.Dao;
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.dao.hibernate.HibernateDao;
 import info.joseluismartin.service.PersistentService;
@@ -38,7 +39,7 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	private final static Log log = LogFactory.getLog(PersistentManager.class);
 	
 	public static final int DEFAULT_DEPTH = 2;
-	protected HibernateDao<T, PK> dao;
+	protected Dao<T, PK> dao;
 
 	/**
 	 * {@inheritDoc}
@@ -143,11 +144,11 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 		return dao.getPage(page);
 	}
 	
-	public HibernateDao<T, PK> getDao() {
+	public Dao<T, PK> getDao() {
 		return dao;
 	}
 
-	public void setDao(HibernateDao<T, PK> dao) {
+	public void setDao(Dao<T, PK> dao) {
 		this.dao = dao;
 	}
 	

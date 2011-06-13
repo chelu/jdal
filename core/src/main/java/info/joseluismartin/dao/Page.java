@@ -24,7 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *  A Page of Objects as result of query on PaginableDataProvider
+ *  A Page of Objects as result of query on PaginableDataSource
  *  Holds results for a page and info of Page definition page size and order.
  *  
  *  @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -61,17 +61,17 @@ public class Page<T> implements Paginator, Cloneable {
 		this.order = order;
 	}
 	
-	public Page(int pageSize, int startIndex, String sortName) {
-		this(pageSize, startIndex, sortName, Order.ASC);
+	public Page(int pageSize, int page, String sortName) {
+		this(pageSize, page, sortName, Order.ASC);
 		
 	}
 	
-	public Page(int pageSize, int startIndex) {
-		this(pageSize, startIndex, null);
+	public Page(int pageSize, int page) {
+		this(pageSize, page, null);
 	}
 	
 	public Page(int pageSize) {
-		this (pageSize, 0);
+		this (pageSize, 1);
 	}
 	
 	public Page() {
@@ -203,9 +203,14 @@ public class Page<T> implements Paginator, Cloneable {
 	 * @see info.joseluismartin.gui.Paginator#setPage(int)
 	 */
 	public void setPage(int indexPage) {
-		page = indexPage;
-		load();
-		firePageChangedEvent();
+		if (page > 0)  {
+			page = indexPage;
+			load();
+			firePageChangedEvent();
+		}
+		else {
+			log.warn("Try to set a page < 0");
+		}
 	}
 
 	/**

@@ -21,13 +21,11 @@ import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.vaadin.ui.AbstractView;
 import info.joseluismartin.vaadin.ui.Box;
 
-import com.lowagie.text.html.simpleparser.ALink;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Select;
@@ -63,7 +61,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	private ButtonClickListener buttonClickListener = new ButtonClickListener();
 	
 	/** 
-	 * Creates a new paginator with default page size of 20 records
+	 * Creates a new paginator with default page size of 10 records
 	 */
 	public VaadinPaginator() {
 		this (new Page<T>(10));
@@ -278,7 +276,8 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	 */
 	public void refresh() {
 		// update status
-		status.setValue(getPage() + "/" + getTotalPages());
+		int currentPage = getTotalPages() == 0 ? 0 : getPage();
+		status.setValue(currentPage + "/" + getTotalPages());
 		resultCount.setValue("Records: " + getModel().getCount());
 
 		// fill goto page select

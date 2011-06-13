@@ -51,7 +51,6 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.util.ClassUtils;
 
 
-
 /**
  * Hibernate generic DAO implementation. Support pagination of results with filters
  * using getPage(Page page) method.
