@@ -21,6 +21,8 @@ import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.vaadin.ui.AbstractView;
 import info.joseluismartin.vaadin.ui.Box;
 
+import java.io.Serializable;
+
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
@@ -37,10 +39,10 @@ import com.vaadin.ui.Button.ClickListener;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginator {
+public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginator, Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	/** Label to show pagenation status. */
+	/** Label to show in pagination status. */
 	private Label status = new Label("-/-");
 	private Label resultCount = new Label("       ");
 	/** String array with available page sizes */

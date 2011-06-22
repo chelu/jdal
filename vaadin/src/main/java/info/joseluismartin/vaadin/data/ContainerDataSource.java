@@ -22,12 +22,16 @@ import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataAccessException;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
@@ -35,6 +39,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Container.Indexed;
 import com.vaadin.data.Container.ItemSetChangeNotifier;
 import com.vaadin.data.Container.Sortable;
+import com.vaadin.data.Item.PropertySetChangeListener;
 import com.vaadin.data.util.BeanItem;
 
 /**
@@ -47,7 +52,7 @@ import com.vaadin.data.util.BeanItem;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class ContainerDataSource<T> implements Container, Sortable, Indexed, 
-	ItemSetChangeNotifier {
+	ItemSetChangeNotifier, PropertySetChangeListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(ContainerDataSource.class);
@@ -60,6 +65,9 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	private Class<T> entityClass;
 	private List<ItemSetChangeListener> listeners = new ArrayList<ItemSetChangeListener>();
 	private ItemIdStrategy itemIdStrategy;
+	
+	private Set<Item> dirtyItems = new HashSet<Item>();
+	private Set<Item> newItems = new HashSet<Item>();
 	
 	public ContainerDataSource() {
 		this(null, null);
@@ -290,7 +298,19 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public Object addItem() throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("ContainerDataSourceAdapter don't support adding new records to container");
+		T bean = null;
+		try {
+			bean = BeanUtils.instantiate(entityClass);
+		} catch (BeanInstantiationException be) {
+			log.error(be);
+			return null;
+		}
+		
+		BeanItem<T> newItem = new BeanItem<T>(bean);
+		newItem.addListener(this);
+		newItems.add(newItem);
+		
+		return newItem;
 	}
 
 	/**
@@ -337,9 +357,13 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public boolean removeAllItems() throws UnsupportedOperationException {
-		Page<T> all =  page.clone();
-		all.setPageSize(Integer.MAX_VALUE);
-		service.delete(all.getData());
+		try {
+			Page<T> all =  page.clone();
+			all.setPageSize(Integer.MAX_VALUE);
+			service.delete(all.getData());
+		} catch (DataAccessException dae) {
+			return false;
+		}
 	
 		return true;
 	}
@@ -350,6 +374,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		items.clear();
 		for (T t : page.getData()) {
 			BeanItem<T> item = new BeanItem<T>(t);
+			item.addListener(this);
 			items.add(item);
 			itemIdStrategy.itemLoaded(pageToGlobal(index++), item);
 		}
@@ -493,4 +518,46 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		return pageIndex < items.size() ? items.get(pageIndex) : null;		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public void itemPropertySetChange(com.vaadin.data.Item.PropertySetChangeEvent event) {
+		dirtyItems.add((BeanItem<T>) event.getItem());
+		
+	}
+	
+	/** 
+	 * Save changes to Persistent Service
+	 * @return true if all items was updated.
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean save() {
+		
+		// insert news 
+		for (Item i : newItems) {
+			try {
+				BeanItem<T> bi = (BeanItem<T>) i;
+				service.save(bi.getBean());
+				newItems.remove(bi);
+			}
+			catch (DataAccessException dae) {
+				log.error(dae);
+			}
+		}
+		
+		// update dirties
+		for (Item i : dirtyItems) {
+			try {
+				BeanItem<T> bi = (BeanItem<T>) i;
+				service.save(bi.getBean());
+				dirtyItems.remove(bi);
+			}
+			catch (DataAccessException dae) {
+				log.error(dae);
+			}
+		}
+		
+		return newItems.isEmpty() && dirtyItems.isEmpty();
+	}
 }

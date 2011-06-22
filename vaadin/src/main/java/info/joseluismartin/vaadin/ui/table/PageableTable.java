@@ -20,8 +20,11 @@ import info.joseluismartin.dao.PageChangedEvent;
 import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.service.PersistentService;
 import info.joseluismartin.vaadin.ui.Box;
+import info.joseluismartin.vaadin.ui.GuiFactory;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,7 +32,12 @@ import org.apache.commons.logging.LogFactory;
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.Action;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Form;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 
@@ -41,7 +49,6 @@ import com.vaadin.ui.VerticalLayout;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-// FIXME: May be better extends ConfigurableTable, review it.
 public class PageableTable<T> extends CustomComponent implements PaginatorListener, 
 	Container.ItemSetChangeListener {
 
@@ -53,18 +60,34 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	private PersistentService<T, Serializable>  service;
 	private Page<T> page;
 	private BeanItemContainer<T> container;
+	private String editor;
+	private GuiFactory guiFactory;
+	private boolean autoResize = false;
+	private boolean autoCreateEditor = true;
+	private List<TableAction> actions = new ArrayList<TableAction>();
+	private Form filterEditor;
 	
 	public void init() {
 		// get initial page and wrap data in container
 		paginator.addPaginatorListener(this);
 		loadPage();
-		// set external sorting, ie do't call Container.sort()
+		// set external sorting, ie don't call Container.sort()
 		table.setSorter(new PageSorter());
 		table.setPageLength(page.getPageSize());
 	
 		// build Componenet
 		VerticalLayout vbox = new VerticalLayout();
 		vbox.setSizeUndefined();
+		
+		if (filterEditor != null) {
+			vbox.addComponent(filterEditor);
+			Box.addVerticalStruct(vbox, 5);
+		}
+		
+		if (actions.size() > 0) {
+			vbox.addComponent(createButtonBox());
+		}
+	
 		vbox.addComponent(table);
 		Box.addVerticalStruct(vbox, 5);
 		vbox.addComponent(paginator.getComponent());
@@ -74,6 +97,22 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 
 	
+	/**
+	 * @return
+	 */
+	private Component createButtonBox() {
+		HorizontalLayout hl = new HorizontalLayout();
+		for (TableAction a : actions) {
+			a.setTable(this);
+			Button b = new Button(a.getCaption(), a);
+			b.setIcon(a.getIcon());
+			hl.addComponent(b);
+		}
+		
+		return hl;
+	}
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -137,7 +176,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		this.service = service;
 	}
 	
-	class PageSorter implements TableSorter {
+	class PageSorter implements TableSorter, Serializable {
 		
 		public void sort(Object[] propertyId, boolean[] ascending) {
 			Column c = table.getColumn(propertyId[0].toString());
@@ -164,5 +203,101 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	public void setFilter(Object filter) {
 		page.setFilter(filter);
+	}
+
+
+	/**
+	 * @return the editor
+	 */
+	public String getEditor() {
+		return editor;
+	}
+
+
+	/**
+	 * @param editor the editor to set
+	 */
+	public void setEditor(String editor) {
+		this.editor = editor;
+	}
+
+
+	/**
+	 * @return the guiFactory
+	 */
+	public GuiFactory getGuiFactory() {
+		return guiFactory;
+	}
+
+
+	/**
+	 * @param guiFactory the guiFactory to set
+	 */
+	public void setGuiFactory(GuiFactory guiFactory) {
+		this.guiFactory = guiFactory;
+	}
+
+
+	/**
+	 * @return the autoResize
+	 */
+	public boolean isAutoResize() {
+		return autoResize;
+	}
+
+
+	/**
+	 * @param autoResize the autoResize to set
+	 */
+	public void setAutoResize(boolean autoResize) {
+		this.autoResize = autoResize;
+	}
+
+
+	/**
+	 * @return the actions
+	 */
+	public List<TableAction> getActions() {
+		return actions;
+	}
+
+
+	/**
+	 * @param actions the actions to set
+	 */
+	public void setActions(List<TableAction> actions) {
+		this.actions = actions;
+	}
+
+
+	/**
+	 * @return the filterEditor
+	 */
+	public Form getFilterEditor() {
+		return filterEditor;
+	}
+
+
+	/**
+	 * @param filterEditor the filterEditor to set
+	 */
+	public void setFilterEditor(Form filterEditor) {
+		this.filterEditor = filterEditor;
+	}
+
+
+	/**
+	 * @return the autoCreateEditor
+	 */
+	public boolean isAutoCreateEditor() {
+		return autoCreateEditor;
+	}
+
+
+	/**
+	 * @param autoCreateEditor the autoCreateEditor to set
+	 */
+	public void setAutoCreateEditor(boolean autoCreateEditor) {
+		this.autoCreateEditor = autoCreateEditor;
 	}
 }

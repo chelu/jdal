@@ -15,6 +15,10 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
+import info.joseluismartin.beans.PropertyUtils;
+import info.joseluismartin.util.BeanUtils;
+
+import java.beans.PropertyEditor;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.vaadin.data.Container;
+import com.vaadin.data.Property;
+import com.vaadin.data.util.AbstractBeanContainer;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
 /**
@@ -34,6 +41,8 @@ import com.vaadin.ui.Table;
  * 			<property name="name" value="a_bean_property_name"/>
  * 			<property name="displayName" value="String_to_show_in_table_header"/>
  * 			<property name="width" value="column_width"/>
+ * 		    <property name="cellEditor" value="cellEditorClass"/>
+ *          <property name="cellComponent" value="cellComponent"/>
  * 			...
  * 		</bean>
  * 		<bean class="info.joseluismartin.vaadin.ui.table.Column">
@@ -81,6 +90,7 @@ public class ConfigurableTable extends Table {
 		super.setContainerDataSource(newDataSource);
 		configure();
 	}
+	
 	/**
 	 * Vaadin Table throw an exception when set this properties 
 	 * with an empty Container datasource. 
@@ -97,6 +107,10 @@ public class ConfigurableTable extends Table {
 				
 		for (int i = 0; i < size; i++) {
 			visibleColumns[i] = columns.get(i).getName();
+			
+			if (visibleColumns[i].contains(PropertyUtils.PROPERTY_SEPARATOR))
+				addNestedPropertyIfPossible(visibleColumns[i]);
+			
 			displayNames[i] = columns.get(i).getDisplayName();
 			alignments[i] = columns.get(i).getAlign();
 			widths[i] = columns.get(i).getWidth();
@@ -111,9 +125,20 @@ public class ConfigurableTable extends Table {
 				this.setColumnWidth(visibleColumns[i], widths[i]);
 		}
 	}
-	
-	
-	
+
+
+	/**
+	 * Add nested property to datasource if is possilbe. 
+	 * @param name of nested property 
+	 */
+	private void addNestedPropertyIfPossible(String name) {
+		Container cds = getContainerDataSource();
+		if (cds instanceof AbstractBeanContainer<?,?>) {
+			((AbstractBeanContainer<?,?>) cds).addNestedContainerProperty(name);
+		}
+	}
+
+
 	/**
 	 * Gets usingChecks property, if true, table show checkboxes for row selection
 	 * @return the usingChecks
@@ -133,7 +158,7 @@ public class ConfigurableTable extends Table {
 
 
 	/**
-	 * Sort on container or 
+	 * Sort on container or on sorter
 	 */
 	@Override
 	public void sort(Object[] propertyId, boolean[] ascending) {
@@ -170,5 +195,52 @@ public class ConfigurableTable extends Table {
 
 	public void setSorter(TableSorter sorter) {
 		this.sorter = sorter;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected Object getPropertyValue(Object rowId, Object colId, Property property) {
+		Column column = columnMap.get(colId);
+		if (isEditable()) {
+			Class<?extends Component> editorClass = column.getCellEditor();
+			if (editorClass == null)
+				return super.getPropertyValue(rowId, colId, property);
+			else {
+				return getComponentForProperty(property, editorClass);
+			}
+		}
+		// Test cell component 
+		Class<?extends Component> cellComponentClass = column.getCellComponent();
+		if (cellComponentClass != null) {
+			return getComponentForProperty(property, cellComponentClass);
+		}
+		
+		// Last try, test property editor
+		Class<?extends PropertyEditor> pec = column.getPropertyEditor();
+		if (pec != null) {
+			PropertyEditor pe = BeanUtils.instantiate(pec);
+			pe.setValue(property.getValue());
+			return pe.getAsText();
+		}
+		// Default behavior
+		return super.getPropertyValue(rowId, colId, property);
+	}
+
+
+	/**
+	 * Intantiate editor Class and set property as DataSource if 
+	 * the editor is Property.Viewer (it should be).
+	 * @param property property to set
+	 * @param editorClass class to instantiate
+	 * @return editor instance
+	 */
+	private Component getComponentForProperty(Property property, Class<? extends Component> editorClass) {
+		Component editor = BeanUtils.instantiate(editorClass);
+		if (editor instanceof Property.Viewer) {
+			((Property.Viewer) editor).setPropertyDataSource(property);
+		}
+		return editor;
 	}
 }

@@ -15,7 +15,11 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
+import java.beans.PropertyEditor;
+import java.io.Serializable;
+
 import com.vaadin.terminal.Resource;
+import com.vaadin.ui.Component;
 
 /**
  * Holder for configurable components by colum in a vaadin table.
@@ -23,7 +27,8 @@ import com.vaadin.terminal.Resource;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class Column {
+public class Column implements Serializable {
+	
 	private String name;
 	private String displayName;
 	private int width = -1;
@@ -31,7 +36,9 @@ public class Column {
 	private Resource icon;
 	private boolean sortable = true;
 	private String sortPropertyName;
-	
+	private Class<?extends Component> cellComponent;
+	private Class<?extends Component> cellEditor;
+	private Class<?extends PropertyEditor> propertyEditor;
 	/**
 	 * @return the name
 	 */
@@ -128,5 +135,47 @@ public class Column {
 	 */
 	public void setSortPropertyName(String sortPropertyName) {
 		this.sortPropertyName = sortPropertyName;
+	}
+
+	/**
+	 * @return the cellComponent
+	 */
+	public Class<?extends Component> getCellComponent() {
+		return cellComponent;
+	}
+
+	/**
+	 * @param cellComponent the cellComponent to set
+	 */
+	public void setCellComponent(Class<?extends Component> cellComponent) {
+		this.cellComponent = cellComponent;
+	}
+
+	/**
+	 * @return the cellEditor
+	 */
+	public Class<?extends Component> getCellEditor() {
+		return cellEditor;
+	}
+
+	/**
+	 * @param cellEditor the cellEditor to set
+	 */
+	public void setCellEditor(Class<?extends Component> cellEditor) {
+		this.cellEditor = cellEditor;
+	}
+
+	/**
+	 * @return the propertyEditor
+	 */
+	public Class<? extends PropertyEditor> getPropertyEditor() {
+		return propertyEditor;
+	}
+
+	/**
+	 * @param propertyEditor the propertyEditor to set
+	 */
+	public void setPropertyEditor(Class<? extends PropertyEditor> propertyEditor) {
+		this.propertyEditor = propertyEditor;
 	}
 }

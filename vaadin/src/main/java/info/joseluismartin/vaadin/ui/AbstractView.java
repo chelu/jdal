@@ -15,6 +15,8 @@
  */
 package info.joseluismartin.vaadin.ui;
 
+import java.io.Serializable;
+
 import com.vaadin.ui.Component;
 
 /**
@@ -24,7 +26,7 @@ import com.vaadin.ui.Component;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class AbstractView<T> implements View<T> {
+public abstract class AbstractView<T> implements View<T>, Serializable {
 	
 	Component component;
 	T model;
