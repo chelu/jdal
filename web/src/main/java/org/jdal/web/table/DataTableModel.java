@@ -1,8 +1,10 @@
 package org.jdal.web.table;
 
 import info.joseluismartin.dao.Page;
+import info.joseluismartin.dao.Page.Order;
 
 import java.util.Collection;
+
 
 
 /**
@@ -24,6 +26,19 @@ public class DataTableModel {
 	private String dir;
 	/** List with model records */
 	private Collection<?> records;
+	
+	public DataTableModel() {}
+
+	/**
+	 * @param page
+	 */
+	public DataTableModel(Page<?> page) {
+		this.totalRecords = page.getCount();
+		this.pageSize = page.getPageSize();
+		this.sort = page.getSortName();
+		this.startIndex = page.getStartIndex();
+		this.dir = page.getOrder() == Page.Order.ASC ? "asc" : "desc";
+	}
 
 	/**
 	 * @return the totalRecords
@@ -96,14 +111,6 @@ public class DataTableModel {
 	}
 	
 	/**
-	 * Create a page definition from request data
-	 * @return a pageDefinition 
-	 */
-	public Page<Object> getPage() {
-		return new Page<Object>();
-	}
-
-	/**
 	 * @return the pageSize
 	 */
 	public int getPageSize() {
@@ -115,6 +122,21 @@ public class DataTableModel {
 	 */
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
+	}
+
+	/**
+	 * @return
+	 */
+	public Page<Object> buildPage() {
+		Page<Object> page = new Page<Object>();
+		page.setSortName(sort);
+		page.setOrder("asc".equalsIgnoreCase(dir) ? Order.ASC : Order.DESC);
+		if (pageSize == 0) pageSize = 10;
+		page.setPageSize(pageSize);
+		int p = startIndex / pageSize + 1;
+		page.setPage(p);
+		
+		return page;
 	}
 }
 

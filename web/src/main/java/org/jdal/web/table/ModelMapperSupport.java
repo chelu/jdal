@@ -22,7 +22,7 @@ public abstract class ModelMapperSupport implements ModelMapper {
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection fromModelCollection(Collection collection) {
+	public Collection<?> fromModel(Collection collection) {
 		ArrayList list = new ArrayList();
 		if (collection != null) {
 			Iterator<Object> iter = collection.iterator();
@@ -38,7 +38,7 @@ public abstract class ModelMapperSupport implements ModelMapper {
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection toodelCollection(Collection collection) {
+	public Collection<?> toModel(Collection collection) {
 		ArrayList list = new ArrayList();
 		if (collection != null) {
 			Iterator iter = collection.iterator();

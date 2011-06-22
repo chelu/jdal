@@ -27,7 +27,6 @@ JDAL.requestBuilder = function(oState, oSelf) {
 //DataTable  default configuration 
 var JDAL.defaultTableConfig = {
 	generateRequest : JDAL.generateRequest,
-	initialRequest : JDAL.generateRequest(), // Initial request for first page of data 
 	dynamicData : true, // Enables dynamic server-driven data 
 	sortedBy : {
 		key : "id",

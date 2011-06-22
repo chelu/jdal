@@ -18,8 +18,10 @@ package org.jdal.web.table;
 import java.util.Collection;
 
 /**
+ * Interface to map models to/from VOs for serialization 
+ * to json strings.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public interface ModelMapper {
 	
@@ -28,7 +30,7 @@ public interface ModelMapper {
 	 * @param obj to convert to view model
 	 * @return view model
 	 */
-	Object fromModell(Object obj);
+	Object fromModel(Object obj);
 	
 	/**
 	 * maps view model to model
