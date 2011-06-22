@@ -94,54 +94,7 @@
 				Jetty server should be running with the server side parts - use the
 				goal jetty:run .
 			-->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>${gwt.plugin.version}</version>
-				<configuration>
-					<!-- if you don't specify any modules, the plugin will find them -->
-					<!--
-						<modules> <module>org.jdal.vaadin.gwt.MyWidgetSet</module>
-						</modules>
-					-->
-					<webappDirectory>${project.build.directory}/${project.build.finalName}/VAADIN/widgetsets</webappDirectory>
-					<!-- On Mac running Snow Leopard, add "-d32" -->
-					<!--
-						This causes error messages (but build works) in phase "package":
-						two processes would use the same debug port
-					-->
-					<!--
-						extraJvmArgs>-Xmx512M -Xss1024k -Xdebug
-						-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8998</extraJvmArgs
-					-->
-					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-					<runTarget>jdal-vaadin</runTarget>
-					<hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
-					<noServer>true</noServer>
-					<port>8080</port>
-					<compileReport>false</compileReport>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>resources</goal>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>com.google.gwt</groupId>
-						<artifactId>gwt-dev</artifactId>
-						<version>${gwt.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>com.google.gwt</groupId>
-						<artifactId>gwt-user</artifactId>
-						<version>${gwt.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
+
 			<plugin>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
