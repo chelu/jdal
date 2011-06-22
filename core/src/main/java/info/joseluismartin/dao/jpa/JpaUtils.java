@@ -15,9 +15,10 @@
  */
 package info.joseluismartin.dao.jpa;
 
-import java.util.regex.Pattern;
-
 import info.joseluismartin.beans.PropertyUtils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -96,7 +97,7 @@ public abstract class JpaUtils {
 	 * @return the count query string
 	 */
 	public static String createCountQueryString(String queryString) {
-		return queryString.replaceFirst("^.*(?i)from", "count (*) from ");
+		return queryString.replaceFirst("^.*(?i)from", "select count (*) from ");
 	}
 
 	/**
@@ -105,7 +106,8 @@ public abstract class JpaUtils {
 	 * @return alias of root entity.
 	 */
 	public static String getAlias(String queryString) {
-		return ALIAS_PATTERN.matcher(queryString).group();
+		Matcher m = ALIAS_PATTERN.matcher(queryString);
+		return m.find() ? m.group(1) : null;
 	}
 	
 	/**
@@ -122,7 +124,7 @@ public abstract class JpaUtils {
 		}
 		
 		StringBuilder sb = new StringBuilder(queryString);
-		sb.append("ORDER BY ");
+		sb.append(" ORDER BY ");
 		sb.append(getAlias(queryString));
 		sb.append(".");
 		sb.append(propertyPath);
@@ -139,13 +141,17 @@ public abstract class JpaUtils {
 	 * @return query string 
 	 */
 	public static String getKeyQuery(String queryString, String name) {
-		StringBuilder sb = new StringBuilder("SELECT ");
-		sb.append(getAlias(queryString));
-		sb.append(".");
-		sb.append(name);
-		sb.append(" ");
-		sb.append(FROM_PATTERN.matcher(queryString).group());
+		Matcher m = FROM_PATTERN.matcher(queryString);
+		if (m.find()) {
+			StringBuilder sb = new StringBuilder("SELECT ");
+			sb.append(getAlias(queryString));
+			sb.append(".");
+			sb.append(name);
+			sb.append(" ");
+			sb.append(m.group());
+			return sb.toString();
+		}
 		
-		return sb.toString();
+		return null;
 	}
 }

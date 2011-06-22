@@ -64,20 +64,19 @@
 				</configuration>
 			</plugin>
 		</plugins>
-               <extensions>
-      <!-- Enabling the use of FTP -->
-                 <extension>
-                    <groupId>org.apache.maven.wagon</groupId>
-                    <artifactId>wagon-ssh-external</artifactId>
-                    <version>1.0-beta-6</version>
-                 </extension>
-               </extensions>
+		<extensions>
+			<!-- Enabling the use of FTP -->
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh-external</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+		</extensions>
 	</build>
 	<repositories>
 		<repository>
-			<id>jlm</id>
-			<name>jlm</name>
-			<url>http://joseluismartin.info:8081/repo</url>
+			<id>maven</id>
+			<url>http://repo1.maven.org/maven</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
@@ -138,17 +137,7 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>3.6.3.Final</version>
 		</dependency>
-		<!--<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-			<version>3.5.6-Final</version>
-		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-commons-annotations</artifactId>
-			<version>3.2.0.Final</version>
-		</dependency>
-		--><dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
 			<version>2.4.1</version>
@@ -157,11 +146,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-ehcache</artifactId>
 			<version>3.6.3.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>persistence-api</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>c3p0</groupId>

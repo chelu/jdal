@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -41,6 +43,8 @@ import javax.persistence.metamodel.Type;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 
 
@@ -183,18 +187,38 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 			if (queryString != null) {
 				String countQueryString = JpaUtils.createCountQueryString(queryString);
 				TypedQuery<Long> countQuery =  em.createQuery(countQueryString, Long.class);
+				applyFilter(countQuery, filter);
 				page.setCount(countQuery.getSingleResult().intValue());
 				// add Order
-				queryString = JpaUtils.addOrder(queryString, page.getSortName(),
+				if (page.getSortName() != null)
+					queryString = JpaUtils.addOrder(queryString, page.getSortName(),
 						page.getOrder() == Page.Order.ASC);
 		
 				query = em.createQuery(queryString, getEntityClass());
+				applyFilter(query, filter);
 			}
 		}
 		
 		return query;
 	}
 	
+	/**
+	 * @param countQuery
+	 */
+	private void applyFilter(Query query, Filter filter) {
+		Map<String, Object> parameterMap = filter.getParameterMap();
+		for (Parameter<?> p : query.getParameters()) {
+			if (parameterMap.containsKey(p.getName())) {
+				query.setParameter(p.getName(), parameterMap.get(p.getName()));
+			}
+			else {
+				throw new InvalidDataAccessApiUsageException("Parameter " + p.getName() +
+						"was not found in filter " + filter.getFilterName() + 
+				". Review NamedQuery or Filter.");
+			}
+		}
+ 	}
+
 	/**
 	 * Gets query string fro named query using configured QueryFinder, if it's null
 	 * use EntityTypeQueryFinder as defaults (looks for anntations on entity class).
@@ -307,10 +331,15 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		if (page.getFilter() instanceof Filter) {
 			filter = (Filter) page.getFilter();
 			String queryString = getQueryString(filter.getFilterName());
-			if (queryString != null) {
-				
+			if (queryString != null) {				
 				String keyQuery = JpaUtils.getKeyQuery(queryString, id.getName());
+				// add Order
+				if (page.getSortName() != null)
+					keyQuery = JpaUtils.addOrder(keyQuery, page.getSortName(),
+						page.getOrder() == Page.Order.ASC);
+					
 				query = em.createQuery(keyQuery, Serializable.class);
+				applyFilter(query, filter);
 			}
 			else {
 				query = getKeyCriteriaQuery(id, page); 

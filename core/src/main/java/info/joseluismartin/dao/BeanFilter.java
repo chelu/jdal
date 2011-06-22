@@ -16,6 +16,7 @@
 package info.joseluismartin.dao;
 
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ import org.springframework.beans.BeanUtils;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class BeanFilter implements Filter {
+public class BeanFilter implements Filter, Serializable {
 	
 	private static final Log log = LogFactory.getLog(BeanFilter.class);
 	private String filterName;
