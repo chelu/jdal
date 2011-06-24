@@ -64,10 +64,6 @@ public class ConfigurableTable extends Table {
 	private TableSorter sorter;
 	private Map<String, Column> columnMap = new HashMap<String, Column>();
 	
-	public List<Column> getColumns() {
-		return this.columns;
-	}
-	
 	
 	/**
 	 * Configure Vaadin table with column definitions. 
@@ -184,18 +180,6 @@ public class ConfigurableTable extends Table {
 		return sortableIds;
 	}
 	
-	public Column getColumn(String name) {
-		return columnMap.get(name);
-	}
-
-	public TableSorter getSorter() {
-		return sorter;
-	}
-
-
-	public void setSorter(TableSorter sorter) {
-		this.sorter = sorter;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -242,5 +226,23 @@ public class ConfigurableTable extends Table {
 			((Property.Viewer) editor).setPropertyDataSource(property);
 		}
 		return editor;
+	}
+	
+	public Column getColumn(String name) {
+		return columnMap.get(name);
+	}
+	
+	public List<Column> getColumns() {
+		return this.columns;
+	}
+	
+
+	public TableSorter getSorter() {
+		return sorter;
+	}
+
+
+	public void setSorter(TableSorter sorter) {
+		this.sorter = sorter;
 	}
 }

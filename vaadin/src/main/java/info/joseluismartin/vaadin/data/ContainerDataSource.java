@@ -33,6 +33,7 @@ import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataAccessException;
 
+import com.vaadin.data.Buffered;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -40,6 +41,7 @@ import com.vaadin.data.Container.Indexed;
 import com.vaadin.data.Container.ItemSetChangeNotifier;
 import com.vaadin.data.Container.Sortable;
 import com.vaadin.data.Item.PropertySetChangeListener;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
 
 /**
@@ -52,7 +54,7 @@ import com.vaadin.data.util.BeanItem;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class ContainerDataSource<T> implements Container, Sortable, Indexed, 
-	ItemSetChangeNotifier, PropertySetChangeListener {
+	ItemSetChangeNotifier, PropertySetChangeListener, Buffered {
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(ContainerDataSource.class);
@@ -373,11 +375,22 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		int index = 0;
 		items.clear();
 		for (T t : page.getData()) {
-			BeanItem<T> item = new BeanItem<T>(t);
+			
+			BeanItem<T> item = getDirtyOrCreate(t);
 			item.addListener(this);
 			items.add(item);
 			itemIdStrategy.itemLoaded(pageToGlobal(index++), item);
 		}
+	}
+
+	/**
+	 * @param t
+	 * @return
+	 */
+	private BeanItem<T> getDirtyOrCreate(T t) {
+		BeanItem<T> item = new BeanItem<T>(t);
+		// FIXME: check if the bean is in dirty list
+		return item;
 	}
 
 	/**
@@ -559,5 +572,67 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		}
 		
 		return newItems.isEmpty() && dirtyItems.isEmpty();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void commit() throws SourceException, InvalidValueException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void discard() throws SourceException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isModified() {
+		return dirtyItems.size() > 0 || newItems.size() > 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isReadThrough() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isWriteThrough() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setReadThrough(boolean readThrough) throws SourceException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setWriteThrough(boolean writeThrough) throws SourceException, InvalidValueException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @return
+	 */
+	public Page<T> getPage() {
+		return page;
 	}
 }

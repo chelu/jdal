@@ -15,7 +15,8 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
-import com.vaadin.ui.Component;
+import com.vaadin.ui.Form;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 
 /**
@@ -29,8 +30,10 @@ public class AddAction extends TableAction {
 	 */
 	@Override
 	public void buttonClick(ClickEvent event) {
-		Component c = getTable().getEditorForm();
-		
+		Form f = getTable().getEditorForm();
+		Window dialog = new Window("Edit");
+		dialog.addComponent(f);
+		getTable().getWindow().addWindow(dialog);
 	}
 
 }

@@ -103,7 +103,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		hbox.addComponent(first);
 		hbox.addComponent(previous);
 		hbox.addComponent(statusLayout);
-//		hbox.setComponentAlignment(statusLayout, Alignment.MIDDLE_CENTER);
 		hbox.addComponent(next);
 		hbox.addComponent(last);
 		Box.addHorizontalStruct(hbox, 10);
@@ -112,7 +111,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		Label goToLabel = new Label("GoTo: ");
 		goToLabel.setSizeUndefined();
 		hbox.addComponent(goToLabel);
-//		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
 		goTo.setWidth("5em");
 		goTo.setImmediate(true);
 		hbox.addComponent(goTo);
@@ -122,17 +120,16 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		Label showRecords = new Label("Page size: ");
 		showRecords.setSizeUndefined();
 		hbox.addComponent(showRecords);
-//		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_RIGHT);
 		
 		for (String size : pageSizes) {
 			pgs.addItem(size);
 		}
+
 		pgs.setNullSelectionAllowed(false);
 		pgs.setValue(String.valueOf(getModel().getPageSize()));
 		pgs.setWidth("6em");
 		pgs.setImmediate(true);
 		hbox.addComponent(pgs);
-//		hbox.setComponentAlignment(pgs, Alignment.MIDDLE_RIGHT);
 	
 		pgs.addListener(new PgsValueChangeListener());
 		goTo.addListener(new GoToValueChangeListener());
@@ -293,9 +290,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		last.setEnabled(hasNext());
 		previous.setEnabled(hasPrevious());
 		first.setEnabled(hasPrevious());
-		
-		// select current page size
-		// pgs.setValue(String.valueOf(getModel().getPageSize()));
 	}
 	
 	// Getters and Setters 
@@ -369,6 +363,11 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		}
 	}
 	
+	/**
+	 * Handle clicks on paginator buttons
+	 * 
+	 * @author Jose Luis Martin - (jlm@joseluismartin.info)
+	 */
 	class ButtonClickListener implements ClickListener {
 
 		private static final long serialVersionUID = 1L;

@@ -63,7 +63,7 @@
    
 	<bean id="bookPageableTable" class="info.joseluismartin.vaadin.ui.table.PageableTable"
 		scope="prototype">
-		<property name="table" ref="table" />
+		<property name="table" ref="dataSourceTable" />
 		<property name="paginator" ref="paginator" />
 		<property name="service" ref="bookService" />
 	</bean>
@@ -116,31 +116,31 @@
 		<property name="pageSizes" value="10,20,30,40,50,100,200,All" />
 	</bean>
 
-	<bean id="paginatorFirstButton" class="com.vaadin.ui.Button">
+	<bean id="paginatorFirstButton" class="com.vaadin.ui.Button" scope="prototype">
 		<property name="icon" value="images/table/go-first.png" />
 	</bean>
 
-	<bean id="paginatorLastButton" class="com.vaadin.ui.Button">
-		<property name="icon" value="images/table/go-last.png" />
+	<bean id="paginatorLastButton" class="com.vaadin.ui.Button" scope="prototype">
+		<property name="icon" value="images/table/go-last.png"/>
 	</bean>
 
-	<bean id="paginatorNextButton" class="com.vaadin.ui.Button">
+	<bean id="paginatorNextButton" class="com.vaadin.ui.Button" scope="prototype"> 
 		<property name="icon" value="images/table/go-next.png" />
 	</bean>
 
-	<bean id="paginatorPreviousButton" class="com.vaadin.ui.Button">
+	<bean id="paginatorPreviousButton" class="com.vaadin.ui.Button" scope="prototype">
 		<property name="icon" value="images/table/go-previous.png" />
 	</bean>
 
-	<bean id="buttonPanel" class="com.vaadin.ui.HorizontalLayout"
-		scope="prototype" />
+	<bean id="buttonPanel" class="com.vaadin.ui.HorizontalLayout" scope="prototype" />
 
 
-	<bean id="dataSourceTable" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable" parent="table">
+	<bean id="dataSourceTable" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable" parent="table" scope="prototype">
 		<property name="containerDataSource" ref="bookContainerDataSource"/>
+		<property name="paginator" ref="paginator"/>
 	</bean>
 	
-	<bean id="bookContainerDataSource" class="info.joseluismartin.vaadin.data.ContainerDataSource">
+	<bean id="bookContainerDataSource" class="info.joseluismartin.vaadin.data.ContainerDataSource" scope="prototype">
 		<property name="service" ref="bookService"/>
 	</bean>
 	
