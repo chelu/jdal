@@ -22,10 +22,10 @@ import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -63,13 +63,16 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	
 	private PersistentService<T, Serializable> service; 
 	private List<String> sortableProperties;
-	private List<BeanItem<T> > items = new LinkedList<BeanItem<T>>();
+	private List<BeanItem<T> > items = new ArrayList<BeanItem<T>>();
 	private Class<T> entityClass;
 	private List<ItemSetChangeListener> listeners = new ArrayList<ItemSetChangeListener>();
 	private ItemIdStrategy itemIdStrategy;
 	
-	private Set<Item> dirtyItems = new HashSet<Item>();
-	private Set<Item> newItems = new HashSet<Item>();
+	private Map<Object, Item> dirtyItems = new HashMap<Object, Item>();
+	private Map<Object, Item> newItems = new HashMap<Object,Item>();
+	
+	private boolean readThrough = false;
+	private boolean writeThrough= false;
 	
 	public ContainerDataSource() {
 		this(null, null);
@@ -232,13 +235,17 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public Collection<?> getContainerPropertyIds() {
-		// if we have data will try introspection
-		if (page.getData().size() > 0) {
-			BeanItem<T> item = items.get(0);
+		BeanItem<T> item = newItem();
+		if (item != null) 
 			return item.getItemPropertyIds();
-		}
 		
-		return null;
+		// if we have data will try introspection
+		if (page.getData().size() > 0) 
+			return items.get(0).getItemPropertyIds();
+	
+		// this is an error...
+		log.error("Can't get property ids from entityClass or data");
+		return new LinkedList<Object>();
 	}
 
 	/**
@@ -300,6 +307,17 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public Object addItem() throws UnsupportedOperationException {
+		BeanItem<T> newItem = newItem();
+		
+		if (newItem != null) {
+			newItem.addListener(this);
+			newItems.put(newItem.getBean(), newItem);
+		}
+		
+		return newItem;
+	}
+
+	private BeanItem<T> newItem() {
 		T bean = null;
 		try {
 			bean = BeanUtils.instantiate(entityClass);
@@ -309,9 +327,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		}
 		
 		BeanItem<T> newItem = new BeanItem<T>(bean);
-		newItem.addListener(this);
-		newItems.add(newItem);
-		
 		return newItem;
 	}
 
@@ -387,9 +402,12 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * @param t
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private BeanItem<T> getDirtyOrCreate(T t) {
 		BeanItem<T> item = new BeanItem<T>(t);
-		// FIXME: check if the bean is in dirty list
+		if (readThrough && dirtyItems.containsKey(t))
+			item = (BeanItem<T>) dirtyItems.get(t);
+			
 		return item;
 	}
 
@@ -446,6 +464,9 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		listeners.remove(listener);
 	}
 	
+	/**
+	 * Notity listeners that the item set change
+	 */
 	private void fireItemSetChange() {
 		ItemSetChangeEvent isce = new ItemSetChangeEvent() {
 
@@ -461,11 +482,19 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		}
 	}
 	
+	/**
+	 * Set the page size
+	 * @param pageSize the page size to set
+	 */
 	public void setPageSize(int pageSize) {
 		page.setPageSize(pageSize);
 		loadPage();
 	}
 	
+	/**
+	 * Get the page size
+	 * @return the page size
+	 */
 	public int getPageSize() {
 		return page.getPageSize();
 	}
@@ -489,7 +518,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	}
 
 	/**
-	 * 
+	 * Get all keys from pageable datasource
 	 */
 	public List<Serializable> getKeys() {
 		Page<T> p = new Page<T>(Integer.MAX_VALUE);
@@ -536,8 +565,9 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 */
 	@SuppressWarnings("unchecked")
 	public void itemPropertySetChange(com.vaadin.data.Item.PropertySetChangeEvent event) {
-		dirtyItems.add((BeanItem<T>) event.getItem());
-		
+		dirtyItems.put(((BeanItem<T>) event.getItem()).getBean(), event.getItem());
+		if (isWriteThrough())
+			commit();
 	}
 	
 	/** 
@@ -548,11 +578,11 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	public boolean save() {
 		
 		// insert news 
-		for (Item i : newItems) {
+		for (Item i : newItems.values()) {
 			try {
 				BeanItem<T> bi = (BeanItem<T>) i;
 				service.save(bi.getBean());
-				newItems.remove(bi);
+				newItems.remove(bi.getBean());
 			}
 			catch (DataAccessException dae) {
 				log.error(dae);
@@ -560,11 +590,11 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		}
 		
 		// update dirties
-		for (Item i : dirtyItems) {
+		for (Item i : dirtyItems.values()) {
 			try {
 				BeanItem<T> bi = (BeanItem<T>) i;
 				service.save(bi.getBean());
-				dirtyItems.remove(bi);
+				dirtyItems.remove(bi.getBean());
 			}
 			catch (DataAccessException dae) {
 				log.error(dae);
@@ -578,15 +608,19 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public void commit() throws SourceException, InvalidValueException {
-		// TODO Auto-generated method stub
-		
+		if (!save()) {
+			// lost changes?
+			discard();
+			throw new SourceException(this);
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void discard() throws SourceException {
-		// TODO Auto-generated method stub
+		newItems.clear();
+		dirtyItems.clear();
 		
 	}
 
@@ -601,23 +635,21 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public boolean isReadThrough() {
-		// TODO Auto-generated method stub
-		return false;
+		return readThrough;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isWriteThrough() {
-		// TODO Auto-generated method stub
-		return false;
+		return writeThrough;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setReadThrough(boolean readThrough) throws SourceException {
-		// TODO Auto-generated method stub
+		this.readThrough = readThrough;
 		
 	}
 
@@ -625,7 +657,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public void setWriteThrough(boolean writeThrough) throws SourceException, InvalidValueException {
-		// TODO Auto-generated method stub
+		this.writeThrough = writeThrough;
 		
 	}
 

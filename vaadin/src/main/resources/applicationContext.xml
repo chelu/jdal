@@ -137,7 +137,6 @@
 
 	<bean id="dataSourceTable" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable" parent="table" scope="prototype">
 		<property name="containerDataSource" ref="bookContainerDataSource"/>
-		<property name="paginator" ref="paginator"/>
 	</bean>
 	
 	<bean id="bookContainerDataSource" class="info.joseluismartin.vaadin.data.ContainerDataSource" scope="prototype">

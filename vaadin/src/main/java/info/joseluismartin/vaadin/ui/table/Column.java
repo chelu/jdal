@@ -38,7 +38,7 @@ public class Column implements Serializable {
 	private String sortPropertyName;
 	private Class<?extends Component> cellComponent;
 	private Class<?extends Component> cellEditor;
-	private Class<?extends PropertyEditor> propertyEditor;
+	private PropertyEditor propertyEditor;
 	/**
 	 * @return the name
 	 */
@@ -168,14 +168,14 @@ public class Column implements Serializable {
 	/**
 	 * @return the propertyEditor
 	 */
-	public Class<? extends PropertyEditor> getPropertyEditor() {
+	public PropertyEditor getPropertyEditor() {
 		return propertyEditor;
 	}
 
 	/**
 	 * @param propertyEditor the propertyEditor to set
 	 */
-	public void setPropertyEditor(Class<? extends PropertyEditor> propertyEditor) {
+	public void setPropertyEditor(PropertyEditor propertyEditor) {
 		this.propertyEditor = propertyEditor;
 	}
 }

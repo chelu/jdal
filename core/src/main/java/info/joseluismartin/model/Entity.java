@@ -29,7 +29,7 @@ public class Entity implements Serializable  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	protected Long id;
-	protected String name;
+	protected String name = "";
 
 	/**
 	 * @return the id

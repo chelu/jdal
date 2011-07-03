@@ -260,4 +260,23 @@ public class IBatisDao<T, PK extends Serializable> extends SqlMapClientDaoSuppor
 	public T initialize(T entity, int depth) {
 		return entity;
 	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <E> E get(PK id, Class<E> clazz) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <E> List<E> getAll(Class<E> clazz) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

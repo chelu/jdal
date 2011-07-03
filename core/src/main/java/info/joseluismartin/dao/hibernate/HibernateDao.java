@@ -459,4 +459,20 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	public void setCachePageQueries(boolean cachePageQueries) {
 		this.cachePageQueries = cachePageQueries;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public <E> E get(PK id, Class<E> clazz) {
+		return (E) getSession().get(clazz, id);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public <E> List<E> getAll(Class<E> clazz) {
+		return getSession().createCriteria(clazz).list();
+	}
 }

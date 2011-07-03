@@ -15,6 +15,10 @@
  */
 package info.joseluismartin.vaadin.data;
 
+import info.joseluismartin.dao.Page;
+import info.joseluismartin.service.PersistentService;
+
+import java.io.Serializable;
 import java.util.Collection;
 
 import com.vaadin.data.Item;
@@ -44,8 +48,12 @@ public class EntityItemIdStrategy implements ItemIdStrategy {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<?> getItemIds() {
-		return null;
+		Page<Object> p = (Page<Object>) containerDataSource.getPage().clone();
+		p.setPageSize(Integer.MAX_VALUE);
+		((PersistentService<Object, Serializable>) containerDataSource.getService()).getPage(p);
+		return p.getData();
 	}
 
 	/**
@@ -60,7 +68,6 @@ public class EntityItemIdStrategy implements ItemIdStrategy {
 	 * {@inheritDoc}
 	 */
 	public Object lastItemId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

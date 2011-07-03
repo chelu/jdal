@@ -55,4 +55,8 @@ public interface PersistentService<T, PK extends Serializable> extends PageableD
 	 */
 	T get(PK id);
 	
+	<E> E get(PK id, Class<E> clazz);
+	
+	<E> List<E> getAll(Class<E> clazz);
+	
 }

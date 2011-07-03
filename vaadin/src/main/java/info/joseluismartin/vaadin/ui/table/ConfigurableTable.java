@@ -202,12 +202,12 @@ public class ConfigurableTable extends Table {
 		}
 		
 		// Last try, test property editor
-		Class<?extends PropertyEditor> pec = column.getPropertyEditor();
-		if (pec != null) {
-			PropertyEditor pe = BeanUtils.instantiate(pec);
+		PropertyEditor pe = column.getPropertyEditor();
+		if (pe != null) {
 			pe.setValue(property.getValue());
 			return pe.getAsText();
 		}
+
 		// Default behavior
 		return super.getPropertyValue(rowId, colId, property);
 	}

@@ -269,6 +269,9 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * {@inheritDoc}
 	 */
 	public void delete(T entity) {
+		if (!em.contains(entity))
+			entity = em.merge(entity);
+		
 		em.remove(entity);
 	}
 
@@ -311,8 +314,10 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		
 		if (em.contains(entity))
 			persistendEntity = em.merge(entity);
-		else 
-			persistendEntity = em.merge(entity);
+		else {
+			em.persist(entity);
+			persistendEntity = entity;
+		}
 		
 		return persistendEntity;
 			
@@ -411,6 +416,37 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 */
 	public void setQueryFinder(QueryFinder queryFinder) {
 		this.queryFinder = queryFinder;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <E> E get(PK id, Class<E> clazz) {
+		return em.find(clazz, id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <E> List<E> getAll(Class<E> clazz) {
+		CriteriaQuery<E> q = em.getCriteriaBuilder().createQuery(clazz);
+		q.from(getEntityClass());
+		
+		return em.createQuery(q).getResultList();
+	}
+
+	/**
+	 * @return the em
+	 */
+	public EntityManager getEntityManager() {
+		return em;
+	}
+
+	/**
+	 * @param em the em to set
+	 */
+	public void setEntityManager(EntityManager em) {
+		this.em = em;
 	}
 
 }

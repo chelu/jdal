@@ -13,52 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.vaadin.ui.table;
+package info.joseluismartin.vaadin.ui;
 
-import com.vaadin.event.Action;
-import com.vaadin.terminal.Resource;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+import com.vaadin.ui.Component;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public abstract class TableAction extends Action implements ClickListener {
+public class ApplicationContextGuiFactory implements GuiFactory, ApplicationContextAware {
 	
-	PageableTable<?> table;
-	
-	
-	public TableAction() {
-		this("");
-	}
-
-	public TableAction(String caption, Resource icon) {
-		super(caption, icon);
-	}
-
-	public TableAction(String caption) {
-		super(caption);
-	}
+	private ApplicationContext applicationContext;
 
 	/**
-	 * @return the table
+	 * {@inheritDoc}
 	 */
-	public PageableTable<?> getTable() {
-		return table;
-	}
-
-	/**
-	 * @param table the table to set
-	 */
-	public void setTable(PageableTable<?> table) {
-		this.table = table;
+	public Component getComponent(String name) {
+		return (Component) applicationContext.getBean(name);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public abstract void buttonClick(ClickEvent event);
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
-	
 }

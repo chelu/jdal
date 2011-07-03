@@ -15,25 +15,31 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
+import info.joseluismartin.dao.Filter;
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.dao.PageChangedEvent;
 import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.service.PersistentService;
 import info.joseluismartin.vaadin.ui.FormUtils;
 import info.joseluismartin.vaadin.ui.GuiFactory;
+import info.joseluismartin.vaadin.ui.form.FormDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.BeanUtils;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
@@ -52,7 +58,7 @@ import com.vaadin.ui.VerticalLayout;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class PageableTable<T> extends CustomComponent implements PaginatorListener, 
-	Container.ItemSetChangeListener {
+	Container.ItemSetChangeListener, ItemClickListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(PageableTable.class);
@@ -65,6 +71,8 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	private PersistentService<T, Serializable>  service;
 	/** page */
 	private Page<T> page;
+	/** Filter */
+	private Filter beanFilter;
 	/** container to use when using external paginator */
 	private BeanItemContainer<T> container;
 	/** Form editor name */
@@ -72,20 +80,21 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** Gui Factory used to get editor instances */
 	private GuiFactory guiFactory;
 	/** if true, pagesLength change to pageSize */
-	private boolean autoResize = false;
+	private boolean autoResize = true;
 	/** if true, will create a editor when none configured */
 	private boolean autoCreateEditor = true;
 	/** TableAction List */
-	private List<TableAction> actions = new ArrayList<TableAction>();
+	private List<TableButtonListener> actions = new ArrayList<TableButtonListener>();
 	/** Filter editor */
-	private Form filterEditor;
+	private String filterEditor;
+	/** Filter Form */
+	private Form filterForm;
 	/** FormFieldFactory used when creating editor forms */
 	private FormFieldFactory formFieldFactory;
 	/** the entity class */
 	private Class<T> entityClass;
 	
 	public PageableTable() {
-		this(null);
 	}
 	
 	public PageableTable(Class<T> entityClass) {
@@ -93,14 +102,17 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 	
 	public void init() {
-	
 		// build Component
 		VerticalLayout vbox = new VerticalLayout();
 		vbox.setSizeUndefined();
 		vbox.setSpacing(true);
 		// filter 
-		if (filterEditor != null) {
-			vbox.addComponent(filterEditor);
+		if (filterEditor != null && filterForm == null) {
+			filterForm = (Form) guiFactory.getComponent(filterEditor);
+		}
+		if (filterForm != null) {
+			filterForm.setItemDataSource(new BeanItem<Filter>(beanFilter), filterForm.getVisibleItemProperties());
+			vbox.addComponent(filterForm);
 		}
 		// action group
 		if (actions.size() > 0) {
@@ -108,6 +120,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		}
 		// table
 		vbox.addComponent(table);
+		
 		// paginator
 		if (paginator != null) {
 			// get initial page and wrap data in container
@@ -117,10 +130,15 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			// set external sorting, ie don't call Container.sort()
 			table.setSorter(new PageSorter());
 			vbox.addComponent(paginator.getComponent());
+			table.setPageLength(page.getPageSize());
+			if (beanFilter != null)
+				page.setFilter(beanFilter);
 		}
 	
+		table.addListener((ItemClickListener) this);
 		this.setCompositionRoot(vbox);
 		this.setSizeUndefined();
+		
 	}
 
 	
@@ -130,10 +148,10 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	private Component createButtonBox() {
 		HorizontalLayout hl = new HorizontalLayout();
-		for (TableAction a : actions) {
+		hl.setSpacing(true);
+		for (TableButtonListener a : actions) {
 			a.setTable(this);
-			Button b = new Button(a.getCaption(), a);
-			b.setIcon(a.getIcon());
+			Button b = FormUtils.newButton(a);
 			hl.addComponent(b);
 		}
 		
@@ -148,12 +166,13 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		if (autoResize)
 			table.setPageLength(page.getPageSize());
 		
-		table.setCurrentPageFirstItemIndex(page.getStartIndex());
+		// table.setCurrentPageFirstItemIndex(page.getStartIndex());
+		loadPage();
 		
 	}
 
 	/**
-	 * Load models from page and add to bean item container
+	 * Load models from page and add to internal bean item container
 	 */
 	@SuppressWarnings("unchecked")
 	private void loadPage() {
@@ -185,17 +204,49 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		if (editor != null) {
 			return (Form) guiFactory.getComponent(editor);
 		}
+		
 		// else create a default one
 		Form f = new Form();
+		f.setSizeFull();
+		f.setImmediate(true);
+		f.getLayout().setMargin(true);
+		f.getLayout().setSizeFull();
 		
 		if (formFieldFactory != null)
 			f.setFormFieldFactory(formFieldFactory);
 		
-		T bean = BeanUtils.instantiate(entityClass);
-		f.setItemDataSource(new BeanItem<T>(bean));
 		FormUtils.addOKCancelButtons(f);
 		
 		return f;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<T> getSelected() {
+		Object selection = table.getValue();
+		if (selection instanceof Collection)
+			return (Collection) selection;
+		else {
+			Set<T> set = new HashSet<T>();
+			set.add((T) selection);
+			return set;
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public void itemClick(ItemClickEvent event) {
+		if (event.isDoubleClick()) {
+			BeanItem<T> bi = (BeanItem<T>) event.getItem();
+			FormDialog dlg = new FormDialog("Edit " + bi.getBean().getClass().getSimpleName());
+			dlg.setPersistentService((PersistentService<Object, Serializable>) service);
+			Form form = getEditorForm();
+			form.setItemDataSource(bi, form.getVisibleItemProperties());
+			dlg.setForm(form);
+			dlg.init();
+			getWindow().addWindow(dlg);
+		}
 	}
 
 	/**
@@ -298,7 +349,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/**
 	 * @return the actions
 	 */
-	public List<TableAction> getActions() {
+	public List<TableButtonListener> getActions() {
 		return actions;
 	}
 
@@ -306,24 +357,8 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/**
 	 * @param actions the actions to set
 	 */
-	public void setActions(List<TableAction> actions) {
+	public void setActions(List<TableButtonListener> actions) {
 		this.actions = actions;
-	}
-
-
-	/**
-	 * @return the filterEditor
-	 */
-	public Form getFilterEditor() {
-		return filterEditor;
-	}
-
-
-	/**
-	 * @param filterEditor the filterEditor to set
-	 */
-	public void setFilterEditor(Form filterEditor) {
-		this.filterEditor = filterEditor;
 	}
 
 
@@ -371,4 +406,74 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		}
 	}
 
+	/**
+	 * @return the formFieldFactory
+	 */
+	public FormFieldFactory getFormFieldFactory() {
+		return formFieldFactory;
+	}
+
+	/**
+	 * @param formFieldFactory the formFieldFactory to set
+	 */
+	public void setFormFieldFactory(FormFieldFactory formFieldFactory) {
+		this.formFieldFactory = formFieldFactory;
+	}
+
+	/**
+	 * @return the beanFilter
+	 */
+	public Filter getBeanFilter() {
+		return beanFilter;
+	}
+
+	/**
+	 * @param beanFilter the beanFilter to set
+	 */
+	public void setBeanFilter(Filter beanFilter) {
+		this.beanFilter = beanFilter;
+	}
+
+	/**
+	 * @return the filterEditor
+	 */
+	public String getFilterEditor() {
+		return filterEditor;
+	}
+
+	/**
+	 * @param filterEditor the filterEditor to set
+	 */
+	public void setFilterEditor(String filterEditor) {
+		this.filterEditor = filterEditor;
+	}
+
+	/**
+	 * @param selected
+	 */
+	@SuppressWarnings("unchecked")
+	public void delete(Collection<?> selected) {
+		service.delete((Collection<T>) selected);
+	}
+
+	/**
+	 * 
+	 */
+	public void refresh() {
+		loadPage();
+	}
+
+	/**
+	 * @return the filterForm
+	 */
+	public Form getFilterForm() {
+		return filterForm;
+	}
+
+	/**
+	 * @param filterForm the filterForm to set
+	 */
+	public void setFilterForm(Form filterForm) {
+		this.filterForm = filterForm;
+	}
 }

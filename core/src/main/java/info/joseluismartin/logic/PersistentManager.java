@@ -158,4 +158,20 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	public T get(PK id) {
 		return dao.get(id);
 	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <E> E get(PK id, Class<E> clazz) {
+		return dao.get(id, clazz);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <E> List<E> getAll(Class<E> clazz) {
+		return dao.getAll(clazz);
+	}
 }

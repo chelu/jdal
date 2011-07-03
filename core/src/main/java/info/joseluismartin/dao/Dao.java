@@ -89,4 +89,10 @@ public interface Dao<T, PK extends Serializable> extends PageableDataSource<T> {
      * @return intialized entity
      */
 	T initialize(T entity, int depth);
+	
+	// Non generic get and getAll methods
+	
+	<E> E get(PK id, Class<E> clazz );
+	
+	<E> List<E> getAll(Class<E> clazz);
 }
