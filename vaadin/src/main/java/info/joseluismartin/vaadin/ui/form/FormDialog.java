@@ -87,6 +87,7 @@ public class FormDialog extends Window {
 		footer.setComponentAlignment(buttonLayout, Alignment.TOP_CENTER);
 		form.setFooter(footer);
 		form.setSizeFull();
+		form.getLayout().setSizeFull();
 		addComponent(form);
 		getContent().setSizeUndefined();
 		center();

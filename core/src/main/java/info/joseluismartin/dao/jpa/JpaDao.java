@@ -43,7 +43,8 @@ import javax.persistence.metamodel.Type;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.dao.DataAccessException;
+import org.springframework.beans.PropertyAccessor;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 
@@ -311,16 +312,35 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 */
 	public T save(T entity) {
 		T persistendEntity;
-		
-		if (em.contains(entity))
-			persistendEntity = em.merge(entity);
-		else {
+	
+		if (isNew(entity)) {
 			em.persist(entity);
 			persistendEntity = entity;
+		}
+		else {
+			persistendEntity = em.merge(entity);
 		}
 		
 		return persistendEntity;
 			
+	}
+
+	/**
+	 * Test if entity is New
+	 * @param entity
+	 * @return true if entity is new, ie not detached
+	 */
+	@SuppressWarnings("unchecked")
+	protected boolean isNew(T entity) {
+		SingularAttribute<?super T, ?> id = getIdAttribute();
+		// try field
+		PropertyAccessor pa = PropertyAccessorFactory.forDirectFieldAccess(entity);
+		PK key = (PK) pa.getPropertyValue(id.getName());
+		if (key == null)
+			key = (PK) PropertyAccessorFactory.forBeanPropertyAccess(entity).getPropertyValue(id.getName());
+		
+		
+		return key == null || !exists(key);
 	}
 
 	/**
@@ -329,9 +349,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	public List<Serializable> getKeys(Page<T> page) {	
 		Filter filter = null;
 		TypedQuery<Serializable> query = null;
-		Type<?> type = em.getMetamodel().entity(getEntityClass()).getIdType();
-		EntityType<T> entity =  em.getMetamodel().entity(getEntityClass());
-		SingularAttribute<?super T, ?> id = entity.getId(type.getJavaType());
+		SingularAttribute<? super T, ?> id = getIdAttribute();
 		// try named query
 		if (page.getFilter() instanceof Filter) {
 			filter = (Filter) page.getFilter();
@@ -358,6 +376,17 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		query.setMaxResults(page.getPageSize());
 		
 		return query.getResultList();
+	}
+
+	/**
+	 * Gets de id attribute from metamodel
+	 * @return PK SingularAttribute
+	 */
+	private SingularAttribute<? super T, ?> getIdAttribute() {
+		Type<?> type = em.getMetamodel().entity(getEntityClass()).getIdType();
+		EntityType<T> entity =  em.getMetamodel().entity(getEntityClass());
+		SingularAttribute<?super T, ?> id = entity.getId(type.getJavaType());
+		return id;
 	}
 
 	/**
