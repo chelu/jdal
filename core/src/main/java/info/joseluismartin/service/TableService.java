@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,36 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.reporting;
+package info.joseluismartin.service;
+
+import info.joseluismartin.model.TableState;
+import info.joseluismartin.model.User;
 
 /**
- * @author Jose A. Corbacho
- *
+ * Read and Save TableStates 
+ * 
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ReportingException extends Exception {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7457804399442640547L;
-
-	public ReportingException(){
-		super();
-	}
+public interface TableService {
 	
-	public ReportingException(String message, Throwable origin){
-		super(message, origin);
-	}
-	
-	public ReportingException(String message){
-		super(message);
-	}
-
 	/**
-	 * @param cause
+	 * Get TableState for user and table name
+	 * @param name the table name
+	 * @return the table state, null if none
 	 */
-	public ReportingException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
-	}
+	TableState getState(String name);
+	
+	/**
+	 * Save the given TableState
+	 * @param state the state 
+	 */
+	void saveState(TableState state);
 }

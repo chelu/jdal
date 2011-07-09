@@ -34,7 +34,7 @@ import com.vaadin.ui.Table;
 /**
  * Add methods to vaadin Table for friendly configuration on spring bean defintion file.
  * Use <code>info.joseluismartin.ui.table.Column</code> as inner bean for configure columns:
- * 
+ * <code>
  * <property name="columns">
  * 	<list>
  * 		<bean class="info.joseluismartin.ui.table.Column"/>
@@ -50,7 +50,8 @@ import com.vaadin.ui.Table;
  * 		</bean>
  * 	</list>
  * <property name="service" value="a_persistent_service"/>
- * </property>
+ * <property>
+ * </code>
  * 
  * ConfigurableTable use persistenService.getPage() to get List of models.
  * 
@@ -187,25 +188,27 @@ public class ConfigurableTable extends Table {
 	@Override
 	protected Object getPropertyValue(Object rowId, Object colId, Property property) {
 		Column column = columnMap.get(colId);
-		if (isEditable()) {
-			Class<?extends Component> editorClass = column.getCellEditor();
-			if (editorClass == null)
-				return super.getPropertyValue(rowId, colId, property);
-			else {
-				return getComponentForProperty(property, editorClass);
+		if (column != null) {
+			if (isEditable()) {
+				Class<?extends Component> editorClass = column.getCellEditor();
+				if (editorClass == null)
+					return super.getPropertyValue(rowId, colId, property);
+				else {
+					return getComponentForProperty(property, editorClass);
+				}
 			}
-		}
-		// Test cell component 
-		Class<?extends Component> cellComponentClass = column.getCellComponent();
-		if (cellComponentClass != null) {
-			return getComponentForProperty(property, cellComponentClass);
-		}
-		
-		// Last try, test property editor
-		PropertyEditor pe = column.getPropertyEditor();
-		if (pe != null) {
-			pe.setValue(property.getValue());
-			return pe.getAsText();
+			// Test cell component 
+			Class<?extends Component> cellComponentClass = column.getCellComponent();
+			if (cellComponentClass != null) {
+				return getComponentForProperty(property, cellComponentClass);
+			}
+
+			// Last try, test property editor
+			PropertyEditor pe = column.getPropertyEditor();
+			if (pe != null) {
+				pe.setValue(property.getValue());
+				return pe.getAsText();
+			}
 		}
 
 		// Default behavior

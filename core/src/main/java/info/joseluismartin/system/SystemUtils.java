@@ -51,6 +51,15 @@ public abstract class SystemUtils {
 			}
 		}
 	}
+	
+	public static void open(File file) {
+		if (Desktop.isDesktopSupported())
+			try {
+				Desktop.getDesktop().open(file);
+			} catch (IOException e) {
+				log.error(e);
+			}
+	}
 
 	public static byte[] getFileAsByteArray() {
 		JFileChooser chooser = new JFileChooser();

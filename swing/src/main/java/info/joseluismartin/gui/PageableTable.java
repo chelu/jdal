@@ -23,6 +23,8 @@ import info.joseluismartin.dao.Paginator;
 import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.dao.Page.Order;
 import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.model.TableState;
+import info.joseluismartin.service.TableService;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -116,6 +118,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	String editorName;
 	/** Open editors Map hold editors that are open for a  model */
 	private Map<Object, Window> openDialogs = Collections.synchronizedMap(new HashMap<Object, Window>()); 
+	/** TableState service */
+	private TableService tableService;
 	
 	// Menus
 	JMenuBar rightMenuBar;
@@ -161,6 +165,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		
 		// goto first page
 		page.firstPage();
+		// restore table state
+		restoreState();
 	}
 	
 	/**
@@ -294,6 +300,64 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		
 		return dlg;
 	}
+	
+	/**
+	 * Restore TableState
+	 */
+	
+	public void restoreState() {
+		if (tableService != null) {
+			TableState state = tableService.getState(getName());
+			if (state != null)
+				restoreState(state);
+		}
+	}
+	
+	/**
+	 * Restore the column visibility from TableState
+	 * @param TableState
+	 */
+	public void restoreState(TableState state) {
+		for (ColumnDescriptor cd : columnDescriptors) {
+			cd.setVisible(state.getVisibleColumns().contains(cd.getPropertyName()));
+		}
+		
+		updateVisibleColumns();
+	}
+	
+	
+	/**
+	 * Update TableModel column model from columDescriptors 
+	 */
+	private void updateVisibleColumns() {
+		List<String> displayNames = new ArrayList<String>(columnDescriptors.size());
+		List<String> propertyNames = new ArrayList<String>(columnDescriptors.size());
+		
+		for (ColumnDescriptor cd : columnDescriptors) {
+			if (cd.isVisible()) {
+				displayNames.add(cd.getDisplayName());
+				propertyNames.add(cd.getPropertyName());
+			}
+		}
+		tableModel.setDisplayNames(displayNames);
+		tableModel.setColumnNames(propertyNames);
+		tableModel.init();
+		table.setColumnModel(tableModel.getTableColumnModel());
+		tableModel.fireTableChanged();
+	}
+	
+	public void saveState() {
+		TableState state = new TableState();
+		List<String> visible = new ArrayList<String>();
+		for (ColumnDescriptor cd : columnDescriptors) {
+			if (cd.isVisible())
+				visible.add(cd.getPropertyName());
+		}
+		state.setName(getName());
+		state.setVisibleColumns(visible);
+		tableService.saveState(state);
+	}
+
 	/**
 	 * @return the paginatorView
 	 */
@@ -411,22 +475,12 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		 * @param ActionEvent the JButton ActionEvent
 		 */
 		public void actionPerformed(ActionEvent e) {
-			List<String> displayNames = new ArrayList<String>(columnDescriptors.size());
-			List<String> propertyNames = new ArrayList<String>(columnDescriptors.size());
-			
+		
 			for (int i = 0; i < columnDescriptors.size(); i++) {
 				ColumnDescriptor cd = columnDescriptors.get(i);
 				cd.setVisible(visibilityBox.getColumnDescriptors().get(i).isVisible());
-				if (cd.isVisible()) {
-					displayNames.add(cd.getDisplayName());
-					propertyNames.add(cd.getPropertyName());
-				}
 			}
-			tableModel.setDisplayNames(displayNames);
-			tableModel.setColumnNames(propertyNames);
-			tableModel.init();
-			table.setColumnModel(tableModel.getTableColumnModel());
-			tableModel.fireTableChanged();
+			updateVisibleColumns();
 		}
 	}
 	
@@ -568,6 +622,20 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 
 	public void setOrder(Page.Order order) {
 		this.order = order;
+	}
+
+	/**
+	 * @return the tableService
+	 */
+	public TableService getTableService() {
+		return tableService;
+	}
+
+	/**
+	 * @param tableService the tableService to set
+	 */
+	public void setTableService(TableService tableService) {
+		this.tableService = tableService;
 	}
 }
 

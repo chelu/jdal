@@ -5,7 +5,7 @@
 	<groupId>org.jdal</groupId>
 	<artifactId>jdal-vaadin</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1-SNAPSHOT</version>
+	<version>${set-version}</version>
 	<name>JDAL Vaadin UI Library</name>
 
 	<parent>
@@ -28,6 +28,7 @@
 	</organization>
 
 	<properties>
+	    <set-version>1.1-SNAPSHOT</set-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<vaadin.version>6.6.0</vaadin.version>
 		<gwt.version>2.3.0</gwt.version>

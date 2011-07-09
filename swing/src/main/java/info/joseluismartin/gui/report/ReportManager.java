@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,12 +39,12 @@ import org.apache.commons.logging.LogFactory;
  * Combine it with info.joseluismartin.util.processor.FileProcessor
  * 
  * @author Jose A. Corbacho
- * @author Jose Luis Martin (jlm@joseluismartin.info)
  */
 public class ReportManager {
 	
 	/** apache common log */
 	private static final Log log = LogFactory.getLog(ReportManager.class);
+	private DataSource dataSource;
 
 	/**
 	 * Default ctor.
@@ -85,14 +84,23 @@ public class ReportManager {
 	 */
 	public void showReport(Report report, DataSource dataSource, String outputType) throws ReportingException {
 		ProcessFileStrategy st = new ConnectionFileStrategy();
+		Connection conn = null;
 		try {
+			conn = dataSource.getConnection();
 			boolean continueWithReport = st.preprocessFile(report);
-			if (continueWithReport) st.processFile(report, outputType, dataSource.getConnection());
+			if (continueWithReport) st.processFile(report, outputType, conn);
 		} catch (Exception e) {
 			log.error(e);
+		} finally {
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					log.error(e);
+				}
 		}
 	}
-
+	
 	
 	public static String getPrefix(String fileName) {
 		String name = fileName != null ? fileName : "";
@@ -141,7 +149,9 @@ public class ReportManager {
 	 */
 	public abstract class ProcessFileStrategy {
 		
-		private Map<String, Object> parameters = new HashMap<String, Object>();;
+		private Map<String, Object> parameters = new HashMap<String, Object>();
+		private boolean interactive = true;
+		private FileProcessor fileProcessor;
 		
 		/**
 		 * Set the data source in this file processor.
@@ -175,7 +185,7 @@ public class ReportManager {
 						jrParameters.put(param.getName(), param);					
 					}
 				}
-				if (!jrParameters.isEmpty()) {
+				if (!jrParameters.isEmpty() && interactive) {
 					if (!showParameterDialog(jrParameters)) return false;
 				}
 			}
@@ -225,36 +235,33 @@ public class ReportManager {
 					}
 				}
 					
-				// The processor of this file
-				FileProcessor fp = null;
-				
 				// TODO In case more file types are allowed in the system, create Factory
 				if (".jasper".equals(suffix)){
-					fp = new JasperReportFileProcessor();
+					fileProcessor = new JasperReportFileProcessor();
 				}
 				else if (".jrxml".equals(suffix)){
-					fp = new JasperReportXMLFileProcessor();
+					fileProcessor = new JasperReportXMLFileProcessor();
 				}
 				else {
 					throw new ReportingException("Process not yet implemented for file type " + suffix);
 				}
 				
 				
-				fp.setParameters(parameters);
+				fileProcessor.setParameters(parameters);
 
-				setReportDataSource(fp, reportDataSource);
+				setReportDataSource(fileProcessor, reportDataSource);
 
 				// Process the file. This method sets its rawData attribute to the result of the processing.
-				fp.processFile(file, outputType, report.getHasQuery());
+				fileProcessor.processFile(file, outputType, report.getHasQuery());
 				
-				if (Desktop.isDesktopSupported()) {
+				if (interactive && Desktop.isDesktopSupported()) {
 					Desktop desktop = Desktop.getDesktop();
 					File outputFile;
 					try {
 						outputFile = File.createTempFile(getPrefix(report.getFileName()), "." + outputType);
 						outputFile.deleteOnExit();
 						// Create the file with the raw data provided by the file processor 
-						FileUtils.writeByteArrayToFile(outputFile, fp.getRawData());
+						FileUtils.writeByteArrayToFile(outputFile, fileProcessor.getRawData());
 						desktop.open(outputFile);
 					} catch (IOException e) {
 						throw new ReportingException("No ha sido posible abrir el fichero del informe: " + report.getFileName(), e);
@@ -265,61 +272,64 @@ public class ReportManager {
 				throw new ReportingException("No ha sido posible abrir el fichero del informe: " + report.getFileName(), e);
 			}			
 		}
+
+		/**
+		 * @return the interactive
+		 */
+		public boolean isInteractive() {
+			return interactive;
+		}
+
+		/**
+		 * @param interactive the interactive to set
+		 */
+		public void setInteractive(boolean interactive) {
+			this.interactive = interactive;
+		}
+
+		/**
+		 * @return the parameters
+		 */
+		public Map<String, Object> getParameters() {
+			return parameters;
+		}
+
+		/**
+		 * @param parameters the parameters to set
+		 */
+		public void setParameters(Map<String, Object> parameters) {
+			this.parameters = parameters;
+		}
+
+		/**
+		 * @return the fileProcessor
+		 */
+		public FileProcessor getFileProcessor() {
+			return fileProcessor;
+		}
+
+		/**
+		 * @param fileProcessor the fileProcessor to set
+		 */
+		public void setFileProcessor(FileProcessor fileProcessor) {
+			this.fileProcessor = fileProcessor;
+		}
+
 		
 	}
-	
-	public static void main(String[] args){
-		String fileName = "/home/jose/Projects/telmma/reports/IncidencesByMonth.jasper";
-		File file;
-		file = new File(fileName);
-		// The processor of this file
-		FileProcessor fp = new JasperReportFileProcessor();
 
-		System.out.println(System.getProperty("user.dir"));
-		//See your driver documentation for the proper format of this string :
-	    String DB_CONN_STRING = "jdbc:postgresql://localhost:5433/guardian2";
-	    //Provided by your driver documentation. In this case, a MySql driver is used : 
-	    String DRIVER_CLASS_NAME = "org.postgresql.Driver";
-	    String USER_NAME = "guardian";
-	    String PASSWORD = "guardian2010";
-	    
-	    Connection conn = null;
-	    try {
-	       Class.forName(DRIVER_CLASS_NAME).newInstance();
-	    }
-	    catch (Exception ex){
-	    	log.error(ex);
-	    }
-	    
+	/**
+	 * @return the dataSource
+	 */
+	public DataSource getDataSource() {
+		return dataSource;
+	}
 
-	    try {
-	      conn = DriverManager.getConnection(DB_CONN_STRING, USER_NAME, PASSWORD);
-	    }
-	    catch (SQLException e){
-	    	log.error(e);
-	    }
-
-		
-		fp.setConnection(conn);
-		// Process the file. This method sets its rawData attribute to the
-		// result of the processing.
-		fp.processFile(file, "pdf", true);
-
-		if (Desktop.isDesktopSupported()) {
-			Desktop desktop = Desktop.getDesktop();
-			File outputFile;
-			try {
-				outputFile = File.createTempFile("IncidentList", "." + "pdf");
-				outputFile.deleteOnExit();
-				// Create the file with the raw data provided by the file
-				// processor
-				FileUtils.writeByteArrayToFile(outputFile, fp.getRawData());
-				desktop.open(outputFile);
-			} catch (IOException e) {
-				log.error("No ha sido posible abrir el fichero del informe: "
-								+ fileName + " " + e);
-			}
-		}
+	/**
+	 * @param dataSource the dataSource to set
+	 */
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
 	}
 }
 

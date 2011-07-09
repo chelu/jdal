@@ -32,38 +32,50 @@
 			</extension>
 		</extensions>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.8</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.8</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+						<detectLinks>true</detectLinks>
+						<attach>true</attach>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<attach>true</attach>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+
+
 
 	<repositories>
 		<repository>
@@ -89,10 +101,10 @@
 		<module>swing</module>
 		<module>aspects</module>
 		<module>vaadin</module>
+		<module>web</module>
 	</modules>
 
 	<properties>
 		<file.encoding>UTF-8</file.encoding>
 	</properties>
-
 </project>

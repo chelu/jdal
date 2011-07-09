@@ -13,7 +13,7 @@
 	<groupId>org.jdal</groupId>
 	<artifactId>jdal-core</artifactId>
 	<name>JDAL Core Library</name>
-	<version>1.1-SNAPSHOT</version>
+	<version>${set-version}</version>
 	<developers>
 		<developer>
 			<id>jlm</id>
@@ -52,8 +52,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
+				<version>2.8</version>
 				<configuration>
+					<encoding>UTF-8</encoding>
 					<detectLinks>true</detectLinks>
 					<excludePackageNames>
 						info.joseluismartin.displaytag;
@@ -62,6 +63,22 @@
 						info.joseluismartin.jdbc;
 					</excludePackageNames>
 				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<phase>verify</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<extensions>
@@ -440,6 +457,7 @@
 
 	<!-- Shared version number properties -->
 	<properties>
+		<set-version>1.1-SNAPSHOT</set-version>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 	</properties>
 
