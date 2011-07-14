@@ -160,6 +160,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		lastPageButton.setEnabled(hasNext);
 		previousPageButton.setEnabled(hasPrevious);
 		firstPageButton.setEnabled(hasPrevious);
+		pageSizeCombo.setSelectedItem(String.valueOf(paginator.getPageSize()));
 	}
 	
 	/**
@@ -333,7 +334,9 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 
 			String item = (String) e.getItem();
 			int pageSize = parsePageSize(item);
-			paginator.setPageSize(pageSize);
+			// avoid cicles
+			if (paginator.getPageSize() != pageSize)
+				paginator.setPageSize(pageSize);
 		}
 		
 	}

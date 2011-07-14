@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -36,6 +37,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
@@ -217,5 +219,19 @@ public abstract class FormUtils {
 	 */
 	public static Icon getIcon(Icon icon, String url) {
 		return icon != null ? icon : getIcon(url);
+	}
+	
+	/**
+	 * Make a JMenu from an Action List 
+	 * @param actions the Action List
+	 * @return JMenu 
+	 */
+	public static JMenu toMenu(List<Action> actions) {
+		JMenu menu = new JMenu();
+		
+		for (Action a : actions)
+			menu.add(a);
+		
+		return menu;
 	}
 }

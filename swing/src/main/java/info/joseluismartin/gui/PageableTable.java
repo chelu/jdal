@@ -23,6 +23,8 @@ import info.joseluismartin.dao.Paginator;
 import info.joseluismartin.dao.PaginatorListener;
 import info.joseluismartin.dao.Page.Order;
 import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.gui.table.LoadPreferencesAction;
+import info.joseluismartin.gui.table.SavePreferencesAction;
 import info.joseluismartin.model.TableState;
 import info.joseluismartin.service.TableService;
 
@@ -45,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
@@ -73,6 +76,8 @@ import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
  * A JPanel with  a JTable and paginator. 
@@ -120,6 +125,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private Map<Object, Window> openDialogs = Collections.synchronizedMap(new HashMap<Object, Window>()); 
 	/** TableState service */
 	private TableService tableService;
+	/** Message Source */
+	private MessageSource messageSource = new ResourceBundleMessageSource();
 	
 	// Menus
 	JMenuBar rightMenuBar;
@@ -128,6 +135,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private Icon visibilityMenuIcon;
 	private Icon okIcon;
 	private Icon cancelIcon;
+	private Icon userMenuIcon;
 	
 
 	// Attributes needed to work with Page objects in Reports
@@ -142,6 +150,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		okIcon = FormUtils.getIcon(okIcon, "/images/16x16/dialog-ok.png");
 		cancelIcon = FormUtils.getIcon(cancelIcon, "/images/16x16/dialog-cancel.png");
 		visibilityMenuIcon = FormUtils.getIcon(visibilityMenuIcon, "/images/16x16/view-choose.png");
+		userMenuIcon = FormUtils.getIcon(userMenuIcon, "/images/table/16x16/users.png");
 		// Server side sorter
 		sorter = new ModelRowSorter<ListTableModel>(tableModel);
 		sorter.addRowSorterListener(this);
@@ -190,6 +199,15 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		menu.add(okMenuItem);
 		menu.add(cancelMenuItem);
 		rightMenuBar.add(menu);
+		JMenu prefsMenu = new JMenu();
+		prefsMenu.setMargin(new Insets(0, 0, 0, 0));
+		prefsMenu.setIcon(userMenuIcon);
+		prefsMenu.setMaximumSize(new Dimension(50,50));
+		prefsMenu.add(new JMenuItem(new LoadPreferencesAction(this, 
+					messageSource.getMessage("PageableTable.loadPreferences", null, "Load Preferences", Locale.getDefault()))));
+		prefsMenu.add(new JMenuItem(new SavePreferencesAction(this, 
+					messageSource.getMessage("PageableTable.savePreferences", null, "Save Preferences", Locale.getDefault()))));
+		rightMenuBar.add(prefsMenu);
 		rightMenuBar.add(Box.createVerticalGlue());
 		// Add menu bar to right
 		add (rightMenuBar, BorderLayout.EAST);
@@ -321,7 +339,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		for (ColumnDescriptor cd : columnDescriptors) {
 			cd.setVisible(state.getVisibleColumns().contains(cd.getPropertyName()));
 		}
-		
+		paginatorView.getPaginator().setPageSize(state.getPageSize());
 		updateVisibleColumns();
 	}
 	
@@ -347,6 +365,9 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	}
 	
 	public void saveState() {
+		if (tableService ==  null)
+			return;  // nothing to do
+		
 		TableState state = new TableState();
 		List<String> visible = new ArrayList<String>();
 		for (ColumnDescriptor cd : columnDescriptors) {
@@ -355,6 +376,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		}
 		state.setName(getName());
 		state.setVisibleColumns(visible);
+		state.setPageSize(paginatorView.getPaginator().getPageSize());
 		tableService.saveState(state);
 	}
 
@@ -458,6 +480,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		 * @see javax.swing.event.PopupMenuListener#popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent)
 		 */
 		public void popupMenuWillBecomeVisible(PopupMenuEvent e) {		
+			visibilityBox.setColumnDescriptors(columnDescriptors);
 		}
 	}
 	
@@ -499,6 +522,29 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		 */
 		public void actionPerformed(ActionEvent e) {
 			visibilityBox.setColumnDescriptors(columnDescriptors);
+			
+		}
+		
+	}
+	
+	class SaveUserPreferencesAction extends AbstractAction {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	class LoadUserPreferencesAction extends AbstractAction {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
 			
 		}
 		
@@ -636,6 +682,34 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 */
 	public void setTableService(TableService tableService) {
 		this.tableService = tableService;
+	}
+
+	/**
+	 * @return the userMenuIcon
+	 */
+	public Icon getUserMenuIcon() {
+		return userMenuIcon;
+	}
+
+	/**
+	 * @param userMenuIcon the userMenuIcon to set
+	 */
+	public void setUserMenuIcon(Icon userMenuIcon) {
+		this.userMenuIcon = userMenuIcon;
+	}
+
+	/**
+	 * @return the messageSource
+	 */
+	public MessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	/**
+	 * @param messageSource the messageSource to set
+	 */
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 }
 

@@ -15,11 +15,11 @@
  */
 package info.joseluismartin.model;
 
-import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.ManyToOne;
+import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 
 /**
  * Hold State info for UI Tables
@@ -29,9 +29,8 @@ import javax.persistence.ManyToOne;
  */
 public class TableState extends Entity {
 	
-	@ManyToOne
-	private User user;
 	private List<String> visibleColumns = new ArrayList<String>();
+	private int pageSize;
 	
 	
 	/**
@@ -39,8 +38,7 @@ public class TableState extends Entity {
 	 * @return the visible Columns
 	 */
 	public List<String> getVisibleColumns() {
-		// TODO Auto-generated method stub
-		return null;
+		return visibleColumns;
 	}
 	
 	/**
@@ -50,18 +48,29 @@ public class TableState extends Entity {
 	public void setVisibleColumns(List<String> visibleColumns) {
 		this.visibleColumns = visibleColumns;
 	}
-
+	
 	/**
-	 * @return the user
+	 * Set visible columns as CSV String 
+	 * @param value the CSV String
 	 */
-	public User getUser() {
-		return user;
+	public void setVisibleColumns(String value) {
+		StringArrayPropertyEditor pe = new StringArrayPropertyEditor();
+		pe.setAsText(value);
+		visibleColumns = Arrays.asList(( String[]) pe.getValue());
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param parseInt
 	 */
-	public void setUser(User user) {
-		this.user = user;
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+		
+	}
+
+	/**
+	 * @return the pageSize
+	 */
+	public int getPageSize() {
+		return pageSize;
 	}
 }
