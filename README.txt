@@ -1,4 +1,4 @@
-JDAL Library 1.1-1 (Jun 2011)
+JDAL Library 1.1.3 (Jul 2011)
 -----------------------------
 http://www.jdal.org
 
@@ -26,6 +26,7 @@ core:              JDAL Core Library
 swing:             JDAL Swing UI Library
 aspects:           JDAL Aspects Library
 vaadin:            JDAL Vaadin UI Library
+web:               JDAL Web Library
   
 
 COMPILE

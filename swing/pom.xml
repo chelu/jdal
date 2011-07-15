@@ -318,6 +318,12 @@
 			<artifactId>jgoodies-common</artifactId>
 			<version>0.9.9</version>
 		</dependency>
+		<!--  Icons from Tango Desktop Project -->
+		<dependency>
+  			<groupId>org.freedesktop.tango</groupId>
+  			<artifactId>tango-icon-theme</artifactId>
+  			<version>0.8.90</version>
+		</dependency>
 
 		<!--
 			Core utilities used by other modules. Define this if you use Spring
