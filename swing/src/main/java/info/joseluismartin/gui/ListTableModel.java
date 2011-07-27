@@ -63,11 +63,11 @@ public class ListTableModel implements TableModel {
 	private final static Log log = LogFactory.getLog(ListTableModel.class);
 	
 	/** List holder for models */
-	List list;
+	private List list;
 	/** TableModel listeners */
-	ArrayList<TableModelListener> listeners = new ArrayList<TableModelListener>();
+	private ArrayList<TableModelListener> listeners = new ArrayList<TableModelListener>();
 	/** columnConunt */
-	int columnCount = 0;
+	private int columnCount = 0;
 	/** Property descriptor array of model */
 	private List<PropertyDescriptor> pds = new ArrayList<PropertyDescriptor>();
 	/** columnNames */

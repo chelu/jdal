@@ -23,9 +23,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -48,47 +49,70 @@ import org.springframework.dao.DataAccessException;
  */
 public class TableEditor<T> extends AbstractView<T> implements TableModelListener {
 	
+	// Default Icons
+	// FIXME: Move to Tango Desktop Icons
 	public static String DEFAULT_ICON = "/images/table/table.png";
 	public static String DEFAULT_ADD_ICON = "/images/table/22x22/edit-new.png";
 	public static String DEFAULT_REMOVE_ICON = "/images/table/22x22/edit-delete.png";
 	public static String DEFAULT_SAVE_ICON = "/images/table/22x22/save.png";
 	public static String DEFAULT_REFRESH_ICON = "/images/reload.png";
-	
+	/** log */
 	private static final Log log = LogFactory.getLog(TableEditor.class);
+	/** JTable to show database rows */
 	private JTable table;
+	/** Use ListTableModel as table TableModel */
 	private ListTableModel tableModel;
 	private Icon icon;
 	private Icon addIcon;
 	private Icon removeIcon;
 	private Icon saveIcon;
 	private Icon refreshIcon;
-	private List<T> dirty = new LinkedList<T>();
+	/** Hold dirty rows */
+	private Set<T> dirty = new HashSet<T>();
+	/** Entity type */
 	private Class<T> clazz;
 	private String name;
 	
+	/** Persistent Service to use */
 	private PersistentService<T, Serializable> service;
 	
+	/** 
+	 * Creates new TableEditor 
+	 */
+	public TableEditor() {
+		
+	}
+	
+	/**
+	 * Creates new TableEditor
+	 * @param clazz entity class
+	 */
 	public TableEditor(Class<T> clazz) {
 		this.clazz = clazz;
 	}
 	
+	/**
+	 * Initiaze, usally called by container
+	 */
 	public void init() {
 		loadIcons();
 		refresh();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected JComponent buildPanel() {
 		Box box = Box.createVerticalBox();
-		// Container header = createHeader();
 		Container tablePanel = createTablePanel(); 
-		// box.add(header);
 		box.add(tablePanel);
-		
+		box.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		return box;
 	}
 
 	/**
+	 * Creates a new Box with table and actions buttons
 	 * @return
 	 */
 	protected Container createTablePanel() {
@@ -120,11 +144,12 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	}
 
 	/**
-	 * 
+	 * {@inheritDoc}
 	 */
 	public void doRefresh() {
 		tableModel.setList(service.getAll());
 	}
+	
 	/**
 	 * @return
 	 */
@@ -137,12 +162,18 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		return box;
 	}
 
+	/**
+	 * Add a new model to the table
+	 */
 	public void add() {
 		T t = newType();
 		tableModel.add(t);
 		dirty.add(t);
 	}
 	
+	/**
+	 * Delete selected table rows using persistent service
+	 */
 	@SuppressWarnings("unchecked")
 	public void delete() {
 		int[] rows = table.getSelectedRows();
@@ -160,7 +191,8 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	}
 	
 	/**
-	 * @return
+	 * Return a new instance of configured entity class
+	 * @return new entity 
 	 */
 	private T newType() {
 		try {
@@ -268,6 +300,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		}
 
 		public void actionPerformed(ActionEvent e) {
+			dirty.clear();
 			refresh();
 		}
 		
