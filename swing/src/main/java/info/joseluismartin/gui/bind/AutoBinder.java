@@ -16,7 +16,7 @@
 package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.Binder;
-import info.joseluismartin.gui.View;
+import info.joseluismartin.gui.ModelHolder;
 
 import java.beans.PropertyDescriptor;
 import java.util.Collection;
@@ -40,7 +40,7 @@ public class AutoBinder<T> implements Binder<T> {
 	/** Log */
 	private static final Log log = LogFactory.getLog(AutoBinder.class);
 	/** View to bind on */
-	private View<T> view;
+	private ModelHolder<T> view;
 	/** Control accessor factory to use for create control accessors */
 	private ControlAccessorFactory controlAccessorFactory;
 	/** PropertyAccessor for access view fields */
@@ -54,9 +54,9 @@ public class AutoBinder<T> implements Binder<T> {
 	 * Create an AutoBinder for a View
 	 * @param view View to bind.
 	 */
-	public AutoBinder(View<T> view) {
+	public AutoBinder(ModelHolder<T> view) {
 		this.view = view;
-		viewPropertyAccessor = PropertyAccessorFactory.forDirectFieldAccess(view);
+		viewPropertyAccessor = new DirectFieldAccessor(view);
 	}
 	
 	/**

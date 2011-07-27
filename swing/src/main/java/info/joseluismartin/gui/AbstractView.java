@@ -21,6 +21,7 @@ import info.joseluismartin.gui.bind.ControlAccessor;
 import info.joseluismartin.gui.bind.ControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlChangeListener;
 import info.joseluismartin.gui.bind.ControlEvent;
+import info.joseluismartin.gui.bind.DirectFieldAccessor;
 import info.joseluismartin.gui.bind.PropertyBinder;
 import info.joseluismartin.gui.validation.ErrorProcessor;
 
@@ -28,11 +29,9 @@ import java.awt.Component;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -389,7 +388,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	protected void autobind() {
 		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
-		PropertyAccessor  viewPropertyAccessor = PropertyAccessorFactory.forDirectFieldAccess(this);
+		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(this);
 		// iterate on model properties
 		for (PropertyDescriptor pd : bw.getPropertyDescriptors()) {
 			String propertyName = pd.getName();

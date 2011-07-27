@@ -27,8 +27,11 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 /**
+ * ControlAccessor for JList
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.ControlAccessor
  */
 public class ListAccessor extends AbstractControlAccessor implements ListDataListener {
 

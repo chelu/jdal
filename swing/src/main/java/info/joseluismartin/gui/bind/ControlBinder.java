@@ -16,8 +16,12 @@
 package info.joseluismartin.gui.bind;
 
 /**
+ * Generic ControlBinder that use a ControlAccessorFactory to get/set control values
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.Binder
+ * @see info.joseluismartin.gui.bind.AbstractBinder
  */
 public class ControlBinder extends AbstractBinder {
 	

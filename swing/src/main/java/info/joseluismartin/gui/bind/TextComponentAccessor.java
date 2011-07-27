@@ -15,7 +15,6 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.awt.TextComponent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -25,6 +24,8 @@ import javax.swing.text.JTextComponent;
  * ControlAccesor for JTextComponents.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.ControlAccessor
  */
 public class TextComponentAccessor extends AbstractControlAccessor implements FocusListener {
 	

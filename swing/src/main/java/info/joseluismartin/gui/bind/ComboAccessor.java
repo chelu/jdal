@@ -21,8 +21,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 
 /**
+ * Control Accessor for JComboBox
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.AbstractControlAccessor
  */
 public class ComboAccessor extends AbstractControlAccessor implements ActionListener {
 

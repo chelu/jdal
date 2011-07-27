@@ -18,10 +18,18 @@ package info.joseluismartin.gui.bind;
 import java.util.EventListener;
 
 /**
+ * A Listener for generic control changes. Use ControlChangeListener when you 
+ * want to be notified on a control changes without knowledge of the control type.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.ControlEvent
  */
 public interface ControlChangeListener extends EventListener {
 
+	/**
+	 * Notify that the value of the control has changed
+	 * @param e ControlEvent with control change info
+	 */
 	void controlChange(ControlEvent e);
 }

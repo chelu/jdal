@@ -3,10 +3,6 @@
  */
 package info.joseluismartin.gui.bind;
 
-import info.joseluismartin.gui.bind.AbstractBinder;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Date;
 
 import org.freixas.jcalendar.JCalendarCombo;

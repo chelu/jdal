@@ -16,8 +16,11 @@
 package info.joseluismartin.gui.bind;
 
 /**
+ * A Factory for ControlAccessors
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.ControlAccessor
  */
 public interface ControlAccessorFactory {
 	

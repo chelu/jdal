@@ -22,8 +22,12 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
+ * ControlAccessor for Selector
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.ControlAccessor
+ * @see info.joseluismartin.gui.Selector
  */
 public class SelectorAccessor extends AbstractControlAccessor implements ActionListener {
 

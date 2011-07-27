@@ -16,12 +16,21 @@
 package info.joseluismartin.gui.editor;
 
 /**
+ * State Pattern for ui Editors
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.Editor
  */
 public interface EditorState {
-	
+	/**
+	 * Save editor state
+	 */
 	void save();
+	
+	/**
+	 * cancel editor
+	 */
 	void cancel();
 
 }

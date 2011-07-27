@@ -21,8 +21,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JToggleButton;
 
 /**
+ * ControlAccessor for JToggleButton
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.ControlAccessor
  */
 public class ToggleButtonAccessor extends AbstractControlAccessor implements ActionListener {
 
@@ -45,6 +48,9 @@ public class ToggleButtonAccessor extends AbstractControlAccessor implements Act
 		getControl().setSelected(convertIfNecessary(value, Boolean.class));
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public JToggleButton getControl() {
 		return (JToggleButton) super.getControl();
 	}

@@ -18,13 +18,16 @@ package info.joseluismartin.gui.bind;
 import java.util.EventObject;
 
 /**
+ * ControlEvent Object
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.ControlChangeListener
  */
 public class ControlEvent extends EventObject {
 
 	/**
-	 * @param source
+	 * @param source 
 	 */
 	public ControlEvent(Object source) {
 		super(source);

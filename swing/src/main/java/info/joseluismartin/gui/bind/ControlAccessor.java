@@ -16,13 +16,33 @@
 package info.joseluismartin.gui.bind;
 
 /**
+ * Interface for generic access to ui controls
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public interface ControlAccessor {
-	
+
+	/**
+	 * Gets the control value
+	 * @return the control value
+	 */
 	Object getControlValue();
+	
+	/**
+	 * Sets the control value
+	 * @param value the value to set
+	 */
 	void setControlValue(Object value);
+	
+	/**
+	 * Add a ControlChangeListener
+	 * @param l the ControlChangeListener to add.
+	 */
 	void addControlChangeListener(ControlChangeListener l);
+	
+	/**
+	 * Remove a ControlChangeListener
+	 * @param l the ControlChangeListener to remove
+	 */
 	void removeControlChangeListener(ControlChangeListener l);
 }

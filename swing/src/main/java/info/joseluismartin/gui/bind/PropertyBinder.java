@@ -15,8 +15,6 @@
  */
 package info.joseluismartin.gui.bind;
 
-import javax.swing.JComponent;
-
 import info.joseluismartin.gui.Binder;
 
 
