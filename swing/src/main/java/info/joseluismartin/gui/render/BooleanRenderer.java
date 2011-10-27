@@ -13,6 +13,7 @@ import javax.swing.table.TableCellRenderer;
 
 /**
  * BooleanCellRenderer extracted from swing JTable.java
+ * 
  * @since 1.1
  */
 public class BooleanRenderer extends JCheckBox implements TableCellRenderer, UIResource {

@@ -34,6 +34,7 @@ public class ComboAccessor extends AbstractControlAccessor implements ActionList
 		super(combo);
 		getControl().addActionListener(this);
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

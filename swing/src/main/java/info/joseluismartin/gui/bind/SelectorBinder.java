@@ -20,7 +20,7 @@ public class SelectorBinder extends AbstractBinder implements ActionListener{
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.bind.AbstractBinder#doBind(java.awt.Component)
+	 * @see info.joseluismartin.gui.bind.AbstractBinder#doBind(Object component)
 	 */
 	protected void doBind(Object component) {
 		Selector<?> selector = (Selector<?>) component;

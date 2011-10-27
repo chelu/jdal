@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Utility class for dealing with JPA API
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public abstract class JpaUtils {

@@ -25,7 +25,7 @@ import javax.swing.JList;
 
 
 /**
- * List Cell Renderer that displays values with icon from extension.
+ * ListCellRenderer that displays values with icon from extension.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *

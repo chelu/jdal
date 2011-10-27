@@ -26,7 +26,7 @@ import info.joseluismartin.gui.Binder;
 public interface PropertyBinder extends Binder<Object> {
 	
 	/**
-	 * Bind changes on component to a property of model.
+	 * Bind changes on component to a model property
 	 * @param component component to bind
 	 * @param propertyName the property name to bind
 	 * @param model model to bind.
@@ -34,7 +34,7 @@ public interface PropertyBinder extends Binder<Object> {
 	void bind(Object component, String propertyName, Object model);
 	
 	/**
-	 * Bind changes on component to a property of model.
+	 * Bind changes on component to a model property
 	 * @param component component to bind
 	 * @param propertyName the property name to bind
 	 * @param model model to bind.

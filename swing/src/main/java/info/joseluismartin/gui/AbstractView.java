@@ -52,7 +52,7 @@ import org.springframework.validation.Validator;
 /**
  * Template class that simplifies {@link View} implementation.
  * 
- * <p> The central method is <code>buildPanel<code> that builds the <code>JComponent</code>
+ * <p> The central method is <code>buildPanel</code> that builds the <code>JComponent</code>
  * that hold the view controls. You may use custom binding of the view overwriting the methods 
  * <code>doUpdate</code> and <code>doRefresh</code>.
  * 
@@ -66,8 +66,8 @@ import org.springframework.validation.Validator;
  * changes.
  * 
  * <p> Only <code>org.springframework.util.validation.Validator</code> validators are supported
- * to add validations to the model. The <code>validateView</code> method calls configured
- * <code>ErrorProcessors</code> to process erros found in validation.
+ * The <code>validateView</code> method calls configured
+ * <code>ErrorProcessors</code> to process errors found in validation.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @since 1.0

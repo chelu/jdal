@@ -39,9 +39,9 @@ public class AppCtx {
 		if (context == null) {
 			context = new ClassPathXmlApplicationContext(
 					new String[] {
-							"classpath*:/applicationContext-resources.xml",
-							"classpath*:/applicationContext-dao.xml",
-							"classpath*:/applicationContext.xml",
+//							"classpath*:/applicationContext-resources.xml",
+//							"classpath*:/applicationContext-dao.xml",
+//							"classpath*:/applicationContext.xml",
 							"classpath*:**/applicationContext*.xml" });
 		}
 		

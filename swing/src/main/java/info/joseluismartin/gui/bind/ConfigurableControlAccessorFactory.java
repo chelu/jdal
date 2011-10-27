@@ -26,12 +26,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * Implementation of ControlAccessorFactory using an asociative Map&lt;Class, ControlAccessor&gt;
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.1
+ * @see info.joseluismartin.gui.bind.ControlAccessor
+ * @see info.joseluismartin.gui.bind.ControlAccessorFactory
  */
-public class ConfigurableControlAccesorFactory implements ControlAccessorFactory {
+public class ConfigurableControlAccessorFactory implements ControlAccessorFactory {
 	
-	private final static Log log = LogFactory.getLog(ConfigurableControlAccesorFactory.class);
+	private final static Log log = LogFactory.getLog(ConfigurableControlAccessorFactory.class);
 	private Map<Class<?>, Class<ControlAccessor>> accessors;
 
 	/**
