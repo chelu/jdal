@@ -123,22 +123,17 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * @param page
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private TypedQuery<T> getCriteriaQuery(Page<T> page) {
 		CriteriaQuery<T> criteria = getCriteria(page);
-		
+		CriteriaQuery countCriteria = getCriteria(page);
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		
-		// count (review i don't sure that this work fine...)
-		CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-		String alias = getOrCreateRootAlias(criteria);
-		Root<T> countRoot = countQuery.from(getEntityClass());
-		countRoot.alias(alias);
-		countQuery.select(cb.count(countRoot));
+		Root countRoot = JpaUtils.findRoot(countCriteria, getEntityClass());
+		countCriteria.select(cb.count(countRoot));
 		
-		if (criteria.getRestriction() != null)
-			countQuery.where(criteria.getRestriction());
-		
-		page.setCount(em.createQuery(countQuery).getSingleResult().intValue());
+		page.setCount(((Long)em.createQuery(countCriteria).getSingleResult())
+				.intValue());
 		
 		if (page.getSortName() != null) 
 			criteria.orderBy(getOrder(page, criteria));

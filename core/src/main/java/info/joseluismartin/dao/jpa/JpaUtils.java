@@ -17,6 +17,7 @@ package info.joseluismartin.dao.jpa;
 
 import info.joseluismartin.beans.PropertyUtils;
 
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +39,7 @@ public abstract class JpaUtils {
 	private static Pattern ALIAS_PATTERN = Pattern.compile(ALIAS_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 	private static String FROM_PATTERN_STRING = "(from.*+)";
 	private static Pattern FROM_PATTERN = Pattern.compile(FROM_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
+	
 	/**
 	 * Find the Root with type class on Set
 	 * @param <T> root type
@@ -155,4 +157,18 @@ public abstract class JpaUtils {
 		
 		return null;
 	}
+	
+	/**
+	 * Adds copy joins and restictions from criteria
+	 */
+	public static void copyCriteria(CriteriaQuery<?> from, CriteriaQuery<?> to) {
+		
+		if (from.getRestriction() != null)
+			to.where(from.getRestriction());
+		
+		Set<Root<?>> roots = from.getRoots();
+		Root<?> root = to.getRoots().iterator().next();
+		
+	}
 }
+

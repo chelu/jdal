@@ -179,7 +179,8 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		page = service.getPage(paginator.getModel());
 		if (page.getData() != null && page.getData().size() > 0) {
 			if (container == null) {
-				container = new BeanItemContainer(page.getData().get(0).getClass(), page.getData());
+				Class beanClass = entityClass != null ? entityClass : page.getData().get(0).getClass();
+				container = new BeanItemContainer(beanClass, page.getData());
 				table.setContainerDataSource(container);
 			}
 			else {
