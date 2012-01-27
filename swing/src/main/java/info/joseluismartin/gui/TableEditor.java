@@ -16,6 +16,7 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.action.BeanAction;
+
 import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.service.PersistentService;
 
@@ -24,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -41,6 +43,8 @@ import javax.swing.event.TableModelListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 
 /**
  * Simple table editor 
@@ -76,6 +80,8 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	/** Persistent Service to use */
 	private PersistentService<T, Serializable> service;
 	
+	/** MessageSource */
+	private MessageSource messageSource = new ResourceBundleMessageSource();
 	/** 
 	 * Creates new TableEditor 
 	 */
@@ -183,7 +189,8 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 				service.delete(model);
 				tableModel.getList().remove(model);
 			} catch (DataAccessException dae) {
-				String errorMsg = "El registro " + model.toString() + " está en uso y no se puede eliminar";
+				String errorMsg = messageSource.getMessage("TableEditor.objectInUse", 
+						new Object[] {model.toString()}, Locale.getDefault());
 				JOptionPane.showMessageDialog(getPanel(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -253,8 +260,8 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 			try {
 				service.save(dirty);
 			} catch (DataAccessException dae) {
-				JOptionPane.showMessageDialog(getPanel(), "Ha ocurrido un error guardando los cambios.", 
-						"Error", JOptionPane.ERROR_MESSAGE);
+				String errorMsg = messageSource.getMessage("TableEditor.saveError", null, Locale.getDefault());
+				JOptionPane.showMessageDialog(getPanel(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			refresh();
 		}

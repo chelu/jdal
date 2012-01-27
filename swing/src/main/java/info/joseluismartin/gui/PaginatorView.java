@@ -26,6 +26,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Locale;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -35,6 +36,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 
 /**
  * PaginatorView with control buttons to manage paginator.
@@ -64,11 +68,15 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	private JLabel statusLabel;
 	private JLabel countLabel;
 	
+	/** MessageSource for internacionalization */
+	private MessageSource messageSource = new ResourceBundleMessageSource();
+	
 	// Icons 
 	private Image nextIcon;
 	private Image previousIcon;
 	private Image lastIcon;
 	private Image firstIcon;
+	
 	
 	
 	/** 
@@ -152,7 +160,8 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	 */
 	public void doRefresh() {
 		statusLabel.setText("" + paginator.getPage() + " / " + paginator.getTotalPages());
-		countLabel.setText("Records: " + paginator.getCount());
+		countLabel.setText(messageSource.getMessage("PaginatorView.records", null, "Records: ", 
+				Locale.getDefault())  + paginator.getCount());
         // disable buttons on fist and last page
 		boolean hasNext = paginator.hasNext();
 		boolean hasPrevious = paginator.hasPrevious();
