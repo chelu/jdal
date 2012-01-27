@@ -16,6 +16,7 @@
 package info.joseluismartin.vaadin.ui;
 
 
+import info.joseluismartin.beans.AppCtx;
 import info.joseluismartin.cmd.Command;
 import info.joseluismartin.vaadin.ui.table.ButtonListener;
 
@@ -28,7 +29,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.Reindeer;
 
 /**
  * Form Utility Library
@@ -83,7 +83,7 @@ public abstract class FormUtils {
 	 * @return new OK Button
 	 */
 	private static Button newOKButton(final Form f) {
-		Button ok = new Button("OK");
+		Button ok = new Button(AppCtx.getInstance().getMessage("ok", null, null));
 		ok.addListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
@@ -137,7 +137,7 @@ public abstract class FormUtils {
 		HorizontalLayout hl = new HorizontalLayout();
 		hl.setSpacing(true);
 		
-		Button ok = new Button("YES");
+		Button ok = new Button(AppCtx.getInstance().getMessage("yes", null, null));
 		ok.addListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
@@ -146,7 +146,7 @@ public abstract class FormUtils {
 				
 			}
 		});
-		Button cancel = new Button("NO");
+		Button cancel = new Button(AppCtx.getInstance().getMessage("no", null, null));
 		cancel.addListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {

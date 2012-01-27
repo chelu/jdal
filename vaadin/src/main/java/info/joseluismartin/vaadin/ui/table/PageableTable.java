@@ -48,6 +48,9 @@ import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import org.springframework.context.MessageSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * <p>
@@ -93,6 +96,9 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	private FormFieldFactory formFieldFactory;
 	/** the entity class */
 	private Class<T> entityClass;
+	/** Message Source */
+	@Autowired
+	private MessageSource messageSource;
 	
 	public PageableTable() {
 	}
@@ -240,7 +246,9 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	public void itemClick(ItemClickEvent event) {
 		if (event.isDoubleClick()) {
 			BeanItem<T> bi = (BeanItem<T>) event.getItem();
-			FormDialog dlg = new FormDialog("Edit " + bi.getBean().getClass().getSimpleName());
+			String message = messageSource.getMessage("edit", null, null);
+			FormDialog dlg = new FormDialog(message + " " + bi.getBean().getClass().getSimpleName());
+			dlg.setMessageSource(messageSource);
 			dlg.setPersistentService((PersistentService<Object, Serializable>) service);
 			Form form = getEditorForm();
 			form.setItemDataSource(bi, form.getVisibleItemProperties());

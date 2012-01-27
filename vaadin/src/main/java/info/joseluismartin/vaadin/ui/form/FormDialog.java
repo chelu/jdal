@@ -22,6 +22,8 @@ import info.joseluismartin.vaadin.ui.table.ButtonListener;
 import java.io.Serializable;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
@@ -43,8 +45,10 @@ public class FormDialog extends Window {
 	@Autowired
 	private PersistentService<Object, Serializable> persistentService;
 	private Form form;
-	private ButtonListener acceptButtonListener = new AcceptButtonListener();
-	private ButtonListener cancelButtonListener = new CancelButtonListener();
+	private ButtonListener acceptButtonListener;
+	private ButtonListener cancelButtonListener;
+	@Autowired
+	private MessageSource messageSource = new ResourceBundleMessageSource();
 	
 	public FormDialog() {
 		super();
@@ -75,6 +79,9 @@ public class FormDialog extends Window {
 	}
 	
 	public void init() {
+		acceptButtonListener = new AcceptButtonListener();
+		cancelButtonListener = new CancelButtonListener();
+		
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		Button acceptButton = FormUtils.newButton(acceptButtonListener);
 		Button cancelButton = FormUtils.newButton(cancelButtonListener);
@@ -153,7 +160,8 @@ public class FormDialog extends Window {
 	private class AcceptButtonListener extends ButtonListener {
 
 		public AcceptButtonListener() {
-			setCaption("Accept");
+			String caption = messageSource == null ? "Accept" : messageSource.getMessage("accept", null, null);
+			setCaption(caption);
 		}
 		/**
 		 * {@inheritDoc}
@@ -171,7 +179,8 @@ public class FormDialog extends Window {
 	private class CancelButtonListener extends ButtonListener {
 
 		public CancelButtonListener() {
-			setCaption("Cancel");
+			String caption = messageSource == null ? "Cancel" : messageSource.getMessage("cancel", null, null);
+			setCaption(caption);
 		}
 		
 		/**
@@ -183,5 +192,19 @@ public class FormDialog extends Window {
 			close();
 		}
 		
+	}
+
+	/**
+	 * @return the messageSource
+	 */
+	public MessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	/**
+	 * @param messageSource the messageSource to set
+	 */
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 }

@@ -34,6 +34,9 @@ import com.vaadin.ui.Select;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
+import org.springframework.context.MessageSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * Paginator implementation for Vaadin framework
  * 
@@ -61,6 +64,8 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	private Select goTo = new Select();
 	/** Listen buttons clicks */
 	private ButtonClickListener buttonClickListener = new ButtonClickListener();
+	@Autowired
+	private MessageSource messageSource;
 	
 	/** 
 	 * Creates a new paginator with default page size of 10 records
@@ -108,7 +113,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		Box.addHorizontalStruct(hbox, 10);
 		
 		// goto page select
-		Label goToLabel = new Label("GoTo: ");
+		Label goToLabel = new Label(messageSource.getMessage("vaadinPaginator.goto", null, null));
 		goToLabel.setSizeUndefined();
 		hbox.addComponent(goToLabel);
 		goTo.setWidth("5em");
@@ -117,7 +122,8 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		Box.addHorizontalGlue(hbox);
 	
 		// records by page select
-		Label showRecords = new Label("Page size: ");
+		Label showRecords = new Label(messageSource.getMessage("vaadinPaginator.pageSize",
+				null, null));
 		showRecords.setSizeUndefined();
 		hbox.addComponent(showRecords);
 		
@@ -277,7 +283,8 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		// update status
 		int currentPage = getTotalPages() == 0 ? 0 : getPage();
 		status.setValue(currentPage + "/" + getTotalPages());
-		resultCount.setValue("Records: " + getModel().getCount());
+		resultCount.setValue(messageSource.getMessage("vaadinPaginator.records", null, null) 
+				+ getModel().getCount());
 
 		// fill goto page select
 		goTo.removeAllItems();

@@ -18,6 +18,9 @@ package info.joseluismartin.vaadin.ui.table;
 import com.vaadin.terminal.Resource;
 import com.vaadin.ui.Button.ClickEvent;
 
+import org.springframework.context.MessageSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
@@ -25,6 +28,8 @@ import com.vaadin.ui.Button.ClickEvent;
 public abstract class TableButtonListener extends ButtonListener {
 	
 	private PageableTable<?> table;
+	@Autowired
+	protected MessageSource messageSource;
 	
 	
 	public TableButtonListener() {
@@ -57,5 +62,19 @@ public abstract class TableButtonListener extends ButtonListener {
 	 * {@inheritDoc}
 	 */
 	public abstract void buttonClick(ClickEvent event);
+
+	/**
+	 * @return the messageSource
+	 */
+	public MessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	/**
+	 * @param messageSource the messageSource to set
+	 */
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
 	
 }

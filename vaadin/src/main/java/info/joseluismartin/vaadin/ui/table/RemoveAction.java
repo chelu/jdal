@@ -49,10 +49,8 @@ public class RemoveAction extends TableButtonListener {
 			}
 		};
 	
-		FormUtils.showConfirmDialog(getTable().getWindow(), command,
-				"<b>This will remove " + selected.size() + " items.<br> <center>Are you sure?</center><br></b>");
-		
-		
+		String message = messageSource.getMessage("removeAction.confirm", new Object[] {
+				selected.size() }, null); 
+		FormUtils.showConfirmDialog(getTable().getWindow(), command, message);
 	}
-
 }

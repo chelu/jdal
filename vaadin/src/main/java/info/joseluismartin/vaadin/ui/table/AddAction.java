@@ -21,6 +21,8 @@ import info.joseluismartin.vaadin.ui.form.FormDialog;
 import java.io.Serializable;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.MessageSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Form;
@@ -34,6 +36,9 @@ import com.vaadin.ui.Window.CloseListener;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class AddAction extends TableButtonListener {
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 	/**
 	 * {@inheritDoc}
@@ -55,5 +60,19 @@ public class AddAction extends TableButtonListener {
 			}
 		});
 		table.getWindow().addWindow(dialog);
+	}
+
+	/**
+	 * @return the messageSource
+	 */
+	public MessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	/**
+	 * @param messageSource the messageSource to set
+	 */
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 }
