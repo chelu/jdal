@@ -49,6 +49,7 @@ public class FormDialog extends Window {
 	private ButtonListener cancelButtonListener;
 	@Autowired
 	private MessageSource messageSource = new ResourceBundleMessageSource();
+	private boolean dirty = false;
 	
 	public FormDialog() {
 		super();
@@ -171,6 +172,7 @@ public class FormDialog extends Window {
 			form.commit();
 			BeanItem<?> item = (BeanItem<?>) form.getItemDataSource();
 			persistentService.save(item.getBean());
+			setDirty(true);
 			close();
 		}
 		
@@ -206,5 +208,19 @@ public class FormDialog extends Window {
 	 */
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
+	}
+
+	/**
+	 * @return the saved
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * @param saved the saved to set
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
 	}
 }

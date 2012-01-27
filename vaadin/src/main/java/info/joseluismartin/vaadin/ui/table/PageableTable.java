@@ -33,6 +33,8 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
@@ -47,9 +49,8 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-
-import org.springframework.context.MessageSource;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vaadin.ui.Window.CloseEvent;
+import com.vaadin.ui.Window.CloseListener;
 
 
 /**
@@ -61,7 +62,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class PageableTable<T> extends CustomComponent implements PaginatorListener, 
-	Container.ItemSetChangeListener, ItemClickListener {
+	Container.ItemSetChangeListener, ItemClickListener, CloseListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(PageableTable.class);
@@ -254,6 +255,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			form.setItemDataSource(bi, form.getVisibleItemProperties());
 			dlg.setForm(form);
 			dlg.init();
+			dlg.addListener((CloseListener) this);
 			getWindow().addWindow(dlg);
 		}
 	}
@@ -484,5 +486,13 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	public void setFilterForm(Form filterForm) {
 		this.filterForm = filterForm;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void windowClose(CloseEvent e) {
+		if (((FormDialog) e.getWindow()).isDirty())
+			loadPage();
 	}
 }
