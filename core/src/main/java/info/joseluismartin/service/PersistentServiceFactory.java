@@ -28,6 +28,8 @@ import org.springframework.transaction.interceptor.MatchAlwaysTransactionAttribu
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /**
+ * Persistent Service Factory. Creates PersistentServices on the fly 
+ * for entity classes.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */

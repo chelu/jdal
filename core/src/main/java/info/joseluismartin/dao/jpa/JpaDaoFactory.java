@@ -24,7 +24,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
+ * Dao Factory implementation that create JpaDaos on the fly. 
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * 
+ * @See info.joseluismartin.dao.jpa.JpaDao
+ * @see info.joseluismartin.service.PersistentServiceFactory
  * @since 1.1
  */
 public class JpaDaoFactory implements DaoFactory {
