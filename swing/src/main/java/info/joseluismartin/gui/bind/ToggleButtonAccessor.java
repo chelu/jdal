@@ -15,10 +15,9 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * ControlAccessor for JToggleButton
@@ -27,11 +26,12 @@ import javax.swing.JToggleButton;
  * @since 1.1
  * @see info.joseluismartin.gui.bind.ControlAccessor
  */
-public class ToggleButtonAccessor extends AbstractControlAccessor implements ActionListener {
+public class ToggleButtonAccessor extends AbstractControlAccessor implements ChangeListener
+	{
 
 	public ToggleButtonAccessor(Object button) {
 		super(button);
-		getControl().addActionListener(this);
+		getControl().getModel().addChangeListener(this);
 	}
 	
 	/**
@@ -58,9 +58,8 @@ public class ToggleButtonAccessor extends AbstractControlAccessor implements Act
 	/**
 	 * {@inheritDoc}
 	 */
-	public void actionPerformed(ActionEvent e) {
+	public void stateChanged(ChangeEvent e) {
 		fireControlChange();
-		
 	}
 
 }

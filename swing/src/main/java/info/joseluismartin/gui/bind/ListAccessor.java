@@ -17,6 +17,8 @@ package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.list.ListListModel;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +28,8 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 /**
  * ControlAccessor for JList
  * 
@@ -33,11 +37,13 @@ import javax.swing.event.ListDataListener;
  * @since 1.1
  * @see info.joseluismartin.gui.bind.ControlAccessor
  */
-public class ListAccessor extends AbstractControlAccessor implements ListDataListener {
+public class ListAccessor extends AbstractControlAccessor implements ListDataListener,
+	PropertyChangeListener {
 
 	public ListAccessor(Object list) {
 		super(list);
 		getControl().getModel().addListDataListener(this);
+		getControl().addPropertyChangeListener(this);
 	}
 	
 	/**
@@ -78,8 +84,16 @@ public class ListAccessor extends AbstractControlAccessor implements ListDataLis
 	 * {@inheritDoc}
 	 */
 	public void setControlValue(Object value) {
+		ListListModel listModel = null;
+		
 		if (value instanceof Collection<?>) {
-			ListListModel listModel = new ListListModel(new ArrayList<Object>((Collection<?>) value));
+			listModel = new ListListModel(new ArrayList<Object>((Collection<?>) value));
+		}
+		else if (value instanceof Object[]) {
+			listModel = new ListListModel(Arrays.asList((Object[])value));
+		}
+		
+		if (listModel != null) {
 			listModel.addListDataListener(this);
 			getControl().setModel(listModel);
 		}
@@ -87,6 +101,14 @@ public class ListAccessor extends AbstractControlAccessor implements ListDataLis
 	
 	public JList getControl() {
 		return (JList) super.getControl();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void propertyChange(PropertyChangeEvent evt) {
+		if ("model".equals(evt.getPropertyName()))
+			fireControlChange();
 	}
 
 }

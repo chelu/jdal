@@ -15,9 +15,8 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
 /**
@@ -27,16 +26,14 @@ import javax.swing.text.JTextComponent;
  * @since 1.1
  * @see info.joseluismartin.gui.bind.ControlAccessor
  */
-public class TextComponentAccessor extends AbstractControlAccessor implements FocusListener {
-	
-	private String value = "";
+public class TextComponentAccessor extends AbstractControlAccessor implements DocumentListener {
 	
 	/**
 	 * @param control
 	 */
 	public TextComponentAccessor(Object control) {
 		super(control);
-		getControl().addFocusListener(this);
+		getControl().getDocument().addDocumentListener(this);
 	}
 
 	/**
@@ -50,27 +47,11 @@ public class TextComponentAccessor extends AbstractControlAccessor implements Fo
 	 * {@inheritDoc}
 	 */
 	public void setControlValue(Object value) {
-		getControl().setText(convertIfNecessary(value, String.class));
-		
+		if (value != getControlValue()) {
+			getControl().setText(convertIfNecessary(value, String.class));
+		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void focusGained(FocusEvent e) {
-		value = getControlValue();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void focusLost(FocusEvent e) {
-		if (!getControlValue().equals(value))
-			fireControlChange();
-			
-		
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -78,5 +59,24 @@ public class TextComponentAccessor extends AbstractControlAccessor implements Fo
 		return (JTextComponent) super.getControl();
 	}
 
-	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void insertUpdate(DocumentEvent e) {
+		fireControlChange();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void removeUpdate(DocumentEvent e) {
+		fireControlChange();		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void changedUpdate(DocumentEvent e) {
+		fireControlChange();		
+	}
 }
