@@ -23,7 +23,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
@@ -64,6 +69,8 @@ public class ConfigurableTable extends Table {
 	private List<Column> columns;
 	private TableSorter sorter;
 	private Map<String, Column> columnMap = new HashMap<String, Column>();
+	@Autowired
+	private MessageSource messageSource;
 	
 	
 	/**
@@ -108,7 +115,7 @@ public class ConfigurableTable extends Table {
 			if (visibleColumns[i].contains(PropertyUtils.PROPERTY_SEPARATOR))
 				addNestedPropertyIfPossible(visibleColumns[i]);
 			
-			displayNames[i] = columns.get(i).getDisplayName();
+			displayNames[i] = intenacionalize(columns.get(i).getDisplayName());
 			alignments[i] = columns.get(i).getAlign();
 			widths[i] = columns.get(i).getWidth();
 		}
@@ -120,6 +127,24 @@ public class ConfigurableTable extends Table {
 		for (int i = 0; i < size; i++) {
 			if ( widths[i] != -1)
 				this.setColumnWidth(visibleColumns[i], widths[i]);
+		}
+	}
+
+
+	/**
+	 * Try to resolve string as i18n code, return string if none.
+	 * @param name
+	 * @return translated code or the string
+	 */
+	private String intenacionalize(String name) {
+		if (messageSource == null)
+			return name;
+		
+		try {
+			return messageSource.getMessage(name, null, Locale.getDefault());
+		} 
+		catch (NoSuchMessageException nsme) {
+			return name;
 		}
 	}
 
