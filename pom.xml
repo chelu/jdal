@@ -32,7 +32,7 @@
 			</extension>
 		</extensions>
 		<plugins>
-		</plugins>
+	</plugins>
 
 		<pluginManagement>
 			<plugins>
@@ -48,7 +48,7 @@
 					<executions>
 						<execution>
 							<id>attach-javadocs</id>
-							<phase>verify</phase>
+							<phase>deploy</phase>
 							<goals>
 								<goal>jar</goal>
 							</goals>
@@ -61,7 +61,7 @@
 					<executions>
 						<execution>
 							<id>attach-sources</id>
-							<phase>verify</phase>
+							<phase>deploy</phase>
 							<goals>
 								<goal>jar</goal>
 							</goals>

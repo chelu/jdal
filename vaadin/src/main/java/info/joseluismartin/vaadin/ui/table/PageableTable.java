@@ -254,6 +254,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			Form form = getEditorForm();
 			form.setItemDataSource(bi, form.getVisibleItemProperties());
 			dlg.setForm(form);
+			dlg.setModal(true);
 			dlg.init();
 			dlg.addListener((CloseListener) this);
 			getWindow().addWindow(dlg);

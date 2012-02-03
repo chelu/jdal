@@ -39,6 +39,7 @@ public class AddAction extends TableButtonListener {
 	
 	@Autowired
 	private MessageSource messageSource;
+	private boolean modal = true;
 	
 	/**
 	 * {@inheritDoc}
@@ -52,6 +53,7 @@ public class AddAction extends TableButtonListener {
 		f.setItemDataSource(new BeanItem<Object>(bean), f.getVisibleItemProperties());
 		FormDialog dialog = new FormDialog(f, "New " + table.getEntityClass().getSimpleName());
 		dialog.setPersistentService((PersistentService<Object, Serializable>) table.getService());
+		dialog.setModal(modal);
 		dialog.init();
 		dialog.addListener(new CloseListener() {
 			
@@ -74,5 +76,19 @@ public class AddAction extends TableButtonListener {
 	 */
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
+	}
+
+	/**
+	 * @return the modal
+	 */
+	public boolean isModal() {
+		return modal;
+	}
+
+	/**
+	 * @param modal the modal to set
+	 */
+	public void setModal(boolean modal) {
+		this.modal = modal;
 	}
 }
