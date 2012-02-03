@@ -16,51 +16,23 @@
 package info.joseluismartin.gui.bind;
 
 /**
- * Generic ControlBinder that use a ControlAccessorFactory to get/set control values
+ * Binder Factory that use a ControlAccessorFactory to create PropertyBinders.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @since 1.1
- * @see info.joseluismartin.gui.Binder
- * @see info.joseluismartin.gui.bind.AbstractBinder
+ *
  */
-public class ControlBinder extends AbstractBinder {
+public class ControlAccessorBinderFactory implements BinderFactory {
 	
 	private ControlAccessorFactory controlAccessorFactory;
-	private ControlAccessor controlAccessor;
-	
-	public ControlBinder() {
-		
-	}
-	
-	public ControlBinder(ControlAccessorFactory controlAccessorFactory) {
-		this.controlAccessorFactory = controlAccessorFactory;
-	}
-	
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void doBind() {
-		controlAccessor = controlAccessorFactory.getControlAccessor(component);
-	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	protected void doRefresh() {
-		controlAccessor.setControlValue(getValue());
+	public PropertyBinder getBinder(Class<?> clazz) {
+		ControlBinder binder = new ControlBinder(controlAccessorFactory);
 		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void doUpdate() {
-		setValue(controlAccessor.getControlValue());
-		
+		return binder;
 	}
 
 	/**
@@ -77,5 +49,4 @@ public class ControlBinder extends AbstractBinder {
 		this.controlAccessorFactory = controlAccessorFactory;
 	}
 
-	
 }

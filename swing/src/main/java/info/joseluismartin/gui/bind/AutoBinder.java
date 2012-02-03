@@ -34,6 +34,7 @@ import org.springframework.beans.PropertyAccessorFactory;
  * controls with name equals to property names in model.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @see info.joseluismartin.gui.bind.Binder
  */
 public class AutoBinder<T> implements Binder<T> {
 	
