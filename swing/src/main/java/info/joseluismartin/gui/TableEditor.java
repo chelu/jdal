@@ -59,7 +59,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	public static String DEFAULT_ADD_ICON = "/images/table/22x22/edit-new.png";
 	public static String DEFAULT_REMOVE_ICON = "/images/table/22x22/edit-delete.png";
 	public static String DEFAULT_SAVE_ICON = "/images/table/22x22/save.png";
-	public static String DEFAULT_REFRESH_ICON = "/images/reload.png";
+	public static String DEFAULT_REFRESH_ICON = "/images/table/22x22/reload.png";
 	/** log */
 	private static final Log log = LogFactory.getLog(TableEditor.class);
 	/** JTable to show database rows */

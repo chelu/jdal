@@ -1,6 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jdal</groupId>
   <artifactId>jdal-web</artifactId>
   <name>JDAL Web Module</name>
   <version>${set-version}</version>
@@ -15,6 +14,7 @@
   <properties>
   		<set-version>1.1-SNAPSHOT</set-version>
 		<spring.version>3.0.5.RELEASE</spring.version>
+		<jdal.version>1.1.4</jdal.version>
   </properties>
 	
 	<dependencies>
@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>org.jdal</groupId>
 			<artifactId>jdal-core</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>${jdal.version}</version>
 		</dependency> 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -118,8 +118,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-
 
 		<!-- Test dependencies -->
 		<dependency>

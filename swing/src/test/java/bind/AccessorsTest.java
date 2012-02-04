@@ -23,6 +23,8 @@ import info.joseluismartin.gui.bind.TextComponentAccessor;
 import info.joseluismartin.gui.bind.ToggleButtonAccessor;
 import info.joseluismartin.gui.list.ListListModel;
 
+import java.util.Arrays;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JList;
@@ -32,7 +34,6 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * Test ControlAccessors
