@@ -53,6 +53,7 @@ public class AddAction extends TableButtonListener {
 		f.setItemDataSource(new BeanItem<Object>(bean), f.getVisibleItemProperties());
 		FormDialog dialog = new FormDialog(f, "New " + table.getEntityClass().getSimpleName());
 		dialog.setPersistentService((PersistentService<Object, Serializable>) table.getService());
+		dialog.setMessageSource(messageSource);
 		dialog.setModal(modal);
 		dialog.init();
 		dialog.addListener(new CloseListener() {

@@ -48,7 +48,7 @@ public class FormDialog extends Window {
 	private ButtonListener acceptButtonListener;
 	private ButtonListener cancelButtonListener;
 	@Autowired
-	private MessageSource messageSource = new ResourceBundleMessageSource();
+	private MessageSource messageSource;
 	private boolean dirty = false;
 	
 	public FormDialog() {
