@@ -67,6 +67,7 @@ public class AccessorsTest extends TestCase implements ControlChangeListener {
 		assertEquals(2, accessor.getControlValue());
 		assertEquals(2, combo.getSelectedItem());
 		assertTrue(listened);
+		listened = false;
 	}
 	
 	@Test
@@ -77,6 +78,7 @@ public class AccessorsTest extends TestCase implements ControlChangeListener {
 		list.setModel(new ListListModel(Arrays.asList(TEST_LIST)));
 		assertEquals(Arrays.asList(TEST_LIST), accessor.getControlValue());
 		assertTrue(listened);
+		listened = false;
 	}
 	
 	@Test
@@ -88,6 +90,7 @@ public class AccessorsTest extends TestCase implements ControlChangeListener {
 		assertEquals(true, check.isSelected());
 		assertEquals(Boolean.TRUE, accessor.getControlValue());
 		assertTrue(listened);
+		listened = false;
 	}
 
 	/**

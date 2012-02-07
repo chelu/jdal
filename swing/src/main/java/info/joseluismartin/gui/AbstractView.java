@@ -18,6 +18,7 @@ package info.joseluismartin.gui;
 import info.joseluismartin.gui.bind.BinderFactory;
 import info.joseluismartin.gui.bind.CompositeBinder;
 import info.joseluismartin.gui.bind.ControlAccessor;
+import info.joseluismartin.gui.bind.ControlAccessorBinderFactory;
 import info.joseluismartin.gui.bind.ControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlChangeListener;
 import info.joseluismartin.gui.bind.ControlEvent;
@@ -32,6 +33,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -42,6 +44,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -101,7 +104,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	/** validator to check binding and model values */
 	private Validator validator;
 	/** message source for internationalization */
-	private MessageSource messageSource;
+	@Autowired
+	protected MessageSource messageSource;
 	/** List of error handlers */
 	private List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
 	/** Validation Errors */
@@ -405,6 +409,14 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 		}
 	}
 	
+	/** 
+	 * I18n Support
+	 */
+	protected String getMessage(String code) {
+		return messageSource == null ?
+				code : messageSource.getMessage(name, null, Locale.getDefault());
+	}
+	
 	/**
 	 * Add a property name  to ignore on binding.
 	 * @param propertyName property name to ignore
@@ -547,6 +559,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public void setControlAccessorFactory(ControlAccessorFactory controlAccessorFactory) {
 		this.controlAccessorFactory = controlAccessorFactory;
+		if (binderFactory == null)
+			setBinderFactory(new ControlAccessorBinderFactory(controlAccessorFactory));
 	}
 
 	/**

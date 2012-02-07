@@ -27,6 +27,21 @@ public class ControlAccessorBinderFactory implements BinderFactory {
 	private ControlAccessorFactory controlAccessorFactory;
 
 	/**
+	 * Default Ctor
+	 */
+	public ControlAccessorBinderFactory() {
+		
+	}
+	
+	/**
+	 * Ctor
+	 * @param controlAccessorFactory
+	 */
+	public ControlAccessorBinderFactory(ControlAccessorFactory controlAccessorFactory) {
+		this.controlAccessorFactory = controlAccessorFactory;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public PropertyBinder getBinder(Class<?> clazz) {

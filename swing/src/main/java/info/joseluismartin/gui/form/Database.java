@@ -22,14 +22,16 @@ package info.joseluismartin.gui.form;
 public class Database {
 	private String name;
 	private String jdbcName;
+	private String driver;
 	
 	public Database() {
-		this(null, null);
+		this(null, null, null);
 	}
 	
-	public Database(String name, String jdbcName) {
+	public Database(String name, String jdbcName, String driver) {
 		this.name = name;
 		this.jdbcName = jdbcName;
+		this.driver = driver;
 	}
 	
 	/**
@@ -55,5 +57,19 @@ public class Database {
 	 */
 	public void setJdbcName(String jdbcName) {
 		this.jdbcName = jdbcName;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getDriver() {
+		return driver;
+	}
+
+	/**
+	 * @param driver the driver to set
+	 */
+	public void setDriver(String driver) {
+		this.driver = driver;
 	}
 }

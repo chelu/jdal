@@ -15,16 +15,43 @@
  */
 package info.joseluismartin.gui.form;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
 public class DbConnection {
 	
+	private static Log log = LogFactory.getLog(DbConnection.class);
+	
 	private Database database;
 	private String host;
 	private int port;
 	private String dbName;
+	private String user;
+	
+	public boolean test() {
+		boolean success = false;
+		// Try to connect
+		try {
+	      Class.forName(database.getDriver());
+	      Connection conn = DriverManager.getConnection(dbName, user, ""); 
+	      conn.close(); 
+	      success = true;
+
+	    } 
+	    catch (Exception e) {
+	    	log.error(e);
+	    }
+		
+		return success;
+	}
 	
 	/**
 	 * @return the database
@@ -81,5 +108,17 @@ public class DbConnection {
 	 */
 	public void setDbName(String dbName) {
 		this.dbName = dbName;
+	}
+	/**
+	 * @return the user
+	 */
+	public String getUser() {
+		return user;
+	}
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(String user) {
+		this.user = user;
 	}
 }

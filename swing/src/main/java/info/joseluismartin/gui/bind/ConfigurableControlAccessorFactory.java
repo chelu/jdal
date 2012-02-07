@@ -15,15 +15,23 @@
  */
 package info.joseluismartin.gui.bind;
 
+import info.joseluismartin.gui.Selector;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JList;
+import javax.swing.JToggleButton;
+import javax.swing.text.JTextComponent;
+
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.freixas.jcalendar.JCalendarCombo;
 
 /**
  * Implementation of ControlAccessorFactory using an asociative Map&lt;Class, ControlAccessor&gt;
@@ -36,14 +44,21 @@ import org.apache.commons.logging.LogFactory;
 public class ConfigurableControlAccessorFactory implements ControlAccessorFactory {
 	
 	private final static Log log = LogFactory.getLog(ConfigurableControlAccessorFactory.class);
-	private Map<Class<?>, Class<ControlAccessor>> accessors;
+	private Map<Class<?>, Class<?extends ControlAccessor>> accessors = 
+			new Hashtable<Class<?>, Class<? extends ControlAccessor>>();
+	private boolean mergeAccessors = true;
+	
+	public ConfigurableControlAccessorFactory() {
+		initDefaultAccessors();
+	}
+
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	public ControlAccessor getControlAccessor(Object control) {
-		Class<ControlAccessor> accessorClass = null;
+		Class<?extends ControlAccessor> accessorClass = null;
 		ControlAccessor accessor = null;
 		Class<?extends Object> clazz = control.getClass();
 	
@@ -62,7 +77,7 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 		
 		if (accessorClass  != null) {	
 			try {
-				Constructor<ControlAccessor> ctor = accessorClass.getConstructor(Object.class);
+				Constructor<?extends ControlAccessor> ctor = accessorClass.getConstructor(Object.class);
 				accessor = ctor.newInstance(control);
 			} catch (InstantiationException e) {
 				log.error(e);
@@ -84,18 +99,48 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 
 		return accessor;
 	}
+	
+	/**
+	 * 
+	 */
+	private void initDefaultAccessors() {
+		accessors.put(JTextComponent.class, TextComponentAccessor.class);
+		accessors.put(JCalendarCombo.class, JCalendarComboAccessor.class);
+		accessors.put(JList.class, ListAccessor.class);
+		accessors.put(Selector.class, SelectorAccessor.class);
+		accessors.put(JToggleButton.class, ToggleButtonAccessor.class);
+	}
 
 	// Getters and Setters
 	
-	public Map<Class<?>, Class<ControlAccessor>> getAccessors() {
+	public Map<Class<?>, Class<?extends ControlAccessor>> getAccessors() {
 		return accessors;
 	}
 
 	/**
 	 * @param accessors the accessors to set
 	 */
-	public void setAccessors(Map<Class<?>, Class<ControlAccessor>> accessors) {
-		this.accessors = accessors;
+	public void setAccessors(Map<Class<?>, Class<?extends ControlAccessor>> accessors) {
+		if (mergeAccessors)
+			this.accessors.putAll(accessors);
+		else 
+			this.accessors = accessors;
+	}
+
+
+	/**
+	 * @return the mergeAccessors
+	 */
+	public boolean isMergeAccessors() {
+		return mergeAccessors;
+	}
+
+
+	/**
+	 * @param mergeAccessors the mergeAccessors to set
+	 */
+	public void setMergeAccessors(boolean mergeAccessors) {
+		this.mergeAccessors = mergeAccessors;
 	}
 
 }

@@ -16,12 +16,20 @@
 package info.joseluismartin.gui.form;
 
 import info.joseluismartin.gui.AbstractView;
+import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
@@ -29,18 +37,33 @@ import javax.swing.JTextField;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class DbConnectionForm  extends AbstractView<DbConnection> {
+public class DbConnectionForm  extends AbstractView<DbConnection> 
+	implements ActionListener {
 	
 	private JComboBox database = new JComboBox();
 	private JTextField port = new JTextField();
 	private JTextField host = new JTextField();
 	private JTextField dbName = new JTextField();
+	private JTextField user = new JTextField();
+	private JButton test;
+	private JLabel testResult = new JLabel(" ");
+	private List<Database> databases = new ArrayList<Database>();
 	
 	/**
 	 * @param dbConnection
 	 */
 	public DbConnectionForm(DbConnection dbConnection) {
 		super(dbConnection);
+		test = new JButton(getMessage("DbConnectionForm.test"));
+		test.addActionListener(this);
+	
+		
+	}
+	
+	/**
+	 * Init method, called by container after property sets.
+	 */
+	public void init() {
 		autobind();
 	}
 
@@ -58,11 +81,21 @@ public class DbConnectionForm  extends AbstractView<DbConnection> {
 		fb.add(getMessage("DbConnectionForm.port"), port);
 		fb.row();
 		fb.add(getMessage("DbConnectionForm.dbName"), dbName);
+		fb.row();
+		fb.add(getMessage("DbConnectionForm.user"), user);
 		
 		JComponent c = fb.getForm();
-		c.setBorder(FormUtils.createTitledBorder(getMessage("DbConnectionForm.title")));
+
+		Box box = Box.createVerticalBox();
+		box.add(c);
+		box.add(Box.createVerticalStrut(10));
+		box.add(test);
+		box.add(Box.createVerticalStrut(10));
+		box.add(testResult);
 		
-		return c;
+		box.setBorder(FormUtils.createTitledBorder(getMessage("DbConnectionForm.title")));
+		
+		return box;
 	}
 	
 	/**
@@ -72,9 +105,37 @@ public class DbConnectionForm  extends AbstractView<DbConnection> {
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 		DbConnectionForm dbf = new DbConnectionForm(new DbConnection());
+		dbf.setControlAccessorFactory(new ConfigurableControlAccessorFactory());
+		dbf.init();
 		f.add(dbf.getPanel());
 		f.setSize(new Dimension(600,400));
 		f.setVisible(true);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if (getModel().test()) {
+			testResult.setText(getMessage("DbConnectionForm.sucess"));
+		}
+		else {
+			testResult.setText(getMessage("DbConnectionForm.failed"));
+		}
+	}
+
+	/**
+	 * @return the databases
+	 */
+	public List<Database> getDatabases() {
+		return databases;
+	}
+
+	/**
+	 * @param databases the databases to set
+	 */
+	public void setDatabases(List<Database> databases) {
+		this.databases = databases;
 	}
 
 }
