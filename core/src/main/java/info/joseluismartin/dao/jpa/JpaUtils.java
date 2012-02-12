@@ -44,7 +44,7 @@ public abstract class JpaUtils {
 	private static Pattern ALIAS_PATTERN = Pattern.compile(ALIAS_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 	private static String FROM_PATTERN_STRING = "(from.*+)";
 	private static Pattern FROM_PATTERN = Pattern.compile(FROM_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
-	private static long aliasCount = 0;
+	private static volatile long aliasCount = 0;
 	
 	/**
 	 * Result count from a CriteriaQuery
@@ -78,7 +78,11 @@ public abstract class JpaUtils {
 	 * @param criteria criteria
 	 * @return root alias or generated one
 	 */
-	public static <T> String getOrCreateAlias(Selection<T> selection) {
+	public static synchronized <T> String getOrCreateAlias(Selection<T> selection) {
+		// reset alias count
+		if (aliasCount > 1000)
+			aliasCount = 0;
+			
 		String alias = selection.getAlias();
 		if (alias == null) {
 			alias = "JDAL_generatedAlias" + aliasCount++;
@@ -88,6 +92,7 @@ public abstract class JpaUtils {
 		
 	}
 	
+
 	/**
 	 * Find Root of result type
 	 * @param query criteria query
