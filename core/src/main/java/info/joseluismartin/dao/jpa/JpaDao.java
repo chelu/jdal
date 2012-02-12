@@ -47,12 +47,12 @@ import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-
-
 /**
  * Dao implementation for JPA
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @see info.joseluismartin.dao.Dao
+ * @since 1.1
  */
 public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	
@@ -64,10 +64,17 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 			new HashMap<String, JpaCriteriaBuilder<T>>());
 	private QueryFinder queryFinder;
 	
+	/**
+	 * Default Ctor, When using it, you need to set entityClass 
+	 */
 	public JpaDao() {
 		
 	}
 	
+	/**
+	 * Create a new JpaDao for entity class
+	 * @param entityClass class to map.
+	 */
 	public JpaDao(Class<T> entityClass) {
 		this.entityClass = entityClass;
 	}
@@ -116,13 +123,13 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 			c.select(c.from(getEntityClass()));
 		}
 			
-			
 		return c;
 	}
 	
 	/**
-	 * @param page
-	 * @return
+	 * Create a TypedQuery from a request page
+	 * @param page request page
+	 * @return new TypedQuery
 	 */
 	@SuppressWarnings("unchecked")
 	private TypedQuery<T> getCriteriaQuery(Page<T> page) {
@@ -143,19 +150,71 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		return em.createQuery(criteria);
 	}
 
-	private String getOrCreateRootAlias(CriteriaQuery<T> criteria) {
-		Root<T> root = JpaUtils.findRoot(criteria, getEntityClass());
-		String alias = root.getAlias();
-		if (alias == null) {
-			alias = "JpaDao_generatedAlias";
-			root.alias(alias);
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Serializable> getKeys(Page<T> page) {	
+		Filter filter = null;
+		TypedQuery<Serializable> query = null;
+		SingularAttribute<? super T, ?> id = getIdAttribute();
+		// try named query
+		if (page.getFilter() instanceof Filter) {
+			filter = (Filter) page.getFilter();
+			String queryString = getQueryString(filter.getFilterName());
+			if (queryString != null) {				
+				String keyQuery = JpaUtils.getKeyQuery(queryString, id.getName());
+				// add Order
+				if (page.getSortName() != null)
+					keyQuery = JpaUtils.addOrder(keyQuery, page.getSortName(),
+						page.getOrder() == Page.Order.ASC);
+					
+				query = em.createQuery(keyQuery, Serializable.class);
+				applyFilter(query, filter);
+			}
+			else {
+				query = getKeyCriteriaQuery(id, page); 
+			}
 		}
-		return alias;
+		else {
+			query = getKeyCriteriaQuery(id, page);
+		}
+		
+		query.setFirstResult(page.getStartIndex());
+		query.setMaxResults(page.getPageSize());
+		
+		return query.getResultList();
 	}
 
 	/**
+	 * Gets CriteriaQuery for Page Keys
 	 * @param page
-	 * @return
+	 * @return CriteriaQuery 
+	 */
+	@SuppressWarnings("unchecked")
+	private TypedQuery<Serializable> getKeyCriteriaQuery(SingularAttribute<? super T, ?> id, Page<T> page) {
+		CriteriaQuery<Serializable> keyCriteria  = (CriteriaQuery<Serializable>) getCriteria(page);
+		Root<T> keyRoot = JpaUtils.findRoot(keyCriteria, getEntityClass());
+		keyCriteria.select(keyRoot.<Serializable>get(id.getName()));
+		
+		return em.createQuery(keyCriteria);
+	}
+	
+	/**
+	 * Gets de id attribute from metamodel
+	 * @return PK SingularAttribute
+	 */
+	private SingularAttribute<? super T, ?> getIdAttribute() {
+		Type<?> type = em.getMetamodel().entity(getEntityClass()).getIdType();
+		EntityType<T> entity =  em.getMetamodel().entity(getEntityClass());
+		SingularAttribute<?super T, ?> id = entity.getId(type.getJavaType());
+		return id;
+	}
+	
+	/**
+	 * Get JPA Order from a page order for a CriteriaQuery
+	 * @param page request page
+	 * @param criteria CriteriaQuery to apply Order on.
+	 * @return new Order
 	 */
 	private Order getOrder(Page<T> page, CriteriaQuery<?> criteria) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -172,8 +231,8 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	
 	/**
 	 * Gets a NamedQuery from page, setup order, params and page result count.
-	 * @param page
-	 * @return
+	 * @param page request page
+	 * @return a TypedQuery from a NamedQuery
 	 */
 	protected TypedQuery<T> getNamedQuery(Page<T> page) {
 		Filter filter = null;
@@ -201,7 +260,9 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	}
 	
 	/**
-	 * @param countQuery
+	 * Apply filter to parametriced Quer
+	 * @param query the query to apply filter on
+	 * @param filter Filter to apply
 	 */
 	private void applyFilter(Query query, Filter filter) {
 		Map<String, Object> parameterMap = filter.getParameterMap();
@@ -229,8 +290,6 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		
 		return queryFinder.find(name);
 	}
-	
-
 
 	/**
 	 * {@inheritDoc}
@@ -336,74 +395,6 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		
 		
 		return key == null || !exists(key);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<Serializable> getKeys(Page<T> page) {	
-		Filter filter = null;
-		TypedQuery<Serializable> query = null;
-		SingularAttribute<? super T, ?> id = getIdAttribute();
-		// try named query
-		if (page.getFilter() instanceof Filter) {
-			filter = (Filter) page.getFilter();
-			String queryString = getQueryString(filter.getFilterName());
-			if (queryString != null) {				
-				String keyQuery = JpaUtils.getKeyQuery(queryString, id.getName());
-				// add Order
-				if (page.getSortName() != null)
-					keyQuery = JpaUtils.addOrder(keyQuery, page.getSortName(),
-						page.getOrder() == Page.Order.ASC);
-					
-				query = em.createQuery(keyQuery, Serializable.class);
-				applyFilter(query, filter);
-			}
-			else {
-				query = getKeyCriteriaQuery(id, page); 
-			}
-		}
-		else {
-			query = getKeyCriteriaQuery(id, page);
-		}
-		
-		query.setFirstResult(page.getStartIndex());
-		query.setMaxResults(page.getPageSize());
-		
-		return query.getResultList();
-	}
-
-	/**
-	 * Gets de id attribute from metamodel
-	 * @return PK SingularAttribute
-	 */
-	private SingularAttribute<? super T, ?> getIdAttribute() {
-		Type<?> type = em.getMetamodel().entity(getEntityClass()).getIdType();
-		EntityType<T> entity =  em.getMetamodel().entity(getEntityClass());
-		SingularAttribute<?super T, ?> id = entity.getId(type.getJavaType());
-		return id;
-	}
-
-	/**
-	 * Gets CriteriaQuery for Page Keys
-	 * @param page
-	 * @return CriteriaQuery 
-	 */
-	private TypedQuery<Serializable> getKeyCriteriaQuery(SingularAttribute<? super T, ?> id, Page<T> page) {
-		CriteriaQuery<Serializable> keyCriteria = em.getCriteriaBuilder().createQuery(Serializable.class);
-		CriteriaQuery<T> cq  = getCriteria(page);
-		String alias = getOrCreateRootAlias(cq);
-		Root<T> keyRoot = keyCriteria.from(getEntityClass());
-		keyRoot.alias(alias);
-		if (cq.getRestriction() != null)
-			keyCriteria.where(cq.getRestriction());
-		
-		keyCriteria.select(keyRoot.<Serializable>get(id.getName()));
-		
-		if (page.getSortName() != null)
-			keyCriteria.orderBy(getOrder(page, keyCriteria));
-		
-		return em.createQuery(keyCriteria);
 	}
 	
 	/**
