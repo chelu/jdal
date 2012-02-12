@@ -17,21 +17,26 @@ package info.joseluismartin.dao.jpa;
 
 import info.joseluismartin.beans.PropertyUtils;
 
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Fetch;
+import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 
 import org.apache.commons.lang.StringUtils;
 
 /**
  * Utility class for dealing with JPA API
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @sice 1.1
  */
 public abstract class JpaUtils {
 	
@@ -39,23 +44,74 @@ public abstract class JpaUtils {
 	private static Pattern ALIAS_PATTERN = Pattern.compile(ALIAS_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 	private static String FROM_PATTERN_STRING = "(from.*+)";
 	private static Pattern FROM_PATTERN = Pattern.compile(FROM_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
+	private static long aliasCount = 0;
 	
 	/**
-	 * Find the Root with type class on Set
+	 * Result count from a CriteriaQuery
+	 * @param em em
+	 * @param criteria criteria
+	 * @return row count
+	 */
+	public static <T> Long count(EntityManager em, CriteriaQuery<T> criteria) {
+	    
+	    return em.createQuery(countCriteria(em, criteria)).getSingleResult();
+	}
+	
+	/**
+	 * Create a row count CriteriaQuery from a CriteriaQuery
+	 * @param em entity manager
+	 * @param criteria source criteria
+	 * @return row coutnt CriteriaQuery
+	 */
+	public static <T> CriteriaQuery<Long> countCriteria(EntityManager em, CriteriaQuery<T> criteria) {
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+		copyCriteriaNoSelection(criteria, countCriteria);
+		countCriteria.select(builder.count(findRoot(countCriteria, 
+				criteria.getResultType())));
+		
+		return countCriteria;
+	}
+	
+	/**
+	 * Gets The result alias, if none set a default one and return it
+	 * @param criteria criteria
+	 * @return root alias or generated one
+	 */
+	public static <T> String getOrCreateAlias(Selection<T> selection) {
+		String alias = selection.getAlias();
+		if (alias == null) {
+			alias = "JDAL_generatedAlias" + aliasCount++;
+			selection.alias(alias);
+		}
+		return alias;
+		
+	}
+	
+	/**
+	 * Find Root of result type
+	 * @param query criteria query
+	 * @return the root of result type or null if none
+	 */
+	public static  <T> Root<T> findRoot(CriteriaQuery<T> query) {
+		return findRoot(query, query.getResultType());
+	}
+	
+	/**
+	 * Find the Root with type class on CriteriaQuery Root Set
 	 * @param <T> root type
 	 * @param roots root set
 	 * @param clazz root type
 	 * @return Root<T> of null if none
 	 */
 	public static  <T> Root<T> findRoot(CriteriaQuery<?> query, Class<T> clazz) {
-		Root<T> root = null;
+
 		for (Root<?> r : query.getRoots()) {
 			if (clazz.equals(r.getJavaType())) {
-				root = (Root<T>) r.as(clazz);
-				break;
+				return (Root<T>) r.as(clazz);
 			}
 		}
-		return root;
+		return null;
 	}
 	
 	/**
@@ -158,17 +214,65 @@ public abstract class JpaUtils {
 		return null;
 	}
 	
+	
 	/**
-	 * Adds copy joins and restictions from criteria
+	 * Copy Criteria without Selection
+	 * @param from source Criteria
+	 * @param to destination Criteria
 	 */
-	public static void copyCriteria(CriteriaQuery<?> from, CriteriaQuery<?> to) {
+	public static void  copyCriteriaNoSelection(CriteriaQuery<?> from, CriteriaQuery<?> to) {
+
+		// Copy Roots
+		for (Root<?> root : from.getRoots()) {
+			Root<?> dest = to.from(root.getJavaType());
+			dest.alias(getOrCreateAlias(root));
+			copyJoins(root, dest);
+		}	
 		
-		if (from.getRestriction() != null)
-			to.where(from.getRestriction());
+		to.groupBy(from.getGroupList());
+		to.distinct(from.isDistinct());
+		to.having(from.getGroupRestriction());
+		to.where(from.getRestriction());
+		to.orderBy(from.getOrderList());
+	}
+	
+	public static <T> void copyCriteria(CriteriaQuery<T> from, CriteriaQuery<T> to) {
+		copyCriteriaNoSelection(from, to);
+		to.select(from.getSelection());
+	}
+	
+	
+	/**
+	 * Copy Joins
+	 * @param from source Join
+	 * @param to destination Join
+	 */
+	public static void copyJoins(From<?, ?> from, From<?, ?> to) {
+		for (Join<?, ?> j : from.getJoins()) {
+			Join<?, ?> toJoin = to.join(j.getAttribute().getName(), j.getJoinType());
+			toJoin.alias(getOrCreateAlias(j));
 		
-		Set<Root<?>> roots = from.getRoots();
-		Root<?> root = to.getRoots().iterator().next();
+			copyJoins(j, toJoin);
+		}
 		
+		for (Fetch<?, ?> f : from.getFetches()) {
+			Fetch<?, ?> toFetch = to.fetch(f.getAttribute().getName());
+			copyFetches(f, toFetch);
+			
+		}
+	}
+
+	/**
+	 * Copy Fetches
+	 * @param from source Fetch
+	 * @param toFetch dest Fetch
+	 */
+	public static void copyFetches(Fetch<?, ?> from, Fetch<?, ?> to) {
+		for (Fetch<?, ?> f : from.getFetches()) {
+			Fetch<?, ?> toFetch = to.fetch(f.getAttribute().getName());
+			// recursively copy fetches
+			copyFetches(f, toFetch);
+		}
 	}
 }
 

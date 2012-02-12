@@ -48,7 +48,7 @@ public class MethodTracer {
 	 * @throws Throwable for the method
 	 */
 	public Object traceMethod(ProceedingJoinPoint  pjp) throws Throwable {
-		log.debug("Enter method: " + pjp.toShortString());
+		log.debug("Enter method: " + pjp.getSignature().toLongString());
 		Object result = pjp.proceed();
 		log.debug("Exit method: " + pjp.toShortString());
 		return result;

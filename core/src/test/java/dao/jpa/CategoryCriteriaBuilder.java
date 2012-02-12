@@ -13,14 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dao;
+package dao.jpa;
+
+import info.joseluismartin.dao.Filter;
+import info.joseluismartin.dao.jpa.JpaCriteriaBuilder;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class JpaDaoTest {
-	
+public class CategoryCriteriaBuilder implements JpaCriteriaBuilder<Category> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public CriteriaQuery<Category> build(CriteriaQuery<Category> criteria, CriteriaBuilder cb, Filter filter) {
+		return criteria;
+	}
 	
 
 }

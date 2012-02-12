@@ -92,11 +92,10 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		return page;
 	}
 	
-
 	/**
 	 * Build CriteriaQuery using declared JpaCriteriaBuilder in filterMap
 	 * @param page
-	 * @return
+	 * @return a CriteriaQuery from filter
 	 */
 	private CriteriaQuery<T> getCriteria(Page<T> page) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -104,7 +103,8 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		Filter filter = null;
 		if (page.getFilter() instanceof Filter) {
 			filter = (Filter) page.getFilter();
-			JpaCriteriaBuilder<T> jcb = criteriaBuilderMap.get(filter.getFilterName());
+			JpaCriteriaBuilder<T> jcb = 
+					(JpaCriteriaBuilder<T>) criteriaBuilderMap.get(filter.getFilterName());
 			if (jcb != null) {
 				if (log.isDebugEnabled())
 					log.debug("Found JpaCriteriaBuilder for filter: " + filter.getFilterName());
@@ -112,9 +112,10 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 				jcb.build(c, cb, filter);
 			}
 		}
-		
-		if (c.getRoots().size() == 0)  // no filter
-			c.from(getEntityClass());
+		else {
+			c.select(c.from(getEntityClass()));
+		}
+			
 			
 		return c;
 	}
@@ -126,13 +127,14 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	@SuppressWarnings("unchecked")
 	private TypedQuery<T> getCriteriaQuery(Page<T> page) {
 		CriteriaQuery<T> criteria = getCriteria(page);
-		CriteriaQuery countCriteria = getCriteria(page);
+		
+		CriteriaQuery<Long> countCriteria = (CriteriaQuery<Long>) getCriteria(page);
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		
-		Root countRoot = JpaUtils.findRoot(countCriteria, getEntityClass());
+		Root<T> countRoot = JpaUtils.findRoot(countCriteria, getEntityClass());
 		countCriteria.select(cb.count(countRoot));
 		
-		page.setCount(((Long)em.createQuery(countCriteria).getSingleResult())
+		page.setCount((em.createQuery(countCriteria).getSingleResult())
 				.intValue());
 		
 		if (page.getSortName() != null) 
@@ -290,16 +292,14 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * {@inheritDoc}
 	 */
 	public T initialize(T entity) {
-		// TODO Auto-generated method stub
-		return null;
+		return entity;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public T initialize(T entity, int depth) {
-		// TODO Auto-generated method stub
-		return null;
+		return entity;
 	}
 
 	/**
