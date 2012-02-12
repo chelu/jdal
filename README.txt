@@ -1,4 +1,4 @@
-JDAL Library 1.1.3 (Jul 2011)
+JDAL Library 1.1.4 (Feb 2012)
 -----------------------------
 http://www.jdal.org
 
