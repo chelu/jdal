@@ -117,7 +117,7 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (getModel().test()) {
-			testResult.setText(getMessage("DbConnectionForm.sucess"));
+			testResult.setText(getMessage("DbConnectionForm.success"));
 		}
 		else {
 			testResult.setText(getMessage("DbConnectionForm.failed"));
