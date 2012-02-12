@@ -48,12 +48,12 @@ public abstract class JpaUtils {
 	
 	/**
 	 * Result count from a CriteriaQuery
-	 * @param em em
-	 * @param criteria criteria
+	 * @param em Entity Manager
+	 * @param criteria Criteria Query to count results
 	 * @return row count
 	 */
 	public static <T> Long count(EntityManager em, CriteriaQuery<T> criteria) {
-	    
+	   
 	    return em.createQuery(countCriteria(em, criteria)).getSingleResult();
 	}
 	
@@ -91,7 +91,6 @@ public abstract class JpaUtils {
 		return alias;
 		
 	}
-	
 
 	/**
 	 * Find Root of result type
@@ -246,7 +245,6 @@ public abstract class JpaUtils {
 		to.select(from.getSelection());
 	}
 	
-	
 	/**
 	 * Copy Joins
 	 * @param from source Join
@@ -270,7 +268,7 @@ public abstract class JpaUtils {
 	/**
 	 * Copy Fetches
 	 * @param from source Fetch
-	 * @param toFetch dest Fetch
+	 * @param to dest Fetch
 	 */
 	public static void copyFetches(Fetch<?, ?> from, Fetch<?, ?> to) {
 		for (Fetch<?, ?> f : from.getFetches()) {
