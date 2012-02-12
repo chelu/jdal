@@ -51,7 +51,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.8</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 					<detectLinks>true</detectLinks>
@@ -452,6 +451,7 @@
 	<properties>
 		<set-version>1.1-SNAPSHOT</set-version>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 </project>
