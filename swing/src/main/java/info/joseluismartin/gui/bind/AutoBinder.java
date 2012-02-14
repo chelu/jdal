@@ -52,6 +52,8 @@ public class AutoBinder<T> implements Binder<T> {
 	/** Set with property names to ingnore on binding commands */
 	private Set<String> ignoredProperties = new HashSet<String>();
 	private T model;
+	private RefreshCommand refreshCommand = new RefreshCommand();
+	private UpdateCommand updateCommand = new UpdateCommand();
 
 	/**
 	 * Create an AutoBinder for a View
@@ -78,14 +80,14 @@ public class AutoBinder<T> implements Binder<T> {
 	 * {@inheritDoc}
 	 */
 	public void refresh() {
-		executeBinderCommand(new RefreshCommand());
+		executeBinderCommand(refreshCommand);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void update() {
-		executeBinderCommand(new UpdateCommand());
+		executeBinderCommand(updateCommand);
 	}
 	
 	/**
@@ -180,7 +182,7 @@ public class AutoBinder<T> implements Binder<T> {
 	
 	/**
 	 * Update Command Callback
-	 * @author Jose Luis Martin - (jlm@joseluismartin.info)
+	 * 
 	 */
 	class UpdateCommand implements  BinderCommand {
 
@@ -191,14 +193,13 @@ public class AutoBinder<T> implements Binder<T> {
 	
 	/**
 	 * Refresh Command Callback
-	 * @author Jose Luis Martin - (jlm@joseluismartin.info)
+	 * 
 	 */
 	class RefreshCommand implements BinderCommand {
 
 		public void execute(ControlAccessor controlAccessor, String name) {
 			controlAccessor.setControlValue(modelPropertyAccessor.getPropertyValue(name));
 		}
-		
 	}
 
 }
