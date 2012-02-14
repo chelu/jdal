@@ -41,7 +41,8 @@ public class AutoBinder<T> implements Binder<T> {
 	/** Log */
 	private static final Log log = LogFactory.getLog(AutoBinder.class);
 	/** View to bind on */
-	private ModelHolder<T> view;
+	@SuppressWarnings("unused")
+	private Object view;
 	/** Control accessor factory to use for create control accessors */
 	private ControlAccessorFactory controlAccessorFactory;
 	/** PropertyAccessor for access view fields */
@@ -50,6 +51,7 @@ public class AutoBinder<T> implements Binder<T> {
 	private BeanWrapper modelPropertyAccessor;
 	/** Set with property names to ingnore on binding commands */
 	private Set<String> ignoredProperties = new HashSet<String>();
+	private T model;
 
 	/**
 	 * Create an AutoBinder for a View
@@ -57,6 +59,18 @@ public class AutoBinder<T> implements Binder<T> {
 	 */
 	public AutoBinder(ModelHolder<T> view) {
 		this.view = view;
+		this.model = view.getModel();
+		viewPropertyAccessor = new DirectFieldAccessor(view);
+	}
+	
+	/**
+	 * Create a Binder for view and model
+	 * @param view
+	 * @param model
+	 */
+	public AutoBinder(Object view, T model) {
+		this.view = view;
+		this.model = model;
 		viewPropertyAccessor = new DirectFieldAccessor(view);
 	}
 	
@@ -79,7 +93,7 @@ public class AutoBinder<T> implements Binder<T> {
 	 * @param command Command to execute.
 	 */
 	private void  executeBinderCommand(BinderCommand command) {
-		modelPropertyAccessor = PropertyAccessorFactory.forBeanPropertyAccess(view.getModel());
+		modelPropertyAccessor = PropertyAccessorFactory.forBeanPropertyAccess(model);
 		// iterate on model properties
 		for (PropertyDescriptor pd :modelPropertyAccessor.getPropertyDescriptors()) {
 			String propertyName = pd.getName();
@@ -101,14 +115,14 @@ public class AutoBinder<T> implements Binder<T> {
 	 * {@inheritDoc}
 	 */
 	public T getModel() {
-		return view.getModel();
+		return model;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setModel(T model) {
-		view.setModel(model);
+		this.model = model;
 	}
 
 	/**
