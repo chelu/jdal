@@ -26,9 +26,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class AlfaNumericComparator implements Comparator<String> {
+public class AlphaNumericComparator implements Comparator<String> {
 	
-	private static final Log log = LogFactory.getLog(AlfaNumericComparator.class);
+	private static final Log log = LogFactory.getLog(AlphaNumericComparator.class);
 
 	/**
 	 * {@inheritDoc}
