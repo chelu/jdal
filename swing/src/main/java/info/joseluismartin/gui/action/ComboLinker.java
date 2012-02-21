@@ -49,12 +49,13 @@ public class ComboLinker implements ActionListener {
 	 * {@inheritDoc}
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent e) {
 		Object selected = primary.getSelectedItem();
 		if (selected != null) {
 			BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(selected);
-			Collection collection = (Collection) wrapper.getPropertyValue(propertyName);
+			Collection<Object> collection = (Collection<Object>) wrapper.getPropertyValue(propertyName);
 			DefaultComboBoxModel model = new DefaultComboBoxModel(new Vector<Object>(collection));
 			dependent.setModel(model);
 		}

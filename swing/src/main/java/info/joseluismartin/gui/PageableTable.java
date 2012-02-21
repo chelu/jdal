@@ -102,9 +102,9 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	/** the paginator view */
 	private PaginatorView paginatorView;
 	/** Page used to query PageableDataSource */
-	private Page page  = new Page();
+	private Page<Object> page  = new Page<Object>();
 	/** pageable datasource to request data page by page */
-	private PageableDataSource dataSource;
+	private PageableDataSource<Object> dataSource;
 	/** list table model for the table */
 	private ListTableModel tableModel;
 	/** scroll pane used as table container */
@@ -303,8 +303,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		if (dlg == null) {
 			dlg = getEditor();
 			openDialogs.put(toEdit, dlg);
-			((View) dlg).setModel(toEdit);
-			((View) dlg).refresh();
+			((View<Object>) dlg).setModel(toEdit);
+			((View<Object>) dlg).refresh();
 			dlg.addWindowListener(new DialogWindowListener());
 			if (dlg instanceof Editor) {
 				((Editor) dlg).addEditorListener(new EditorListener() {
@@ -397,14 +397,14 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	/**
 	 * @return the dataSource
 	 */
-	public PageableDataSource getDataSource() {
+	public PageableDataSource<Object> getDataSource() {
 		return dataSource;
 	}
 
 	/**
 	 * @param dataSource the dataSource to set
 	 */
-	public void setDataSource(PageableDataSource dataSource) {
+	public void setDataSource(PageableDataSource<Object> dataSource) {
 		this.dataSource = dataSource;
 	}
 	
@@ -591,7 +591,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private class DialogWindowListener extends WindowAdapter {
 		@Override
 		public void windowClosed(WindowEvent e) {
-			if (openDialogs.remove(((View) e.getWindow()).getModel()) == null)
+			if (openDialogs.remove(((View<Object>) e.getWindow()).getModel()) == null)
 				log.warn("Tray to remove a non existant Dialog, ¿may be model hashcode changed?");
 		}
 	}

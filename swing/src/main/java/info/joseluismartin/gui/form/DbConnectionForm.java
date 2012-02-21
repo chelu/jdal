@@ -16,6 +16,7 @@
 package info.joseluismartin.gui.form;
 
 import info.joseluismartin.gui.AbstractView;
+import info.joseluismartin.gui.ViewDialog;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 
 import java.awt.Dimension;
@@ -99,20 +100,6 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	}
 	
 	/**
-	 * Test Method
-	 * @param args none
-	 */
-	public static void main(String[] args) {
-		JFrame f = new JFrame();
-		DbConnectionForm dbf = new DbConnectionForm(new DbConnection());
-		dbf.setControlAccessorFactory(new ConfigurableControlAccessorFactory());
-		dbf.init();
-		f.add(dbf.getPanel());
-		f.setSize(new Dimension(600,400));
-		f.setVisible(true);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
@@ -136,6 +123,20 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	 */
 	public void setDatabases(List<Database> databases) {
 		this.databases = databases;
+	}
+	
+	/**
+	 * Test Method
+	 * @param args none
+	 */
+	public static void main(String[] args) {
+		ViewDialog<DbConnection> d = new ViewDialog<DbConnection>();
+		DbConnectionForm dbf = new DbConnectionForm(new DbConnection());
+		dbf.setControlAccessorFactory(new ConfigurableControlAccessorFactory());
+		dbf.init();
+		d.setView(dbf);
+		d.init();
+		d.setVisible(true);
 	}
 
 }

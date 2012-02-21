@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui.action;
 
+import info.joseluismartin.gui.View;
 import info.joseluismartin.gui.ViewDialog;
 
 import java.awt.event.ActionEvent;
@@ -22,10 +23,17 @@ import java.awt.event.ActionEvent;
 /**
  * Accept Action for View Dialog
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  *
  */
 public class DialogAcceptAction extends ViewAction {
+
+	/**
+	 * 
+	 */
+	public DialogAcceptAction() {
+		this.setName("Accept");
+	}
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,8 +41,11 @@ public class DialogAcceptAction extends ViewAction {
 	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
+		View<?> view = getView();
+		view.update();
+		
 		if (getDialog() instanceof ViewDialog) {
-			((ViewDialog) getDialog()).setValue(ViewDialog.OK);
+			((ViewDialog<?>) getDialog()).setValue(ViewDialog.OK);
 		}
 		
 		getDialog().dispose();

@@ -39,8 +39,7 @@ public class AuthTest extends TestCase {
 	private AuthStrategy authStrategy = EasyMock.createMock(AuthStrategy.class);
 	
 	/** 
-	 * test auth manager
-	 * 
+	 * Test auth manager
 	 */
 	public void notestAuthManagerValidate() {
 		

@@ -25,6 +25,13 @@ import java.awt.event.ActionEvent;
  */
 public class DialogCancelAction extends DialogAction {
 
+	/**
+	 * 
+	 */
+	public DialogCancelAction() {
+		this.setName("Cancel");
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	/**

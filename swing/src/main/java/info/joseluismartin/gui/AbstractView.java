@@ -17,6 +17,7 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.bind.BinderFactory;
 import info.joseluismartin.gui.bind.CompositeBinder;
+import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlAccessor;
 import info.joseluismartin.gui.bind.ControlAccessorBinderFactory;
 import info.joseluismartin.gui.bind.ControlAccessorFactory;
@@ -88,7 +89,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	/** binder factory to make property binders */
 	private BinderFactory binderFactory;
 	/** control accessor factory */
-	private ControlAccessorFactory controlAccessorFactory;
+	private ControlAccessorFactory controlAccessorFactory = new ConfigurableControlAccessorFactory();
 	/** hold binders */
 	private CompositeBinder<T> binder = new CompositeBinder<T>();
 	/** if true, do an automatic binding using property names */
@@ -335,12 +336,11 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * @param errors erros to use 
 	 * @return String with error message
 	 */
-	@SuppressWarnings("unchecked")
 	protected String getErrorMessage(Errors errors) {
 		StringBuilder sb = new StringBuilder();
 		if (errors.hasErrors()) {
 			sb.append("\n");
-			Iterator iter = errors.getAllErrors().iterator();
+			Iterator<ObjectError> iter = errors.getAllErrors().iterator();
 			while (iter.hasNext()) {
 				ObjectError oe = (ObjectError) iter.next();
 				sb.append("- ");

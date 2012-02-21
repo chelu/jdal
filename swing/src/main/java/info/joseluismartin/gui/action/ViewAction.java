@@ -25,13 +25,13 @@ import info.joseluismartin.gui.View;
 public abstract class ViewAction extends DialogAction {
 
 	private static final long serialVersionUID = 1L;
-	private View<Object> view;
+	private View<?> view;
 
-	public View<Object> getView() {
+	public View<?> getView() {
 		return view;
 	}
 
-	public void setView(View<Object> view) {
+	public void setView(View<?> view) {
 		this.view = view;
 	}
 }

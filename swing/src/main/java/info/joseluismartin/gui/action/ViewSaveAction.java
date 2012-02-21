@@ -37,7 +37,7 @@ public class ViewSaveAction extends ViewAction {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		View<Object> view = getView();
+		View<?> view = getView();
 		view.update();
 		if (view.validateView()) {
 			service.save(getView().getModel());
@@ -46,7 +46,7 @@ public class ViewSaveAction extends ViewAction {
 			
 			// FIXME: move to Editor
 			if (getDialog() instanceof ViewDialog) {
-				((ViewDialog) getDialog()).setValue(ViewDialog.OK);
+				((ViewDialog<?>) getDialog()).setValue(ViewDialog.OK);
 			}
 			
 			if (getDialog() instanceof Editor) {

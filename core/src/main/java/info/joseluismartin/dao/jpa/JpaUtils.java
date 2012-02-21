@@ -231,7 +231,7 @@ public abstract class JpaUtils {
 			Root<?> dest = to.from(root.getJavaType());
 			dest.alias(getOrCreateAlias(root));
 			copyJoins(root, dest);
-		}	
+		}
 		
 		to.groupBy(from.getGroupList());
 		to.distinct(from.isDistinct());

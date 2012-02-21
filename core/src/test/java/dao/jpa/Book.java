@@ -6,8 +6,10 @@ import java.util.Date;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+@NamedQuery(name="booksByAuthorName", query="SELECT b FROM Book b WHERE b.author.name= :authorName")
 @javax.persistence.Entity
 @Table(name="books")
 public class Book extends Entity {

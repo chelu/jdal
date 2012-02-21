@@ -56,7 +56,8 @@ public class Page<T> implements Paginator, Cloneable {
 	public Page(int pageSize, int page, String sortName, Order order) {
 	
 		this.pageSize = pageSize;
-		this.page = page;
+		if (page > 0) 
+			this.page = page;
 		this.sortName = sortName;
 		this.order = order;
 	}
@@ -139,7 +140,7 @@ public class Page<T> implements Paginator, Cloneable {
 		setOrder(Order.ASC);
 	}
 	
-	public void setOderDesc() {
+	public void setOrderDesc() {
 		setOrder(Order.DESC);
 	}
 
@@ -203,13 +204,13 @@ public class Page<T> implements Paginator, Cloneable {
 	 * @see info.joseluismartin.gui.Paginator#setPage(int)
 	 */
 	public void setPage(int indexPage) {
-		if (page > 0)  {
+		if (indexPage > 0)  {
 			page = indexPage;
 			load();
 			firePageChangedEvent();
 		}
 		else {
-			log.warn("Try to set a page < 0");
+			log.warn("Try to set a page < 1");
 		}
 	}
 

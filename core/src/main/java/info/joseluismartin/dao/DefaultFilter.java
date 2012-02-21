@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Default implementation of Filter that use a Map to store filter values.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */

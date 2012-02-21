@@ -41,11 +41,4 @@
 
   <toc></toc>
 
-  <part id="jdal-intro">
-    <title>Introducción a JDAL</title>
-    <partintro id="jdal-intro-core"></partintro>
-    <xi:include href="overview.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-  </part>
-
- 
 </book>

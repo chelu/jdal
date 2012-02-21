@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.gui.action.DialogAcceptAction;
 import info.joseluismartin.gui.action.DialogCancelAction;
 import info.joseluismartin.gui.action.ViewAction;
 
@@ -31,22 +32,29 @@ import javax.swing.JPanel;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ViewDialog extends JDialog implements View<Object>  {
+public class ViewDialog<T> extends JDialog implements View<T>  {
 	
 	public static final int OK = 0;
 	public static final int CANCEL= 1;
 	
 	private static final long serialVersionUID = 1L;
-	private View<Object> view;
-	private ViewAction acceptAction;
-	private DialogCancelAction cancelAction;
+	private View<T> view;
+	private ViewAction acceptAction = new DialogAcceptAction();
+	private DialogCancelAction cancelAction = new DialogCancelAction(); 
 	private JButton acceptButton;
 	private JButton cancelButton;
 	private int dialogWidth = 750;
 	private int dialogHeight = 750;
 	private int value = CANCEL;
 	
+	public ViewDialog() {
+		acceptAction.setDialog(this);
+		cancelAction.setDialog(this);
+	}
+	
 	public void init() {
+		acceptAction.setView(view);
+
 		add(view.getPanel(), BorderLayout.CENTER);
 		if (view.getModel() != null)
 			setTitle(view.getModel().toString());
@@ -66,11 +74,11 @@ public class ViewDialog extends JDialog implements View<Object>  {
 		return p;
 	}
 
-	public View<Object> getView() {
+	public View<T> getView() {
 		return view;
 	}
 
-	public void setView(View<Object> view) {
+	public void setView(View<T> view) {
 		this.view = view;
 	}
 
@@ -140,7 +148,7 @@ public class ViewDialog extends JDialog implements View<Object>  {
 		
 	}
 
-	public Object getModel() {
+	public T getModel() {
 		return view.getModel();
 	}
 
@@ -155,7 +163,7 @@ public class ViewDialog extends JDialog implements View<Object>  {
 		view.refresh();
 	}
 
-	public void setModel(Object model) {
+	public void setModel(T model) {
 		view.setModel(model);
 	}
 

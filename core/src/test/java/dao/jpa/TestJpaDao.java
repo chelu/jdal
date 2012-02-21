@@ -21,6 +21,7 @@ import info.joseluismartin.dao.Page;
 import info.joseluismartin.dao.jpa.JpaDao;
 import info.joseluismartin.dao.jpa.JpaUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -123,6 +124,27 @@ public class TestJpaDao extends TestCase {
 		List<Book> copyBooks = em.createQuery(copy).getResultList();
 		List<Book> books = em.createQuery(criteria).getResultList();
 		assertEquals(books, copyBooks);
+	}
+	
+	@Test
+	@Transactional
+	public void testKeys() {
+		Page<Book> page = new Page<Book>();
+		List<Serializable> keys = bookDao.getKeys(page);
+		assertEquals(10, keys.size());	
+	}
+	
+	@Test
+	@Transactional
+	public void testNamedQuery() {
+		BookFilter filter = new BookFilter("booksByAuthorName");
+		filter.setAuthorName("Martin");
+		Page<Book> page = new Page<Book>();
+		page.setFilter(filter);
+		page.setSortName("publishedDate");
+		page.setOrderDesc();
+		bookDao.getPage(page);
+		assertEquals(4, page.getData().size());
 	}
 	
 

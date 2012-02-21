@@ -52,7 +52,7 @@ import org.springframework.beans.PropertyAccessorFactory;
  * @since 1.0
  */
 // FIXME: - jlm - This class is growing quicky, revise design.
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ListTableModel implements TableModel {
 	
 	public static final String MAX_WIDTH = "maxWidth";
@@ -63,6 +63,7 @@ public class ListTableModel implements TableModel {
 	private final static Log log = LogFactory.getLog(ListTableModel.class);
 	
 	/** List holder for models */
+	
 	private List list;
 	/** TableModel listeners */
 	private ArrayList<TableModelListener> listeners = new ArrayList<TableModelListener>();

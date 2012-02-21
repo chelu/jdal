@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JToggleButton;
 import javax.swing.text.JTextComponent;
@@ -56,7 +57,7 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public ControlAccessor getControlAccessor(Object control) {
 		Class<?extends ControlAccessor> accessorClass = null;
 		ControlAccessor accessor = null;
@@ -66,6 +67,7 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 		
 		if (accessorClass == null) { // try with superclasses
 
+		
 			List superclasses = ClassUtils.getAllSuperclasses(clazz);
 			superclasses.addAll(ClassUtils.getAllInterfaces(clazz));
 			Iterator iter = superclasses.iterator();
@@ -109,6 +111,7 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 		accessors.put(JList.class, ListAccessor.class);
 		accessors.put(Selector.class, SelectorAccessor.class);
 		accessors.put(JToggleButton.class, ToggleButtonAccessor.class);
+		accessors.put(JComboBox.class, ComboAccessor.class);
 	}
 
 	// Getters and Setters

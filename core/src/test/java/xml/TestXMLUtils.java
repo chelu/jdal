@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
 /**
  * Test for XMLUtils
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 
 public class TestXMLUtils extends TestCase {

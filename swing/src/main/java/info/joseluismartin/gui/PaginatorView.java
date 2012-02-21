@@ -48,8 +48,6 @@ import org.springframework.context.MessageSource;
  */
 public class PaginatorView extends AbstractView<Paginator> implements PaginatorListener {
 	
-	private static final long serialVersionUID = 1L;
-
 	/** paginator */
 	private Paginator paginator;
 	/** combo for change page sizes */

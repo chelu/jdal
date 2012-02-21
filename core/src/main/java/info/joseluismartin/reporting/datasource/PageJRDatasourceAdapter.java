@@ -81,8 +81,7 @@ public class PageJRDatasourceAdapter extends JRAbstractBeanDataSource {
 		if (page.hasNext()) {
 			page.nextPage();
 			index = 0;
-			if (getCurrentObject());
-				return true;
+			return getCurrentObject();
 		}
 		
 		return false;

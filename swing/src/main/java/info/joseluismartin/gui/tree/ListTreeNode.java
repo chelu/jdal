@@ -16,13 +16,14 @@
 package info.joseluismartin.gui.tree;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+
 
 /**
  * Simple TreeNode implementation that use List to hold chidrens.

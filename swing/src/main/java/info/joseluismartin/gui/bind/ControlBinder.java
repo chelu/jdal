@@ -29,7 +29,7 @@ public class ControlBinder extends AbstractBinder {
 	private ControlAccessor controlAccessor;
 	
 	public ControlBinder() {
-		
+		this(new ConfigurableControlAccessorFactory());
 	}
 	
 	public ControlBinder(ControlAccessorFactory controlAccessorFactory) {
