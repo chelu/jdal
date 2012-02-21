@@ -27,7 +27,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.ConfigurablePropertyAccessor;
+import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingErrorProcessor;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DefaultBindingErrorProcessor;
 
 /**
  * Do an automatic binding of a view using reflection. Bind
@@ -54,15 +59,16 @@ public class AutoBinder<T> implements Binder<T> {
 	private T model;
 	private RefreshCommand refreshCommand = new RefreshCommand();
 	private UpdateCommand updateCommand = new UpdateCommand();
+	
+	private BindingErrorProcessor errorProcessor = new DefaultBindingErrorProcessor();
+	private BindingResult bindingResult;
 
 	/**
 	 * Create an AutoBinder for a View
 	 * @param view View to bind.
 	 */
 	public AutoBinder(ModelHolder<T> view) {
-		this.view = view;
-		this.model = view.getModel();
-		viewPropertyAccessor = new DirectFieldAccessor(view);
+		this(view, view.getModel());
 	}
 	
 	/**
@@ -74,6 +80,7 @@ public class AutoBinder<T> implements Binder<T> {
 		this.view = view;
 		this.model = model;
 		viewPropertyAccessor = new DirectFieldAccessor(view);
+		bindingResult = new BeanPropertyBindingResult(model, "model");
 	}
 	
 	/**
@@ -97,7 +104,7 @@ public class AutoBinder<T> implements Binder<T> {
 	private void  executeBinderCommand(BinderCommand command) {
 		modelPropertyAccessor = PropertyAccessorFactory.forBeanPropertyAccess(model);
 		// iterate on model properties
-		for (PropertyDescriptor pd :modelPropertyAccessor.getPropertyDescriptors()) {
+		for (PropertyDescriptor pd : modelPropertyAccessor.getPropertyDescriptors()) {
 			String propertyName = pd.getName();
 			if ( !ignoredProperties.contains(propertyName) && viewPropertyAccessor.isReadableProperty(propertyName)) {
 				Object control = viewPropertyAccessor.getPropertyValue(propertyName);
@@ -105,7 +112,7 @@ public class AutoBinder<T> implements Binder<T> {
 					if (log.isDebugEnabled()) 
 						log.debug("Found control: " + control.getClass().getSimpleName() + " for property: " + propertyName);
 
-					ControlAccessor controlAccessor = controlAccessorFactory.getControlAccessor(control);
+					ControlAccessor controlAccessor = getControlAccessorFactory().getControlAccessor(control);
 					if (controlAccessor != null)
 						command.execute(controlAccessor, propertyName);
 				}
@@ -131,6 +138,9 @@ public class AutoBinder<T> implements Binder<T> {
 	 * @return the controlAccessorFactory
 	 */
 	public ControlAccessorFactory getControlAccessorFactory() {
+		if (controlAccessorFactory == null)
+			controlAccessorFactory = new ConfigurableControlAccessorFactory();
+		
 		return controlAccessorFactory;
 	}
 
@@ -173,6 +183,14 @@ public class AutoBinder<T> implements Binder<T> {
 	}
 	
 	/**
+	 * Return the Binding result
+	 * @return the binding result
+	 */
+	public BindingResult getBindingResult() {
+		return bindingResult;
+	}
+	
+	/**
 	 *  Binder Command Callback
 	 * @author Jose Luis Martin - (jlm@joseluismartin.info)
 	 */
@@ -187,7 +205,14 @@ public class AutoBinder<T> implements Binder<T> {
 	class UpdateCommand implements  BinderCommand {
 
 		public void execute(ControlAccessor controlAccessor, String name) {
-			modelPropertyAccessor.setPropertyValue(name, controlAccessor.getControlValue());
+			try {
+				modelPropertyAccessor.setPropertyValue(name, controlAccessor.getControlValue());
+			}
+			catch (PropertyAccessException pae) { 
+				errorProcessor.processPropertyAccessException(pae, bindingResult);
+				
+				
+			}
 		}
 	}
 	
