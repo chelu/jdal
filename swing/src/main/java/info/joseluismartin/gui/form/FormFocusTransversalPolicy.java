@@ -20,6 +20,8 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
+
 /**
  * FocusTraversalProvider for FormBuilder
  * 
@@ -30,10 +32,15 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 	ArrayList<Component> components = new ArrayList<Component>();
 	
 	@Override
-	public Component getComponentAfter(Container aContainer,
-			Component aComponent) {
+	public Component getComponentAfter(Container container,
+			Component component) {
+		
+		// Fix awt bug looking for ComboBoxEditor instead ComboBox
+		// see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6205817
+		if (component.getParent() instanceof JComboBox)
+				component = component.getParent();
 	
-		int index = components.indexOf(aComponent);
+		int index = components.indexOf(component);
 		index++;
 		
 		if (index < components.size() && index >= 0) {
@@ -41,10 +48,10 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 			if (c.isEnabled()) 
 				return c;
 			else 
-				return getComponentAfter(aContainer, c);
+				return getComponentAfter(container, c);
 		}
 		
-		return getFirstComponent(aContainer);
+		return getFirstComponent(container);
 	}
 
 	@Override
