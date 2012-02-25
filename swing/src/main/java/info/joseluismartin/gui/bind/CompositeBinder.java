@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+
 /**
  * Composite Binder methods to a collection of
  * PropertyBinders that bind on the same model 
@@ -20,6 +23,7 @@ public class CompositeBinder<T> implements Binder<T> {
 	private Map<String, Binder<?>> binders = new HashMap<String, Binder<?>>();
 	/** Default model to bind on for property binders */
 	private T model;
+
 	
 	public CompositeBinder() {
 		
@@ -100,6 +104,17 @@ public class CompositeBinder<T> implements Binder<T> {
 	
 	public void setModel(T model) {
 		this.model = model;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public BindingResult getBindingResult() {
+		BindingResult br = new BeanPropertyBindingResult(model, "model");
+		for (Binder<?> b : binders.values())
+			br.addAllErrors(b.getBindingResult());
+		
+		return br;
 	}
 
 }

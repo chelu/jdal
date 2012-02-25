@@ -15,6 +15,8 @@
  */
 package info.joseluismartin.gui;
 
+import org.springframework.validation.BindingResult;
+
 
 /**
  * Binder interface define methods common to model based
@@ -35,4 +37,10 @@ public interface Binder<T> extends ModelHolder<T> {
 	 * Update Component from model
 	 */
 	void refresh();
+	
+	/**
+	 * Get binding result
+	 * @return the binding result
+	 */
+	BindingResult getBindingResult();
 }

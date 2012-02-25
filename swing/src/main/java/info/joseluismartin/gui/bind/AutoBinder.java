@@ -20,7 +20,9 @@ import info.joseluismartin.gui.ModelHolder;
 
 import java.beans.PropertyDescriptor;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -62,6 +64,7 @@ public class AutoBinder<T> implements Binder<T> {
 	
 	private BindingErrorProcessor errorProcessor = new DefaultBindingErrorProcessor();
 	private BindingResult bindingResult;
+	private Map<String, ControlAccessor> controlAccessorMap = new HashMap<String, ControlAccessor>();
 
 	/**
 	 * Create an AutoBinder for a View
@@ -81,6 +84,22 @@ public class AutoBinder<T> implements Binder<T> {
 		this.model = model;
 		viewPropertyAccessor = new DirectFieldAccessor(view);
 		bindingResult = new BeanPropertyBindingResult(model, "model");
+	}
+	
+	public void bind(String viewField, String propertyName) {
+		Object control = viewPropertyAccessor.getPropertyValue(propertyName);
+		if (control != null) {
+			ControlAccessor accessor = controlAccessorFactory.getControlAccessor(control);
+			if (accessor != null) {
+				controlAccessorMap.put(propertyName, accessor);
+			}
+			else {
+				log.error("Not found ControlAcessor for control class [" + 
+						control.getClass().getName());
+				throw BeanException
+			}
+		}
+		
 	}
 	
 	/**

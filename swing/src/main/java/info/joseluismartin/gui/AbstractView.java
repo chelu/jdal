@@ -48,6 +48,7 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -110,7 +111,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	/** List of error handlers */
 	private List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
 	/** Validation Errors */
-	protected Errors errors;
+	protected BindingResult errors;
 	/** dirty state */
 	boolean dirty = false;
 	
@@ -210,11 +211,16 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 		doUpdate();
 		
 		binder.update();
+		errors.addAllErrors(binder.getBindingResult());
+		
 		
 		// update subviews
 		for (View<T>  v : subViews) {
 			v.update();
+			errors.addAllErrors(v.getBindingResult());
 		}
+		
+	
 	}
 
 	/**
@@ -575,5 +581,9 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public void setAutobinding(boolean autobinding) {
 		this.autobinding = autobinding;
+	}
+	
+	public BindingResult getBindingResult() {
+		return errors;
 	}
 }

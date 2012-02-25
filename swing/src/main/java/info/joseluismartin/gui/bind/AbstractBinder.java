@@ -24,8 +24,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingErrorProcessor;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DefaultBindingErrorProcessor;
 
 /**
  * Base class for Binders. Implement doBind() to do the binding.
@@ -47,6 +52,8 @@ public abstract class AbstractBinder implements PropertyBinder {
 	protected Object component;
 	/** if true, binding is readOnly, ie from model to control */
 	protected boolean readOnly = false;
+	private BindingErrorProcessor errorProcessor = new DefaultBindingErrorProcessor();
+	private BindingResult bindingResult;
 	
 	
 	/**
@@ -81,8 +88,10 @@ public abstract class AbstractBinder implements PropertyBinder {
 	}
 	
 	public final void update() {
-		if (!readOnly)
+		if (!readOnly) {
+			bindingResult = new BeanPropertyBindingResult(model, model.getClass().getSimpleName());
 			doUpdate();
+		}
 	}
 	
 	abstract protected void doRefresh();
@@ -100,12 +109,12 @@ public abstract class AbstractBinder implements PropertyBinder {
 				oldValue = value;
 			
 			}
-			catch (BeansException e) {
-				log.error(e);
+			catch (PropertyAccessException pae) {
+				log.error(pae);
+				errorProcessor.processPropertyAccessException(pae, bindingResult);
 			}
 		}
 	}
-
 	
 	/**
 	 * Get value from model
@@ -176,5 +185,8 @@ public abstract class AbstractBinder implements PropertyBinder {
 	public void setComponent(Object component) {
 		this.component = component;
 	}
-
+	
+	public BindingResult getBindingResult() {
+		return bindingResult;
+	}
 }

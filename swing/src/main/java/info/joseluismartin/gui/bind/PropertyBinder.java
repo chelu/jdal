@@ -19,7 +19,7 @@ import info.joseluismartin.gui.Binder;
 
 
 /**
- * Bind a component on model via property name
+ * Bind a component to a model property
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
@@ -53,4 +53,5 @@ public interface PropertyBinder extends Binder<Object> {
 	  * @return
 	  */
 	 String getPropertyName();
+	 
 }

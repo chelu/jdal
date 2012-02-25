@@ -28,6 +28,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
+import org.springframework.validation.BindingResult;
+
 /**
  * A JFrame for use as View Container
  * 
@@ -220,5 +222,12 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	public void enableView(boolean enabled) {
 		view.enableView(enabled);
 		acceptButton.setEnabled(enabled);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public BindingResult getBindingResult() {
+		return view.getBindingResult();
 	}
 }

@@ -27,6 +27,8 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import org.springframework.validation.BindingResult;
+
 /**
  * A JDialog for use as View Wrapper
  * 
@@ -190,5 +192,11 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 		view.enableView(enabled);
 		acceptButton.setEnabled(enabled);
 	}
-		
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public BindingResult getBindingResult() {
+		return view.getBindingResult();
+	}
 }
