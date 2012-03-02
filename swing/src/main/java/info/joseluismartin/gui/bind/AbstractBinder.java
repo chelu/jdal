@@ -89,7 +89,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	
 	public final void update() {
 		if (!readOnly) {
-			bindingResult = new BeanPropertyBindingResult(model, model.getClass().getSimpleName());
+			bindingResult = new BeanPropertyBindingResult(model, model.getClass().getSimpleName(), true);
 			doUpdate();
 		}
 	}

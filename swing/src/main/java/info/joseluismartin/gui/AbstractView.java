@@ -211,7 +211,9 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 		doUpdate();
 		
 		binder.update();
-		errors.addAllErrors(binder.getBindingResult());
+		
+		if (errors != null && binder.getBindingResult() != null)
+			errors.addAllErrors(binder.getBindingResult());
 		
 		
 		// update subviews
@@ -417,6 +419,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	
 	/** 
 	 * I18n Support
+	 * @param code message code
+	 * @return message or code if none defined
 	 */
 	protected String getMessage(String code) {
 		return messageSource == null ?

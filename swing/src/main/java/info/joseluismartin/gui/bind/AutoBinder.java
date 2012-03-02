@@ -40,15 +40,15 @@ import org.springframework.validation.DefaultBindingErrorProcessor;
  * Do an automatic binding of a view using reflection. Bind
  * controls with name equals to property names in model.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @see info.joseluismartin.gui.bind.Binder
+ * @since 1.1
  */
 public class AutoBinder<T> implements Binder<T> {
 	
 	/** Log */
 	private static final Log log = LogFactory.getLog(AutoBinder.class);
 	/** View to bind on */
-	@SuppressWarnings("unused")
 	private Object view;
 	/** Control accessor factory to use for create control accessors */
 	private ControlAccessorFactory controlAccessorFactory;
@@ -58,12 +58,17 @@ public class AutoBinder<T> implements Binder<T> {
 	private BeanWrapper modelPropertyAccessor;
 	/** Set with property names to ingnore on binding commands */
 	private Set<String> ignoredProperties = new HashSet<String>();
+	/** Binded model */
 	private T model;
+	/** Command to execute on refresh */
 	private RefreshCommand refreshCommand = new RefreshCommand();
+	/** Command to execute on update */
 	private UpdateCommand updateCommand = new UpdateCommand();
-	
+	/** Process binding errors */
 	private BindingErrorProcessor errorProcessor = new DefaultBindingErrorProcessor();
+	/** binding errors */
 	private BindingResult bindingResult;
+	/** Hold property name -> ControlAccessor mapping */
 	private Map<String, ControlAccessor> controlAccessorMap = new HashMap<String, ControlAccessor>();
 
 	/**
@@ -82,11 +87,11 @@ public class AutoBinder<T> implements Binder<T> {
 	public AutoBinder(Object view, T model) {
 		this.view = view;
 		this.model = model;
-		viewPropertyAccessor = new DirectFieldAccessor(view);
+		viewPropertyAccessor = new DirectFieldAccessor(this.view);
 		bindingResult = new BeanPropertyBindingResult(model, "model");
 	}
 	
-	public void bind(String viewField, String propertyName) {
+	public void bind(String viewField, String propertyName) throws UndefinedAccessorException {
 		Object control = viewPropertyAccessor.getPropertyValue(propertyName);
 		if (control != null) {
 			ControlAccessor accessor = controlAccessorFactory.getControlAccessor(control);
@@ -94,9 +99,9 @@ public class AutoBinder<T> implements Binder<T> {
 				controlAccessorMap.put(propertyName, accessor);
 			}
 			else {
-				log.error("Not found ControlAcessor for control class [" + 
-						control.getClass().getName());
-				throw BeanException
+				String msg = "Not found ControlAcessor for control class [" + 
+						control.getClass().getName() +  "]";
+				throw new UndefinedAccessorException(msg);
 			}
 		}
 		
@@ -125,20 +130,38 @@ public class AutoBinder<T> implements Binder<T> {
 		// iterate on model properties
 		for (PropertyDescriptor pd : modelPropertyAccessor.getPropertyDescriptors()) {
 			String propertyName = pd.getName();
-			if ( !ignoredProperties.contains(propertyName) && viewPropertyAccessor.isReadableProperty(propertyName)) {
-				Object control = viewPropertyAccessor.getPropertyValue(propertyName);
-				if (control != null) {
-					if (log.isDebugEnabled()) 
-						log.debug("Found control: " + control.getClass().getSimpleName() + " for property: " + propertyName);
-
-					ControlAccessor controlAccessor = getControlAccessorFactory().getControlAccessor(control);
-					if (controlAccessor != null)
-						command.execute(controlAccessor, propertyName);
-				}
+			if ( !ignoredProperties.contains(propertyName)) {
+				ControlAccessor controlAccessor = getControlAccessor(propertyName);
+				if (controlAccessor != null)
+					command.execute(controlAccessor, propertyName);
 			}
 		}
 	}
 		
+	/**
+	 * Gets control accessor
+	 * @param control to get accessor
+	 * @return accessor or null if none found.
+	 */
+	private ControlAccessor getControlAccessor(String name) {
+		// try map first
+		if (controlAccessorMap.containsKey(name))
+			return controlAccessorMap.get(name);
+		
+		// try matching view property
+		ControlAccessor accessor = null;
+		if (viewPropertyAccessor.isReadableProperty(name)) {
+			Object control = viewPropertyAccessor.getPropertyValue(name);
+			if (control != null) {
+				if (log.isDebugEnabled()) 
+					log.debug("Found control: " + control.getClass().getSimpleName() + " for property: " + name);
+				accessor = getControlAccessorFactory().getControlAccessor(control);
+			}
+			
+		}
+		return accessor;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,8 +241,7 @@ public class AutoBinder<T> implements Binder<T> {
 	}
 	
 	/**
-	 * Update Command Callback
-	 * 
+	 * Update Command
 	 */
 	class UpdateCommand implements  BinderCommand {
 
@@ -229,15 +251,12 @@ public class AutoBinder<T> implements Binder<T> {
 			}
 			catch (PropertyAccessException pae) { 
 				errorProcessor.processPropertyAccessException(pae, bindingResult);
-				
-				
 			}
 		}
 	}
 	
 	/**
-	 * Refresh Command Callback
-	 * 
+	 * Refresh Command
 	 */
 	class RefreshCommand implements BinderCommand {
 
