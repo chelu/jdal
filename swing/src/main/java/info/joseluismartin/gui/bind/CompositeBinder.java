@@ -17,10 +17,11 @@ import org.springframework.validation.BindingResult;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @param <T> model 
  */
+@SuppressWarnings("unchecked")
 public class CompositeBinder<T> implements Binder<T> {
 	
 	private BinderFactory binderFactory;
-	private Map<String, Binder<?>> binders = new HashMap<String, Binder<?>>();
+	private Map<String, Binder<T>> binders = new HashMap<String, Binder<T>>();
 	/** Default model to bind on for property binders */
 	private T model;
 
@@ -42,16 +43,15 @@ public class CompositeBinder<T> implements Binder<T> {
 	
 
 	public void bind(Object component, String propertyName, boolean readOnly) {
-		bind(component, propertyName, this, readOnly);
+		bind(component, propertyName, getModel(), readOnly);
 	}
 
 
-	
-	public void bind(Object component, String propertyName, Object object, boolean readOnly) {
-		PropertyBinder binder = binderFactory.getBinder(component.getClass());
+	public void bind(Object component, String propertyName, T model, boolean readOnly) {
+		PropertyBinder binder =  binderFactory.getBinder(component.getClass());
 		if (binder != null) {
-			binder.bind(component, propertyName, object, readOnly);
-			binders.put(propertyName, binder);
+			binder.bind(component, propertyName, model, readOnly);
+			binders.put(propertyName, (Binder<T>) binder);
 		}
 	}
 
@@ -61,7 +61,7 @@ public class CompositeBinder<T> implements Binder<T> {
 	}
 
 	public void addBinder(Binder<?> binder, String name) {
-		binders.put(name, binder);
+		binders.put(name, (Binder<T>) binder);
 	}
 	
 
@@ -80,7 +80,7 @@ public class CompositeBinder<T> implements Binder<T> {
 		return binders.keySet();
 	}
 	
-	public Collection<Binder<?>> getPropertyBinders() {
+	public Collection<Binder<T>> getPropertyBinders() {
 		return binders.values();
 	}
 
@@ -104,15 +104,23 @@ public class CompositeBinder<T> implements Binder<T> {
 	
 	public void setModel(T model) {
 		this.model = model;
+		for (Binder<T> b : binders.values()) {
+			b.setModel(model);
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public BindingResult getBindingResult() {
-		BindingResult br = new BeanPropertyBindingResult(model, "model");
-		for (Binder<?> b : binders.values())
-			br.addAllErrors(b.getBindingResult());
+		if (getModel() == null)
+			return null;
+		
+		BindingResult br = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+		for (Binder<?> b : binders.values()) {
+			if (b.getBindingResult() != null)
+				br.addAllErrors(b.getBindingResult());
+		}
 		
 		return br;
 	}
