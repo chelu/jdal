@@ -30,7 +30,6 @@ import java.util.ArrayList;
  */
 public class DefaultPaginator  implements Paginator {
 
-	private static final long serialVersionUID = 1L;
 	/** Number of total records */
 	private int totalRecords;
 	/** Page index number */
