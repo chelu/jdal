@@ -51,6 +51,7 @@ public class ReportListView extends AbstractView<Report> implements ReportEventL
 	private Icon pdfIcon;
 	private Icon excelIcon;
 	private ReportType reportType;
+	private ReportManager reportManager;
 
 	private ReportDataProvider<Object, Serializable> reportProvider;
 
@@ -112,8 +113,7 @@ public class ReportListView extends AbstractView<Report> implements ReportEventL
 
 		if (model.getHasQuery()) {
 			try {
-				ReportManager rm = new ReportManager();
-				rm.showReport(model,
+				reportManager.showReport(model,
 						dataSource, reportOutputType);
 			} catch (ReportingException e) {
 				JOptionPane.showMessageDialog(getPanel(), e.getMessage(),
@@ -121,8 +121,7 @@ public class ReportListView extends AbstractView<Report> implements ReportEventL
 			}
 		} else if (reportProvider != null) {
 			try {
-				ReportManager rm = new ReportManager();
-				rm.showReport(model,
+				reportManager.showReport(model,
 						reportProvider.getDataSource(),
 						reportProvider.getFilter(),
 						reportProvider.getSortProperty(),
@@ -204,6 +203,20 @@ public class ReportListView extends AbstractView<Report> implements ReportEventL
 
 	public void reportChanged(EventObject event) {
 		doRefresh();
+	}
+
+	/**
+	 * @return the reportManager
+	 */
+	public ReportManager getReportManager() {
+		return reportManager;
+	}
+
+	/**
+	 * @param reportManager the reportManager to set
+	 */
+	public void setReportManager(ReportManager reportManager) {
+		this.reportManager = reportManager;
 	}
 
 }

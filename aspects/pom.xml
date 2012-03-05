@@ -13,7 +13,7 @@
 	
 	<properties>
 		<set-version>1.1-SNAPSHOT</set-version>
-		<jdal-version>1.1.4</jdal-version>
+		<jdal-version>1.1-SNAPSHOT</jdal-version>
 	</properties>
 	
 	<build>
@@ -70,21 +70,13 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>jdal</id>
-			<name>jdal</name>
-			<url>http://jdal.org/repo</url>
-		</repository>
-		<repository>
-			<id>jlm</id>
-			<name>jlm</name>
-			<url>http://joseluismartin.info:8081/artifactory/repo</url>
-		</repository>
-	</repositories>
+
 	<distributionManagement>
 		<repository>
 			<id>jdal</id>

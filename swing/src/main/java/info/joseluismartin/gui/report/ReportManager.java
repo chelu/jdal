@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Jose A. Corbacho
  */
-public class ReportManager {
+public abstract class ReportManager {
 	
 	/** apache common log */
 	private static final Log log = LogFactory.getLog(ReportManager.class);
@@ -113,6 +113,8 @@ public class ReportManager {
 		int index = name.lastIndexOf('.');
 		return index == -1 ? "" : name.substring(index);
 	}
+	
+	protected abstract JRParameterEditorDialog createEditorDialog();
 
 	
 	/**
@@ -193,7 +195,9 @@ public class ReportManager {
 		}
 		
 		private boolean showParameterDialog(Map<String, JRParameter> jrParameters){
-			JRParameterEditorDialog dialog = new JRParameterEditorDialog(null, true,jrParameters);
+			JRParameterEditorDialog dialog = createEditorDialog();
+			dialog.setParameters(jrParameters);
+			dialog.initialize();
 			dialog.setVisible(true);
 			
 			if (dialog.isCanceled()) return false;
@@ -201,7 +205,7 @@ public class ReportManager {
 			this.parameters = dialog.getReturnValues();
 			return true;
 		}
-		
+
 		/**
 		 * Process the report with this reportDataSource. The data source can be JRDataSource or Connection
 		 * @param report

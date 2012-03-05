@@ -22,7 +22,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,8 +42,6 @@ import javax.swing.border.Border;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.freixas.jcalendar.JCalendar;
-import org.freixas.jcalendar.JCalendarCombo;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -137,18 +134,6 @@ public abstract class FormUtils {
 		return BorderFactory.createCompoundBorder(title, margin);
 	}
 	
-	/**
-	 * Create a new JCalendarCombo with DateFormat.SHORT
-	 * @return JCalendarCombo
-	 */
-	public static JCalendarCombo newJCalendarCombo() {
-		JCalendarCombo combo = new JCalendarCombo(JCalendar.DISPLAY_DATE | JCalendar.DISPLAY_TIME, false);
-		combo.setDateFormat(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT));
-		combo.setNullAllowed(true);
-		combo.setDate(null);
-		
-		return combo;
-	}
 	
 	/**
 	 * Get Default OK Button from LookAndFeel (like JOptionPane)

@@ -13,14 +13,16 @@
 	<artifactId>jdal-core</artifactId>
 	<name>JDAL Core Library</name>
 	<version>${set-version}</version>
-	
+	<url>http://www.jdal.org</url>
+	<description>JDAL Core Library</description>
+
 	<properties>
 		<set-version>1.1-SNAPSHOT</set-version>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
-	
+
+
 	<developers>
 		<developer>
 			<id>jlm</id>
@@ -86,6 +88,10 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
 		</plugins>
 		<extensions>
 			<!-- Enabling the use of FTP -->
@@ -96,12 +102,7 @@
 			</extension>
 		</extensions>
 	</build>
-	<repositories>
-		<repository>
-			<id>maven</id>
-			<url>http://repo1.maven.org/maven</url>
-		</repository>
-	</repositories>
+	
 	<distributionManagement>
 		<repository>
 			<id>jdal</id>
@@ -267,11 +268,6 @@
 			<version>3.6</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.freixas</groupId>
-			<artifactId>jcalendar</artifactId>
-			<version>1.1</version>
-		</dependency>
 
 
 		<dependency>
@@ -281,16 +277,6 @@
 		</dependency>
 
 		<!-- JGoodies Look & Feel -->
-		<dependency>
-			<groupId>com.jgoodies</groupId>
-			<artifactId>jgoodies-looks</artifactId>
-			<version>2.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.jgoodies</groupId>
-			<artifactId>jgoodies-common</artifactId>
-			<version>0.9.9</version>
-		</dependency>
 
 		<!-- Core utilities used by other modules. Define this if you use Spring 
 			Utility APIs (org.springframework.core.*/org.springframework.util.*) -->
@@ -448,8 +434,8 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.18</version>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
-
 
 </project>

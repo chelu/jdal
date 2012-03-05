@@ -22,7 +22,7 @@ import javax.swing.JComponent;
  * @author Jose A. Corbacho
  *
  */
-public interface ReportParameterEditor{
+public interface ReportParameterEditor {
 
 	/**
 	 * Get the actual editor

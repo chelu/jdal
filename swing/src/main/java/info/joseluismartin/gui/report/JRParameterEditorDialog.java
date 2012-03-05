@@ -52,7 +52,12 @@ public class JRParameterEditorDialog extends JDialog {
 	private Map<String, ReportParameterEditor> editors = new HashMap<String, ReportParameterEditor>();
 	private Map<String, Object> returnValues;
 	private boolean canceled;
+	private EditorFactory editorFactory;
 
+	public JRParameterEditorDialog() {
+		this(null, true);
+	}
+	
 	public JRParameterEditorDialog(Frame parent, boolean modal,
 			Map<String, JRParameter> jrParameters) {
 		super(parent, modal);
@@ -62,10 +67,9 @@ public class JRParameterEditorDialog extends JDialog {
 
 	public JRParameterEditorDialog(Frame parent, boolean modal) {
 		super(parent, modal);
-		initialize();
 	}
 
-	private void initialize() {
+	public void initialize() {
 		this.setTitle("Parámetros del informe");
 		
 		// Main Panel containing parameter panel and button panel.
@@ -89,7 +93,7 @@ public class JRParameterEditorDialog extends JDialog {
 		JPanel paramPanel = new JPanel(new SpringLayout());
 
 		for (JRParameter param : parameters.values()) {
-			JRPropertyEditorFactory editorFactory = new JRPropertyEditorFactory();
+	
 			ReportParameterEditor propertyEditor = editorFactory
 					.getParameterEditor(param);
 			
@@ -190,5 +194,33 @@ public class JRParameterEditorDialog extends JDialog {
 	public static void main(String[] args) {
 		JRParameterEditorDialog d = new JRParameterEditorDialog(null, true);
 		d.setVisible(true);
+	}
+
+	/**
+	 * @return the editorFactory
+	 */
+	public EditorFactory getEditorFactory() {
+		return editorFactory;
+	}
+
+	/**
+	 * @param editorFactory the editorFactory to set
+	 */
+	public void setEditorFactory(EditorFactory editorFactory) {
+		this.editorFactory = editorFactory;
+	}
+
+	/**
+	 * @return the parameters
+	 */
+	public Map<String, JRParameter> getParameters() {
+		return parameters;
+	}
+
+	/**
+	 * @param parameters the parameters to set
+	 */
+	public void setParameters(Map<String, JRParameter> parameters) {
+		this.parameters = parameters;
 	}
 }

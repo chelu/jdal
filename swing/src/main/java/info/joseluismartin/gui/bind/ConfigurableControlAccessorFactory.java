@@ -32,7 +32,6 @@ import javax.swing.text.JTextComponent;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.freixas.jcalendar.JCalendarCombo;
 
 /**
  * Implementation of ControlAccessorFactory using an asociative Map&lt;Class, ControlAccessor&gt;
@@ -107,7 +106,6 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 	 */
 	private void initDefaultAccessors() {
 		accessors.put(JTextComponent.class, TextComponentAccessor.class);
-		accessors.put(JCalendarCombo.class, JCalendarComboAccessor.class);
 		accessors.put(JList.class, ListAccessor.class);
 		accessors.put(Selector.class, SelectorAccessor.class);
 		accessors.put(JToggleButton.class, ToggleButtonAccessor.class);

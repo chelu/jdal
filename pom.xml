@@ -13,7 +13,7 @@
 		<developer>
 			<id>jlm</id>
 			<name>Jose Luis Martin</name>
-			<email>jlm@joseluismartin.info</email>
+			<email>jlm@jdal.org</email>
 			<url>http://www.joseluismartin.info</url>
 		</developer>
 	</developers>
@@ -31,8 +31,8 @@
 				<version>1.0-beta-6</version>
 			</extension>
 		</extensions>
-		<plugins>
-	</plugins>
+
+		<plugins></plugins>
 
 		<pluginManagement>
 			<plugins>
@@ -71,23 +71,23 @@
 						<attach>true</attach>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>sign-artifacts</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>sign</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
 
-
-
-	<repositories>
-		<repository>
-			<id>maven</id>
-			<url>http://repo1.maven.org/maven2</url>
-		</repository>
-		<repository>
-			<id>jdal</id>
-			<name>jdal</name>
-			<url>http://jdal.org/repo</url>
-		</repository>
-	</repositories>
 	<distributionManagement>
 		<repository>
 			<id>jdal</id>
@@ -107,4 +107,9 @@
 	<properties>
 		<file.encoding>UTF-8</file.encoding>
 	</properties>
+	<url>http://www.jdal.org</url>
+	<description>JDAL is an open source Java library that aims to help developers making database applications easily. JDAL helps you to find what you really need to code and what is already coded in a common java database application, avoiding the complexity of many common programming tasks.</description>
+	<scm>
+		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal </url>
+	</scm>
 </project>

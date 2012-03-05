@@ -148,6 +148,10 @@
 					</webAppConfig>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
 		</plugins>
 
 		<!--
@@ -160,7 +164,7 @@
 			</resource>
 		</resources>
 	</build>
-
+<!-- 
 	<repositories>
 		<repository>
 			<id>vaadin-snapshots</id>
@@ -205,7 +209,7 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
-
+ -->
 	<distributionManagement>
 		<repository>
 			<id>jdal</id>
@@ -263,4 +267,6 @@
 			<version>0.9.3</version>
 		</dependency>
 	</dependencies>
+	<url>http://www.jdal.org</url>
+	<description>JDAL Vaadin UI Library</description>
 </project>

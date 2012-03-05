@@ -76,6 +76,10 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+			</plugin>
 		</plugins>
 		<extensions>
 			<!-- Enabling the use of FTP -->
@@ -87,13 +91,6 @@
 		</extensions>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>jlm</id>
-			<name>jlm</name>
-			<url>http://joseluismartin.info:8081/repo</url>
-		</repository>
-	</repositories>
 	<distributionManagement>
 		<repository>
 			<id>jdal</id>
@@ -216,11 +213,6 @@
 			<version>3.6</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.freixas</groupId>
-			<artifactId>jcalendar</artifactId>
-			<version>1.1</version>
-		</dependency>
 
 
 		<dependency>
@@ -413,4 +405,5 @@
 
 	</dependencies>
 
+	<description>JDAL Swing Library</description>
 </project>

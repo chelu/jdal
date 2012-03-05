@@ -37,7 +37,7 @@ public class ReportViewRowAction extends TableRowAction {
 	 */
 	private static final long serialVersionUID = 2255283318836584357L;
 	private final static Log log = LogFactory.getLog(TableRowAction.class);
-	
+	private ReportManager reportManager;
 	private DataSource dataSource;
 	private String reportOutputType;
 
@@ -48,7 +48,7 @@ public class ReportViewRowAction extends TableRowAction {
 	public void actionPerformed(ActionEvent e) {
 		Report model = (Report) getRow();
 		try {
-			 new ReportManager().showReport(model, dataSource, reportOutputType);
+			 reportManager.showReport(model, dataSource, reportOutputType);
 		} catch (ReportingException re) {
 			log.error(e);
 		} 
@@ -78,6 +78,20 @@ public class ReportViewRowAction extends TableRowAction {
 
 	public void setReportOutputType(String reportOutputType) {
 		this.reportOutputType = reportOutputType;
+	}
+
+	/**
+	 * @return the reportManager
+	 */
+	public ReportManager getReportManager() {
+		return reportManager;
+	}
+
+	/**
+	 * @param reportManager the reportManager to set
+	 */
+	public void setReportManager(ReportManager reportManager) {
+		this.reportManager = reportManager;
 	}
 
 }
