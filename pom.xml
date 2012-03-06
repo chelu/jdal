@@ -9,6 +9,15 @@
 	<name>Java Database Application Library</name>
 	<version>1.1.5</version>
 	<packaging>pom</packaging>
+
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
 	<developers>
 		<developer>
 			<id>jlm</id>
@@ -34,18 +43,18 @@
 
 		<plugins>
 			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>sign-artifacts</id>
-							<phase>verify</phase>
-							<goals>
-								<goal>sign</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
@@ -59,7 +68,7 @@
 						<detectLinks>true</detectLinks>
 						<attach>true</attach>
 						<links>
-							<link>http://http://docs.jboss.org/hibernate/orm/3.5/api/</link>
+							<link>http://docs.jboss.org/hibernate/core/3.6/javadocs</link>
 						</links>
 					</configuration>
 					<executions>
@@ -127,8 +136,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 	</properties>
-	
-	
+
+
 	<url>http://www.jdal.org</url>
 	<description>JDAL is an open source Java library that aims to help developers making database applications easily. JDAL helps you to find what you really need to code and what is already coded in a common java database application, avoiding the complexity of many common programming tasks.</description>
 	<scm>

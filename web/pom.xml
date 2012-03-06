@@ -11,6 +11,19 @@
   	<relativePath>../pom.xml</relativePath>
   </parent>
   
+  <developers>
+		<developer>
+			<id>jlm</id>
+			<name>Jose Luis Martin</name>
+			<email>jlm@joseluismartin.info</email>
+			<url>http://www.joseluismartin.info</url>
+		</developer>
+  </developers>
+  
+  <scm>
+		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal</url>
+  </scm>
+  
   <profiles>
 		<profile>
 			<id>sonatype</id>

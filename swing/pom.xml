@@ -13,6 +13,7 @@
 	<artifactId>jdal-swing</artifactId>
 	<name>JDAL Swing Library</name>
 	<version>${set-version}</version>
+	
 	<developers>
 		<developer>
 			<id>jlm</id>
@@ -21,6 +22,11 @@
 			<url>http://www.joseluismartin.info</url>
 		</developer>
 	</developers>
+	
+	<scm>
+		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal</url>
+	</scm>
+	
 	<organization>
 		<name>JDAL</name>
 		<url>http://www.jdal.org</url>
@@ -33,7 +39,6 @@
 				<configuration>
 					<excludes>
 						<exclude>**/package.html</exclude>
-						<exclude>**/.svn/*</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

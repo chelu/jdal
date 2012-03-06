@@ -6,6 +6,8 @@
 	<packaging>jar</packaging>
 	<version>${set-version}</version>
 	<name>JDAL Vaadin UI Library</name>
+	<url>http://www.jdal.org</url>
+	<description>JDAL Vaadin UI Library</description>
 
 	<parent>
 		<artifactId>jdal</artifactId>
@@ -22,6 +24,11 @@
 			<url>http://www.joseluismartin.info</url>
 		</developer>
 	</developers>
+	
+	<scm>
+		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal</url>
+	</scm>
+	
 	<organization>
 		<name>JDAL</name>
 		<url>http://www.jdal.org</url>
@@ -269,6 +276,4 @@
 			<version>0.9.3</version>
 		</dependency>
 	</dependencies>
-	<url>http://www.jdal.org</url>
-	<description>JDAL Vaadin UI Library</description>
 </project>
