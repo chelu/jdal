@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.jdal</groupId>
 		<artifactId>jdal</artifactId>
-		<version>1.1</version>
+		<version>1.1.5</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -15,13 +15,6 @@
 	<version>${set-version}</version>
 	<url>http://www.jdal.org</url>
 	<description>JDAL Core Library</description>
-
-	<properties>
-		<set-version>1.1-SNAPSHOT</set-version>
-		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 
 	<developers>
 		<developer>
@@ -110,6 +103,30 @@
 			<url>scpexe://jdal.org/var/www/jdal/repo</url>
 		</repository>
 	</distributionManagement>
+	
+	<profiles>
+		<profile>
+			<id>sonatype</id>
+			<distributionManagement>
+				<repository>
+					<id>sonatype-nexus-staging</id>
+					<name>Nexus Release Repository</name>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>sonatype-snapshots</id>
+			<distributionManagement>
+				<repository>
+					<id>sonatype-nexus-snapshots</id>
+					<name>Nexus Snapshots Repository</name>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
+	
 	<dependencies>
 		<dependency>
 			<groupId>commons-collections</groupId>

@@ -24,6 +24,8 @@ public class CompositeBinder<T> implements Binder<T> {
 	private Map<String, Binder<T>> binders = new HashMap<String, Binder<T>>();
 	/** Default model to bind on for property binders */
 	private T model;
+	/** Binding result */
+	private BindingResult bindingResult;
 
 	
 	public CompositeBinder() {
@@ -115,14 +117,16 @@ public class CompositeBinder<T> implements Binder<T> {
 	public BindingResult getBindingResult() {
 		if (getModel() == null)
 			return null;
-		
-		BindingResult br = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
-		for (Binder<?> b : binders.values()) {
-			if (b.getBindingResult() != null)
-				br.addAllErrors(b.getBindingResult());
+
+		if (bindingResult == null) {
+			bindingResult = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+			for (Binder<?> b : binders.values()) {
+				if (b.getBindingResult() != null && 
+						bindingResult.getObjectName().equals(b.getBindingResult().getObjectName()))
+					bindingResult.addAllErrors(b.getBindingResult());
+			}
 		}
 		
-		return br;
+		return bindingResult;
 	}
-
 }

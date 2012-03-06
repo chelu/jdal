@@ -7,7 +7,7 @@
 	<groupId>org.jdal</groupId>
 	<artifactId>jdal</artifactId>
 	<name>Java Database Application Library</name>
-	<version>1.1</version>
+	<version>1.1.5</version>
 	<packaging>pom</packaging>
 	<developers>
 		<developer>
@@ -32,7 +32,21 @@
 			</extension>
 		</extensions>
 
-		<plugins></plugins>
+		<plugins>
+			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>sign-artifacts</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>sign</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+		</plugins>
 
 		<pluginManagement>
 			<plugins>
@@ -44,6 +58,9 @@
 						<encoding>UTF-8</encoding>
 						<detectLinks>true</detectLinks>
 						<attach>true</attach>
+						<links>
+							<link>http://http://docs.jboss.org/hibernate/orm/3.5/api/</link>
+						</links>
 					</configuration>
 					<executions>
 						<execution>
@@ -106,10 +123,39 @@
 
 	<properties>
 		<file.encoding>UTF-8</file.encoding>
+		<set-version>1.1.5</set-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 	</properties>
+	
+	
 	<url>http://www.jdal.org</url>
 	<description>JDAL is an open source Java library that aims to help developers making database applications easily. JDAL helps you to find what you really need to code and what is already coded in a common java database application, avoiding the complexity of many common programming tasks.</description>
 	<scm>
 		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal </url>
 	</scm>
+
+	<profiles>
+		<profile>
+			<id>sonatype</id>
+			<distributionManagement>
+				<repository>
+					<id>sonatype-nexus-staging</id>
+					<name>Nexus Release Repository</name>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>sonatype-snapshots</id>
+			<distributionManagement>
+				<repository>
+					<id>sonatype-nexus-snapshots</id>
+					<name>Nexus Snapshots Repository</name>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
+
 </project>

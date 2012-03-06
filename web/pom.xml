@@ -7,16 +7,33 @@
   <parent>
   	<groupId>org.jdal</groupId>
   	<artifactId>jdal</artifactId>
-  	<version>1.1</version>
+  	<version>1.1.5</version>
   	<relativePath>../pom.xml</relativePath>
   </parent>
   
-  <properties>
-  		<set-version>1.1-SNAPSHOT</set-version>
-		<spring.version>3.0.5.RELEASE</spring.version>
-		<jdal.version>1.1-SNAPSHOT</jdal.version>
-  </properties>
-	
+  <profiles>
+		<profile>
+			<id>sonatype</id>
+			<distributionManagement>
+				<repository>
+					<id>sonatype-nexus-staging</id>
+					<name>Nexus Release Repository</name>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>sonatype-snapshots</id>
+			<distributionManagement>
+				<repository>
+					<id>sonatype-nexus-snapshots</id>
+					<name>Nexus Snapshots Repository</name>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
+  
 	<dependencies>
 		<!-- Compile dependencies -->
 		<dependency>
@@ -37,27 +54,27 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
+			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>${spring.version}</version>
+			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
+			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
+			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
+			<version>${org.springframework.version}</version>
 		</dependency>
 		<!-- Container-provided dependencies-->
 		<dependency>
@@ -75,7 +92,7 @@
 		<dependency>
 			<groupId>org.jdal</groupId>
 			<artifactId>jdal-core</artifactId>
-			<version>${jdal.version}</version>
+			<version>${set-version}</version>
 		</dependency> 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -181,14 +198,4 @@
 		</plugins>
 	</build>
 	
-	<!-- <repositories>
-	    <repository>
-	    	<id>maven</id>
-	    	<url>http://repo1.maven.org/maven2</url>
-	    </repository>
-		<repository>
-			<id>jdal</id>
-			<url>http://www.jdal.org/repo</url>
-		</repository>
-	</repositories> -->
 </project>

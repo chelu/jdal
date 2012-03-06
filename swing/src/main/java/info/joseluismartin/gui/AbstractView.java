@@ -210,16 +210,19 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 		// do custom update
 		doUpdate();
 		
+		// update binder
 		binder.update();
 		
-		if (errors != null && binder.getBindingResult() != null)
+		if (errors != null && binder.getBindingResult() != null &&
+				errors.getObjectName().equals(binder.getBindingResult().getObjectName()))
 			errors.addAllErrors(binder.getBindingResult());
-		
 		
 		// update subviews
 		for (View<T>  v : subViews) {
 			v.update();
-			errors.addAllErrors(v.getBindingResult());
+			if (errors != null && v.getBindingResult() != null &&
+					errors.getObjectName().equals(v.getBindingResult().getObjectName()))
+				errors.addAllErrors(v.getBindingResult());
 		}
 		
 	
