@@ -31,7 +31,7 @@ import javax.swing.tree.TreeNode;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ListTreeNode implements MutableTreeNode {
 
 	private MutableTreeNode parent;
@@ -111,7 +111,7 @@ public class ListTreeNode implements MutableTreeNode {
 	}
 	
 	/**
-	 * @return
+	 * @return children list
 	 */
 	public List getList() {
 		return children;

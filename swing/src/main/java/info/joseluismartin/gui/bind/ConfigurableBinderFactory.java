@@ -39,7 +39,7 @@ public class ConfigurableBinderFactory implements BinderFactory {
 	 * @param clazz Class to looking for
 	 * @return a Binder for that class or null if none
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public PropertyBinder getBinder(Class<?> clazz) {
 		Class<PropertyBinder> binderClass = null;
 		PropertyBinder binder = null;

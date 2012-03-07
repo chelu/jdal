@@ -69,10 +69,12 @@ public abstract class FormUtils {
 	 * @param propertyName the property name for get the collection from primary selected item
 	 * @param addNull if true, add a null as first combobox item
 	 */
+	@SuppressWarnings("rawtypes")
 	public static void link(final JComboBox primary, final JComboBox dependent, final String propertyName, 
 			final boolean addNull) {
 		
 		primary.addActionListener(new ActionListener() {
+		
 			public void actionPerformed(ActionEvent e) {
 				Object selected = primary.getSelectedItem();
 				if (selected != null) {
@@ -83,7 +85,6 @@ public abstract class FormUtils {
 						if (addNull) vector.add(0, null);
 						DefaultComboBoxModel model = new DefaultComboBoxModel(vector);
 						dependent.setModel(model);
-				
 					}
 					else {
 						log.error("Can't write on propety '" + propertyName + "' of class: '" + selected.getClass() + "'");

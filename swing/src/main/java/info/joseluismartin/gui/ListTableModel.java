@@ -48,7 +48,7 @@ import org.springframework.beans.PropertyAccessorFactory;
  * TableModel that use a List of Objects to hold data.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @see info.joseluismartin.PageableTable
+ * @see info.joseluismartin.gui.PageableTable
  * @since 1.0
  */
 // FIXME: - jlm - This class is growing quicky, revise design.
@@ -637,7 +637,7 @@ public class ListTableModel implements TableModel {
 	
 	/**
 	 * Get a List with all selected model keys
-	 * @return
+	 * @return List with  checked model keys
 	 */
 	public List<Serializable> getChecked() {
 		return new ArrayList<Serializable>(selectedRowSet);
@@ -733,8 +733,8 @@ public class ListTableModel implements TableModel {
 	}
 
 	/**
-	 * @param column
-	 * @return
+	 * @param column column index
+	 * @return sort property for column
 	 */
 	public String getSortPropertyName(int column) {
 		String sortPropertyName = null;

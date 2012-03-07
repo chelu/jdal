@@ -19,7 +19,6 @@ import info.joseluismartin.gui.AbstractView;
 import info.joseluismartin.gui.ViewDialog;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 

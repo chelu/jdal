@@ -60,7 +60,7 @@ public class Database {
 	}
 
 	/**
-	 * @return
+	 * @return driver string
 	 */
 	public String getDriver() {
 		return driver;

@@ -13,7 +13,7 @@ import org.apache.commons.lang.ObjectUtils;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ListComboBoxModel extends ListListModel implements MutableComboBoxModel {
 
 	private static final long serialVersionUID = 1L;

@@ -104,7 +104,7 @@ public class DbConnection {
 	}
 	
 	/**
-	 * @param name the name to set
+	 * @param dbName the database name to set
 	 */
 	public void setDbName(String dbName) {
 		this.dbName = dbName;

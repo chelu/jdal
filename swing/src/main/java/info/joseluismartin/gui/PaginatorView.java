@@ -215,7 +215,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	}
 
 	/**
-	 * @param lastIcond the lastIcond to set
+	 * @param lastIcon the lastIcond to set
 	 */
 	public void setLastIcon(Image lastIcon) {
 		this.lastIcon = lastIcon;

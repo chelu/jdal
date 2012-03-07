@@ -188,7 +188,8 @@ public class ReportListView extends AbstractView<Report> implements ReportEventL
 	public void setReportType(ReportType type) {
 		this.reportType = type;
 	}
-
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" }) 
 	public void setReportProvider(ReportDataProvider reportProvider) {
 		this.reportProvider = reportProvider;
 	}

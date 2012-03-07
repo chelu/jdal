@@ -16,10 +16,9 @@ import java.util.List;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class SelectorBinder extends AbstractBinder implements ActionListener{
+public class SelectorBinder extends AbstractBinder implements ActionListener {
 
 	/**
-	 * {@inheritDoc}
 	 * @see info.joseluismartin.gui.bind.AbstractBinder#doBind(Object component)
 	 */
 	protected void doBind(Object component) {
@@ -36,7 +35,7 @@ public class SelectorBinder extends AbstractBinder implements ActionListener{
 	
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void doRefresh() {
 		List values = new ArrayList((Collection) getValue());
 		Selector selector = (Selector) component;

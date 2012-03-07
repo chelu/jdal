@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Default implementation of Paginator.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @see info.joseluismartin.PaginatorView
+ * @see info.joseluismartin.gui.PaginatorView
  */
 public class DefaultPaginator  implements Paginator {
 
@@ -42,7 +42,6 @@ public class DefaultPaginator  implements Paginator {
 	
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#getToltalRecords()
 	 */
 	public int getCount() {
 		return totalRecords;
@@ -50,7 +49,6 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#hasNext()
 	 */
 	public boolean hasNext() {
 		return page < getTotalPages();
@@ -58,7 +56,6 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#hasPage(int)
 	 */
 	public boolean hasPage(int indexPage) {
 		return indexPage <= getTotalPages() &&  indexPage > 0;
@@ -66,7 +63,6 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#hasPreviews()
 	 */
 	public boolean hasPrevious() {
 		return page > 1;
@@ -74,7 +70,6 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 *  {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#setPage(int)
 	 */
 	public void setPage(int indexPage) {
 		page = indexPage;
@@ -91,7 +86,6 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#getTotalPages()
 	 */
 	public int getTotalPages() {
 		if (pageSize > 0) {
@@ -158,7 +152,6 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#firstPage()
 	 */
 	public void firstPage() {
 		setPage(1);
@@ -167,7 +160,6 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#lastPage()
 	 */
 	public void lastPage() {
 		setPage(getTotalPages());
@@ -175,7 +167,6 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#nextPage()
 	 */
 	public void nextPage() {
 			setPage(page + 1);
@@ -184,8 +175,8 @@ public class DefaultPaginator  implements Paginator {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#previousPage()
 	 */
+
 	public void previousPage() {
 			setPage(page - 1);
 	}
@@ -198,6 +189,5 @@ public class DefaultPaginator  implements Paginator {
 			listener.pageChanged(new PageChangedEvent(this, page, getStartIndex(), getTotalPages(), pageSize));
 		}
 	}
-
 	
 }

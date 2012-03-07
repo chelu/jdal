@@ -2,6 +2,7 @@ package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.View;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
 @SuppressWarnings("unchecked")
@@ -19,7 +20,8 @@ public class ViewBinder extends AbstractBinder {
 		View<Object> view = (View<Object>) component;
 		view.update();
 		setValue(view.getModel());
-		if (view.getBindingResult().hasErrors()) {
+		BindingResult br = view.getBindingResult();
+		if (br != null && view.getBindingResult().hasErrors()) {
 			for (ObjectError oe : view.getBindingResult().getAllErrors()) {
 				getBindingResult().addError(oe);
 			}

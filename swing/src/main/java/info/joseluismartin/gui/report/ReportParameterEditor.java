@@ -26,13 +26,13 @@ public interface ReportParameterEditor {
 
 	/**
 	 * Get the actual editor
-	 * @return
+	 * @return editor component
 	 */
 	public JComponent getEditor();
 	
 	/**
 	 * Get the value in the editor
-	 * @return
+	 * @return editor value
 	 */
 	public Object getValue() throws Exception;
 

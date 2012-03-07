@@ -38,7 +38,8 @@ public abstract class AutoCompletionListener extends KeyAdapter  {
 	public AutoCompletionListener() {}
 
 	/**
-	 * @param street
+	 * Create a new AutocompletionListener and attach it to combo
+	 * @param combo combobox to add the auto completion listener
 	 */
 	public AutoCompletionListener(JComboBox combo) {
 		this.combo = combo;

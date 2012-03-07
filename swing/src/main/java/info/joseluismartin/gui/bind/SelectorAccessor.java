@@ -52,7 +52,7 @@ public class SelectorAccessor extends AbstractControlAccessor implements ActionL
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void setControlValue(Object value) {
 		Selector selector = (Selector) getControl();
 		selector.setSelected(convertIfNecessary(value, List.class));

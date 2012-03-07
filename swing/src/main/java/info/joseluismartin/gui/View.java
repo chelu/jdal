@@ -37,7 +37,7 @@ public interface View<T> extends Binder<T>{
 	
 	/**
 	 *  validate
-	 * @return
+	 * @return true if there are not binding errors.
 	 */
 	boolean validateView();
 	

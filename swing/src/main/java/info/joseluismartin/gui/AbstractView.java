@@ -134,7 +134,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	
 	/**
 	 * add a binding for control and model property name
-	 * @param comoponent control
+	 * @param component control
 	 * @param propertyName the model property path to bind
 	 * @param readOnly if true, binding only do refresh()
 	 */
@@ -146,7 +146,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	
 	/**
 	 * add a binding for control and model property name
-	 * @param comoponent control
+	 * @param component control
 	 * @param propertyName the model property path to bind
 	 */
 	public void bind(Object component, String propertyName) {
@@ -594,7 +594,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * {@inheritDoc}
 	 */
 	public BindingResult getBindingResult() {
-		if (errors == null)
+		if (errors == null && getModel() != null)
 			errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
 		
 		return errors;

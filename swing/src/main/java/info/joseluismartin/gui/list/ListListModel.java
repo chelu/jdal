@@ -11,7 +11,7 @@ import javax.swing.AbstractListModel;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ListListModel extends AbstractListModel {
 
 	private static final long serialVersionUID = 1L;
@@ -50,7 +50,7 @@ public class ListListModel extends AbstractListModel {
 	}
 
 	/**
-	 * @param asList
+	 * @param c collection with objects to remove
 	 */
 	public void removeAll(Collection c) {
 		list.removeAll(c);
@@ -59,16 +59,13 @@ public class ListListModel extends AbstractListModel {
 	}
 
 	/**
-	 * @param available
+	 * @param c collection with objets to add
 	 */
 	public void addAll(Collection c) {
 		list.addAll(c);
 		fireContentsChanged(this, -1, -1);
 	}
 
-	/**
-	 * 
-	 */
 	public void clear() {
 		list.clear();
 		fireContentsChanged(this, -1, -1);

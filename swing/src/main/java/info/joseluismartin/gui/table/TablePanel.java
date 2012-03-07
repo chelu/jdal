@@ -45,7 +45,7 @@ import javax.swing.KeyStroke;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class TablePanel extends JPanel implements ReportDataProvider {
 
 	private static final long serialVersionUID = 1L;
@@ -198,7 +198,7 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	}
 	
 	/**
-	 * @param the PageableTable to set.
+	 * @param table the PageableTable to set.
 	 */
 	public void setTable(PageableTable table) {
 		this.table = table;

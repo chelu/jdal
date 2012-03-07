@@ -16,7 +16,6 @@
 package info.joseluismartin.gui.form;
 
 import info.joseluismartin.gui.bind.BinderFactory;
-import info.joseluismartin.gui.bind.DirectFieldAccessor;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -26,11 +25,8 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ComboBoxEditor;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 import org.springframework.context.MessageSource;
 
@@ -146,7 +142,7 @@ public class BoxFormBuilder {
 	
 	/**
 	 * Builds the panel form.
-	 * @return
+	 * @return the form component
 	 */
 	public JComponent getForm() {
 		// set sizes;

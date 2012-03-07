@@ -34,7 +34,7 @@ import org.springframework.validation.FieldError;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @since 1.1 
  * @see ErrorProcessor
- * @see AbstracView
+ * @see info.joseluismartin.gui.AbstractView
  */
 public class BackgroundErrorProcessor implements ErrorProcessor {
 

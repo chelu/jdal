@@ -278,7 +278,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	
 	/**
 	 * Handle paginators changes.
-	 * @see info.joseluismartin.gui.PaginatorListener#pageChanged(info.joseluismartin.gui.PageChangedEvent)
+	 * @see info.joseluismartin.dao.PaginatorListener#pageChanged(info.joseluismartin.dao.PageChangedEvent)
 	 */
 	public void pageChanged(PageChangedEvent event) {
 		loadPage();
@@ -333,7 +333,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	
 	/**
 	 * Restore the column visibility from TableState
-	 * @param TableState
+	 * @param state the table state
 	 */
 	public void restoreState(TableState state) {
 		for (ColumnDescriptor cd : columnDescriptors) {
@@ -495,7 +495,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		/**
 		 * Copy visibility descriptors to table and change de ListableTableModel
 		 * with new properties
-		 * @param ActionEvent the JButton ActionEvent
+		 * @param e ActionEvent the JButton ActionEvent
 		 */
 		public void actionPerformed(ActionEvent e) {
 		
@@ -847,7 +847,7 @@ class VisibilityBox extends JComponent {
 
 	/**
 	 * Create a new VisiblityBox initialized with column descriptors
-	 * @param columnDescriptos
+	 * @param columnDescriptors column descriptors
 	 */
 	public VisibilityBox(List<ColumnDescriptor> columnDescriptors) {
 		setColumnDescriptors(columnDescriptors);

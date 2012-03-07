@@ -50,7 +50,7 @@ public interface PropertyBinder extends Binder<Object> {
 	 
 	 /**
 	  * return property name
-	  * @return
+	  * @return the property name
 	  */
 	 String getPropertyName();
 	 

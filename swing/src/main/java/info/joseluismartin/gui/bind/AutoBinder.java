@@ -41,7 +41,7 @@ import org.springframework.validation.DefaultBindingErrorProcessor;
  * controls with name equals to property names in model.
  * 
  * @author Jose Luis Martin
- * @see info.joseluismartin.gui.bind.Binder
+ * @see info.joseluismartin.gui.Binder
  * @since 1.1
  */
 public class AutoBinder<T> implements Binder<T> {

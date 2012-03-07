@@ -55,10 +55,12 @@ public abstract class ReportManager {
 	/**
 	 * Display a report in <code>outputType</code> using the service and available ids to create  
 	 * the data source
-	 * @param report
-	 * @param service
-	 * @param ids
-	 * @param outputType
+	 * @param report report to display
+	 * @param filter filter to use when query data to persistent service
+	 * @param sortPropertyName sort property name
+	 * @param sortOrder sort order (ASC, DESC)
+	 * @param service persistent service to use
+	 * @param outputType report output type (pdf, xml)
 	 */
 	public void showReport(Report report, PersistentService<Object, Serializable> service, Object filter, String sortPropertyName, Page.Order sortOrder, String outputType) throws Exception{
 		PageJRDatasourceAdapter dataSource = new PageJRDatasourceAdapter(true);
@@ -167,7 +169,7 @@ public abstract class ReportManager {
 		 * The fact a report has params can be determined at the moment of registering
 		 * it the system. At this point, it could be possible to have this information
 		 * thus making this process faster
-		 * @param file
+		 * @param report report to process
 		 */
 		public boolean preprocessFile(Report report){
 			if (log.isDebugEnabled())

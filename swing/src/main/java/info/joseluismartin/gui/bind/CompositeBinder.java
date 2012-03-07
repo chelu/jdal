@@ -28,12 +28,15 @@ public class CompositeBinder<T> implements Binder<T> {
 	private BindingResult bindingResult;
 
 	
+	/**
+	 * Create new CompositeBinder
+	 */
 	public CompositeBinder() {
 		
 	}
 	
 	/**
-	 * @param T model
+	 * @param model model to bind on
 	 */
 	public CompositeBinder(T model) {
 		this.model = model;
