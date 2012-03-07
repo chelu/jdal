@@ -15,6 +15,9 @@
  */
 package info.joseluismartin.gui.bind;
 
+import info.joseluismartin.gui.View;
+
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +105,26 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 	 */
 	public void setControl(Object control) {
 		this.control = control;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setEnabled(boolean enabled) {
+		if (control instanceof Component) 
+			((Component) control).setEnabled(enabled);
+		else if (control instanceof View<?>) 
+			((View<?>) control).enableView(enabled);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isEnabled() {
+		if (control instanceof Component) 
+			return ((Component) control).isEnabled();
+		
+		return true;
 	}
 
 }

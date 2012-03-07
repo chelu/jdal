@@ -17,11 +17,13 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.bind.BinderFactory;
 import info.joseluismartin.gui.bind.CompositeBinder;
+import info.joseluismartin.gui.bind.ConfigurableBinderFactory;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlAccessor;
 import info.joseluismartin.gui.bind.ControlAccessorBinderFactory;
 import info.joseluismartin.gui.bind.ControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlChangeListener;
+import info.joseluismartin.gui.bind.ControlError;
 import info.joseluismartin.gui.bind.ControlEvent;
 import info.joseluismartin.gui.bind.DirectFieldAccessor;
 import info.joseluismartin.gui.bind.PropertyBinder;
@@ -42,11 +44,13 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.or.jms.MessageRenderer;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -90,7 +94,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	/** binder factory to make property binders */
 	private BinderFactory binderFactory;
 	/** control accessor factory */
-	private ControlAccessorFactory controlAccessorFactory = new ConfigurableControlAccessorFactory();
+	private ControlAccessorFactory controlAccessorFactory;
 	/** hold binders */
 	private CompositeBinder<T> binder = new CompositeBinder<T>();
 	/** if true, do an automatic binding using property names */
@@ -122,6 +126,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * Default ctor
 	 */
 	public AbstractView() {
+		
 	}
 	
 	/**
@@ -139,11 +144,25 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * @param readOnly if true, binding only do refresh()
 	 */
 	public void bind(Object component, String propertyName, boolean readOnly) {
+		checkFactories();
 		binder.bind(component, propertyName, readOnly);
 		listen(component);
 		
 	}
 	
+	/**
+	 * Check if there are binder and control accessor factories configured, if not
+	 * use defaults.
+	 */
+	private void checkFactories() {
+		if (controlAccessorFactory == null) {
+			setControlAccessorFactory(ConfigurableControlAccessorFactory.getDefaultFactory());
+		}
+		if (binderFactory == null) {
+			setBinderFactory(ConfigurableBinderFactory.getDefaultFactory());
+		}
+	}
+
 	/**
 	 * add a binding for control and model property name
 	 * @param component control
@@ -185,6 +204,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public final void setModel(T model) {
 		this.model = model;
+		createBindingResult();
 		binder.setModel(model);
 		
 		// refresh subviews
@@ -194,6 +214,13 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 		onSetModel(model);
 	}
 	
+	/**
+	 * 
+	 */
+	private void createBindingResult() {
+		errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+	}
+
 	/**
 	 * Callback method to handle model changes
 	 * @param model the new model
@@ -232,7 +259,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * Clear validation erros
 	 */
 	private void clearErrors() {
-		if (getModel() != null)
+		if (getModel() != null && errors.hasErrors())
 			errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
 		resetErrorProcessors();
 		
@@ -326,8 +353,18 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 			JOptionPane.showMessageDialog(getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
 			
 			for (FieldError error : errors.getFieldErrors()) {
-				for (ErrorProcessor ep : errorProcessors ) 
-					ep.processError(binder.getBinder(error.getField()), error);
+				for (ErrorProcessor ep : errorProcessors ) {
+					if (error instanceof ControlError) {
+						ControlError ce = (ControlError) error;
+						ep.processError(ce.getComponent(), error);
+					}
+					else {
+						Binder<?> b = binder.getBinder(error.getField());
+						if (b instanceof PropertyBinder) {
+							ep.processError(((PropertyBinder) b).getComponent(), error);
+						}
+					}
+				}
 			}
 			return false;
 		}
@@ -355,7 +392,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 			while (iter.hasNext()) {
 				ObjectError oe = (ObjectError) iter.next();
 				sb.append("- ");
-				sb.append(messageSource.getMessage(oe, null));
+				sb.append(getMessage(oe));
 				sb.append("\n");
 			}
 		}
@@ -401,7 +438,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	/**
 	 * Bind Controls with the same name that a property in the model.
 	 */
-	protected void autobind() {
+	public void autobind() {
 		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
 		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(this);
 		// iterate on model properties
@@ -428,6 +465,16 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	protected String getMessage(String code) {
 		return messageSource == null ?
 				code : messageSource.getMessage(name, null, Locale.getDefault());
+	}
+	
+	/** 
+	 * I18n Support
+	 * @param msr message source resolvable
+	 * @return message or code if none defined
+	 */
+	protected String getMessage(MessageSourceResolvable msr) {
+		return messageSource == null ?
+				msr.getDefaultMessage() : messageSource.getMessage(msr, Locale.getDefault());
 	}
 	
 	/**
@@ -572,8 +619,6 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public void setControlAccessorFactory(ControlAccessorFactory controlAccessorFactory) {
 		this.controlAccessorFactory = controlAccessorFactory;
-		if (binderFactory == null)
-			setBinderFactory(new ControlAccessorBinderFactory(controlAccessorFactory));
 	}
 
 	/**
@@ -595,7 +640,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	public BindingResult getBindingResult() {
 		if (errors == null && getModel() != null)
-			errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+			createBindingResult();
 		
 		return errors;
 	}

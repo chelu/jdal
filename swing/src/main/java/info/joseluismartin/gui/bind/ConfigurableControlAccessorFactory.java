@@ -16,6 +16,7 @@
 package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.Selector;
+import info.joseluismartin.gui.View;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -44,6 +45,9 @@ import org.apache.commons.logging.LogFactory;
 public class ConfigurableControlAccessorFactory implements ControlAccessorFactory {
 	
 	private final static Log log = LogFactory.getLog(ConfigurableControlAccessorFactory.class);
+	
+	private static ControlAccessorFactory defaultFactory;
+	
 	private Map<Class<?>, Class<?extends ControlAccessor>> accessors = 
 			new Hashtable<Class<?>, Class<? extends ControlAccessor>>();
 	private boolean mergeAccessors = true;
@@ -110,9 +114,21 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 		accessors.put(Selector.class, SelectorAccessor.class);
 		accessors.put(JToggleButton.class, ToggleButtonAccessor.class);
 		accessors.put(JComboBox.class, ComboAccessor.class);
+		accessors.put(View.class, ViewAccessor.class);
 	}
 
 	// Getters and Setters
+	
+	/**
+	 * For use without DI Container
+	 * @return a default singleton ControlAccesorFactory
+	 */
+	public static synchronized ControlAccessorFactory getDefaultFactory() {
+		if (defaultFactory == null)
+			defaultFactory = new ConfigurableControlAccessorFactory();
+		
+		return defaultFactory;
+	}
 	
 	public Map<Class<?>, Class<?extends ControlAccessor>> getAccessors() {
 		return accessors;
@@ -122,10 +138,10 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 	 * @param accessors the accessors to set
 	 */
 	public void setAccessors(Map<Class<?>, Class<?extends ControlAccessor>> accessors) {
-		if (mergeAccessors)
-			this.accessors.putAll(accessors);
-		else 
-			this.accessors = accessors;
+		if (!mergeAccessors)
+			this.accessors.clear();
+		
+		this.accessors.putAll(accessors);
 	}
 
 

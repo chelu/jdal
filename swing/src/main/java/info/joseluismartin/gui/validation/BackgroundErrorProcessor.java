@@ -42,18 +42,23 @@ public class BackgroundErrorProcessor implements ErrorProcessor {
 	private Color errorColor = new Color(255, 130, 130);
 	private MessageSource messageSource;
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	public void processError(Binder<?> binder, FieldError error) {
 		if (binder instanceof PropertyBinder) {
 			Object o = ((PropertyBinder) binder).getComponent();
-			if (o instanceof JComponent) {
-				JComponent c = (JComponent) o;
-				colorMap.put(c, c.getBackground());
-				((JComponent) c).setBackground(errorColor);
+			processError(o, error);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public  void processError(Object control, FieldError error) {
+		if (control instanceof JComponent) {
+			JComponent c = (JComponent) control;
+			colorMap.put(c, c.getBackground());
+			((JComponent) c).setBackground(errorColor);
+			if (messageSource != null)
 				c.setToolTipText(messageSource.getMessage(error, null));
-			}
 		}
 	}
 		

@@ -31,10 +31,10 @@ public interface ErrorProcessor {
 	/**
 	 * Process binding error. Usefull for do control interaction on binding erros, 
 	 * like set a tooltip with error, change background and so.
-	 * @param binder the binder that gerenate the error
+	 * @param control the control that generate the error
 	 * @param error the spring validation error Object
 	 */
-	void processError(Binder<?> binder, FieldError error);
+	void processError(Object control, FieldError error);
 	
 	/**
 	 * clear state of ErrorProcessor. Usefull for undo control changes made in processError.

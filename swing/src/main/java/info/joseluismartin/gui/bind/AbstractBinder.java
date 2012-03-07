@@ -52,7 +52,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	protected Object component;
 	/** if true, binding is readOnly, ie from model to control */
 	protected boolean readOnly = false;
-	private BindingErrorProcessor errorProcessor = new DefaultBindingErrorProcessor();
+	private ControlBindingErrorProcessor errorProcessor = new ControlBindingErrorProcessor();
 	private BindingResult bindingResult;
 	
 	
@@ -88,12 +88,20 @@ public abstract class AbstractBinder implements PropertyBinder {
 	}
 	
 	public final void update() {
-		if (!readOnly) {
-			bindingResult = new BeanPropertyBindingResult(model, model.getClass().getSimpleName(), true);
+		if (!readOnly && model != null) {
+			bindingResult = createBindingResult();
 			doUpdate();
 		}
 	}
 	
+	/**
+	 * Create a new Binding result, override to set nested paths on complex binders
+	 * @return a new instance of BindingResult for this model
+	 */
+	protected BindingResult createBindingResult() {
+		return new BeanPropertyBindingResult(model, model.getClass().getSimpleName(), true);
+	}
+
 	abstract protected void doRefresh();
 	abstract protected void doUpdate();
 
@@ -107,18 +115,17 @@ public abstract class AbstractBinder implements PropertyBinder {
 			try {
 				wrapper.setPropertyValue(propertyName, value);
 				oldValue = value;
-			
 			}
 			catch (PropertyAccessException pae) {
 				log.error(pae);
-				errorProcessor.processPropertyAccessException(pae, bindingResult);
+				errorProcessor.processPropertyAccessException(component, pae, bindingResult);
 			}
 		}
 	}
 	
 	/**
 	 * Get value from model
-	 * @return
+	 * @return model value
 	 */
 	protected Object getValue() {
 		BeanWrapper wrapper = getBeanWrapper();

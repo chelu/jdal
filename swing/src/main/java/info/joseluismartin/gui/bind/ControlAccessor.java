@@ -45,4 +45,16 @@ public interface ControlAccessor {
 	 * @param l the ControlChangeListener to remove
 	 */
 	void removeControlChangeListener(ControlChangeListener l);
+	
+	/**
+	 * Enable/disable the control
+	 * @param enabled true if enabled
+	 */
+	void setEnabled(boolean enabled);
+	
+	/**
+	 * Test control enabled state
+	 * @return true if control is enabled
+	 */
+	boolean isEnabled();
 }

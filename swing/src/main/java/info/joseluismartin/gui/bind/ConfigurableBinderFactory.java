@@ -15,6 +15,9 @@
  */
 package info.joseluismartin.gui.bind;
 
+import info.joseluismartin.gui.View;
+
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +34,22 @@ import org.apache.commons.logging.LogFactory;
 */
 public class ConfigurableBinderFactory implements BinderFactory {
 	private final static Log log = LogFactory.getLog(BinderFactory.class);
-	private Map<Class<?>, Class<PropertyBinder>> binders;
+	private static BinderFactory defaultFactory;
+	private ControlAccessorFactory controlAccessorFactory;
+	private Map<Class<?>, Class<?extends PropertyBinder>> binders = 
+			new Hashtable<Class<?>, Class<? extends PropertyBinder>>();
+	private boolean mergeBinders = true;
 	
+	
+	public ConfigurableBinderFactory() {
+		this(ConfigurableControlAccessorFactory.getDefaultFactory());
+	}
+	
+	public ConfigurableBinderFactory(ControlAccessorFactory controlAccessorFactory) {
+		this.controlAccessorFactory = controlAccessorFactory;
+		initDefaultBinders();
+	}
+
 	/**
 	 * Try to find a binder for a Class, use super Class if none is configured.
 	 * 
@@ -41,7 +58,7 @@ public class ConfigurableBinderFactory implements BinderFactory {
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public PropertyBinder getBinder(Class<?> clazz) {
-		Class<PropertyBinder> binderClass = null;
+		Class<?extends PropertyBinder> binderClass = null;
 		PropertyBinder binder = null;
 	
 		binderClass = binders.get(clazz);
@@ -66,21 +83,65 @@ public class ConfigurableBinderFactory implements BinderFactory {
 				log.error(e);
 			}
 		}
+		
 		else {
-			log.warn("Can't find a Binder for class: " + clazz.getName());
+			binder = new ControlBinder(controlAccessorFactory);
 		}
 
 		return binder;
 	}
+	
+	private void initDefaultBinders() {
+		binders.put(View.class, ViewBinder.class);
+		
+	}
 
 	// Getters and Setters
+
+	public static synchronized BinderFactory getDefaultFactory() {
+		if (defaultFactory == null) 
+			defaultFactory = new ConfigurableBinderFactory();
+		
+		return defaultFactory;
+	}
 	
-	public Map<Class<?>, Class<PropertyBinder>> getBinders() {
+	public Map<Class<?>, Class<?extends PropertyBinder>> getBinders() {
 		return binders;
 	}
 
-	public void setBinders(Map<Class<?>, Class<PropertyBinder>> binders) {
-		this.binders = binders;
+	public void setBinders(Map<Class<?>, Class<?extends PropertyBinder>> binders) {
+		if (!mergeBinders)
+			this.binders.clear();
+		
+		this.binders.putAll(binders);
+	}
+
+	/**
+	 * @return the controlAccessorFactory
+	 */
+	public ControlAccessorFactory getControlAccessorFactory() {
+		return controlAccessorFactory;
+	}
+
+	/**
+	 * @param controlAccessorFactory the controlAccessorFactory to set
+	 */
+	public void setControlAccessorFactory(ControlAccessorFactory controlAccessorFactory) {
+		this.controlAccessorFactory = controlAccessorFactory;
+	}
+
+	/**
+	 * @return the mergeBinders
+	 */
+	public boolean isMergeBinders() {
+		return mergeBinders;
+	}
+
+	/**
+	 * @param mergeBinders the mergeBinders to set
+	 */
+	public void setMergeBinders(boolean mergeBinders) {
+		this.mergeBinders = mergeBinders;
 	}
 
 }

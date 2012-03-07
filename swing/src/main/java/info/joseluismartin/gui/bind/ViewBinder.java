@@ -18,9 +18,15 @@ public class ViewBinder extends AbstractBinder {
 	
 	public void doUpdate() {
 		View<Object> view = (View<Object>) component;
+		BindingResult br = view.getBindingResult();
+		
+		if (br != null) {
+			br.setNestedPath(propertyName);
+		}
+			
 		view.update();
 		setValue(view.getModel());
-		BindingResult br = view.getBindingResult();
+		
 		if (br != null && view.getBindingResult().hasErrors()) {
 			for (ObjectError oe : view.getBindingResult().getAllErrors()) {
 				getBindingResult().addError(oe);
