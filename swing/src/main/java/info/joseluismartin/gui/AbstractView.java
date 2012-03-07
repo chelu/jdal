@@ -590,7 +590,13 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 		this.autobinding = autobinding;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public BindingResult getBindingResult() {
+		if (errors == null)
+			errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+		
 		return errors;
 	}
 }

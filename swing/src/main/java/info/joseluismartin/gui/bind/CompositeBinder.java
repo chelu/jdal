@@ -69,6 +69,8 @@ public class CompositeBinder<T> implements Binder<T> {
 
 	
 	public void update() {
+		bindingResult = null;
+		
 		for (Binder<?> b : binders.values())
 			b.update();
 		

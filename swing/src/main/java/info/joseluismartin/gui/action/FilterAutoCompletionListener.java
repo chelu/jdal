@@ -28,10 +28,11 @@ import javax.swing.JComboBox;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class FilterAutoCompletionListener extends AutoCompletionListener  {
 
 	public static final String DEFAULT_SORT_PROPERTY = "name";
-	private PersistentService<Object, ?>  persistentService;
+	private PersistentService persistentService;
 	private int maxResults = Short.MAX_VALUE;
 	private String sortProperty;
 	
@@ -50,7 +51,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 	/**
 	 * Create and add the autocompletion listener to JComboBox
 	 * @param combo the combo to add autocompletion-
-	 * @param maximun number of results. 
+	 * @param maxValue maximun number of results. 
 	 */
 	public FilterAutoCompletionListener(JComboBox combo, int maxValue) {
 		this(combo, Short.MAX_VALUE, DEFAULT_SORT_PROPERTY);
@@ -59,7 +60,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 	/**
 	 * Create and add the autocompletion listener to JComboBox
 	 * @param combo the combo to add autocompletion-
-	 * @param maximun number of results.
+	 * @param maxResults maximun number of results.
 	 * @param sortProperty property for ordering, by default "name". 
 	 */
 	public FilterAutoCompletionListener(JComboBox combo, int maxResults,
@@ -69,11 +70,9 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 		this.sortProperty = sortProperty;
 	}
 
-	
-
 	@Override
-	protected List<?> getList(String editing) {
-		Page<Object> page = new Page<Object>(maxResults);
+	protected List getList(String editing) {
+		Page<?> page = new Page<Object>(maxResults);
 		PatternFilter filter = new PatternFilter();
 		filter.setPattern(editing.trim() + "%");
 		page.setFilter(filter);
@@ -85,7 +84,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 	/**
 	 * @return the persistentService
 	 */
-	public PersistentService<?, ?> getPersistentService() {
+	public PersistentService getPersistentService() {
 		return persistentService;
 	}
 	
@@ -93,7 +92,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 	 * @param persistentService the persistentService to set
 	 */
 
-	public void setPersistentService(PersistentService<Object, ?> persistentService) {
+	public void setPersistentService(PersistentService persistentService) {
 		this.persistentService = persistentService;
 	}
 

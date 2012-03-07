@@ -18,7 +18,6 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,7 +41,7 @@ public class Report {
 	private Boolean hasQuery;
 	
 	/**
-	 * @return
+	 * @return a JasperReport
 	 */
 	@SuppressWarnings("unchecked")
 	public JasperReport newJasperReport() {
