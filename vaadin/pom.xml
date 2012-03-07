@@ -101,25 +101,25 @@
 				goal jetty:run .
 			-->
 
-			<plugin>
+			<!-- <plugin>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>1.0.2</version>
 				<executions>
 					<execution>
 						<configuration>
-							<!-- if you don't specify any modules, the plugin will find them -->
-							<!--
+							if you don't specify any modules, the plugin will find them
+							
 								<modules> <module>org.jdal.vaadin.gwt.MyWidgetSet</module>
 								</modules>
-							-->
+							
 						</configuration>
 						<goals>
 							<goal>update-widgetset</goal>
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 
 			<!--
 				A simple Jetty test server at http://localhost:8080/jdal-vaadin can
