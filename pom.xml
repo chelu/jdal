@@ -7,7 +7,7 @@
 	<groupId>org.jdal</groupId>
 	<artifactId>jdal</artifactId>
 	<name>Java Database Application Library</name>
-	<version>1.1.5</version>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<licenses>

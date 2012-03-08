@@ -42,14 +42,13 @@ public class SessionAspect  {
 	/**
 	 * Before advice to prepare Session before call 
 	 */
-	@SuppressWarnings("unchecked")
 	public void processSession(JoinPoint jp) {
 
 		if (log.isDebugEnabled()) {
 			String entityClassName = "";
 			Object target = jp.getTarget();
 			if (target instanceof HibernateDao) {
-				entityClassName = ((HibernateDao) target).getEntityClass().getSimpleName();
+				entityClassName = ((HibernateDao<?, ?>) target).getEntityClass().getSimpleName();
 			}		
 			log.debug("Advising: " + jp.toShortString() + " of class: " + 
 					jp.getTarget().getClass().getSimpleName() +"<" + entityClassName + ">" );

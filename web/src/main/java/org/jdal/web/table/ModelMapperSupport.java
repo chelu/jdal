@@ -21,11 +21,10 @@ public abstract class ModelMapperSupport implements ModelMapper {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	public Collection<?> fromModel(Collection collection) {
-		ArrayList list = new ArrayList();
+	public Collection<?> fromModel(Collection<?> collection) {
+		ArrayList<Object> list = new ArrayList<Object>();
 		if (collection != null) {
-			Iterator<Object> iter = collection.iterator();
+			Iterator<?> iter = collection.iterator();
 			while (iter.hasNext()) {
 				list.add(fromModel(iter.next()));
 			}
@@ -37,11 +36,10 @@ public abstract class ModelMapperSupport implements ModelMapper {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	public Collection<?> toModel(Collection collection) {
-		ArrayList list = new ArrayList();
+	public Collection<?> toModel(Collection<?> collection) {
+		ArrayList<Object> list = new ArrayList<Object>();
 		if (collection != null) {
-			Iterator iter = collection.iterator();
+			Iterator<?> iter = collection.iterator();
 			while (iter.hasNext()) {
 				list.add(toModel(iter.next()));
 			}

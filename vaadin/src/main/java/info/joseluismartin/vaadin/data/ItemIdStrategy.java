@@ -63,6 +63,10 @@ public interface ItemIdStrategy extends ItemSetChangeListener {
 	 */
 	void setContainerDataSource(ContainerDataSource<?> containerDataSource);
 	
+	/**
+	 * @param index
+	 * @param item
+	 */
 	void itemLoaded(int index, Item item);
 	
 

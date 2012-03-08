@@ -15,6 +15,10 @@
  */
 package model;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 
 public class Book {
 	
@@ -29,6 +33,7 @@ public class Book {
 	/**
 	 * @return the title
 	 */
+	@NotBlank
 	public String getTitle() {
 		return title;
 	}

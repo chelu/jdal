@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.jdal</groupId>
 		<artifactId>jdal</artifactId>
-		<version>1.1.5</version>
+		<version>1.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -13,7 +13,8 @@
 	<artifactId>jdal-swing</artifactId>
 	<name>JDAL Swing Library</name>
 	<version>${set-version}</version>
-	
+	<description>JDAL Swing Library</description>
+
 	<developers>
 		<developer>
 			<id>jlm</id>
@@ -22,16 +23,16 @@
 			<url>http://www.joseluismartin.info</url>
 		</developer>
 	</developers>
-	
+
 	<scm>
 		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal</url>
 	</scm>
-	
+
 	<organization>
 		<name>JDAL</name>
 		<url>http://www.jdal.org</url>
 	</organization>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -97,7 +98,7 @@
 			<url>scpexe://jdal.org/var/www/jdal/repo</url>
 		</repository>
 	</distributionManagement>
-	
+
 	<profiles>
 		<profile>
 			<id>sonatype</id>
@@ -120,7 +121,7 @@
 			</distributionManagement>
 		</profile>
 	</profiles>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jdal</groupId>
@@ -148,14 +149,28 @@
 			<artifactId>jgoodies-common</artifactId>
 			<version>0.9.9</version>
 		</dependency>
-		<!--  Icons from Tango Desktop Project -->
+		<!-- Icons from Tango Desktop Project -->
 		<dependency>
-  			<groupId>org.freedesktop.tango</groupId>
-  			<artifactId>tango-icon-theme</artifactId>
-  			<version>0.8.90</version>
+			<groupId>org.freedesktop.tango</groupId>
+			<artifactId>tango-icon-theme</artifactId>
+			<version>0.8.90</version>
 		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+
+
 
 	</dependencies>
 
-	<description>JDAL Swing Library</description>
 </project>

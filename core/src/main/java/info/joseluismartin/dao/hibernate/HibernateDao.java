@@ -89,7 +89,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	 * @param page with page definitions
 	 * @return page of results
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Page<T> getPage(Page<T> page) {
 		
 		List data = null;

@@ -125,7 +125,7 @@ public class DataTableModel {
 	}
 
 	/**
-	 * @return
+	 * @return a new Page
 	 */
 	public Page<Object> buildPage() {
 		Page<Object> page = new Page<Object>();

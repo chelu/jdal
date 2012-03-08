@@ -142,7 +142,7 @@ public abstract class JpaUtils {
 	 * Gets a Path from Path using property path
 	 * @param path the base path
 	 * @param propertyPath property path String like "customer.order.price"
-	 * @return a new Path for property path
+	 * @return a new Path for property
 	 */
 	public static Path<?> getPath(Path<?> path, String propertyPath) {
 		if (StringUtils.isEmpty(propertyPath))

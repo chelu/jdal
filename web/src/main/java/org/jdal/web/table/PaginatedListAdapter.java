@@ -27,7 +27,7 @@ import org.displaytag.properties.SortOrderEnum;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class PaginatedListAdapter implements PaginatedList {
 	
 	private Page<?> model;

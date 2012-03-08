@@ -377,10 +377,9 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 
 	/**
 	 * Build a error message with all errors.
-	 * @param errors erros to use 
 	 * @return String with error message
 	 */
-	protected String getErrorMessage(Errors errors) {
+	public String getErrorMessage() {
 		StringBuilder sb = new StringBuilder();
 		if (errors.hasErrors()) {
 			sb.append("\n");

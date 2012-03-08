@@ -34,7 +34,6 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
  * Hibernate Guard for LazyInitializationException. Open read only session and 
  * load Uninitialized proxy o collection from database before access to it.
  * 
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 privileged public aspect HibernateLazyGuard {

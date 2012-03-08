@@ -30,15 +30,22 @@ import junit.framework.TestCase;
 import model.Author;
 import model.Book;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
 public class ViewTest extends TestCase {
 	
+	private final static Log log = LogFactory.getLog(ViewTest.class);
+	
 	public void testAbstractView() {
 		Author author = new Author("Joe", "The King");
-		Book book = new Book("Be happy", author);
+		Book book = new Book(null, author);
 		BookView view = new BookView();
 		List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
 		errorProcessors.add(new BackgroundErrorProcessor());		
@@ -48,7 +55,18 @@ public class ViewTest extends TestCase {
 		view.autobind();
 		view.refresh();
 		view.update();
+		view.setValidator(createValidator());
 		view.validateView();
+		log.info(view.getErrorMessage());
+	}
+
+	/**
+	 * @return
+	 */
+	private Validator createValidator() {
+		LocalValidatorFactoryBean vfb = new LocalValidatorFactoryBean();
+		vfb.afterPropertiesSet();
+		return vfb;
 	}
 }
 
