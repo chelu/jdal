@@ -30,9 +30,9 @@ public interface PageableDataSource<T> {
 	 */
 	public Page<T> getPage(Page<T> page);
 	/**
-	 * return a Set with keys of page
+	 * Gets a List with keys of page
 	 * @param page
-	 * @return
+	 * @return List with keys
 	 */
 	public List<Serializable> getKeys(Page<T> page);
 }

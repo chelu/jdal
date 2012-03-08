@@ -50,14 +50,13 @@ import org.xml.sax.SAXException;
  *  
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
 public abstract class XMLUtils {
 	
 	/** commons log */
 	private static Log log = LogFactory.getLog(XMLUtils.class);
 	
 	/** Cache a DocumentBuilder */
-	private static ThreadLocal dbLocal = new ThreadLocal();
+	private static ThreadLocal<DocumentBuilder> dbLocal = new ThreadLocal<DocumentBuilder>();
 	
 	/**
 	 * Get a org.w3c.Document from resource String
@@ -259,8 +258,8 @@ public abstract class XMLUtils {
 	 * Creates a new Document with name and namespace
 	 * @param ns namespace
 	 * @param name name
-	 * @return
-	 */
+	 * @return new Document
+	 */ 
 	public static Document newDocument(String ns, String name) {
 		return  getDocumentBuilder().getDOMImplementation()
 			.createDocument(ns, name, null);

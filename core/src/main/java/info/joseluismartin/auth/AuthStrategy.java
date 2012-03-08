@@ -22,7 +22,7 @@ import java.security.NoSuchAlgorithmException;
  * 
  * @see AuthPlain 
  * @see AuthHashMD5
- * @see AuthManagers
+ * @see AuthManager
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
@@ -38,9 +38,9 @@ public interface AuthStrategy {
 
 	boolean validate(String suppliedPassword, String userPassword);
 	/** 
-	 * 
+	 * Crypt a password
 	 * @param suppliedPassword
-	 * @return
+	 * @return crypted passord
 	 * @throws NoSuchAlgorithmException
 	 */
 	String crypt(String suppliedPassword) throws NoSuchAlgorithmException;

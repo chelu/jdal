@@ -29,31 +29,38 @@ import com.vaadin.data.Container.ItemSetChangeListener;
 public interface ItemIdStrategy extends ItemSetChangeListener {
 	
 	/**
-	 * @return
+	 * @return the first itemId
 	 */
 	Object firstItemId();
 
 	/**
-	 * @return
+	 * @return the las itemId
 	 */
 	Object lastItemId();
 
 	/**
-	 * @param itemId
+	 * Gets the index of an itemId
+	 * @param itemId the itemId
 	 */
 	int indexOfId(Object itemId);
 
 	/**
-	 * @param index
-	 * @return
+	 * Get an id by index
+	 * @param index the index
+	 * @return Id
 	 */
 	Object getIdByIndex(int index);
 
 	/**
-	 * @return
+	 * Gets a collection of all itemIds
+	 * @return collection with all itemIds
 	 */
 	Collection<?> getItemIds();
 	
+	/**
+	 * Set the containerDataSource
+	 * @param containerDataSource 
+	 */
 	void setContainerDataSource(ContainerDataSource<?> containerDataSource);
 	
 	void itemLoaded(int index, Item item);

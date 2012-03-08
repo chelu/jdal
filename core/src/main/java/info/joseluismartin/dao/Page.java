@@ -177,7 +177,7 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#hasNext()
+	 * @see info.joseluismartin.dao.Paginator#hasNext()
 	 */
 	public boolean hasNext() {
 		return page < getTotalPages();
@@ -185,7 +185,7 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#hasPage(int)
+	 * @see info.joseluismartin.dao.Paginator#hasPage(int)
 	 */
 	public boolean hasPage(int indexPage) {
 		return indexPage <= getTotalPages() &&  indexPage > 0;
@@ -193,7 +193,6 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#hasPreviews()
 	 */
 	public boolean hasPrevious() {
 		return page > 1;
@@ -201,7 +200,7 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 *  {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#setPage(int)
+	 * @see info.joseluismartin.dao.Paginator#setPage(int)
 	 */
 	public void setPage(int indexPage) {
 		if (indexPage > 0)  {
@@ -223,7 +222,7 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#getTotalPages()
+	 * @see info.joseluismartin.dao.Paginator#getTotalPages()
 	 */
 	public int getTotalPages() {
 		if (pageSize > 0)
@@ -275,7 +274,7 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#firstPage()
+	 * @see info.joseluismartin.dao.Paginator#firstPage()
 	 */
 	public void firstPage() {
 		setPage(1);
@@ -284,7 +283,7 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#lastPage()
+	 * @see info.joseluismartin.dao.Paginator#lastPage()
 	 */
 	public void lastPage() {
 		setPage(getTotalPages());
@@ -292,7 +291,7 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#nextPage()
+	 * @see info.joseluismartin.dao.Paginator#nextPage()
 	 */
 	public void nextPage() {
 			setPage(page + 1);
@@ -301,7 +300,7 @@ public class Page<T> implements Paginator, Cloneable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.gui.Paginator#previousPage()
+	 * @see info.joseluismartin.dao.Paginator#previousPage()
 	 */
 	public void previousPage() {
 			setPage(page - 1);

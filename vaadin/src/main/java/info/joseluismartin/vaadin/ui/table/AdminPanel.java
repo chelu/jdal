@@ -29,7 +29,7 @@ import com.vaadin.ui.VerticalLayout;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class AdminPanel extends CustomComponent {
 	
 	private static final long serialVersionUID = 1L;

@@ -17,7 +17,6 @@ package info.joseluismartin.logic;
 
 import info.joseluismartin.dao.Dao;
 import info.joseluismartin.dao.Page;
-import info.joseluismartin.dao.hibernate.HibernateDao;
 import info.joseluismartin.service.PersistentService;
 
 import java.io.Serializable;
@@ -26,8 +25,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-
 
 /**
  * Base class for Services that wrappers persistent operations to DAO.
@@ -56,7 +53,6 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 		dao.initialize(entity, depth);
 		return entity;
 	}
-	
 
 	/**
 	 * {@inheritDoc}

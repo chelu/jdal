@@ -387,10 +387,9 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
         return new ArrayList<T>(getHibernateTemplate().loadAll(this.entityClass));
     }
     
-    @SuppressWarnings("unchecked")
     public List<T> getAllDistinct() {
-        Collection result = new LinkedHashSet(getAll());
-        return new ArrayList(result);
+        Collection<T> result = new LinkedHashSet<T>(getAll());
+        return new ArrayList<T>(result);
     }
     
     /** 

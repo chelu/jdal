@@ -32,11 +32,10 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-@SuppressWarnings("unchecked")
 public class EasyMockReplacer implements BeanFactoryPostProcessor {
 	
 	/** List of replaced classes */
-	private List<Class> replacedClasses = new ArrayList<Class>();
+	private List<Class<?>> replacedClasses = new ArrayList<Class<?>>();
 	/** log */
 	private Log log = LogFactory.getLog(EasyMockReplacer.class);
 	
@@ -50,7 +49,7 @@ public class EasyMockReplacer implements BeanFactoryPostProcessor {
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory factory)
 			throws BeansException {
 	
-		for (Class clazz : replacedClasses) {
+		for (Class<?> clazz : replacedClasses) {
 			replaceBean(clazz, factory);
 		}
 
@@ -61,7 +60,7 @@ public class EasyMockReplacer implements BeanFactoryPostProcessor {
 	 * @param clazz clazz to replace
 	 * @param factory factory to replace on
 	 */
-	private void replaceBean(Class clazz, 
+	private void replaceBean(Class<?> clazz, 
 			ConfigurableListableBeanFactory factory) {
 		
 		Object  mock = EasyMock.createMock(clazz);
@@ -78,7 +77,7 @@ public class EasyMockReplacer implements BeanFactoryPostProcessor {
 	 * @param clazz Class to replace.
 	 * @return true if replaced
 	 */
-	public boolean add(Class clazz) {
+	public boolean add(Class<?> clazz) {
 		return replacedClasses.add(clazz);
 	}
 	/**
@@ -86,7 +85,7 @@ public class EasyMockReplacer implements BeanFactoryPostProcessor {
 	 * @param clazz Class to remove
 	 * @return true if removed
 	 */
-	public boolean remove(Class clazz) {
+	public boolean remove(Class<?> clazz) {
 		return replacedClasses.remove(clazz);
 	}
 }

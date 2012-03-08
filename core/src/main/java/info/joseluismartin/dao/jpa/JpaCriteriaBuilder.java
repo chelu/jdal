@@ -27,7 +27,6 @@ import javax.persistence.criteria.CriteriaQuery;
 public interface JpaCriteriaBuilder<T> {
 	/**
 	 * Add Restrictions to Critera from filter
-	 * @param <T>
 	 * @param criteria criteria to add restrictions
 	 * @param filter Filter data
 	 * @param cb CriteriaBuilder

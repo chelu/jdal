@@ -21,8 +21,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.data.JRAbstractBeanDataSource;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 /**
  * Adapter to use PageableDataSource and Pages as JRDataSource.
  * 

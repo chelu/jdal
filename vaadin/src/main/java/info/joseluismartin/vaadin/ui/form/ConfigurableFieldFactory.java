@@ -120,33 +120,51 @@ public class ConfigurableFieldFactory extends DefaultFieldFactory {
 		// try id to builder map
 		FieldBuilder builder = idBuilderMap.get(propertyId);
 		if (builder != null) {
-			return builder.build(clazz, (String) propertyId);
+			if (log.isDebugEnabled())
+				log.debug("Found FieldBuilder in idBuilderMap: [" + builder.getClass().getSimpleName() +"]");
+			
+				return builder.build(clazz, (String) propertyId);
 		}
+		
 		// try id to class Map
 		Class<?extends Field> fieldClass = idClassMap.get(propertyId);
-		if (fieldClass != null)
+		if (fieldClass != null) {
+			if (log.isDebugEnabled())
+				log.debug("Found FieldBuilder in idClassMap: [" + fieldClass.getSimpleName() +"]");
 			return BeanUtils.instantiate(fieldClass);
-		
+		}
+	
 		// try class to builder map
 		Class<?> propertyClass = BeanUtils.getPropertyDescriptor(clazz, (String) propertyId).getPropertyType();
 		builder  = (FieldBuilder) findByClass(propertyClass, classBuilderMap);
-		if (builder != null)
+		if (builder != null) {
+			if (log.isDebugEnabled())
+				log.debug("Found FieldBuilder in classBuilderMap: [" + builder.getClass().getSimpleName() +"]");
+
 			return builder.build(clazz, (String) propertyId);
+		}
 		
 		// try class to field map
 		fieldClass =  (Class<? extends Field>) findByClass(propertyClass, classFieldMap);
+		if (fieldClass != null) {
+			if (log.isDebugEnabled())
+				log.debug("Found FieldBuilder in classFieldMap: [" + fieldClass.getSimpleName() +"]");
+			
+			return BeanUtils.instantiate(fieldClass);
+		}
 		
-		return fieldClass != null ? BeanUtils.instantiate(fieldClass) : null;
+		log.warn("Not found field for propertyId: " + propertyId);
+		
+		return null;
 	}
 
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Object findByClass(Class<?> clazz, Map<Class<?>, ?> map) {
 		Object target;
 		target = map.get(clazz);
 		
 		if (target == null) { // try with superclasses
-
 			List superclasses = ClassUtils.getAllSuperclasses(clazz);
 			superclasses.addAll(ClassUtils.getAllInterfaces(clazz));
 			Iterator iter = superclasses.iterator();
@@ -189,7 +207,7 @@ public class ConfigurableFieldFactory extends DefaultFieldFactory {
 	}
 
 	/**
-	 * @param builderMap the builderMap to set
+	 * @param idBuilderMap the builderMap to set
 	 */
 	public void setIdBuilderMap(Map<Object, FieldBuilder> idBuilderMap) {
 		this.idBuilderMap.clear();

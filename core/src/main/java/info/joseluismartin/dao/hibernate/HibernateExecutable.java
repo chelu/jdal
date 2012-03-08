@@ -35,7 +35,6 @@ import org.hibernate.transform.ResultTransformer;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@SuppressWarnings("unchecked")
 public class HibernateExecutable {
 	
 	
@@ -66,6 +65,7 @@ public class HibernateExecutable {
 	 * @throws HibernateException
 	 */
 	
+	@SuppressWarnings("rawtypes")
 	public List list() throws HibernateException {
 		return (List) invoke(LIST);
 	}
@@ -85,6 +85,7 @@ public class HibernateExecutable {
 	 * @param uniqueResult
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	private Object invoke(String name, Object...args ) {
 		
 		Method method = methodMap.get(name);

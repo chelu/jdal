@@ -36,9 +36,7 @@ import org.springframework.beans.PropertyValue;
  */
 public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 
-	/**
-	 * Class log
-	 */
+	/** log */
 	private static Log log = LogFactory.getLog(BeanUtils.class);
 	
 	/**
@@ -51,11 +49,10 @@ public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 	 * @param obj Object to get PropertyValues
 	 * @return the property values
 	 */
-	@SuppressWarnings("unchecked")
 	public static PropertyValue[] getPropertyValues(Object obj) {
 		
 		PropertyDescriptor[] pds = getPropertyDescriptors(obj.getClass());
-		ArrayList pvs = new ArrayList<PropertyValue>();
+		ArrayList<PropertyValue> pvs = new ArrayList<PropertyValue>();
 		List<String> excludedProperties = Arrays.asList(EXCLUDED_PROPERTIES);
 		
 		for (int i = 0; i < pds.length; i++) {

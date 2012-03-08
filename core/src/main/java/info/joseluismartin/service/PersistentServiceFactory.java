@@ -56,7 +56,7 @@ public class PersistentServiceFactory {
 	 * Creates a default transactional proxy for service with default transacction attributes
 	 * @param <T>
 	 * @param service
-	 * @return
+	 * @return a Tx Proxy for service with default tx attributes
 	 */
 	@SuppressWarnings("unchecked")
 	public <T>  PersistentService<T, Serializable> makeTransactionalProxy(PersistentService<T, Serializable> service) {

@@ -23,16 +23,15 @@ import java.io.Serializable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 
 /**
  * Window that hold a form for use as Dialog
@@ -211,14 +210,14 @@ public class FormDialog extends Window {
 	}
 
 	/**
-	 * @return the saved
+	 * @return true if dirty
 	 */
 	public boolean isDirty() {
 		return dirty;
 	}
 
 	/**
-	 * @param saved the saved to set
+	 * @param dirty 
 	 */
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;

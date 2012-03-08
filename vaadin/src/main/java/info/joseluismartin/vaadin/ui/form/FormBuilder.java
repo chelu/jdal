@@ -27,7 +27,7 @@ public interface FormBuilder {
 	
 	/**
 	 * Build a  Form
-	 * @return
+	 * @return new Form
 	 */
 	Form build();
 }

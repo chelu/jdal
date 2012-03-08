@@ -500,7 +500,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	}
 
 	/**
-	 * @return
+	 * @return filter Object
 	 * @see info.joseluismartin.dao.Page#getFilter()
 	 */
 	public Object getFilter() {
@@ -662,7 +662,8 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	}
 
 	/**
-	 * @return
+	 * Gets the page
+	 * @return the page
 	 */
 	public Page<T> getPage() {
 		return page;

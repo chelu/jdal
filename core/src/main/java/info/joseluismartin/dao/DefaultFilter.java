@@ -30,7 +30,7 @@ public class DefaultFilter implements Filter {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Filter#getName()
+	 * @see info.joseluismartin.dao.Filter#getFilterName()
 	 */
 	public String getFilterName() {
 		return name;

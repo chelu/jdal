@@ -17,8 +17,6 @@ package info.joseluismartin.gui.validation;
 
 import org.springframework.validation.FieldError;
 
-import info.joseluismartin.gui.Binder;
-
 /**
  * Process binding erros. <code>AbstractView</code> execute configured ErrorProcessors 
  * when there are binding errors. 

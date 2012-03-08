@@ -42,7 +42,9 @@ public class IndexedItemIdStrategy implements ItemIdStrategy {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test for first itemId
+	 * @param itemId the itemId
+	 * @return true is itemId is the first
 	 */
 	public boolean isFirstId(Object itemId) {
 		if (itemId instanceof Integer && containerDataSource.size() > 0)
@@ -52,7 +54,9 @@ public class IndexedItemIdStrategy implements ItemIdStrategy {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test for last itemId
+	 * @param itemId the itemId
+	 * @return true if the itemId is the last
 	 */
 	public boolean isLastId(Object itemId) {
 		if (itemId instanceof Integer && containerDataSource.size() > 0)
@@ -69,7 +73,9 @@ public class IndexedItemIdStrategy implements ItemIdStrategy {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Return the next itemId
+	 * @param itemId the itemId
+	 * @return the next itemId
 	 */
 	public Object nextItemId(Object itemId) {
 		if (itemId instanceof Integer) {
@@ -79,7 +85,8 @@ public class IndexedItemIdStrategy implements ItemIdStrategy {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gets the previous itemId
+	 * @param itemId 
 	 */
 	public Object prevItemId(Object itemId) {
 		if (itemId instanceof Integer) {

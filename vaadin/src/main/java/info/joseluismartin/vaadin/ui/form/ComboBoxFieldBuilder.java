@@ -85,7 +85,7 @@ public class ComboBoxFieldBuilder implements FieldBuilder {
 	 * Creates a ContainerDataSource for entity class
 	 * @param clazz entity class
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected ContainerDataSource<?> buildContainerDataSource(Class<?> clazz) {
 		ContainerDataSource<?> cds = new ContainerDataSource(clazz, 
 				persistentServiceFactory.createPersistentService(clazz));

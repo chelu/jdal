@@ -65,6 +65,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	Container.ItemSetChangeListener, ItemClickListener, CloseListener {
 
 	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private static final Log log = LogFactory.getLog(PageableTable.class);
 	
 	/** the table */
@@ -181,7 +182,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/**
 	 * Load models from page and add to internal bean item container
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void loadPage() {
 		page = service.getPage(paginator.getModel());
 		if (page.getData() != null && page.getData().size() > 0) {
@@ -232,7 +233,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	public Collection<T> getSelected() {
 		Object selection = table.getValue();
 		if (selection instanceof Collection)
-			return (Collection) selection;
+			return (Collection<T>) selection;
 		else {
 			Set<T> set = new HashSet<T>();
 			set.add((T) selection);
@@ -293,7 +294,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 	
 	/**
-	 * @return
+	 * @return the filter Object
 	 * @see info.joseluismartin.dao.Page#getFilter()
 	 */
 	public Object getFilter() {

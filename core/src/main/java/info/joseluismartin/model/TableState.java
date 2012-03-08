@@ -32,7 +32,6 @@ public class TableState extends Entity {
 	private List<String> visibleColumns = new ArrayList<String>();
 	private int pageSize;
 	
-	
 	/**
 	 * Gets visible columns property names
 	 * @return the visible Columns
@@ -60,7 +59,7 @@ public class TableState extends Entity {
 	}
 
 	/**
-	 * @param parseInt
+	 * @param pageSize
 	 */
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;

@@ -28,9 +28,7 @@ import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingErrorProcessor;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DefaultBindingErrorProcessor;
 
 /**
  * Base class for Binders. Implement doBind() to do the binding.
@@ -99,7 +97,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	 * @return a new instance of BindingResult for this model
 	 */
 	protected BindingResult createBindingResult() {
-		return new BeanPropertyBindingResult(model, model.getClass().getSimpleName(), true);
+		return new BeanPropertyBindingResult(model, model.getClass().getSimpleName());
 	}
 
 	abstract protected void doRefresh();

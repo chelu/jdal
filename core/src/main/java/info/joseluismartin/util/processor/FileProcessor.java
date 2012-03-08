@@ -41,7 +41,7 @@ public interface FileProcessor {
 	
 	/**
 	 * Returns a raw set of the data of this file
-	 * @return
+	 * @return report as raw data
 	 */
 	public byte[] getRawData();
 	

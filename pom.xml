@@ -134,7 +134,7 @@
 		<file.encoding>UTF-8</file.encoding>
 		<set-version>1.1.5</set-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+		<org.springframework.version>3.1.0.RELEASE</org.springframework.version>
 	</properties>
 
 

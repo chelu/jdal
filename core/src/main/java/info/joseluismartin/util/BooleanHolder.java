@@ -16,15 +16,16 @@
 package info.joseluismartin.util;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * A boolean pointer
  *
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class BooleanHolder {
 
 	private boolean value;
 
 	/**
-	 * @param b
+	 * @param value
 	 */
 	public BooleanHolder(boolean value) {
 		this.value = value;

@@ -56,9 +56,9 @@ public class AuthHashMD5 implements AuthStrategy {
 	}
 	
 	/**
-	 * Encript password 
+	 * crypt a password 
 	 * @param suppliedPassword
-	 * @return
+	 * @return crypted password
 	 * @throws NoSuchAlgorithmException
 	 */
 	public  String crypt(String suppliedPassword)

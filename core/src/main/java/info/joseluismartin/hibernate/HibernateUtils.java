@@ -45,8 +45,7 @@ import org.hibernate.persister.collection.CollectionPersister;
  *
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public abstract class HibernateUtils {
 	
 	public static final int DEFAULT_DEPTH = 2;

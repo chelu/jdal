@@ -110,7 +110,7 @@ public class Column implements Serializable {
 	}
 
 	/**
-	 * @return
+	 * @return true if is a sortable column
 	 */
 	public boolean isSortable() {
 		return sortable;

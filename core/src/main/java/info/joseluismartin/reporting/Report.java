@@ -1,8 +1,6 @@
 
 package info.joseluismartin.reporting;
 
-
-
 import info.joseluismartin.util.ZipFileUtils;
 
 import java.io.File;
@@ -24,7 +22,6 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Jose A. Corbacho
- *
  */
 
 public class Report {
@@ -43,7 +40,6 @@ public class Report {
 	/**
 	 * @return a JasperReport
 	 */
-	@SuppressWarnings("unchecked")
 	public JasperReport newJasperReport() {
 		String suffix = FilenameUtils.getExtension(getFileName());
 		String prefix = FilenameUtils.getBaseName(getFileName());

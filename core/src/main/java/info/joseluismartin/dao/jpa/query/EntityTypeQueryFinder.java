@@ -41,7 +41,7 @@ public class EntityTypeQueryFinder extends QueryFinderSupport {
 	private EntityType<?> entityType;
 	
 	/**
-	 * @param type
+	 * @param entityType
 	 */
 	public EntityTypeQueryFinder(EntityType<?> entityType) {
 		this.entityType = entityType;

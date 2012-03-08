@@ -28,7 +28,7 @@ public interface QueryFinder {
 	
 	/**
 	 * Find for NamedQueries and return a Map with name as key and query string as value.
-	 * @return
+	 * @return Map with query strings
 	 */
 	Map<String, String> find();
 	

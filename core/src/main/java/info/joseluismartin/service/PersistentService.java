@@ -51,7 +51,7 @@ public interface PersistentService<T, PK extends Serializable> extends PageableD
 
 	/**
 	 * @param id
-	 * @return
+	 * @return entity
 	 */
 	T get(PK id);
 	

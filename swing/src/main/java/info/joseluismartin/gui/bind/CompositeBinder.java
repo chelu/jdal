@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
@@ -136,6 +135,6 @@ public class CompositeBinder<T> implements Binder<T> {
 	}
 	
 	private void createBindingResult() {
-		bindingResult = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+		bindingResult = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName());
 	}
 }

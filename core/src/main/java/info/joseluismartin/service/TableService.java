@@ -16,7 +16,6 @@
 package info.joseluismartin.service;
 
 import info.joseluismartin.model.TableState;
-import info.joseluismartin.model.User;
 
 /**
  * Read and Save TableStates 

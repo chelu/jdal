@@ -107,8 +107,8 @@ public abstract class FormUtils {
 
 	/**
 	 * Build a new Button from Button Listener
-	 * @param acceptButtonListener
-	 * @return
+	 * @param buttonListener
+	 * @return a new Button
 	 */
 	public static Button newButton(ButtonListener buttonListener) {
 		Button b = new Button(buttonListener.getCaption(), buttonListener);
@@ -121,9 +121,6 @@ public abstract class FormUtils {
 	 * Show a YES/NO confirm dialog
 	 * @param window Window to attach the dialog
 	 * @param msg the msg
-	 * @param width dialog width
-	 * @param height dialog height
-	 * @return true if user choose YES
 	 */
 	public static void showConfirmDialog(Window window,  final Command command, String msg) {
 	

@@ -20,7 +20,6 @@ import info.joseluismartin.gui.bind.CompositeBinder;
 import info.joseluismartin.gui.bind.ConfigurableBinderFactory;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlAccessor;
-import info.joseluismartin.gui.bind.ControlAccessorBinderFactory;
 import info.joseluismartin.gui.bind.ControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlChangeListener;
 import info.joseluismartin.gui.bind.ControlError;
@@ -40,11 +39,9 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.or.jms.MessageRenderer;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -218,7 +215,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * 
 	 */
 	private void createBindingResult() {
-		errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+		errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName());
 	}
 
 	/**
@@ -260,7 +257,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	private void clearErrors() {
 		if (getModel() != null && errors.hasErrors())
-			errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName(), true);
+			createBindingResult();
 		resetErrorProcessors();
 		
 	}
@@ -349,8 +346,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 			validator.validate(getModel(), errors);
 		
 		if (errors.hasErrors()) {
-			String errorMessage = getErrorMessage(errors);
-			JOptionPane.showMessageDialog(getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+			// String errorMessage = getErrorMessage(errors);
+			// JOptionPane.showMessageDialog(getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
 			
 			for (FieldError error : errors.getFieldErrors()) {
 				for (ErrorProcessor ep : errorProcessors ) {
@@ -368,7 +365,6 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 			}
 			return false;
 		}
-		
 		return true;
 	}
 	

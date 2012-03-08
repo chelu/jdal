@@ -75,7 +75,7 @@ public abstract class JpaUtils {
 	
 	/**
 	 * Gets The result alias, if none set a default one and return it
-	 * @param criteria criteria
+	 * @param selection 
 	 * @return root alias or generated one
 	 */
 	public static synchronized <T> String getOrCreateAlias(Selection<T> selection) {
@@ -104,7 +104,7 @@ public abstract class JpaUtils {
 	/**
 	 * Find the Root with type class on CriteriaQuery Root Set
 	 * @param <T> root type
-	 * @param roots root set
+	 * @param query criteria query
 	 * @param clazz root type
 	 * @return Root<T> of null if none
 	 */
@@ -121,9 +121,10 @@ public abstract class JpaUtils {
 	/**
 	 * Find Joined Root of type clazz
 	 * @param <T>
-	 * @param query
-	 * @param clazz
-	 * @return
+	 * @param query the criteria query
+	 * @param rootClass the root class
+	 * @param joinClass the join class
+	 * @return the Join
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, K> Join<T,K> findJoinedType(CriteriaQuery<T> query, Class<T> rootClass, Class<K> joinClass) {
@@ -141,7 +142,7 @@ public abstract class JpaUtils {
 	 * Gets a Path from Path using property path
 	 * @param path the base path
 	 * @param propertyPath property path String like "customer.order.price"
-	 * @return
+	 * @return a new Path for property path
 	 */
 	public static Path<?> getPath(Path<?> path, String propertyPath) {
 		if (StringUtils.isEmpty(propertyPath))

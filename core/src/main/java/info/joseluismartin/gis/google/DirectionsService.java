@@ -60,7 +60,7 @@ public class DirectionsService {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private MultiLineString parseResponse(Object response) throws IOException {
 		
 		List<LineString> lines = new ArrayList<LineString>();

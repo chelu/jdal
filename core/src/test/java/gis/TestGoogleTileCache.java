@@ -3,11 +3,6 @@
  */
 package gis;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-
 import junit.framework.TestCase;
 
 /**

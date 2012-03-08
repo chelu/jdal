@@ -24,17 +24,15 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 /**
- * Servlet 2.3 Filter that log request param
+ * Servlet 2.3 Filter that log request params
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class RequestParamLogFilter extends CommonsRequestLoggingFilter {
 	
 	private static Log log = LogFactory.getLog(RequestParamLogFilter.class);
 	
-
 	@Override
 	public void beforeRequest(HttpServletRequest request, String message) {
 		super.beforeRequest(request, message);
