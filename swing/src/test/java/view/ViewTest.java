@@ -70,9 +70,6 @@ public class ViewTest extends TestCase {
 	}
 }
 
-
-
-
 class BookView extends AbstractView<Book> {
 	JTextField title = new JTextField();
 	AuthorView author = new AuthorView();
