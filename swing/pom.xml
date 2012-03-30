@@ -5,33 +5,13 @@
 	<parent>
 		<groupId>org.jdal</groupId>
 		<artifactId>jdal</artifactId>
-		<version>1.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
+		<version>1.2.0</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>jdal-swing</artifactId>
 	<name>JDAL Swing Library</name>
-	<version>${set-version}</version>
-	<description>JDAL Swing Library</description>
-
-	<developers>
-		<developer>
-			<id>jlm</id>
-			<name>Jose Luis Martin</name>
-			<email>jlm@joseluismartin.info</email>
-			<url>http://www.joseluismartin.info</url>
-		</developer>
-	</developers>
-
-	<scm>
-		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal</url>
-	</scm>
-
-	<organization>
-		<name>JDAL</name>
-		<url>http://www.jdal.org</url>
-	</organization>
 
 	<build>
 		<plugins>
@@ -126,28 +106,13 @@
 		<dependency>
 			<groupId>org.jdal</groupId>
 			<artifactId>jdal-core</artifactId>
-			<version>${set-version}</version>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.jgoodies</groupId>
-			<artifactId>jgoodies-looks</artifactId>
-			<version>2.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.jgoodies</groupId>
-			<artifactId>jgoodies-common</artifactId>
-			<version>0.9.9</version>
+			<scope>test</scope>
 		</dependency>
 		<!-- Icons from Tango Desktop Project -->
 		<dependency>
@@ -155,22 +120,22 @@
 			<artifactId>tango-icon-theme</artifactId>
 			<version>0.8.90</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
 			<scope>test</scope>
 		</dependency>
-
-
-
+		<dependency>
+			<groupId>com.jgoodies</groupId>
+			<artifactId>looks</artifactId>
+			<version>2.2.2</version>
+		</dependency>
 	</dependencies>
 
 </project>

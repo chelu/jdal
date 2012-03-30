@@ -42,6 +42,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
@@ -83,6 +84,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** Form editor name */
 	private String editor;
 	/** Gui Factory used to get editor instances */
+	@Autowired
 	private GuiFactory guiFactory;
 	/** if true, pagesLength change to pageSize */
 	private boolean autoResize = true;
@@ -137,7 +139,9 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			loadPage();
 			// set external sorting, ie don't call Container.sort()
 			table.setSorter(new PageSorter());
-			vbox.addComponent(paginator.getComponent());
+			Component p = paginator.getComponent();
+			vbox.addComponent(p);
+			vbox.setComponentAlignment(p, Alignment.MIDDLE_CENTER);
 			table.setPageLength(page.getPageSize());
 			if (beanFilter != null)
 				page.setFilter(beanFilter);
@@ -249,16 +253,25 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		if (event.isDoubleClick()) {
 			BeanItem<T> bi = (BeanItem<T>) event.getItem();
 			String message = messageSource.getMessage("edit", null, null);
-			FormDialog dlg = new FormDialog(message + " " + bi.getBean().getClass().getSimpleName());
-			dlg.setMessageSource(messageSource);
-			dlg.setPersistentService((PersistentService<Object, Serializable>) service);
+			FormDialog fd = new FormDialog(message + " " + bi.getBean().getClass().getSimpleName());
+			fd.setMessageSource(messageSource);
+			fd.setPersistentService((PersistentService<Object, Serializable>) service);
+
 			Form form = getEditorForm();
-			form.setItemDataSource(bi, form.getVisibleItemProperties());
-			dlg.setForm(form);
-			dlg.setModal(true);
-			dlg.init();
-			dlg.addListener((CloseListener) this);
-			getWindow().addWindow(dlg);
+
+			if (form.getVisibleItemProperties() != null) {
+				form.setItemDataSource(bi, form.getVisibleItemProperties());
+			}
+			else { 
+				form.setItemDataSource(bi);
+			}
+
+			fd.setForm(form);
+			fd.setModal(true);
+			fd.init();
+			fd.addListener((CloseListener) this);
+
+			getWindow().addWindow(fd);
 		}
 	}
 
@@ -313,6 +326,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 
 	/**
 	 * @return the editor
+	 * @deprecated use getEditorName instead
 	 */
 	public String getEditor() {
 		return editor;
@@ -320,7 +334,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 
 
 	/**
-	 * @param editor the editor to set
+	 * @param editor the editor to se
 	 */
 	public void setEditor(String editor) {
 		this.editor = editor;

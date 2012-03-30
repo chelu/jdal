@@ -109,8 +109,9 @@ public class IBatisDao<T, PK extends Serializable> extends SqlMapClientDaoSuppor
 	}
 
 	/**
+	 * Get the PK from entity
 	 * @param entity
-	 * @return
+	 * @return PK
 	 */
 	protected PK getPrimaryKey(T entity) {
 		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(entity);
@@ -118,7 +119,8 @@ public class IBatisDao<T, PK extends Serializable> extends SqlMapClientDaoSuppor
 	}
 
 	/**
-	 * @return
+	 * Gets the PK property name
+	 * @return the property name of primary key
 	 */
 	protected String getPrimaryKeyPropertyName() {
 		return PRIMARY_KEY_PROPERTY_NAME;
@@ -193,7 +195,7 @@ public class IBatisDao<T, PK extends Serializable> extends SqlMapClientDaoSuppor
     
     /**
      * Gets name of new id query in SqlMaps
-     * @return
+     * @return name of the newId query
      */
     protected String getNewIdQuery() {
             return "newId" + getEntityName();

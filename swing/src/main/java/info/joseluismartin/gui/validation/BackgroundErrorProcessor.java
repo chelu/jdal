@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;
 
@@ -40,6 +41,7 @@ public class BackgroundErrorProcessor implements ErrorProcessor {
 
 	private Map<JComponent, Color> colorMap = new HashMap<JComponent, Color>();
 	private Color errorColor = new Color(255, 130, 130);
+	@Autowired
 	private MessageSource messageSource;
 	
 	public void processError(Binder<?> binder, FieldError error) {

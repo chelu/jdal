@@ -17,6 +17,7 @@ package info.joseluismartin.dao;
 
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  *  @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @SuppressWarnings("unchecked")
-public class Page<T> implements Paginator, Cloneable {
+public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	private static final Log log = LogFactory.getLog(Page.class);
 	public static enum Order { ASC, DESC };

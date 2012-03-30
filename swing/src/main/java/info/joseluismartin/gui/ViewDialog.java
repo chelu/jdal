@@ -199,4 +199,11 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 	public BindingResult getBindingResult() {
 		return view.getBindingResult();
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getErrorMessage() {
+		return view.getErrorMessage();
+	}
 }

@@ -18,9 +18,7 @@ import java.util.List;
  */
 public class SelectorBinder extends AbstractBinder implements ActionListener {
 
-	/**
-	 * @see info.joseluismartin.gui.bind.AbstractBinder#doBind(Object component)
-	 */
+	
 	protected void doBind(Object component) {
 		Selector<?> selector = (Selector<?>) component;
 		selector.addActionListener(this);

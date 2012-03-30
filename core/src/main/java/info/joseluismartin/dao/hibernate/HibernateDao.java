@@ -245,7 +245,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	
 	/**
 	 * Apply Order to Criteria
-	 * @param Page the page
+	 * @param page the page
 	 * @param criteria the criteria
 	 */
 	protected void applyOrder(Page<T> page, Criteria criteria) {
@@ -258,7 +258,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	 * Create Order from criteria and property path
 	 * @param criteria the hibernate criteria to apply order on
 	 * @param propertyPath the property path
-	 * @return
+	 * @return Order 
 	 */
 	protected Order createOrder(Criteria criteria, String propertyPath, boolean ascending) {
 		Order order = null;

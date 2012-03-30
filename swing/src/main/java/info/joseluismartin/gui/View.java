@@ -41,6 +41,12 @@ public interface View<T> extends Binder<T>{
 	 */
 	boolean validateView();
 	
+	/**
+	 * Get Error Message
+	 * @return String with errors
+	 */
+	String getErrorMessage();
+	
 	/** 
 	 * Reset view state to default values
 	 */

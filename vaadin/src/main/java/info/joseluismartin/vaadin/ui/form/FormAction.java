@@ -13,22 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.vaadin.beans;
+package info.joseluismartin.vaadin.ui.form;
 
-import java.beans.PropertyEditorSupport;
+import info.joseluismartin.vaadin.ui.table.ButtonListener;
 
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.ui.Form;
 
-public class VaadinResourcePropertyEditor extends PropertyEditorSupport {
-	
-	// private static final String CLASSPATH_PREFIX = "classpath:";
-	
+/**
+ * Base class for Editor Actions
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ */
+public abstract class FormAction extends ButtonListener {
+	private Form form;
+
 	/**
-	 * {@inheritDoc}
+	 * @return the form
 	 */
-	@Override
-	public void setAsText(String text) throws IllegalArgumentException {
-			setValue(new ThemeResource(text));
+	public Form getForm() {
+		return form;
 	}
-		
+
+	/**
+	 * @param form the form to set
+	 */
+	public void setForm(Form form) {
+		this.form = form;
+	}
 }

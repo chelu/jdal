@@ -204,9 +204,17 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * @return PK SingularAttribute
 	 */
 	private SingularAttribute<? super T, ?> getIdAttribute() {
-		Type<?> type = em.getMetamodel().entity(getEntityClass()).getIdType();
-		EntityType<T> entity =  em.getMetamodel().entity(getEntityClass());
-		SingularAttribute<?super T, ?> id = entity.getId(type.getJavaType());
+		return getIdAttribute(getEntityClass());
+	}
+	
+	/**
+	 * @param class1
+	 * @return
+	 */
+	private <K> SingularAttribute<? super K, ?> getIdAttribute(Class<K> clazz) {
+		Type<?> type = em.getMetamodel().entity(clazz).getIdType();
+		EntityType<K> entity =  em.getMetamodel().entity(clazz);
+		SingularAttribute<? super K, ?> id = entity.getId(type.getJavaType());
 		return id;
 	}
 	
@@ -347,6 +355,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		return get(id) != null;
 	}
 
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -386,7 +395,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected boolean isNew(T entity) {
-		SingularAttribute<?super T, ?> id = getIdAttribute();
+		SingularAttribute<?, ?> id = getIdAttribute(entity.getClass());
 		// try field
 		PropertyAccessor pa = PropertyAccessorFactory.forDirectFieldAccess(entity);
 		PK key = (PK) pa.getPropertyValue(id.getName());
@@ -394,9 +403,18 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 			key = (PK) PropertyAccessorFactory.forBeanPropertyAccess(entity).getPropertyValue(id.getName());
 		
 		
-		return key == null || !exists(key);
+		return key == null || !exists(key, entity.getClass());
 	}
 	
+	/**
+	 * @param key
+	 * @param class1
+	 * @return
+	 */
+	private boolean exists(PK key, Class<? extends Object> clazz) {
+		return get(key, clazz) != null;
+	}
+
 	/**
 	 * @return
 	 */

@@ -119,7 +119,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 
 	/**
 	 * Creates a new Box with table and actions buttons
-	 * @return
+	 * @return a new Box
 	 */
 	protected Container createTablePanel() {
 		table = new JTable(tableModel, tableModel.getTableColumnModel());

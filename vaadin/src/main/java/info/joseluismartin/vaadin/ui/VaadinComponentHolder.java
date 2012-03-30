@@ -15,32 +15,61 @@
  */
 package info.joseluismartin.vaadin.ui;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import java.io.Serializable;
 
+import com.vaadin.terminal.Resource;
 import com.vaadin.ui.Component;
 
 /**
+ * Vaadin Component Holder
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
-public class ApplicationContextGuiFactory implements GuiFactory, ApplicationContextAware {
+public class VaadinComponentHolder implements ComponentHolder, Serializable {
+
+	private String name;
+	private Resource icon;
+	private Component component;
 	
-	protected ApplicationContext applicationContext;
-
 	/**
 	 * {@inheritDoc}
 	 */
-	public Component getComponent(String name) {
-		return (Component) applicationContext.getBean(name);
+	public String getName() {
+		return name;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
+	public void setName(String name) {
+		this.name = name;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public Resource getIcon() {
+		return icon;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setIcon(Resource icon) {
+		this.icon = icon;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Component getComponent() {
+		return component;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setComponent(Component component) {
+		this.component = component;
+	}
 }

@@ -16,19 +16,19 @@
 package info.joseluismartin.vaadin.ui;
 
 
-import info.joseluismartin.beans.AppCtx;
+import info.joseluismartin.beans.StaticMessageSource;
 import info.joseluismartin.cmd.Command;
 import info.joseluismartin.vaadin.ui.table.ButtonListener;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 
 /**
  * Form Utility Library
@@ -64,7 +64,7 @@ public abstract class FormUtils {
 	 * @return new cancel button
 	 */
 	private static Button newCancelButton(final Form f) {
-		Button cancel = new Button("Cancel");
+		Button cancel = new Button(StaticMessageSource.getMessage("cancel"));
 		cancel.addListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
@@ -83,7 +83,7 @@ public abstract class FormUtils {
 	 * @return new OK Button
 	 */
 	private static Button newOKButton(final Form f) {
-		Button ok = new Button(AppCtx.getInstance().getMessage("ok", null, null));
+		Button ok = new Button(StaticMessageSource.getMessage("ok"));
 		ok.addListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
@@ -134,7 +134,7 @@ public abstract class FormUtils {
 		HorizontalLayout hl = new HorizontalLayout();
 		hl.setSpacing(true);
 		
-		Button ok = new Button(AppCtx.getInstance().getMessage("yes", null, null));
+		Button ok = new Button(StaticMessageSource.getMessage("yes"));
 		ok.addListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
@@ -143,7 +143,7 @@ public abstract class FormUtils {
 				
 			}
 		});
-		Button cancel = new Button(AppCtx.getInstance().getMessage("no", null, null));
+		Button cancel = new Button(StaticMessageSource.getMessage("no"));
 		cancel.addListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {

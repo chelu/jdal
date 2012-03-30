@@ -140,8 +140,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		pgs.addListener(new PgsValueChangeListener());
 		goTo.addListener(new GoToValueChangeListener());
 		
-		hbox.setWidth("100%");
-		
 		return hbox;
 	}
 

@@ -58,12 +58,16 @@ public class ListPane extends JPanel implements ListSelectionListener {
 		list.setBorder(BorderFactory.createEmptyBorder(5, 5	, 5, 5));
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setVisibleRowCount(-1);
-		JScrollPane scroll = new JScrollPane(list);
-		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, editorPanel);
-		add(split);
 		list.addListSelectionListener(this);
 		list.setCellRenderer(new ListCellRenderer());
 		list.setSelectedIndex(0);
+		JScrollPane scroll = new JScrollPane(list);
+		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, editorPanel);
+		split.setResizeWeight(0);
+		split.setDividerLocation(150);
+		add(split);
+	
+		
 	}
 	
 	

@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>jdal-aspects</artifactId>
-	<name>JDAL Aspects</name>
-	<version>${set-version}</version>
+	<name>JDAL Aspects Library</name>
+	
 	<parent>
 		<groupId>org.jdal</groupId>
 		<artifactId>jdal</artifactId>
-		<version>1.1-SNAPSHOT</version>
+		<version>1.2.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -70,15 +70,7 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>jdal</id>
-			<name>jdal</name>
-			<url>scpexe://jdal.org/var/www/jdal/repo</url>
-		</repository>
-	</distributionManagement>
-
+	
 	<profiles>
 		<profile>
 			<id>sonatype</id>
@@ -141,7 +133,7 @@
 		<dependency>
 			<groupId>org.jdal</groupId>
 			<artifactId>jdal-core</artifactId>
-			<version>${set-version}</version>
+			<version>1.2.0</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -61,7 +61,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 
 	private Page<T> page = new Page<T>();
 	
-	private PersistentService<T, Serializable> service; 
+	private PersistentService<T, ?extends Serializable> service; 
 	private List<String> sortableProperties;
 	private List<BeanItem<T> > items = new ArrayList<BeanItem<T>>();
 	private Class<T> entityClass;
@@ -82,7 +82,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		this(entityClass, null);
 	}
 	
-	public ContainerDataSource(Class<T> entityClass, PersistentService<T, Serializable> service) {
+	public ContainerDataSource(Class<T> entityClass, PersistentService<T, ?extends Serializable> service) {
 		this.service = service;
 		this.entityClass = entityClass;
 		setItemIdStrategy(new IndexedItemIdStrategy());
@@ -433,7 +433,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		return globalToPage(index) >= 0 && globalToPage(index) < page.getPageSize();
 	}
 	
-	public PersistentService<T, Serializable> getService() {
+	public PersistentService<T, ?extends Serializable> getService() {
 		return service;
 	}
 

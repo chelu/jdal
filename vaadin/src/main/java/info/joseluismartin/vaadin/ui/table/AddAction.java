@@ -50,7 +50,14 @@ public class AddAction extends TableButtonListener {
 		final PageableTable<?> table = getTable();
 		Form f = getTable().getEditorForm();
 		Object bean = BeanUtils.instantiate(table.getEntityClass());
-		f.setItemDataSource(new BeanItem<Object>(bean), f.getVisibleItemProperties());
+		
+		if (f.getVisibleItemProperties() != null) {
+			f.setItemDataSource(new BeanItem<Object>(bean), f.getVisibleItemProperties());
+		}
+		else {
+			f.setItemDataSource(new BeanItem<Object>(bean));
+		}
+		
 		FormDialog dialog = new FormDialog(f, "New " + table.getEntityClass().getSimpleName());
 		dialog.setPersistentService((PersistentService<Object, Serializable>) table.getService());
 		dialog.setMessageSource(messageSource);

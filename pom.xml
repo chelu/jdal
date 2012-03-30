@@ -7,8 +7,19 @@
 	<groupId>org.jdal</groupId>
 	<artifactId>jdal</artifactId>
 	<name>Java Database Application Library</name>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.2.0</version>
 	<packaging>pom</packaging>
+	<url>http://www.jdal.org</url>
+	<description>JDAL is an open source Java library that aims to help developers making database applications easily. JDAL helps you to find what you really need to code and what is already coded in a common java database application, avoiding the complexity of many common programming tasks.</description>
+	
+	<scm>
+		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal </url>
+	</scm>
+	
+	<issueManagement>
+		<system>mantis</system>
+		<url>http://www.jdal.org/mantis</url>
+	</issueManagement>
 
 	<licenses>
 		<license>
@@ -22,15 +33,30 @@
 		<developer>
 			<id>jlm</id>
 			<name>Jose Luis Martin</name>
-			<email>jlm@jdal.org</email>
+			<email>jlm@joseluismartin.info</email>
 			<url>http://www.joseluismartin.info</url>
 		</developer>
 	</developers>
+	
 	<organization>
 		<name>JDAL</name>
 		<url>http://www.jdal.org</url>
 	</organization>
-
+	
+	<properties>
+		<file.encoding>UTF-8</file.encoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
+	</properties>
+	
+	<modules>
+		<module>core</module>
+		<module>swing</module>
+		<module>aspects</module>
+		<module>vaadin</module>
+		<module>web</module>
+	</modules>
+	
 	<build>
 		<extensions>
 			<!-- Enabling the use of FTP -->
@@ -121,28 +147,6 @@
 			<url>scpexe://jdal.org/var/www/jdal/repo</url>
 		</repository>
 	</distributionManagement>
-
-	<modules>
-		<module>core</module>
-		<module>swing</module>
-		<module>aspects</module>
-		<module>vaadin</module>
-		<module>web</module>
-	</modules>
-
-	<properties>
-		<file.encoding>UTF-8</file.encoding>
-		<set-version>1.1-SNAPSHOT</set-version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.springframework.version>3.1.0.RELEASE</org.springframework.version>
-	</properties>
-
-
-	<url>http://www.jdal.org</url>
-	<description>JDAL is an open source Java library that aims to help developers making database applications easily. JDAL helps you to find what you really need to code and what is already coded in a common java database application, avoiding the complexity of many common programming tasks.</description>
-	<scm>
-		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal </url>
-	</scm>
 
 	<profiles>
 		<profile>

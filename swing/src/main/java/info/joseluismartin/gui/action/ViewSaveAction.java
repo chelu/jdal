@@ -23,6 +23,8 @@ import info.joseluismartin.service.PersistentService;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
 
+import javax.swing.JOptionPane;
+
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
@@ -52,6 +54,10 @@ public class ViewSaveAction extends ViewAction {
 			if (getDialog() instanceof Editor) {
 				((Editor) getDialog()).save();
 			}
+		}
+		else {
+			String errorMessage = view.getErrorMessage();
+			 JOptionPane.showMessageDialog(view.getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

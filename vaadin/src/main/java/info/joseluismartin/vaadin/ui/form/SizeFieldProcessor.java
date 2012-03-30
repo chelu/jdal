@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.vaadin.ui.form;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import com.vaadin.ui.Field;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class SizeFieldProcessor implements FieldProcessor {
+public class SizeFieldProcessor implements FieldProcessor, Serializable {
 	
 	private String defaultWidth;
 	private String defaultHeight;

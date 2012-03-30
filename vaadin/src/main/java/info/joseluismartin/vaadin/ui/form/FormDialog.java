@@ -79,6 +79,13 @@ public class FormDialog extends Window {
 	}
 	
 	public void init() {
+		addComponent(form);
+		getContent().setSizeUndefined();
+		center();
+		
+		if (form instanceof FormEditor)
+			 return;  // already have actions
+		 
 		acceptButtonListener = new AcceptButtonListener();
 		cancelButtonListener = new CancelButtonListener();
 		
@@ -95,9 +102,6 @@ public class FormDialog extends Window {
 		form.setFooter(footer);
 		form.setSizeFull();
 		form.getLayout().setSizeFull();
-		addComponent(form);
-		getContent().setSizeUndefined();
-		center();
 	}
 
 	
@@ -121,7 +125,7 @@ public class FormDialog extends Window {
 	public PersistentService<Object, Serializable> getPersistentService() {
 		return persistentService;
 	}
-
+	
 	/**
 	 * @param persistentService the persistentService to set
 	 */

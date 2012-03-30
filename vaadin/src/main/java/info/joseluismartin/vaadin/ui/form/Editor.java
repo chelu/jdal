@@ -13,22 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.vaadin.beans;
+package info.joseluismartin.vaadin.ui.form;
 
-import java.beans.PropertyEditorSupport;
-
-import com.vaadin.terminal.ThemeResource;
-
-public class VaadinResourcePropertyEditor extends PropertyEditorSupport {
-	
-	// private static final String CLASSPATH_PREFIX = "classpath:";
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setAsText(String text) throws IllegalArgumentException {
-			setValue(new ThemeResource(text));
-	}
-		
+/**
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ *
+ */
+public interface Editor {
+	public void save();
+	public void cancel();
 }

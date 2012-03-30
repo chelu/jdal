@@ -230,4 +230,11 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	public BindingResult getBindingResult() {
 		return view.getBindingResult();
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getErrorMessage() {
+		return view.getErrorMessage();
+	}
 }

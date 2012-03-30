@@ -13,36 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.dao.jpa;
+package info.joseluismartin.vaadin.ui.form;
 
-import info.joseluismartin.dao.Dao;
-import info.joseluismartin.dao.DaoFactory;
-
-import java.io.Serializable;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import com.vaadin.ui.Button.ClickEvent;
 
 /**
- * Dao Factory implementation that create JpaDaos on the fly. 
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * 
- * @see info.joseluismartin.dao.jpa.JpaDao
- * @see info.joseluismartin.service.PersistentServiceFactory
- * @since 1.1
+ *
  */
-public class JpaDaoFactory implements DaoFactory {
-	@PersistenceContext
-	private EntityManager em;
-	
+public class CancelAction extends FormAction {
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public <T> Dao<T, Serializable> createDao(Class<T> entityClass) {
-		JpaDao<T, Serializable> dao = new JpaDao<T, Serializable>(entityClass);
-		dao.setEntityManager(em);
-		return dao;
+	@Override
+	public void buttonClick(ClickEvent event) {
+	
+		if (getForm().getWindow().getParent() != null)
+			getForm().getWindow().getParent().removeWindow(getForm().getWindow());
+		else 
+			getForm().discard();
 	}
-
 }

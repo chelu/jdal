@@ -102,7 +102,6 @@ privileged public aspect HibernateLazyGuard {
 	 * @param ps persistent collection
 	 * @param session hibernate sesion to use for initialization
 	 */
-	@SuppressWarnings("unchecked")
 	public void attachToSession(AbstractPersistentCollection ps, Session session) {
 		if (log.isDebugEnabled())
 			log.debug("Attatching PersistentCollection of role: " + ps.getRole());

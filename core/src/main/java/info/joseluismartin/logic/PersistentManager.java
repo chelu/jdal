@@ -20,6 +20,7 @@ import info.joseluismartin.dao.Page;
 import info.joseluismartin.service.PersistentService;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -91,16 +92,8 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	public Collection<T> save(Collection<T> collection) {
-		Collection<T> saved = null; 
-		try {
-			saved = collection.getClass().newInstance();
-		} 
-		catch (Exception e) {
-			log.error(e);
-			return saved;
-		}
+		List<T> saved = new ArrayList<T>();
 		
 		for (T t : collection) {
 			saved.add(dao.save(t));

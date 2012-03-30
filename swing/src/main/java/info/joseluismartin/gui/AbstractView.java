@@ -123,7 +123,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * Default ctor
 	 */
 	public AbstractView() {
-		
+		this(null);
 	}
 	
 	/**
@@ -215,7 +215,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 * 
 	 */
 	private void createBindingResult() {
-		errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName());
+		if (model != null)
+			errors = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName());
 	}
 
 	/**
@@ -346,9 +347,6 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 			validator.validate(getModel(), errors);
 		
 		if (errors.hasErrors()) {
-			// String errorMessage = getErrorMessage(errors);
-			// JOptionPane.showMessageDialog(getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
-			
 			for (FieldError error : errors.getFieldErrors()) {
 				for (ErrorProcessor ep : errorProcessors ) {
 					if (error instanceof ControlError) {
@@ -459,7 +457,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 	 */
 	protected String getMessage(String code) {
 		return messageSource == null ?
-				code : messageSource.getMessage(name, null, Locale.getDefault());
+				code : messageSource.getMessage(code, null, Locale.getDefault());
 	}
 	
 	/** 
