@@ -130,10 +130,5 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.vaadin.addons</groupId>
-			<artifactId>customfield</artifactId>
-			<version>0.9.3</version>
-		</dependency>
 	</dependencies>
 </project>
