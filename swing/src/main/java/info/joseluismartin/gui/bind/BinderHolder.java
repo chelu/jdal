@@ -16,11 +16,16 @@
 package info.joseluismartin.gui.bind;
 
 /**
- * Iterface for classes that hold property binders.
+ * Interface for classes that hold property binders.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public interface BinderHolder {
 
+	/**
+	 * Lookup for a binder by property name
+	 * @param propertyName property name 
+	 * @return PropertyBinder or null if none
+	 */
 	PropertyBinder getBinder(String propertyName);
 }

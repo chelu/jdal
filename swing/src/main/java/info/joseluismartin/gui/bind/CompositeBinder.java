@@ -84,7 +84,8 @@ public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 		
 		if (PropertyUtils.isNested(propertyName)) {
 			BinderHolder binderHolder = (BinderHolder) binders.get(PropertyUtils.getFirstPropertyName(propertyName));
-			return binderHolder.getBinder(PropertyUtils.getNestedPath(propertyName));
+			return binderHolder != null ?
+					binderHolder.getBinder(PropertyUtils.getNestedPath(propertyName)) : null;
 		}
 		
 		return (PropertyBinder) binders.get(propertyName);

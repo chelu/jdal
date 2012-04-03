@@ -2,13 +2,16 @@ package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.View;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
 @SuppressWarnings("unchecked")
 public class ViewBinder extends AbstractBinder implements BinderHolder {
 
-
+	private static final Log log = LogFactory.getLog(ViewBinder.class);
+	
 	public void doRefresh() {
 		Object value = getValue();
 		View<Object> view = getView();
@@ -47,9 +50,10 @@ public class ViewBinder extends AbstractBinder implements BinderHolder {
 		if (view instanceof BinderHolder)
 			return ((BinderHolder) view).getBinder(propertyName);
 		
-		throw new  BindingException("View class: [" + view.getClass().getName() +"] " +
+		log.warn("View class: [" + view.getClass().getName() +"] " +
 				"must implements BinderHolder to validate property: [" + propertyName + "]");
-	
+		
+		return null;
 	}
 
 }
