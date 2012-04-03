@@ -1,8 +1,9 @@
-JDAL Library 1.1.4 (Feb 2012)
------------------------------
+JDAL Library 1.2.0 (April 2012)
+-------------------------------------------------------------------------------
 http://www.jdal.org
 
 INTRODUCTION
+-------------------------------------------------------------------------------
 
 JDAL is an open source Java library that aims to help developers
 making database applications easily. JDAL helps you to find what you
@@ -21,22 +22,30 @@ JDAL is freely usable, licensed under the Apache 2.0 license.
 
 
 CONTENT
+-------------------------------------------------------------------------------
 
-core:              JDAL Core Library
-swing:             JDAL Swing UI Library
-aspects:           JDAL Aspects Library
-vaadin:            JDAL Vaadin UI Library
-web:               JDAL Web Library
+core:              JDAL Core Library          Data access and common classes
+swing:             JDAL Swing Library         Swing binding and UI
+vaadin:            JDAL Vaadin UI Library     Vaadin Spring Integration
+aspects:           JDAL Aspects Library       Aspect Library)
+web:               JDAL Web Library           Web Library
   
 
-COMPILE
+COMPILE-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-mvn package 
+mvn package or mvn package -Dmaven.skip.test=true  (to avoid test)
+
+Test need sample database, install from jda-samples
+
 
 INSTALL
+-------------------------------------------------------------------------------
 
 mvn install
 
+
 AUTHOR
+-------------------------------------------------------------------------------
 
 Jose Luis Martin - jlm@joseluismartin.info
