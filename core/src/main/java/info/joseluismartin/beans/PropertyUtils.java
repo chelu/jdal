@@ -35,4 +35,13 @@ public abstract class PropertyUtils {
 	public static boolean isNested(String propertyPath) {
 		return propertyPath.contains(PROPERTY_SEPARATOR);
 	}
+	
+	public static String getFirstPropertyName(String propertyPath) {
+		return isNested(propertyPath) ? 
+				StringUtils.substringBefore(propertyPath, PROPERTY_SEPARATOR) : propertyPath;
+	}
+	
+	public static String getNestedPath(String propertyPath) { 
+		return StringUtils.substringAfter(propertyPath, PROPERTY_SEPARATOR);
+	}
 }

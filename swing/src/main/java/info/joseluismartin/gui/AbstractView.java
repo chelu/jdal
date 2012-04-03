@@ -16,6 +16,7 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.bind.BinderFactory;
+import info.joseluismartin.gui.bind.BinderHolder;
 import info.joseluismartin.gui.bind.CompositeBinder;
 import info.joseluismartin.gui.bind.ConfigurableBinderFactory;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
@@ -50,7 +51,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
@@ -81,7 +81,7 @@ import org.springframework.validation.Validator;
  * @see ControlAccessorFactory
  * @see ErrorProcessor
  */
-public abstract class AbstractView<T> implements View<T>, ControlChangeListener {
+public abstract class AbstractView<T> implements View<T>, ControlChangeListener, BinderHolder {
 	
 	public final static String DEFAULT_BINDER_FACTORY_NAME = "binderFactory";
 	/** log */
@@ -636,5 +636,12 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener 
 			createBindingResult();
 		
 		return errors;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public PropertyBinder getBinder(String propertyName) {
+		return binder.getBinder(propertyName);
 	}
 }

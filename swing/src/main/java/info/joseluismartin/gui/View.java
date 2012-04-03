@@ -36,7 +36,7 @@ public interface View<T> extends Binder<T>{
 	JComponent getPanel();
 	
 	/**
-	 *  validate
+	 * validate model
 	 * @return true if there are not binding errors.
 	 */
 	boolean validateView();

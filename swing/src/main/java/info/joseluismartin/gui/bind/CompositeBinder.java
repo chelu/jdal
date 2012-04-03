@@ -1,5 +1,6 @@
 package info.joseluismartin.gui.bind;
 
+import info.joseluismartin.beans.PropertyUtils;
 import info.joseluismartin.gui.Binder;
 
 import java.util.Collection;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.PropertyAccessor;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
@@ -18,7 +20,7 @@ import org.springframework.validation.BindingResult;
  * @param <T> model 
  */
 @SuppressWarnings("unchecked")
-public class CompositeBinder<T> implements Binder<T> {
+public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 	
 	private BinderFactory binderFactory;
 	private Map<String, Binder<T>> binders = new HashMap<String, Binder<T>>();
@@ -78,8 +80,14 @@ public class CompositeBinder<T> implements Binder<T> {
 		
 	}
 	
-	public Binder<?> getBinder(String propertyName) {
-		return binders.get(propertyName);
+	public PropertyBinder getBinder(String propertyName) {
+		
+		if (PropertyUtils.isNested(propertyName)) {
+			BinderHolder binderHolder = (BinderHolder) binders.get(PropertyUtils.getFirstPropertyName(propertyName));
+			return binderHolder.getBinder(PropertyUtils.getNestedPath(propertyName));
+		}
+		
+		return (PropertyBinder) binders.get(propertyName);
 	}
 	
 	public Set<String> getPropertyNames() {

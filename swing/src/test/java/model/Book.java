@@ -15,11 +15,14 @@
  */
 package model;
 
+import javax.validation.Valid;
+
 
 
 public class Book {
 	
 	public String title;
+	@Valid
 	public Author author;
 	
 	public Book(String title, Author author) {

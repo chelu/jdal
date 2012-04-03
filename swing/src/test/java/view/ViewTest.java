@@ -44,13 +44,13 @@ public class ViewTest extends TestCase {
 	private final static Log log = LogFactory.getLog(ViewTest.class);
 	
 	public void testAbstractView() {
-		Author author = new Author("Joe", "The King");
+		Author author = new Author("", "The King");
 		Book book = new Book(null, author);
 		BookView view = new BookView();
 		List<ErrorProcessor> errorProcessors = new ArrayList<ErrorProcessor>();
 		errorProcessors.add(new BackgroundErrorProcessor());		
 		view.setErrorProcessors(errorProcessors);	
-		author.setBindFaliure(true);
+		author.setBindFaliure(false);
 		view.setModel(book);
 		view.autobind();
 		view.refresh();

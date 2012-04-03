@@ -15,9 +15,12 @@
  */
 package model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 
 public class Author {
 	
+	@NotBlank
 	private String name;
 	private String surname;
 	private boolean bindFaliure = false;
