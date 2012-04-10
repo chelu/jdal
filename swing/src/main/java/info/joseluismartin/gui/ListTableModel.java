@@ -52,18 +52,18 @@ import org.springframework.beans.PropertyAccessorFactory;
  * @since 1.0
  */
 // FIXME: - jlm - This class is growing quicky, revise design.
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ListTableModel implements TableModel {
-	
+
 	public static final String MAX_WIDTH = "maxWidth";
 	public static final String CELL_RENDERER = "cellRenderer";
 	private static final String CELL_EDITOR = "cellEditor";
-	
+
 	/**  log */
 	private final static Log log = LogFactory.getLog(ListTableModel.class);
-	
+
 	/** List holder for models */
-	
+
 	private List list;
 	/** TableModel listeners */
 	private ArrayList<TableModelListener> listeners = new ArrayList<TableModelListener>();
@@ -88,7 +88,7 @@ public class ListTableModel implements TableModel {
 	/** Editable Map holds editable state by property name*/
 	private Map<String, Boolean> editableMap = new HashMap<String, Boolean>();
 	/** hold check state by model key */
-	private Set<Serializable> selectedRowSet  = new HashSet<Serializable>();
+	private Set<Serializable> selectedRowSet = new HashSet<Serializable>();
 	/** model id property for checkMap */
 	private String id = "id";
 	/** Model class */
@@ -97,7 +97,7 @@ public class ListTableModel implements TableModel {
 	private List<ColumnDefinition> columns = new ArrayList<ColumnDefinition>();
 	/** Default TableCellRenderer */
 	private TableCellRenderer defaultTableCellRenderer;
-	
+
 	/**
 	 * Creates a new ListTableModel with model set to List l
 	 * @param l the list to set as model
@@ -129,22 +129,20 @@ public class ListTableModel implements TableModel {
 	 */
 	public Class<?> getColumnClass(int columnIndex) {
 		Class clazz = Object.class;
-		
+
 		if (isCheckColum(columnIndex)) {
 			clazz = Boolean.class;
-		}
-		else if (isPropertyColumn(columnIndex)) {
+		} else if (isPropertyColumn(columnIndex)) {
 			if (pds.size() > 0) {
-				clazz =  pds.get(columnToPropertyIndex(columnIndex)).getPropertyType();
+				clazz = pds.get(columnToPropertyIndex(columnIndex)).getPropertyType();
 			}
-		}
-		else if(isActionColumn(columnIndex)) {
+		} else if (isActionColumn(columnIndex)) {
 			clazz = actions.get(columntoToActionIndex(columnIndex)).getClass();
 		}
-		
+
 		return clazz;
 	}
-	
+
 	private int columntoToActionIndex(int columnIndex) {
 		return columnIndex - pds.size() - (usingActions ? 1 : 0);
 	}
@@ -167,13 +165,13 @@ public class ListTableModel implements TableModel {
 	 * {@inheritDoc}
 	 */
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return isCheckColum(columnIndex) || isActionColumn(columnIndex) ||
-			(isPropertyColumn(columnIndex) && 
-				Boolean.TRUE.equals(editableMap.get(getPropertyName(columnIndex))));
-	
+		return isCheckColum(columnIndex)
+				|| isActionColumn(columnIndex)
+				|| (isPropertyColumn(columnIndex) && Boolean.TRUE.equals(editableMap.get(getPropertyName(columnIndex))));
+
 		//		editable[columnToPropertyIndex(columnIndex)]); 
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -181,9 +179,8 @@ public class ListTableModel implements TableModel {
 		// return check
 		if (usingChecks) {
 			if (columnIndex == 0) {
-				return checks.get(rowIndex); 
-			}
-			else {
+				return checks.get(rowIndex);
+			} else {
 				columnIndex--;
 			}
 		}
@@ -195,7 +192,7 @@ public class ListTableModel implements TableModel {
 		if (usingActions) {
 			return actions.get(columnIndex - pds.size());
 		}
-		
+
 		return null;
 	}
 
@@ -209,15 +206,15 @@ public class ListTableModel implements TableModel {
 	 */
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
 		if (isCheckColum(columnIndex)) {
-			checks.set(rowIndex, (Boolean) value);			
+			checks.set(rowIndex, (Boolean) value);
 			// sync selectedRowSet
 			Object row = list.get(rowIndex);
-		
+
 			if (Boolean.TRUE.equals(value))
 				selectedRowSet.add((Serializable) getPrimaryKey(row));
-			else 
+			else
 				selectedRowSet.remove(getPrimaryKey(row));
-		
+
 			return;
 		}
 		int index = columnToPropertyIndex(columnIndex);
@@ -225,20 +222,20 @@ public class ListTableModel implements TableModel {
 		bw.setPropertyValue(columnNames.get(index), value);
 		fireTableCellUpdated(rowIndex, columnIndex);
 	}
-	
+
 	/**
-     * Notifies all listeners that the value of the cell at 
-     * <code>[row, column]</code> has been updated.
-     *
-     * @param row  row of cell which has been updated
-     * @param column  column of cell which has been updated
-     * @see TableModelEvent
-     * @see EventListenerList
-     */
-    public void fireTableCellUpdated(int row, int column) {
-        fireTableChanged(new TableModelEvent(this, row, row, column));
-    }
-    
+	 * Notifies all listeners that the value of the cell at 
+	 * <code>[row, column]</code> has been updated.
+	 *
+	 * @param row  row of cell which has been updated
+	 * @param column  column of cell which has been updated
+	 * @see TableModelEvent
+	 * @see EventListenerList
+	 */
+	public void fireTableCellUpdated(int row, int column) {
+		fireTableChanged(new TableModelEvent(this, row, row, column));
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -253,7 +250,7 @@ public class ListTableModel implements TableModel {
 	public void removeTableModelListener(TableModelListener l) {
 		listeners.remove(l);
 	}
-	
+
 	/** 
 	 * Initialize table. Load propertyDescriptors based on columNames or 
 	 * model introspection. 
@@ -264,30 +261,30 @@ public class ListTableModel implements TableModel {
 			log.warn("Cannot initilize without  modelClass, set a list of models o specify a model class");
 			return;
 		}
-		
+
 		columnCount = 0;
-			
+
 		if (usingIntrospection) {
 			pds = Arrays.asList(BeanUtils.getPropertyDescriptors(modelClass));
 			Collections.reverse(pds);
 			columnNames = new ArrayList<String>(pds.size());
 			displayNames = new ArrayList<String>(pds.size());
-			
+
 			for (PropertyDescriptor propertyDescriptor : pds) {
-					columnNames.add(propertyDescriptor.getName());
-					displayNames.add(propertyDescriptor.getDisplayName());
+				columnNames.add(propertyDescriptor.getName());
+				displayNames.add(propertyDescriptor.getDisplayName());
 			}
 		}
-			
+
 		else {
 			pds = new ArrayList<PropertyDescriptor>(columnNames.size());
 			for (String name : columnNames) {
-				pds.add(BeanUtils.getPropertyDescriptor(modelClass, name));	
+				pds.add(BeanUtils.getPropertyDescriptor(modelClass, name));
 			}
 		}
-		
+
 		columnCount += pds.size();
-			
+
 		if (usingChecks) {
 			columnCount++;
 			buildCheckArray();
@@ -325,8 +322,7 @@ public class ListTableModel implements TableModel {
 	 */
 	public TableColumnModel getTableColumnModel() {
 		TableColumnModel tcm = new DefaultTableColumnModel();
-		int baseIndex = 0
-		;
+		int baseIndex = 0;
 		if (usingChecks) {
 			TableColumn tableColumn = new TableColumn(0);
 			tableColumn.setMaxWidth(50);
@@ -334,10 +330,10 @@ public class ListTableModel implements TableModel {
 			baseIndex++;
 		}
 		for (int i = 0; i < columnNames.size(); i++) {
-		
+
 			TableColumn tableColumn = new TableColumn(baseIndex + i);
 			tableColumn.setHeaderValue(displayNames.get(i));
-			
+
 			if (pds != null && pds.size() > 0) {
 				PropertyDescriptor descriptor = pds.get(i);
 				// property values for TableColums
@@ -349,24 +345,24 @@ public class ListTableModel implements TableModel {
 					tableColumn.setCellEditor(getColumnEditor(i));
 				}
 			}
-			
+
 			tcm.addColumn(tableColumn);
 		}
-		
+
 		if (usingActions) {
 			baseIndex += columnNames.size();
 			for (int i = 0; i < actions.size(); i++) {
 				TableColumn tableColumn = new TableColumn(baseIndex + i);
 				tableColumn.setCellRenderer(new ActionCellRenderer());
 				tableColumn.setMaxWidth(50);
-			//	tableColumn.setCellEditor(new ActionCellEditor())
+				//	tableColumn.setCellEditor(new ActionCellEditor())
 				tcm.addColumn(tableColumn);
 			}
 		}
-		
+
 		return tcm;
 	}
-	
+
 	/**
 	 * Try to get a TableCellRenderer from PropertyDescriptors or ColumnDefinitions
 	 * @param index Column index
@@ -376,13 +372,13 @@ public class ListTableModel implements TableModel {
 		TableCellRenderer renderer = (TableCellRenderer) pds.get(index).getValue(CELL_RENDERER);
 		if (renderer == null && columns.size() > 0)
 			renderer = columns.get(index).getRenderer();
-		
+
 		if (renderer == null)
 			renderer = defaultTableCellRenderer;
 
 		return renderer;
 	}
-	
+
 	/**
 	 * Try to get a TableCellEditor from PropertyDescriptors or ColumnDefinitions
 	 * @param index Column index
@@ -392,21 +388,21 @@ public class ListTableModel implements TableModel {
 		TableCellEditor editor = (TableCellEditor) pds.get(index).getValue(CELL_EDITOR);
 		if (editor == null && columns.size() > 0)
 			editor = columns.get(index).getEditor();
-		
+
 		return editor;
 	}
-	
+
 	/**
 	 * Try to get a column width from PropertyDescriptors or ColumnDefinitions
 	 * @param index Column index
 	 * @return a column width, null if none configured
 	 */
 	private Integer getColumnWidth(int index) {
-		 Integer maxWidth = (Integer) pds.get(index).getValue(MAX_WIDTH);
-		 if (maxWidth == null && columns.size() > 0)
-			 maxWidth = columns.get(index).getWidth();
-		
-		 return maxWidth;
+		Integer maxWidth = (Integer) pds.get(index).getValue(MAX_WIDTH);
+		if (maxWidth == null && columns.size() > 0)
+			maxWidth = columns.get(index).getWidth();
+
+		return maxWidth;
 	}
 
 	/**
@@ -416,18 +412,18 @@ public class ListTableModel implements TableModel {
 	 */
 	public boolean add(Object o) {
 		boolean result = list.add(o);
-	
+
 		if (usingChecks)
 			checks.add(Boolean.FALSE);
-		
+
 		if (list.size() == 1) {
 			// adding on empty list, need to init
 			init();
 		}
-		fireTableChanged(new TableModelEvent(this, list.size() - 1,
-				list.size() - 1, TableModelEvent.ALL_COLUMNS,
-				TableModelEvent.INSERT));
 		
+		fireTableChanged(new TableModelEvent(this, list.size() - 1, list.size() - 1, TableModelEvent.ALL_COLUMNS,
+				TableModelEvent.INSERT));
+
 		return result;
 	}
 
@@ -438,11 +434,10 @@ public class ListTableModel implements TableModel {
 	 */
 	public Object remove(int index) {
 		Object result = list.remove(index);
-		fireTableChanged(new TableModelEvent(this, index, index,
-				TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
+		fireTableChanged(new TableModelEvent(this, index, index, TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
 		return result;
 	}
-	
+
 	/**
 	 * Test if index is a property column
 	 * @param column index to check
@@ -450,13 +445,12 @@ public class ListTableModel implements TableModel {
 	 */
 	public boolean isPropertyColumn(int column) {
 		if (usingChecks) {
-			return column > 0  &&  column <= columnNames.size();
-		}
-		else {
+			return column > 0 && column <= columnNames.size();
+		} else {
 			return column < columnNames.size();
 		}
 	}
-	
+
 	/**
 	 * Test if index is a check column
 	 * @param column column index to check
@@ -465,11 +459,11 @@ public class ListTableModel implements TableModel {
 	public boolean isCheckColum(int column) {
 		return usingChecks && column == 0;
 	}
-	
+
 	public boolean isActionColumn(int column) {
 		return !(isPropertyColumn(column) || isCheckColum(column));
 	}
-	
+
 	/**
 	 * Get a property name from column index, used in PageableTable
 	 * @param index to convert
@@ -481,7 +475,7 @@ public class ListTableModel implements TableModel {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Return de columnIndex of property
 	 * @param propertyName property to find
@@ -489,7 +483,7 @@ public class ListTableModel implements TableModel {
 	 */
 	@SuppressWarnings("unused")
 	private int getColumnByPropertyName(String propertyName) {
-		int i =  0;
+		int i = 0;
 		for (String columnName : columnNames) {
 			if (columnName.equals(propertyName)) {
 				return isUsingChecks() ? i + 1 : i;
@@ -498,14 +492,14 @@ public class ListTableModel implements TableModel {
 		}
 		return -1;
 	}
-	 
+
 	/**
 	 * Convert column model index to property index
 	 * @param column the column to convert
 	 * @return the property index
 	 */
 	public int columnToPropertyIndex(int column) {
-		return usingChecks ? column - 1 : column; 
+		return usingChecks ? column - 1 : column;
 	}
 
 	/**
@@ -514,50 +508,45 @@ public class ListTableModel implements TableModel {
 	public void fireTableChanged() {
 		fireTableChanged(new TableModelEvent(this, TableModelEvent.HEADER_ROW));
 	}
-	
+
 	public void setColumnEditable(int columnIndex, boolean value) {
 		if (isPropertyColumn(columnIndex))
 			editableMap.put(getPropertyName(columnIndex), value);
 	}
-	
+
 	public void setEditableMap(Map<String, Boolean> editableMap) {
 		this.editableMap = editableMap;
 	}
-	
-	
 
 	// Getters and Setters
-	
+
 	public void setList(List list) {
 		this.list = list;
 		// initialize if not already initialized or class model changes
 		boolean initilized = pds.size() > 0;
-		boolean modelClassChanged = list.size() > 0 && 
-			!list.get(0).getClass().equals(modelClass);
+		boolean modelClassChanged = list.size() > 0 && !list.get(0).getClass().equals(modelClass);
 
 		if (!initilized || modelClassChanged) {
 			if (modelClassChanged)
 				modelClass = list.get(0).getClass();
 			init();
 		}
-		
-		if (usingActions)
+
+		if (usingChecks)
 			buildCheckArray();
 
 		fireTableChanged();
-		
+
 	}
 
 	public List getList() {
 		return list;
 	}
 
-	
 	public Iterator<?> iterator() {
 		return list.iterator();
 	}
 
-	
 	public boolean isUsingIntrospection() {
 		return usingIntrospection;
 	}
@@ -569,11 +558,11 @@ public class ListTableModel implements TableModel {
 	public List<String> getColumnNames() {
 		return columnNames;
 	}
-	
+
 	public int getPropertyCount() {
 		return columnNames.size();
 	}
-	
+
 	public void setColumnNames(List<String> columnNames) {
 		this.columnNames = columnNames;
 	}
@@ -613,7 +602,7 @@ public class ListTableModel implements TableModel {
 	public Map<String, Boolean> getEditableMap() {
 		return editableMap;
 	}
-	
+
 	/**
 	 * Get a primary key of entity in the list
 	 * @param row row of model
@@ -623,18 +612,18 @@ public class ListTableModel implements TableModel {
 		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(row);
 		return wrapper.getPropertyValue(id);
 	}
-	
+
 	/**
 	 * Check a list of keys
 	 * @param keys
 	 */
-	public void check(List<Serializable> keys) { 
+	public void check(List<Serializable> keys) {
 		if (usingChecks) {
 			selectedRowSet.addAll(keys);
 			fillChecks(true);
 		}
 	}
-	
+
 	/**
 	 * Get a List with all selected model keys
 	 * @return List with  checked model keys
@@ -642,7 +631,7 @@ public class ListTableModel implements TableModel {
 	public List<Serializable> getChecked() {
 		return new ArrayList<Serializable>(selectedRowSet);
 	}
-	
+
 	/**
 	 * Uncheck All checks
 	 */
@@ -658,12 +647,12 @@ public class ListTableModel implements TableModel {
 	 * @param value
 	 */
 	private void fillChecks(boolean value) {
-		for (int i = 0; i < checks.size(); i++) 
+		for (int i = 0; i < checks.size(); i++)
 			checks.set(i, value);
-		
+
 		fireTableChanged(new TableModelEvent(this, 0, list.size() - 1));
 	}
-	
+
 	/**
 	 * Add an action to action List
 	 * @param action
@@ -701,7 +690,7 @@ public class ListTableModel implements TableModel {
 		this.columns = columns;
 		parseColumnDefinitions();
 	}
-	
+
 	/**
 	 * Parse columns definitions to internal state
 	 */
@@ -709,7 +698,7 @@ public class ListTableModel implements TableModel {
 		displayNames.clear();
 		columnNames.clear();
 		editableMap.clear();
-		
+
 		for (ColumnDefinition cd : columns) {
 			columnNames.add(cd.getName());
 			displayNames.add(cd.getDisplayName());
@@ -727,8 +716,7 @@ public class ListTableModel implements TableModel {
 	/**
 	 * @param defaultTableCellRenderer the defaultTableCellRenderer to set
 	 */
-	public void setDefaultTableCellRenderer(
-			TableCellRenderer defaultTableCellRenderer) {
+	public void setDefaultTableCellRenderer(TableCellRenderer defaultTableCellRenderer) {
 		this.defaultTableCellRenderer = defaultTableCellRenderer;
 	}
 
@@ -741,11 +729,10 @@ public class ListTableModel implements TableModel {
 		if (isPropertyColumn(column)) {
 			if (columns.size() > column)
 				sortPropertyName = columns.get(columnToPropertyIndex(column)).getSortProperty();
-				if (sortPropertyName == null)
-					sortPropertyName = getPropertyName(column);
+			if (sortPropertyName == null)
+				sortPropertyName = getPropertyName(column);
 		}
-		
+
 		return sortPropertyName;
 	}
 }
-

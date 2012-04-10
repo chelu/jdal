@@ -56,6 +56,6 @@ public class ViewPanelHolder extends PanelHolder {
 
 	@Override
 	public String getName() {
-		return view.getName();
+		return super.getName() != null ? super.getName() : view.getName();
 	}
 }

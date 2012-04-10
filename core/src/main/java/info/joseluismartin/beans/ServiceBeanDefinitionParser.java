@@ -28,10 +28,11 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
 /**
- * Parse jdal:service element and register Dao and PersistentService for an entity.
+ * Parse jdal:service element and register a {@link info.joseluismartin.dao.Dao} and 
+ * {@link info.joseluismartin.service.PersistentService} for a entity.
  * The beans names are build from entity name adding suffixes "Dao" and "Service" 
- * to uncapitalized entity simple class name. For example, for a entity 
- * "com.example.Entity" class will create entityDao and entityService beans.
+ * to uncapitalized entity SimpleClassName. For example, for a entity class
+ * "com.example.Entity" will create entityDao and entityService beans.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */

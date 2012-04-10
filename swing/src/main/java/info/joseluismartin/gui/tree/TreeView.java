@@ -15,8 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
-
-
 /**
  * Tree View that show a List of TreeModelBuilders
  * 
@@ -24,12 +22,13 @@ import javax.swing.JTree;
  */
 public class TreeView extends  AbstractView<TreeViewModel> implements ActionListener  {
 	
-	JComboBox combo = FormUtils.newCombo(25);
-	JTree tree = new JTree();
+	private JComboBox combo = FormUtils.newCombo(25);
+	private JTree tree = new JTree();
 	
 	public void init() {
 		combo.addActionListener(this);
 	}
+	
 	@Override
 	protected JComponent buildPanel() {
 		JPanel p = new JPanel(new BorderLayout());

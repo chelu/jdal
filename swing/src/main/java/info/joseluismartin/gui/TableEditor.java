@@ -102,6 +102,10 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	 */
 	public void init() {
 		loadIcons();
+		
+		if (tableModel.getModelClass() == null)
+			tableModel.setModelClass(this.clazz);
+		
 		refresh();
 	}
 

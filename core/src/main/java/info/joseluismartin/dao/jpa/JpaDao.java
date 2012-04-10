@@ -482,4 +482,11 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		this.em = em;
 	}
 
+	/**
+	 * @param entityClass the entityClass to set
+	 */
+	public void setEntityClass(Class<T> entityClass) {
+		this.entityClass = entityClass;
+	}
+
 }

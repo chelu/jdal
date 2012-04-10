@@ -15,12 +15,16 @@
  */
 package info.joseluismartin.model;
 
+import java.util.Date;
+
+import javax.persistence.MappedSuperclass;
+
 /**
- * Generic User model
+ * Base User model
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-
+@MappedSuperclass
 public class User {
 	
 	/** Id */
@@ -31,6 +35,8 @@ public class User {
 	private String name;
 	/** Surname */
 	private String Surname;
+	/** Register date */
+	private Date registerDate;
 	
 	/** Stored passwored */
 	private String password;
@@ -93,5 +99,17 @@ public class User {
 	 */
 	public void setSurname(String surname) {
 		Surname = surname;
+	}
+	/**
+	 * @return the registerDate
+	 */
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+	/**
+	 * @param registerDate the registerDate to set
+	 */
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
 	}
 }

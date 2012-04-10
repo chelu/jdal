@@ -257,7 +257,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	 * Clear validation erros
 	 */
 	private void clearErrors() {
-		if (getModel() != null && errors.hasErrors())
+		if (getModel() != null && errors != null && errors.hasErrors())
 			createBindingResult();
 		resetErrorProcessors();
 		
