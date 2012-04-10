@@ -26,7 +26,7 @@ CONTENT
 
 core:              JDAL Core Library          Data access and common classes
 swing:             JDAL Swing Library         Swing binding and UI
-vaadin:            JDAL Vaadin UI Library     Vaadin Spring Integration
+vaadin:            JDAL Vaadin Library        Vaadin Spring Integration
 aspects:           JDAL Aspects Library       Aspect Library)
 web:               JDAL Web Library           Web Library
   
