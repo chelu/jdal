@@ -184,7 +184,8 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	public void selectAll() {
 		PageableDataSource dataSource = table.getDataSource();
 		Page page = new Page(Integer.MAX_VALUE);
-		page.setFilter(filterView.getModel());
+		if (filterView != null)
+			page.setFilter(filterView.getModel());
 		table.getTableModel().check(dataSource.getKeys(page));
 	}
 	

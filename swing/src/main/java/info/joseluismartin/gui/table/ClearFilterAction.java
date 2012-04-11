@@ -36,7 +36,9 @@ public class ClearFilterAction extends TablePanelAction {
 
 	public void actionPerformed(ActionEvent arg0) {
 		PageableTable table = getTablePanel().getTable();
-		getTablePanel().getFilterView().clear();
+		if (getTablePanel().getFilterView() != null)
+			getTablePanel().getFilterView().clear();
+	
 		table.setFilter(null);
 		table.getPaginator().firstPage();
 	}

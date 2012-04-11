@@ -18,11 +18,11 @@ package info.joseluismartin.gui;
 import info.joseluismartin.dao.PageChangedEvent;
 import info.joseluismartin.dao.Paginator;
 import info.joseluismartin.dao.PaginatorListener;
+import info.joseluismartin.gui.form.FormUtils;
 
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -31,14 +31,14 @@ import java.util.Locale;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
  * PaginatorView with control buttons to manage paginator.
@@ -47,6 +47,11 @@ import org.springframework.context.MessageSource;
  * @see info.joseluismartin.gui.PageableTable
  */
 public class PaginatorView extends AbstractView<Paginator> implements PaginatorListener {
+	
+	private static final String DEFAULT_NEXT_ICON = "images/table/22x22/go-next.png";
+	private static final String DEFAULT_PREVIOUS_ICON = "images/table/22x22/go-previous.png";
+	private static final String DEFAULT_LAST_ICON = "images/table/22x22/go-last.png";
+	private static final String DEFAULT_FIRST_ICON = "images/table/22x22/go-first.png";
 	
 	/** paginator */
 	private Paginator paginator;
@@ -70,10 +75,10 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	private MessageSource messageSource = new ResourceBundleMessageSource();
 	
 	// Icons 
-	private Image nextIcon;
-	private Image previousIcon;
-	private Image lastIcon;
-	private Image firstIcon;
+	private Icon nextIcon;
+	private Icon previousIcon;
+	private Icon lastIcon;
+	private Icon firstIcon;
 	
 	
 	
@@ -98,6 +103,10 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	 * with init-method.
 	 */
 	public void init() {
+		nextIcon = FormUtils.getIcon(nextIcon, DEFAULT_NEXT_ICON);
+		previousIcon = FormUtils.getIcon(previousIcon, DEFAULT_PREVIOUS_ICON);
+		lastIcon = FormUtils.getIcon(lastIcon, DEFAULT_LAST_ICON);
+		firstIcon = FormUtils.getIcon(firstIcon, DEFAULT_FIRST_ICON);
 		
 	}
 	
@@ -182,56 +191,56 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	/**
 	 * @return the nextIcon
 	 */
-	public Image getNextIcon() {
+	public Icon getNextIcon() {
 		return nextIcon;
 	}
 
 	/**
 	 * @param nextIcon the nextIcon to set
 	 */
-	public void setNextIcon(Image nextIcon) {
+	public void setNextIcon(Icon nextIcon) {
 		this.nextIcon = nextIcon;
 	}
 
 	/**
 	 * @return the previousIcon
 	 */
-	public Image getPreviousIcon() {
+	public Icon getPreviousIcon() {
 		return previousIcon;
 	}
 
 	/**
 	 * @param previousIcon the previousIcon to set
 	 */
-	public void setPreviousIcon(Image previousIcon) {
+	public void setPreviousIcon(Icon previousIcon) {
 		this.previousIcon = previousIcon;
 	}
 
 	/**
 	 * @return the lastIcond
 	 */
-	public Image getLastIcon() {
+	public Icon getLastIcon() {
 		return lastIcon;
 	}
 
 	/**
 	 * @param lastIcon the lastIcond to set
 	 */
-	public void setLastIcon(Image lastIcon) {
+	public void setLastIcon(Icon lastIcon) {
 		this.lastIcon = lastIcon;
 	}
 
 	/**
 	 * @return the firstIcon
 	 */
-	public Image getFirstIcon() {
+	public Icon getFirstIcon() {
 		return firstIcon;
 	}
 
 	/**
 	 * @param firstIcon the firstIcon to set
 	 */
-	public void setFirstIcon(Image firstIcon) {
+	public void setFirstIcon(Icon firstIcon) {
 		this.firstIcon = firstIcon;
 	}
 
@@ -285,7 +294,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		private static final long serialVersionUID = 1L;
 
 		public NextPageAction() {
-			putValue(Action.SMALL_ICON, new ImageIcon(nextIcon));
+			putValue(Action.SMALL_ICON, nextIcon);
 		}
 		
 		public void actionPerformed(ActionEvent e) {
@@ -299,7 +308,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		private static final long serialVersionUID = 1L;
 
 		public PreviousPageAction() {
-			putValue(Action.SMALL_ICON, new ImageIcon(previousIcon));
+			putValue(Action.SMALL_ICON, previousIcon);
 		}
 		
 		public void actionPerformed(ActionEvent e) {
@@ -312,7 +321,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		private static final long serialVersionUID = 1L;
 
 		public LastPageAction() {
-			putValue(Action.SMALL_ICON, new ImageIcon(lastIcon));
+			putValue(Action.SMALL_ICON, lastIcon);
 		}
 		
 		public void actionPerformed(ActionEvent e) {
@@ -326,7 +335,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		private static final long serialVersionUID = 1L;
 
 		public FirstPageAction() {
-			putValue(Action.SMALL_ICON, new ImageIcon(firstIcon));
+			putValue(Action.SMALL_ICON, firstIcon);
 		}
 		
 		public void actionPerformed(ActionEvent e) {

@@ -861,7 +861,6 @@ class VisibilityBox extends JComponent {
 	 * refresh the state of visibility item when column descriptor list changes
 	 */
 	public void refresh() {
-		System.out.println(columnDescriptors.size());
 		for (int i = 0; i < getComponents().length; i++) {
 			Component c = getComponent(i);
 			if (c instanceof VisibilityItem) {

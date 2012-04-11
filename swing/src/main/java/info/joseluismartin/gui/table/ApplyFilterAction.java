@@ -33,11 +33,13 @@ public class ApplyFilterAction extends TablePanelAction {
 
 	public void actionPerformed(ActionEvent arg0) {
 		View<Object> filterView = getTablePanel().getFilterView();
-		filterView.update();
+		if (filterView != null) {
+			filterView.update();
 
-		if (filterView.validateView()) {
-			getTablePanel().getTable().setFilter(filterView.getModel());
-			getTablePanel().getTable().getPaginator().firstPage();
+			if (filterView.validateView()) {
+				getTablePanel().getTable().setFilter(filterView.getModel());
+				getTablePanel().getTable().getPaginator().firstPage();
+			}
 		}
 	}
 }
