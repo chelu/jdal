@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.jdal.org/schema/swing"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.jdal.org/schema/swing"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+
+   <xsd:element name="defaults" />
+   <xsd:element name="column" type="columnType" />
+   <xsd:element name="table" type="tableType" />
+   
+   <xsd:complexType name="tableType">
+		<xsd:sequence>
+			<xsd:element name="columns">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element ref="column" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="entity" type="xsd:string" use="required" />
+		<xsd:attribute name="id" type="xsd:string" />
+		<xsd:attribute name="paginator" type="xsd:string" />
+		<xsd:attribute name="dataSource" type="xsd:string" />
+		<xsd:attribute name="editor" type="xsd:string"/>
+		<xsd:attribute name="actions" type="xsd:string"/>
+   </xsd:complexType>
+
+	<xsd:complexType name="columnType">
+		<xsd:attribute name="name" type="xsd:string" />
+		<xsd:attribute name="displayName" type="xsd:string" />
+		<xsd:attribute name="editable" type="xsd:boolean" />
+		<xsd:attribute name="sortProperty" type="xsd:string" />
+		<xsd:attribute name="width" type="xsd:integer" />
+	</xsd:complexType>
+	
+</xsd:schema>
