@@ -18,13 +18,17 @@ package info.joseluismartin.gui.action;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Cancel Action for ViewDialog
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class DialogCancelAction extends DialogAction {
-
+	
+	private static final Log log = LogFactory.getLog(DialogCancelAction.class);
 	/**
 	 * 
 	 */

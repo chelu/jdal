@@ -16,6 +16,7 @@
 package info.joseluismartin.gui.form;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -219,5 +220,16 @@ public abstract class FormUtils {
 			menu.add(a);
 		
 		return menu;
+	}
+
+	/**
+	 * @param message
+	 * @return JLabel
+	 */
+	public static JLabel newLabelForBox(String message) {
+		JLabel label = new JLabel(message);
+		label.setMaximumSize(new Dimension(Short.MAX_VALUE, label.getFont().getSize() + 10));
+		label.setAlignmentX(Container.CENTER_ALIGNMENT);
+		return label;
 	}
 }

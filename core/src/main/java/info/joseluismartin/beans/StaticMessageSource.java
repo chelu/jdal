@@ -53,8 +53,13 @@ public class StaticMessageSource {
 	 * @return message or code if none defined
 	 */
 	public static String getMessage(String code) {
-		return messageSource == null ?
+		try {
+			return messageSource == null ?
 				code : messageSource.getMessage(code, null, Locale.getDefault());
+		}
+		catch (Exception e) {
+			return code;
+		}
 	}
 	
 	/** 

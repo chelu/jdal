@@ -43,6 +43,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.util.ClassUtils;
 
 /**
  * TableModel that use a List of Objects to hold data.
@@ -139,8 +140,9 @@ public class ListTableModel implements TableModel {
 		} else if (isActionColumn(columnIndex)) {
 			clazz = actions.get(columntoToActionIndex(columnIndex)).getClass();
 		}
-
-		return clazz;
+		
+		// JTable hangs if we return a primitive type here
+		return ClassUtils.resolvePrimitiveIfNecessary(clazz);
 	}
 
 	private int columntoToActionIndex(int columnIndex) {

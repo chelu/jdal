@@ -25,6 +25,7 @@ import info.joseluismartin.gui.bind.ControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlChangeListener;
 import info.joseluismartin.gui.bind.ControlError;
 import info.joseluismartin.gui.bind.ControlEvent;
+import info.joseluismartin.gui.bind.ControlInitializer;
 import info.joseluismartin.gui.bind.DirectFieldAccessor;
 import info.joseluismartin.gui.bind.PropertyBinder;
 import info.joseluismartin.gui.validation.ErrorProcessor;
@@ -49,6 +50,7 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -114,10 +116,14 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	/** Validation Errors */
 	protected BindingResult errors;
 	/** dirty state */
-	boolean dirty = false;
+	private boolean dirty = false;
+	/** initialize controls on autobind **/
+	private boolean initializeControls = true;
 	
 	protected int width = 0;
 	protected int height = 0;
+	/** control initializer */
+	private ControlInitializer controlInitializer;
 	
 	/**
 	 * Default ctor
@@ -445,6 +451,9 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 								" for property: " + propertyName);
 					// do bind
 					bind(control, propertyName);
+					// initialize control
+					if (isInitializeControls() && controlInitializer != null)
+						controlInitializer.initialize(control, propertyName, getModel().getClass());
 				}
 			}
 		}
@@ -456,8 +465,15 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	 * @return message or code if none defined
 	 */
 	protected String getMessage(String code) {
-		return messageSource == null ?
+		try {
+			return messageSource == null ?
 				code : messageSource.getMessage(code, null, Locale.getDefault());
+		} 
+		catch (NoSuchMessageException nsme) {
+			log.error(nsme);
+		}
+		
+		return code;
 	}
 	
 	/** 
@@ -643,5 +659,33 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	 */
 	public PropertyBinder getBinder(String propertyName) {
 		return binder.getBinder(propertyName);
+	}
+
+	/**
+	 * @return the initializeControls
+	 */
+	public boolean isInitializeControls() {
+		return initializeControls;
+	}
+
+	/**
+	 * @param initializeControls the initializeControls to set
+	 */
+	public void setInitializeControls(boolean initializeControls) {
+		this.initializeControls = initializeControls;
+	}
+
+	/**
+	 * @return the controlInitializer
+	 */
+	public ControlInitializer getControlInitializer() {
+		return controlInitializer;
+	}
+
+	/**
+	 * @param controlInitializer the controlInitializer to set
+	 */
+	public void setControlInitializer(ControlInitializer controlInitializer) {
+		this.controlInitializer = controlInitializer;
 	}
 }

@@ -15,6 +15,8 @@
  */
 package info.joseluismartin.model;
 
+import info.joseluismartin.beans.StaticMessageSource;
+
 import java.io.Serializable;
 
 import javax.persistence.GeneratedValue;
@@ -59,6 +61,10 @@ public class Entity implements Serializable  {
 		this.name = name;
 	}
 
+	public String toString() {
+		return id == null? StaticMessageSource.getMessage("New") : name;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

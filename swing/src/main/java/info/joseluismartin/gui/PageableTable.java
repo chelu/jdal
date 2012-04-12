@@ -65,6 +65,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -290,8 +291,12 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 */
 	
 	public Window getEditor() {
-		Window dlg = (Window) guiFactory.getObject(editorName);
-		return dlg;
+		Window owner = SwingUtilities.getWindowAncestor(this);
+		
+		if (owner instanceof Frame)
+			return (Window) guiFactory.getObject(editorName, new Object[] {owner});
+		
+		return (Window) guiFactory.getObject(editorName);
 	}
 	
 	/**

@@ -21,6 +21,7 @@ import info.joseluismartin.gui.action.ViewAction;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Frame;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -50,10 +51,18 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 	private int value = CANCEL;
 	
 	public ViewDialog() {
+		this(null);
+	}
+	
+	/**
+	 * @param owner
+	 */
+	public ViewDialog(Frame owner) {
+		super(owner);
 		acceptAction.setDialog(this);
 		cancelAction.setDialog(this);
 	}
-	
+
 	public void init() {
 		acceptAction.setView(view);
 
@@ -62,7 +71,6 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 			setTitle(view.getModel().toString());
 		add(createButtonBox(), BorderLayout.SOUTH);
 		setSize(dialogWidth, dialogHeight);
-		pack();
 		setLocationRelativeTo(null);
 	}
 
@@ -206,4 +214,5 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 	public String getErrorMessage() {
 		return view.getErrorMessage();
 	}
+
 }
