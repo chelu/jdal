@@ -463,7 +463,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 */
 	public <E> List<E> getAll(Class<E> clazz) {
 		CriteriaQuery<E> q = em.getCriteriaBuilder().createQuery(clazz);
-		q.from(getEntityClass());
+		q.from(clazz);
 		
 		return em.createQuery(q).getResultList();
 	}
