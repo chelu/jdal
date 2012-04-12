@@ -17,6 +17,7 @@ package info.joseluismartin.beans;
 
 import info.joseluismartin.gui.ApplicationContextGuiFactory;
 import info.joseluismartin.gui.PaginatorView;
+import info.joseluismartin.gui.bind.AnnotationControlInitializer;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 import info.joseluismartin.gui.bind.ControlAccessorBinderFactory;
 import info.joseluismartin.gui.table.AddAction;
@@ -27,12 +28,8 @@ import info.joseluismartin.gui.table.HideShowFilterAction;
 import info.joseluismartin.gui.table.RemoveAllAction;
 import info.joseluismartin.gui.table.SelectAllAction;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.swing.Action;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -47,7 +44,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
-import org.springframework.beans.factory.xml.BeanDefinitionParserDelegate;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
@@ -65,7 +61,9 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 	public static final String DEFAULT_TABLE_ACTIONS = "defaultTableActions";
 	public static final String INIT_METHOD_NAME = "init";
 	public static final String DEFAULT_GUI_FACTORY = "defaultGuiFactory";
-	
+	public static final String CONTROL_INITIALIZER = "controlInitializer";
+	public static final String PERSISTENT_SERVICE = "persistentService";
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -80,6 +78,7 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 		ccd.addNestedComponent(registerPaginatorView(element, parserContext));
 		ccd.addNestedComponent(registerDefaultTableActions(element, parserContext));
 		ccd.addNestedComponent(registerDefaultGuiFactory(element, parserContext));
+//		ccd.addNestedComponent(registerControlInitializer(element, parserContext));
 		
 		parserContext.getReaderContext().fireComponentRegistered(ccd);
 		
@@ -104,6 +103,7 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 	private ComponentDefinition registerPaginatorView(Element element, ParserContext parserContext) {
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(PaginatorView.class);
 		bdb.addPropertyValue("pageSizes", "10,20,30,40,50,100,All");
+		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), PAGINATOR_VIEW_BEAN_NAME);
 		registerBeanComponentDefinition(element, parserContext, bcd);	
 		return bcd;
@@ -115,6 +115,7 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 	private ComponentDefinition registerBinderFactory(Element element, ParserContext parserContext) {
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(
 				ControlAccessorBinderFactory.class);
+		bdb.addPropertyReference(ACCESSOR_FACTORY_BEAN_NAME, ACCESSOR_FACTORY_BEAN_NAME);
 		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), BINDER_FACTORY_BEAN_NAME);
 		registerBeanComponentDefinition(element, parserContext, bcd);	
 		return bcd;
@@ -201,5 +202,24 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 		registerBeanComponentDefinition(element, parserContext, bcd);
 		return bcd;
 	}
+	
+	/**
+	 * @param element
+	 * @param parserContext
+	 * @return
+	 */
+	@SuppressWarnings("unused")
+	private ComponentDefinition registerControlInitializer(Element element, ParserContext parserContext) {
+		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(
+				AnnotationControlInitializer.class);
+		
+		bdb.addPropertyReference(PERSISTENT_SERVICE, PERSISTENT_SERVICE);
+		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), 
+				CONTROL_INITIALIZER);
+		
+		registerBeanComponentDefinition(element, parserContext, bcd);
+		return bcd;
+	}
+	
 
 }

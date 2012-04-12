@@ -54,7 +54,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String COLUMNS = "columns";
 	private static final String ACTIONS = "actions";
 	private static final String GUI_FACTORY = "guiFactory";
-	private static final String EDITOR = "editorName";;
+	private static final String EDITOR = "editorName";
+	private static final String PERSISTENT_SERVICE = "persistentService";
 
 	
 	/**
@@ -124,6 +125,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.addPropertyReference(ACTIONS, actions);
 		bdb.addPropertyReference(GUI_FACTORY, guiFactory);
 		bdb.addPropertyValue(EDITOR, editor);
+		bdb.addPropertyReference(PERSISTENT_SERVICE, dataSource);
 		registerBeanDefinition(element, parserContext, tablePanelBeanName, bdb);
 		
 		
