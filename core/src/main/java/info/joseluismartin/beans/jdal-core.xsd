@@ -7,11 +7,19 @@
 
 
    <xsd:element name="service" type="serviceType" />
-      
+   <xsd:element name="criteria" type="criteriaType" />   
 
 	<xsd:complexType name="serviceType">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element ref="criteria" />
+		</xsd:sequence>
     	<xsd:attribute name="name" type="xsd:string" />
         <xsd:attribute name="entity" type="xsd:string" />
+    </xsd:complexType>
+    
+    <xsd:complexType name="criteriaType">
+    	<xsd:attribute name="name" type="xsd:string" />
+        <xsd:attribute name="builder" type="xsd:string" />
     </xsd:complexType>
 
 </xsd:schema>
