@@ -281,7 +281,11 @@ public class ListTableModel implements TableModel {
 		else {
 			pds = new ArrayList<PropertyDescriptor>(columnNames.size());
 			for (String name : columnNames) {
-				pds.add(BeanUtils.getPropertyDescriptor(modelClass, name));
+				PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(modelClass, name);
+				if (pd == null)
+					throw new RuntimeException("Invalid property [" + name +"]" + 
+							" for model class [" + modelClass.getName() + "]");
+				pds.add(pd);
 			}
 		}
 

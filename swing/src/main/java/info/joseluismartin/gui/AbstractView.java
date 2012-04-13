@@ -494,6 +494,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 		ignoredProperties.add(propertyName);
 	}
 	
+	
 
 	/**
 	 * @return the ignoredProperties

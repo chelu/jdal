@@ -26,6 +26,7 @@
 		<xsd:attribute name="dataSource" type="xsd:string" />
 		<xsd:attribute name="editor" type="xsd:string"/>
 		<xsd:attribute name="actions" type="xsd:string"/>
+		<xsd:attribute name="filter" type="xsd:string"/>
    </xsd:complexType>
 
 	<xsd:complexType name="columnType">

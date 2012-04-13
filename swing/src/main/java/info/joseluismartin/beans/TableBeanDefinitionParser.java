@@ -56,6 +56,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String GUI_FACTORY = "guiFactory";
 	private static final String EDITOR = "editorName";
 	private static final String PERSISTENT_SERVICE = "persistentService";
+	private static final String FILTER = "filter";
+	private static final String FILTER_VIEW = "filterView";
 
 	
 	/**
@@ -102,7 +104,6 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		// create ListTableModel
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(ListTableModel.class);
 		bdb.addPropertyValue("modelClass", entity);
-		
 		NodeList nl = element.getElementsByTagNameNS(element.getNamespaceURI(), COLUMNS);
 	
 		if (nl.getLength() > 0) {
@@ -126,6 +127,10 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.addPropertyReference(GUI_FACTORY, guiFactory);
 		bdb.addPropertyValue(EDITOR, editor);
 		bdb.addPropertyReference(PERSISTENT_SERVICE, dataSource);
+		
+		if (element.hasAttribute(FILTER))
+			bdb.addPropertyReference(FILTER_VIEW, element.getAttribute(FILTER));
+		
 		registerBeanDefinition(element, parserContext, tablePanelBeanName, bdb);
 		
 		
