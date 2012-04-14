@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -45,16 +46,20 @@ public class BoxFormBuilder {
 	private int rows = 0;
 	private int height = 30;
 	private int charWidth = 6;
-	private boolean debug = false;
+	private boolean debug = true;
+	private boolean fixedHeight = false;
 	private BinderFactory binderFactory;
 	private MessageSource messageSource;
 	private FormFocusTransversalPolicy focusTransversal = new FormFocusTransversalPolicy();
-	
+	private List<BoxFormBuilder> builders = new ArrayList<BoxFormBuilder>();
+	private BoxFormBuilder currentBuilder = this;
+	private Stack<BoxFormBuilder> stack = new Stack<BoxFormBuilder>();
 	
 	/** 
 	 * Default Ctor 
 	 */
 	public BoxFormBuilder() {
+		builders.add(this);
 	}
 	
 	/** 
@@ -70,6 +75,11 @@ public class BoxFormBuilder {
 	 * @param c Component to add
 	 */
 	public void add(Component c) {
+		if (this != currentBuilder) {
+			currentBuilder.add(c);
+			return;
+		}
+		
 		Box column = getColumn();
 		
 		if (!c.isMaximumSizeSet())
@@ -91,6 +101,10 @@ public class BoxFormBuilder {
 	 * @return a new or existent column Box.
 	 */
 	private Box getColumn() {
+		if (this != currentBuilder) {
+			return currentBuilder.getColumn();
+		}
+
 		Box column = null;
 		if (index < columns.size()) {
 			column = (Box) columns.get(index);
@@ -116,6 +130,11 @@ public class BoxFormBuilder {
 	 * @param c component.
 	 */
 	public void add(String name, Component c) {
+		if (this != currentBuilder) {
+			currentBuilder.add(name, c);
+			return;
+		}
+		
 		JLabel label = new JLabel(name);
 		add(label);
 		setMaxWidth(name.length()*charWidth);
@@ -126,6 +145,11 @@ public class BoxFormBuilder {
 	 * @param i
 	 */
 	public void setMaxWidth(int i) {
+		if (this != currentBuilder) {
+			currentBuilder.setMaxWidth(i);
+			return;
+		}
+		
 		if (i > columnsWidth.get(index - 1)) {
 			columnsWidth.set(index - 1, i);
 		}
@@ -136,6 +160,10 @@ public class BoxFormBuilder {
 	 * Move cursor to next row.
 	 */
 	public void row() {
+		if (this != currentBuilder) {
+			currentBuilder.row();
+		}
+		
 		index = 0;
 		rows++;
 	}
@@ -145,17 +173,36 @@ public class BoxFormBuilder {
 	 * @return the form component
 	 */
 	public JComponent getForm() {
+		Box holder = Box.createVerticalBox();
+		for (BoxFormBuilder fb : builders) {
+			holder.add(fb == this ? getOwnerForm() : fb.getForm());
+		}
+		if (debug)
+			holder.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+	
+		return holder;
+	}
+	
+	protected JComponent getOwnerForm() {
+		int maxColumnHeight= 0;
 		// set sizes;
 		for (int i = 0; i < columns.size(); i++) {
 			Box box = columns.get(i);
 			int maxWidth = columnsWidth.get(i) == 0 ? Short.MAX_VALUE : columnsWidth.get(i);
 			int maxHeight = columnsHeight.get(i) == 0 ? (rows +1)*height : columnsHeight.get(i);
+			
+			if (maxHeight > maxColumnHeight)
+				maxColumnHeight = maxHeight;
+			
 			box.setMaximumSize(new Dimension(maxWidth, maxHeight));
 		}
-		
+
 		container.setFocusTraversalPolicy(focusTransversal);
 		container.setFocusTraversalPolicyProvider(true);
-		
+
+		if (isFixedHeight())
+			container.setMaximumSize(new Dimension(Short.MAX_VALUE, maxColumnHeight));
+
 		return container;
 	}
 	
@@ -179,6 +226,20 @@ public class BoxFormBuilder {
 		index++;
 	}
 	
+	public void startBlock() {
+		if (currentBuilder != this) {
+			currentBuilder.startBlock();
+			return;
+		}
+		
+		stack.push(currentBuilder);
+		currentBuilder = new BoxFormBuilder();
+		builders.add(currentBuilder);
+	}
+	
+	public void endBlock() {
+		currentBuilder = stack.pop();
+	}
 
 	// Getters & Setters
 	
@@ -189,13 +250,15 @@ public class BoxFormBuilder {
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	// TODO Auto-generated method stub
+	
 	public boolean isDebug() {
 		return debug;
 	}
 
 	public void setDebug(boolean debug) {
 		this.debug = debug;
+		if (debug)
+			container.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 	}
 	
 	public BinderFactory getBinderFactory() {
@@ -213,7 +276,19 @@ public class BoxFormBuilder {
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
-	
-	
+
+	/**
+	 * @return the fixedHeight
+	 */
+	public boolean isFixedHeight() {
+		return fixedHeight;
+	}
+
+	/**
+	 * @param fixedHeight the fixedHeight to set
+	 */
+	public void setFixedHeight(boolean fixedHeight) {
+		this.fixedHeight = fixedHeight;
+	}
 
 }
