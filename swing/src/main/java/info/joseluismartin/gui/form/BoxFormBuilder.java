@@ -15,280 +15,156 @@
  */
 package info.joseluismartin.gui.form;
 
-import info.joseluismartin.gui.bind.BinderFactory;
-
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-
-import org.springframework.context.MessageSource;
 
 /**
- * A FormBuilder that create form using columns of Box.
+ * A FormBuilder that create form using Box.
  * Add components using a implicit cursor.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class BoxFormBuilder {
-	private Box container = Box.createHorizontalBox();
-	private List<Box> columns = new ArrayList<Box>();
-	private List<Integer> columnsWidth = new ArrayList<Integer>();
-	private List<Integer> columnsHeight = new ArrayList<Integer>();
-	private int index = 0;
-	private int rows = 0;
-	private int height = 30;
-	private int charWidth = 6;
-	private boolean debug = true;
-	private boolean fixedHeight = false;
-	private BinderFactory binderFactory;
-	private MessageSource messageSource;
-	private FormFocusTransversalPolicy focusTransversal = new FormFocusTransversalPolicy();
-	private List<BoxFormBuilder> builders = new ArrayList<BoxFormBuilder>();
-	private BoxFormBuilder currentBuilder = this;
-	private Stack<BoxFormBuilder> stack = new Stack<BoxFormBuilder>();
+	/** hold form builders */
+	private Stack<SimpleBoxFormBuilder> stack = new Stack<SimpleBoxFormBuilder>();
+	SimpleBoxFormBuilder builder = new SimpleBoxFormBuilder();
 	
 	/** 
 	 * Default Ctor 
 	 */
 	public BoxFormBuilder() {
-		builders.add(this);
-	}
 	
-	/** 
-	 * Default Ctor 
-	 */
-	public BoxFormBuilder(BinderFactory binderFactory) {
-		this.binderFactory = binderFactory;
-	}
-	
-	/**
-	 * Add a component to Form at position pointer by cursor, 
-	 * Increments cursor by one.
-	 * @param c Component to add
-	 */
-	public void add(Component c) {
-		if (this != currentBuilder) {
-			currentBuilder.add(c);
-			return;
-		}
-		
-		Box column = getColumn();
-		
-		if (!c.isMaximumSizeSet())
-			c.setMaximumSize(new Dimension(Short.MAX_VALUE, height));
-		
-		column.add(c);
-		column.add(Box.createVerticalStrut(5));
-		index++;
-		
-		// don't add Labels to focus transversal
-		if (!(c instanceof JLabel)) {
-			focusTransversal.add(c);
-		}
-			
-	}
-	
-	/**
-	 * Gets current column pointed to cursor, create one if none.
-	 * @return a new or existent column Box.
-	 */
-	private Box getColumn() {
-		if (this != currentBuilder) {
-			return currentBuilder.getColumn();
-		}
-
-		Box column = null;
-		if (index < columns.size()) {
-			column = (Box) columns.get(index);
-		}
-		else {
-			column = Box.createVerticalBox();
-			columns.add(column);
-			container.add(column);
-			container.add(Box.createHorizontalStrut(5));
-			columnsHeight.add(0);
-			columnsWidth.add(0);
-			
-			if (debug) {
-				column.setBorder(BorderFactory.createLineBorder(Color.RED));
-			}
-		}
-		return column;
-	}
-	
-	/**
-	 * Add a component with label, increments cursor by two.
-	 * @param name label string
-	 * @param c component.
-	 */
-	public void add(String name, Component c) {
-		if (this != currentBuilder) {
-			currentBuilder.add(name, c);
-			return;
-		}
-		
-		JLabel label = new JLabel(name);
-		add(label);
-		setMaxWidth(name.length()*charWidth);
-		add(c);
-	}
-	
-	/**
-	 * @param i
-	 */
-	public void setMaxWidth(int i) {
-		if (this != currentBuilder) {
-			currentBuilder.setMaxWidth(i);
-			return;
-		}
-		
-		if (i > columnsWidth.get(index - 1)) {
-			columnsWidth.set(index - 1, i);
-		}
-		
 	}
 
-	/**
-	 * Move cursor to next row.
-	 */
-	public void row() {
-		if (this != currentBuilder) {
-			currentBuilder.row();
-		}
-		
-		index = 0;
-		rows++;
-	}
-	
-	/**
-	 * Builds the panel form.
-	 * @return the form component
-	 */
-	public JComponent getForm() {
-		Box holder = Box.createVerticalBox();
-		for (BoxFormBuilder fb : builders) {
-			holder.add(fb == this ? getOwnerForm() : fb.getForm());
-		}
-		if (debug)
-			holder.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-	
-		return holder;
-	}
-	
-	protected JComponent getOwnerForm() {
-		int maxColumnHeight= 0;
-		// set sizes;
-		for (int i = 0; i < columns.size(); i++) {
-			Box box = columns.get(i);
-			int maxWidth = columnsWidth.get(i) == 0 ? Short.MAX_VALUE : columnsWidth.get(i);
-			int maxHeight = columnsHeight.get(i) == 0 ? (rows +1)*height : columnsHeight.get(i);
-			
-			if (maxHeight > maxColumnHeight)
-				maxColumnHeight = maxHeight;
-			
-			box.setMaximumSize(new Dimension(maxWidth, maxHeight));
-		}
-
-		container.setFocusTraversalPolicy(focusTransversal);
-		container.setFocusTraversalPolicyProvider(true);
-
-		if (isFixedHeight())
-			container.setMaximumSize(new Dimension(Short.MAX_VALUE, maxColumnHeight));
-
-		return container;
-	}
-	
-	/**
-	 * Reset the form builder to reuse for creating a new panel
-	 */
-	public void reset() {
-		columns = new ArrayList<Box>();
-		columnsWidth = new ArrayList<Integer>();
-		columnsHeight = new ArrayList<Integer>();
-		container = Box.createHorizontalBox();
-		
-		index = 0;
-		rows = 0;
-		
-		focusTransversal = new FormFocusTransversalPolicy();
-	}
-	
-	public void next() {
-		getColumn();
-		index++;
-	}
-	
 	public void startBlock() {
-		if (currentBuilder != this) {
-			currentBuilder.startBlock();
-			return;
-		}
-		
-		stack.push(currentBuilder);
-		currentBuilder = new BoxFormBuilder();
-		builders.add(currentBuilder);
+		boolean debug = builder.isDebug();
+		stack.push(builder);
+		builder = new SimpleBoxFormBuilder();
+		builder.setDebug(debug);
 	}
 	
 	public void endBlock() {
-		currentBuilder = stack.pop();
+		JComponent c = builder.getForm();
+		builder = stack.pop();
+		builder.addBlock(c);
+		builder.setHeight(c.getHeight());
 	}
-
-	// Getters & Setters
-	
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-	
-	public boolean isDebug() {
-		return debug;
-	}
-
-	public void setDebug(boolean debug) {
-		this.debug = debug;
-		if (debug)
-			container.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-	}
-	
-	public BinderFactory getBinderFactory() {
-		return binderFactory;
-	}
-
-	public void setBinderFactory(BinderFactory binderFactory) {
-		this.binderFactory = binderFactory;
-	}
-	
-	public MessageSource getMessageSource() {
-		return messageSource;
-	}
-
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
+	/**
+	 * @param c
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#add(java.awt.Component)
+	 */
+	public void add(Component c) {
+		builder.add(c);
 	}
 
 	/**
-	 * @return the fixedHeight
+	 * @param name
+	 * @param c
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#add(java.lang.String, java.awt.Component)
+	 */
+	public void add(String name, Component c) {
+		builder.add(name, c);
+	}
+
+	/**
+	 * @param i
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#setMaxWidth(int)
+	 */
+	public void setMaxWidth(int i) {
+		builder.setMaxWidth(i);
+	}
+
+	/**
+	 * 
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#row()
+	 */
+	public void row() {
+		builder.row();
+	}
+
+	/**
+	 * @return the form
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#getForm()
+	 */
+	public JComponent getForm() {
+		return builder.getForm();
+	}
+
+	/**
+	 * 
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#reset()
+	 */
+	public void reset() {
+		builder.reset();
+	}
+
+	/**
+	 * 
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#next()
+	 */
+	public void next() {
+		builder.next();
+	}
+
+	/**
+	 * @return form height
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#getHeight()
+	 */
+	public int getHeight() {
+		return builder.getHeight();
+	}
+
+	/**
+	 * @param height
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#setHeight(int)
+	 */
+	public void setHeight(int height) {
+		builder.setHeight(height);
+	}
+
+	/**
+	 * @return true if form debug is enabled.
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#isDebug()
+	 */
+	public boolean isDebug() {
+		return builder.isDebug();
+	}
+
+	/**
+	 * @param debug
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#setDebug(boolean)
+	 */
+	public void setDebug(boolean debug) {
+		builder.setDebug(debug);
+	}
+
+	/**
+	 * @return true if this form has height fixed.
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#isFixedHeight()
 	 */
 	public boolean isFixedHeight() {
-		return fixedHeight;
+		return builder.isFixedHeight();
 	}
 
 	/**
-	 * @param fixedHeight the fixedHeight to set
+	 * @param fixedHeight
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#setFixedHeight(boolean)
 	 */
 	public void setFixedHeight(boolean fixedHeight) {
-		this.fixedHeight = fixedHeight;
+		builder.setFixedHeight(fixedHeight);
+	}	
+	
+	public void setElastic() {
+		setHeight(Short.MAX_VALUE);
+	}
+
+	/**
+	 * @param rowHeight
+	 */
+	public void row(int rowHeight) {
+		builder.row(rowHeight);
 	}
 
 }
