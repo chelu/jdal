@@ -59,7 +59,6 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 	 * {@inheritDoc}
 	 */
 	public AbstractBeanDefinition parse(Element element, ParserContext parserContext) {
-		BeanDefinitionRegistry registry = parserContext.getRegistry();
 		
 		// default dao and service classes
 		String daoClassName = JPA_DAO_CLASS_NAME;
@@ -75,6 +74,9 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 			String className = element.getAttribute(ENTITY);
 			String name = StringUtils.uncapitalize(
 					StringUtils.substringAfterLast(className, PropertyUtils.PROPERTY_SEPARATOR));
+			
+			parserContext.pushContainingComponent(
+					new CompositeComponentDefinition(name, parserContext.extractSource(element)));
 		
 			// DAO
 			BeanDefinitionBuilder daoBuilder  = BeanDefinitionBuilder.genericBeanDefinition(daoClassName);
@@ -87,30 +89,28 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 				}
 				daoBuilder.addPropertyValue(CRITERIA_BUILDER_MAP, builders);
 			}
-			GenericBeanDefinition dao =  new GenericBeanDefinition();
-			dao.setBeanClassName(daoClassName);
-			ConstructorArgumentValues cav = new ConstructorArgumentValues();
-			cav.addGenericArgumentValue(className);
-			dao.setConstructorArgumentValues(cav);
-		
+			
+			daoBuilder.addConstructorArgValue(className);
 			String daoBeanName = name  + DAO_SUFFIX;
-			registry.registerBeanDefinition(daoBeanName, dao);
+			registerBeanDefinition(parserContext, daoBuilder, daoBeanName); 
 			
-			GenericBeanDefinition service =  new GenericBeanDefinition();
-			service.setBeanClassName(serviceClassName);
-			service.getPropertyValues().add("dao", new RuntimeBeanReference(daoBeanName));
+			// SERVICE
+			BeanDefinitionBuilder serviceBuilder = BeanDefinitionBuilder.genericBeanDefinition(serviceClassName);
+			serviceBuilder.addPropertyReference("dao", daoBeanName);
 			String serviceBeanName = name + SERVICE_SUFFIX;
-			registry.registerBeanDefinition(serviceBeanName, service);
+			registerBeanDefinition(parserContext, serviceBuilder, serviceBeanName); 
 			
-			Object source = parserContext.extractSource(element);
-			CompositeComponentDefinition ccd = new CompositeComponentDefinition(name, source);
-			ccd.addNestedComponent(new BeanComponentDefinition(dao, daoBeanName));
-			ccd.addNestedComponent(new BeanComponentDefinition(service, serviceBeanName));
-			
-			parserContext.getReaderContext().fireComponentRegistered(ccd);
+			parserContext.popAndRegisterContainingComponent();
+					
 		}
 		
 		return null;
+	}
+
+	private void registerBeanDefinition(ParserContext parserContext, BeanDefinitionBuilder builder,
+			String beanName) {
+		BeanComponentDefinition bcd = new BeanComponentDefinition(builder.getBeanDefinition(), beanName);
+		parserContext.registerBeanComponent(bcd);
 	}
 }
 
