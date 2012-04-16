@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.util.Stack;
 
 import javax.swing.JComponent;
+import javax.swing.border.Border;
 
 /**
  * A FormBuilder that create form using Box.
@@ -29,7 +30,8 @@ import javax.swing.JComponent;
 public class BoxFormBuilder {
 	/** hold form builders */
 	private Stack<SimpleBoxFormBuilder> stack = new Stack<SimpleBoxFormBuilder>();
-	SimpleBoxFormBuilder builder = new SimpleBoxFormBuilder();
+	/** current form builder */
+	SimpleBoxFormBuilder builder;
 	
 	/** 
 	 * Default Ctor 
@@ -37,18 +39,35 @@ public class BoxFormBuilder {
 	public BoxFormBuilder() {
 	
 	}
-
-	public void startBlock() {
-		boolean debug = builder.isDebug();
-		stack.push(builder);
-		builder = new SimpleBoxFormBuilder();
-		builder.setDebug(debug);
+	
+	public BoxFormBuilder(Border border) {
+		this.builder = new SimpleBoxFormBuilder(border);
 	}
 	
-	public void endBlock() {
+	public BoxFormBuilder(int rowHeight) {
+		this(rowHeight, null);
+	}
+	
+	public BoxFormBuilder(int rowHeight, Border border) {
+		this.builder = new SimpleBoxFormBuilder(rowHeight, border);
+	}
+	
+	public void startBox(Border border) {
+		boolean debug = builder.isDebug();
+		stack.push(builder);
+		builder = new SimpleBoxFormBuilder(border);
+		builder.setDebug(debug);
+	}
+
+	public void startBox() {
+		startBox(null);
+		
+	}
+	
+	public void endBox() {
 		JComponent c = builder.getForm();
 		builder = stack.pop();
-		builder.addBlock(c);
+		builder.addBox(c);
 		builder.setHeight(c.getHeight());
 	}
 	/**
@@ -77,7 +96,6 @@ public class BoxFormBuilder {
 	}
 
 	/**
-	 * 
 	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#row()
 	 */
 	public void row() {
@@ -93,7 +111,6 @@ public class BoxFormBuilder {
 	}
 
 	/**
-	 * 
 	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#reset()
 	 */
 	public void reset() {
@@ -101,7 +118,6 @@ public class BoxFormBuilder {
 	}
 
 	/**
-	 * 
 	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#next()
 	 */
 	public void next() {

@@ -52,7 +52,6 @@ public class SimpleBoxFormBuilder {
 	private int charWidth = 6;
 	private boolean debug = false;
 	private boolean fixedHeight = false;
-	private BinderFactory binderFactory;
 	private MessageSource messageSource;
 	private FormFocusTransversalPolicy focusTransversal = new FormFocusTransversalPolicy();
 	private Border border = null;
@@ -64,11 +63,17 @@ public class SimpleBoxFormBuilder {
 	public SimpleBoxFormBuilder() {
 	}
 	
-	/** 
-	 * Default Ctor 
-	 */
-	public SimpleBoxFormBuilder(BinderFactory binderFactory) {
-		this.binderFactory = binderFactory;
+	public SimpleBoxFormBuilder(Border border) {
+		this.border = border;
+	}
+	
+	public SimpleBoxFormBuilder(int rowHeight) {
+		this(rowHeight, null);
+	}
+	
+	public SimpleBoxFormBuilder(int rowHeight, Border border) {
+		this.rowHeight = rowHeight;
+		this.border = border;
 	}
 	
 	/**
@@ -96,7 +101,7 @@ public class SimpleBoxFormBuilder {
 			
 	}
 	
-	public void addBlock(Component c) {
+	public void addBox(Component c) {
 		Box column = getColumn();
 		column.add(c);
 		column.add(Box.createVerticalStrut(5));
@@ -237,14 +242,6 @@ public class SimpleBoxFormBuilder {
 
 	public void setDebug(boolean debug) {
 		this.debug = debug;
-	}
-	
-	public BinderFactory getBinderFactory() {
-		return binderFactory;
-	}
-
-	public void setBinderFactory(BinderFactory binderFactory) {
-		this.binderFactory = binderFactory;
 	}
 	
 	public MessageSource getMessageSource() {
