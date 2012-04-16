@@ -37,7 +37,7 @@ public class BoxFormBuilder {
 	 * Default Ctor 
 	 */
 	public BoxFormBuilder() {
-	
+		this.builder = new SimpleBoxFormBuilder();
 	}
 	
 	public BoxFormBuilder(Border border) {
