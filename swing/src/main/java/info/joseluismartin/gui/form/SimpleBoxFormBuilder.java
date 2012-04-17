@@ -49,7 +49,7 @@ public class SimpleBoxFormBuilder {
 	private int defaultRowHeight = 25;
 	private int defaultSpace = 5;
 	private int charWidth = 6;
-	private boolean debug = true;
+	private boolean debug = false;
 	private boolean fixedHeight = false;
 	private MessageSource messageSource;
 	private FormFocusTransversalPolicy focusTransversal = new FormFocusTransversalPolicy();
