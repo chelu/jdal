@@ -15,8 +15,6 @@
  */
 package info.joseluismartin.gui.form;
 
-import info.joseluismartin.gui.bind.BinderFactory;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -82,26 +80,20 @@ public class SimpleBoxFormBuilder {
 	 * @param c Component to add
 	 */
 	public void add(Component c) {
-		if (rows == 0 && rowsHeight.isEmpty()) {
-			log.warn("You must call row() before adding components. I will add a row with default height for you");
-		}
-		Box column = getColumn();
-		
-		if (!c.isMaximumSizeSet())
-			c.setMaximumSize(new Dimension(Short.MAX_VALUE, rowHeight));
-		
-		column.add(c);
-		column.add(Box.createVerticalStrut(5));
-		index++;
-		
+		addBox(c);
 		// don't add Labels to focus transversal
 		if (!(c instanceof JLabel)) {
 			focusTransversal.add(c);
 		}
-			
+		if (!c.isMaximumSizeSet())
+			c.setMaximumSize(new Dimension(Short.MAX_VALUE, rowHeight));
 	}
 	
 	public void addBox(Component c) {
+		if (rows == 0 && rowsHeight.isEmpty()) {
+			log.warn("You must call row() before adding components. I will add a row with default height for you");
+			row();
+		}
 		Box column = getColumn();
 		column.add(c);
 		column.add(Box.createVerticalStrut(5));
@@ -122,7 +114,6 @@ public class SimpleBoxFormBuilder {
 			columns.add(column);
 			container.add(column);
 			container.add(Box.createHorizontalStrut(5));
-			rowsHeight.add(rowHeight);
 			columnsWidth.add(0);
 			
 			if (debug) {
@@ -230,8 +221,8 @@ public class SimpleBoxFormBuilder {
 
 	public void setHeight(int height) {
 		this.rowHeight = height;
-		if (rowsHeight.size() > 0) {
-			rowsHeight.remove(rows);
+		if (rowsHeight.size() > 0 && rows > 0) {
+			rowsHeight.remove(rows -1);
 			rowsHeight.add(height);
 		}
 	}

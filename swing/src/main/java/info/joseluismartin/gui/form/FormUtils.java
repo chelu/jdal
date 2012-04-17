@@ -232,4 +232,5 @@ public abstract class FormUtils {
 		label.setAlignmentX(Container.CENTER_ALIGNMENT);
 		return label;
 	}
+	
 }

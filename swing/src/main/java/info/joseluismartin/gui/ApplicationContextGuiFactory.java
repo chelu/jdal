@@ -132,7 +132,14 @@ public class ApplicationContextGuiFactory implements GuiFactory, ApplicationCont
 			log.error(e);
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @param name title string
+	 * @return a new titled border
+	 * @deprecated use FormUtils.createTitledBorder instead.
+	 */
+	@Deprecated
 	public static Border createTitledBorder(String name) {
 		Border margin = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		Border title = BorderFactory.createTitledBorder(name);

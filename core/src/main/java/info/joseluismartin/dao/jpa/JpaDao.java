@@ -352,7 +352,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * {@inheritDoc}
 	 */
 	public boolean exists(PK id) {
-		return get(id) != null;
+		return id != null && get(id) != null;
 	}
 
 
@@ -374,17 +374,17 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * {@inheritDoc}
 	 */
 	public T save(T entity) {
-		T persistendEntity;
+		T persistentEntity;
 	
 		if (isNew(entity)) {
 			em.persist(entity);
-			persistendEntity = entity;
+			persistentEntity = entity;
 		}
 		else {
-			persistendEntity = em.merge(entity);
+			persistentEntity = em.merge(entity);
 		}
 		
-		return persistendEntity;
+		return persistentEntity;
 			
 	}
 

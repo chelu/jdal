@@ -15,6 +15,8 @@
 		</xsd:sequence>
     	<xsd:attribute name="name" type="xsd:string" />
         <xsd:attribute name="entity" type="xsd:string" />
+        <xsd:attribute name="serviceClass" type="xsd:string" />
+        <xsd:attribute name="daoClass" type="xsd:string" />
     </xsd:complexType>
     
     <xsd:complexType name="criteriaType">

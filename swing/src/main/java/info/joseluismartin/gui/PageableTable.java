@@ -580,7 +580,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 						((Frame) dlg).requestFocus();
 					}
 					dlg.setLocationRelativeTo(null);
-					dlg.setAlwaysOnTop(true);
+			//		dlg.setAlwaysOnTop(true);
 					dlg.setVisible(true);
 				}
 			}

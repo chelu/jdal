@@ -35,11 +35,11 @@ public class SeparatorTitled extends Box {
 	public SeparatorTitled(String title) {
 		super(BoxLayout.LINE_AXIS);
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+		titleLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		this.add(titleLabel);
 		this.add(Box.createHorizontalStrut(5));
 		JSeparator separator = new JSeparator();
-		separator.setAlignmentY(Container.BOTTOM_ALIGNMENT);
+		separator.setAlignmentY(Container.TOP_ALIGNMENT);
 		this.add(separator);
 		this.setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
 	}
