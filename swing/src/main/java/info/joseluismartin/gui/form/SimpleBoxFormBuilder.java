@@ -47,8 +47,9 @@ public class SimpleBoxFormBuilder {
 	private int rows = 0;
 	private int rowHeight = 25;
 	private int defaultRowHeight = 25;
+	private int defaultSpace = 5;
 	private int charWidth = 6;
-	private boolean debug = false;
+	private boolean debug = true;
 	private boolean fixedHeight = false;
 	private MessageSource messageSource;
 	private FormFocusTransversalPolicy focusTransversal = new FormFocusTransversalPolicy();
@@ -96,7 +97,7 @@ public class SimpleBoxFormBuilder {
 		}
 		Box column = getColumn();
 		column.add(c);
-		column.add(Box.createVerticalStrut(5));
+		column.add(Box.createVerticalStrut(defaultSpace));
 		index++;
 	}
 	
@@ -146,7 +147,7 @@ public class SimpleBoxFormBuilder {
 	}
 	
 	public void row() {
-		row(defaultRowHeight);
+		row(defaultRowHeight + defaultSpace);
 	}
 
 	/**
@@ -173,7 +174,7 @@ public class SimpleBoxFormBuilder {
 		for (int i = 0; i < columns.size(); i++) {
 			Box box = columns.get(i);
 			int maxWidth = columnsWidth.get(i) == 0 ? Short.MAX_VALUE : columnsWidth.get(i);
-			 box.setMaximumSize(new Dimension(maxWidth, columnHeight));
+			box.setMaximumSize(new Dimension(maxWidth, columnHeight));
 		}
 		
 		container.setFocusTraversalPolicy(focusTransversal);
@@ -283,6 +284,34 @@ public class SimpleBoxFormBuilder {
 	 */
 	public void setBorder(Border border) {
 		this.border = border;
+	}
+
+	/**
+	 * @return the defaultSpace
+	 */
+	public int getDefaultSpace() {
+		return defaultSpace;
+	}
+
+	/**
+	 * @param defaultSpace the defaultSpace to set
+	 */
+	public void setDefaultSpace(int defaultSpace) {
+		this.defaultSpace = defaultSpace;
+	}
+
+	/**
+	 * @return the charWidth
+	 */
+	public int getCharWidth() {
+		return charWidth;
+	}
+
+	/**
+	 * @param charWidth the charWidth to set
+	 */
+	public void setCharWidth(int charWidth) {
+		this.charWidth = charWidth;
 	}
 
 	
