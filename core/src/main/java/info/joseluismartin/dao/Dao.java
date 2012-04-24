@@ -95,4 +95,6 @@ public interface Dao<T, PK extends Serializable> extends PageableDataSource<T> {
 	<E> E get(PK id, Class<E> clazz );
 	
 	<E> List<E> getAll(Class<E> clazz);
+	
+	Class<T> getEntityClass();
 }

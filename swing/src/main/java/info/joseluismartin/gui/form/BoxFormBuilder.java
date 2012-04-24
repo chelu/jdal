@@ -18,6 +18,7 @@ package info.joseluismartin.gui.form;
 import java.awt.Component;
 import java.util.Stack;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 

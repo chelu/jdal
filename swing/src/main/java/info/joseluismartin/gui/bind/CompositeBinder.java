@@ -3,12 +3,19 @@ package info.joseluismartin.gui.bind;
 import info.joseluismartin.beans.PropertyUtils;
 import info.joseluismartin.gui.Binder;
 
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessor;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
@@ -22,14 +29,15 @@ import org.springframework.validation.BindingResult;
 @SuppressWarnings("unchecked")
 public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 	
+	private static final Log log = LogFactory.getLog(CompositeBinder.class);
 	private BinderFactory binderFactory;
 	private Map<String, Binder<T>> binders = new HashMap<String, Binder<T>>();
 	/** Default model to bind on for property binders */
 	private T model;
 	/** Binding result */
 	private BindingResult bindingResult;
+	private List<String> ignoredProperties = new ArrayList<String>();
 
-	
 	/**
 	 * Create new CompositeBinder
 	 */
@@ -81,6 +89,9 @@ public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 	}
 	
 	public PropertyBinder getBinder(String propertyName) {
+		PropertyBinder binder = (PropertyBinder) binders.get(propertyName);
+		if (binder != null)
+			return binder;
 		
 		if (PropertyUtils.isNested(propertyName)) {
 			BinderHolder binderHolder = (BinderHolder) binders.get(PropertyUtils.getFirstPropertyName(propertyName));
@@ -88,7 +99,7 @@ public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 					binderHolder.getBinder(PropertyUtils.getNestedPath(propertyName)) : null;
 		}
 		
-		return (PropertyBinder) binders.get(propertyName);
+		return null;
 	}
 	
 	public Set<String> getPropertyNames() {
@@ -146,4 +157,45 @@ public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 	private void createBindingResult() {
 		bindingResult = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName());
 	}
+	
+	public void autobind() {
+		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
+		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(this);
+		// iterate on model properties
+		for (PropertyDescriptor pd : bw.getPropertyDescriptors()) {
+			String propertyName = pd.getName();
+			if ( !ignoredProperties.contains(propertyName) && viewPropertyAccessor.isReadableProperty(propertyName)) {
+				Object control = viewPropertyAccessor.getPropertyValue(propertyName);
+				if (control != null) {
+					if (log.isDebugEnabled()) 
+						log.debug("Found control: " + control.getClass().getSimpleName() + 
+								" for property: " + propertyName);
+					bind(control, propertyName);
+				}
+			}
+		}
+	}
+
+	/**
+	 * @return the ignoredProperties
+	 */
+	public List<String> getIgnoredProperties() {
+		return ignoredProperties;
+	}
+
+	/**
+	 * @param ignoredProperties the ignoredProperties to set
+	 */
+	public void setIgnoredProperties(List<String> ignoredProperties) {
+		this.ignoredProperties = ignoredProperties;
+	}
+	
+	/**
+	 * Add a property name  to ignore on binding.
+	 * @param propertyName property name to ignore
+	 */
+	public void ignoreProperty(String propertyName) {
+		ignoredProperties.add(propertyName);
+	}
+
 }

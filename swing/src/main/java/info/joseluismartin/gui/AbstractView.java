@@ -70,7 +70,7 @@ import org.springframework.validation.Validator;
  * of <code>ignoreProperty</code> methods.
  * 
  * <p> Manual binding is also supported via <code>bind</code> methods. When binding a control, a
- * <code>StateChangeListener</code> is added to the control for setting dirty property on control
+ * the View is added to control as <code>ChangeListener</code> is added to the control for setting dirty property on control
  * changes.
  * 
  * <p> Only <code>org.springframework.util.validation.Validator</code> validators are supported
@@ -105,7 +105,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	/** JComponent that hold controls */
 	private JComponent panel;
 	/** subviews list */
-	private List<View<T>> subViews = new ArrayList<View<T>>();
+	@SuppressWarnings("rawtypes")
+	private List<View> subViews = new ArrayList<View>();
 	/** validator to check binding and model values */
 	private Validator validator;
 	/** message source for internationalization */
@@ -211,7 +212,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 		binder.setModel(model);
 		
 		// refresh subviews
-		for (View<T> v : subViews)
+		for (View<Object> v : subViews)
 			v.setModel(model);
 		
 		onSetModel(model);
@@ -248,8 +249,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 				errors.getObjectName().equals(binder.getBindingResult().getObjectName()))
 			errors.addAllErrors(binder.getBindingResult());
 		
-		// update subviews
-		for (View<T>  v : subViews) {
+		// update ubviews
+		for (View<Object>  v : subViews) {
 			v.update();
 			if (errors != null && v.getBindingResult() != null &&
 					errors.getObjectName().equals(v.getBindingResult().getObjectName()))
@@ -281,7 +282,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	 * that this view, for adding views with other models, use bind()
 	 * @param view
 	 */
-	public void addView(View<T> view) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void addView(View view) {
 		subViews.add(view);
 		view.setModel(model);
 	}
@@ -295,7 +297,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 		binder.refresh();
 
 		// refresh subviews
-		for (View<T> v : subViews)
+		for (View<Object> v : subViews)
 			v.refresh();
 	}
 	
@@ -437,6 +439,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	/**
 	 * Bind Controls with the same name that a property in the model.
 	 */
+	// TODO: This code has been moved to CompositeBinder, drop it.
 	public void autobind() {
 		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
 		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(this);
@@ -493,8 +496,6 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	public void ignoreProperty(String propertyName) {
 		ignoredProperties.add(propertyName);
 	}
-	
-	
 
 	/**
 	 * @return the ignoredProperties

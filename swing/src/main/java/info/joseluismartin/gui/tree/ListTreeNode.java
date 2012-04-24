@@ -27,7 +27,7 @@ import javax.swing.tree.TreeNode;
 
 /**
  * Simple TreeNode implementation that use List to hold chidrens.
- * mainly used for RooNodes
+ * mainly used for root nodes
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */

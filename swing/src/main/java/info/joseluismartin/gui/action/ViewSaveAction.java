@@ -39,8 +39,19 @@ public class ViewSaveAction extends ViewAction {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
+		beforeSave();
+		afterSave(save());
+	}
+
+	/** 
+	 * Save the view model, show a message to user if there are
+	 * validation errors.
+	 */
+	private boolean save() {
 		View<?> view = getView();
 		view.update();
+		boolean valid = view.validateView();
+		
 		if (view.validateView()) {
 			service.save(getView().getModel());
 			getDialog().setVisible(false);
@@ -56,9 +67,38 @@ public class ViewSaveAction extends ViewAction {
 			}
 		}
 		else {
-			String errorMessage = view.getErrorMessage();
-			 JOptionPane.showMessageDialog(view.getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+			if (onError()) {
+				String errorMessage = view.getErrorMessage();
+				JOptionPane.showMessageDialog(view.getPanel(),errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
+		
+		return valid;
+	}
+
+	/**
+	 * Hook method to let subclases to do something on validation errors.
+	 * @return true to show message error, false otherwise
+	 */
+	protected boolean onError() {
+		return true;
+	}
+
+	/**
+	 * Hook method to let subclases to do something before save 
+	 * the model 
+	 * @param valid true if validation success
+	 */
+	protected void afterSave(boolean valid) {
+		
+	}
+
+	/**
+	 * Hook method to let subclases to do something after save 
+	 * the model
+	 */
+	protected void beforeSave() {
+		
 	}
 
 	public PersistentService<Object, Serializable> getService() {
@@ -68,5 +108,4 @@ public class ViewSaveAction extends ViewAction {
 	public void setService(PersistentService<Object, Serializable> service) {
 		this.service = service;
 	}
-
 }

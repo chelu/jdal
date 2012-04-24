@@ -15,20 +15,20 @@
  */
 package info.joseluismartin.gui.form;
 
+import info.joseluismartin.gui.bind.BinderFactory;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.border.Border;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 
 /**
@@ -37,42 +37,35 @@ import org.springframework.context.MessageSource;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class SimpleBoxFormBuilder {
-	private static final Log log = LogFactory.getLog(SimpleBoxFormBuilder.class);
+public class TestBoxFormBuilder {
 	private Box container = Box.createHorizontalBox();
 	private List<Box> columns = new ArrayList<Box>();
 	private List<Integer> columnsWidth = new ArrayList<Integer>();
-	private List<Integer> rowsHeight = new ArrayList<Integer>();
+	private List<Integer> columnsHeight = new ArrayList<Integer>();
 	private int index = 0;
 	private int rows = 0;
-	private int rowHeight = 25;
-	private int defaultRowHeight = 25;
-	private int defaultSpace = 5;
+	private int height = 30;
 	private int charWidth = 6;
-	private boolean debug = false;
+	private boolean debug = true;
 	private boolean fixedHeight = false;
+	private BinderFactory binderFactory;
 	private MessageSource messageSource;
 	private FormFocusTransversalPolicy focusTransversal = new FormFocusTransversalPolicy();
-	private Border border = null;
-	
+	private TestBoxFormBuilder currentBuilder = this;
+	private Stack<TestBoxFormBuilder> stack = new Stack<TestBoxFormBuilder>();
 	
 	/** 
 	 * Default Ctor 
 	 */
-	public SimpleBoxFormBuilder() {
+	public TestBoxFormBuilder() {
+	
 	}
 	
-	public SimpleBoxFormBuilder(Border border) {
-		this.border = border;
-	}
-	
-	public SimpleBoxFormBuilder(int rowHeight) {
-		this(rowHeight, null);
-	}
-	
-	public SimpleBoxFormBuilder(int rowHeight, Border border) {
-		this.rowHeight = rowHeight;
-		this.border = border;
+	/** 
+	 * Default Ctor 
+	 */
+	public TestBoxFormBuilder(BinderFactory binderFactory) {
+		this.binderFactory = binderFactory;
 	}
 	
 	/**
@@ -81,51 +74,47 @@ public class SimpleBoxFormBuilder {
 	 * @param c Component to add
 	 */
 	public void add(Component c) {
-		if (debug) {
-			if (c instanceof JComponent)
-				((JComponent) c).setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+		if (this != currentBuilder) {
+			currentBuilder.add(c);
+			return;
 		}
-		addBox(c);
+		
+		Box column = getColumn();
+		
+		if (!c.isMaximumSizeSet())
+			c.setMaximumSize(new Dimension(Short.MAX_VALUE, height));
+		
+		column.add(c);
+		column.add(Box.createVerticalStrut(5));
+		index++;
+		
 		// don't add Labels to focus transversal
 		if (!(c instanceof JLabel)) {
 			focusTransversal.add(c);
 		}
-
-		if (!c.isMaximumSizeSet() || c.getMaximumSize().getHeight() > rowHeight)
-			c.setMaximumSize(new Dimension(Short.MAX_VALUE, rowHeight));
+			
 	}
 	
-	public void addBox(Component c) {
-		if (rows == 0 && rowsHeight.isEmpty()) {
-			log.warn("You must call row() before adding components. I will add a row with default height for you");
-			row();
-		}
-		Box column = getColumn();
-		
-		if (rows > 1)
-			column.add(Box.createVerticalStrut(defaultSpace));
-		
-		column.add(c);
-	
-		index++;
-	}
 	
 	/**
 	 * Gets current column pointed to cursor, create one if none.
 	 * @return a new or existent column Box.
 	 */
 	private Box getColumn() {
+		if (this != currentBuilder) {
+			return currentBuilder.getColumn();
+		}
+
 		Box column = null;
 		if (index < columns.size()) {
 			column = (Box) columns.get(index);
 		}
 		else {
-			if (!columns.isEmpty())
-				container.add(Box.createHorizontalStrut(defaultSpace));
-			
 			column = Box.createVerticalBox();
 			columns.add(column);
 			container.add(column);
+			container.add(Box.createHorizontalStrut(5));
+			columnsHeight.add(0);
 			columnsWidth.add(0);
 			
 			if (debug) {
@@ -141,6 +130,11 @@ public class SimpleBoxFormBuilder {
 	 * @param c component.
 	 */
 	public void add(String name, Component c) {
+		if (this != currentBuilder) {
+			currentBuilder.add(name, c);
+			return;
+		}
+		
 		JLabel label = new JLabel(name);
 		add(label);
 		setMaxWidth(name.length()*charWidth);
@@ -151,25 +145,27 @@ public class SimpleBoxFormBuilder {
 	 * @param i
 	 */
 	public void setMaxWidth(int i) {
+		if (this != currentBuilder) {
+			currentBuilder.setMaxWidth(i);
+			return;
+		}
+		
 		if (i > columnsWidth.get(index - 1)) {
 			columnsWidth.set(index - 1, i);
 		}
 		
 	}
-	
-	public void row() {
-		row(defaultRowHeight + defaultSpace);
-	}
 
 	/**
 	 * Move cursor to next row.
 	 */
-	public void row(int rowHeight) {
+	public void row() {
+		if (this != currentBuilder) {
+			currentBuilder.row();
+		}
+		
 		index = 0;
 		rows++;
-		rowsHeight.add(rowHeight);
-		this.rowHeight = rowHeight;
-		
 	}
 	
 	/**
@@ -177,30 +173,28 @@ public class SimpleBoxFormBuilder {
 	 * @return the form component
 	 */
 	public JComponent getForm() {
-		// set sizes;
-		int columnHeight= 0;
-		for (int h : rowsHeight)
-			columnHeight += h;
+		if (this != currentBuilder)
+			return currentBuilder.getForm();
 		
+		int maxColumnHeight= 0;
+		// set sizes;
 		for (int i = 0; i < columns.size(); i++) {
 			Box box = columns.get(i);
 			int maxWidth = columnsWidth.get(i) == 0 ? Short.MAX_VALUE : columnsWidth.get(i);
-			box.setMaximumSize(new Dimension(maxWidth, columnHeight));
+			int maxHeight = columnsHeight.get(i) == 0 ? (rows +1)*height : columnsHeight.get(i);
+			
+			if (maxHeight > maxColumnHeight)
+				maxColumnHeight = maxHeight;
+			
+			box.setMaximumSize(new Dimension(maxWidth, maxHeight));
 		}
-		
+
 		container.setFocusTraversalPolicy(focusTransversal);
 		container.setFocusTraversalPolicyProvider(true);
-		container.setSize(Short.MAX_VALUE, columnHeight);
-		
+
 		if (isFixedHeight())
-			container.setMaximumSize(new Dimension(Short.MAX_VALUE, columnHeight));
-		
-		if (isDebug())
-			container.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-		
-		if (border != null)
-			container.setBorder(border);
-		
+			container.setMaximumSize(new Dimension(Short.MAX_VALUE, maxColumnHeight));
+
 		return container;
 	}
 	
@@ -210,7 +204,7 @@ public class SimpleBoxFormBuilder {
 	public void reset() {
 		columns = new ArrayList<Box>();
 		columnsWidth = new ArrayList<Integer>();
-		rowsHeight = new ArrayList<Integer>();
+		columnsHeight = new ArrayList<Integer>();
 		container = Box.createHorizontalBox();
 		
 		index = 0;
@@ -220,31 +214,66 @@ public class SimpleBoxFormBuilder {
 	}
 	
 	public void next() {
+		if (currentBuilder != this)
+			currentBuilder.next();
+		
 		getColumn();
 		index++;
 	}
 	
+	public void startBlock() {
+		if (currentBuilder != this) {
+			currentBuilder.startBlock();
+			return;
+		}
+		
+		stack.push(currentBuilder);
+		currentBuilder = new TestBoxFormBuilder();
+	}
+	
+	public void endBlock() {
+		JComponent c = currentBuilder.getForm();
+		currentBuilder = stack.pop();
+		currentBuilder.add(c);
+	}
 
 	// Getters & Setters
 	
 	public int getHeight() {
-		return rowHeight;
+		if (this != currentBuilder)
+			return currentBuilder.getHeight();
+		
+		return height;
 	}
 
 	public void setHeight(int height) {
-		this.rowHeight = height;
-		if (rowsHeight.size() > 0 && rows > 0) {
-			rowsHeight.remove(rows -1);
-			rowsHeight.add(height);
-		}
+		if (this != currentBuilder)
+			currentBuilder.setHeight(height);
+		
+		this.height = height;
 	}
-
+	
 	public boolean isDebug() {
+		if (this != currentBuilder)
+			return currentBuilder.isDebug();
 		return debug;
 	}
 
 	public void setDebug(boolean debug) {
+		if (this != currentBuilder)
+			currentBuilder.setDebug(debug);
+		
 		this.debug = debug;
+		if (debug)
+			container.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+	}
+	
+	public BinderFactory getBinderFactory() {
+		return binderFactory;
+	}
+
+	public void setBinderFactory(BinderFactory binderFactory) {
+		this.binderFactory = binderFactory;
 	}
 	
 	public MessageSource getMessageSource() {
@@ -254,11 +283,14 @@ public class SimpleBoxFormBuilder {
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
-	
+
 	/**
 	 * @return the fixedHeight
 	 */
 	public boolean isFixedHeight() {
+		if (this != currentBuilder)
+			return currentBuilder.isFixedHeight();
+		
 		return fixedHeight;
 	}
 
@@ -266,65 +298,10 @@ public class SimpleBoxFormBuilder {
 	 * @param fixedHeight the fixedHeight to set
 	 */
 	public void setFixedHeight(boolean fixedHeight) {
+		if (this != currentBuilder)
+			currentBuilder.setFixedHeight(fixedHeight);
+		
 		this.fixedHeight = fixedHeight;
 	}
-
-	/**
-	 * @return the defaultRowHeight
-	 */
-	public int getDefaultRowHeight() {
-		return defaultRowHeight;
-	}
-
-	/**
-	 * @param defaultRowHeight the defaultRowHeight to set
-	 */
-	public void setDefaultRowHeight(int defaultRowHeight) {
-		this.defaultRowHeight = defaultRowHeight;
-	}
-
-	/**
-	 * @return the border
-	 */
-	public Border getBorder() {
-		return border;
-	}
-
-	/**
-	 * @param border the border to set
-	 */
-	public void setBorder(Border border) {
-		this.border = border;
-	}
-
-	/**
-	 * @return the defaultSpace
-	 */
-	public int getDefaultSpace() {
-		return defaultSpace;
-	}
-
-	/**
-	 * @param defaultSpace the defaultSpace to set
-	 */
-	public void setDefaultSpace(int defaultSpace) {
-		this.defaultSpace = defaultSpace;
-	}
-
-	/**
-	 * @return the charWidth
-	 */
-	public int getCharWidth() {
-		return charWidth;
-	}
-
-	/**
-	 * @param charWidth the charWidth to set
-	 */
-	public void setCharWidth(int charWidth) {
-		this.charWidth = charWidth;
-	}
-
-	
 
 }

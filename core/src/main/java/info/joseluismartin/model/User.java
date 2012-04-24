@@ -17,6 +17,9 @@ package info.joseluismartin.model;
 
 import java.util.Date;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -27,6 +30,8 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class User {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	/** Id */
 	private Long id;
 	/** Username */
@@ -34,9 +39,18 @@ public class User {
 	/** Real name */
 	private String name;
 	/** Surname */
-	private String Surname;
+	private String surname;
 	/** Register date */
 	private Date registerDate;
+	/** user email */
+	private String email;
+	
+	public String toString() {
+		if (id != null)
+			return name + " " + surname;
+		
+		return "New User";
+	}
 	
 	/** Stored passwored */
 	private String password;
@@ -92,13 +106,13 @@ public class User {
 	 * @return the surname
 	 */
 	public String getSurname() {
-		return Surname;
+		return surname;
 	}
 	/**
 	 * @param surname the surname to set
 	 */
 	public void setSurname(String surname) {
-		Surname = surname;
+		this.surname = surname;
 	}
 	/**
 	 * @return the registerDate
@@ -111,5 +125,17 @@ public class User {
 	 */
 	public void setRegisterDate(Date registerDate) {
 		this.registerDate = registerDate;
+	}
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

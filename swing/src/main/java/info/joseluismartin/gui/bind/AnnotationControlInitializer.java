@@ -42,13 +42,16 @@ import org.springframework.util.ReflectionUtils;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class AnnotationControlInitializer implements ControlInitializer {
+	
 
 	private static final Log log = LogFactory.getLog(AnnotationControlInitializer.class);
-	private PersistentService<?extends Object, ?extends Serializable> persistentService;
+	private PersistentService<Object, ?extends Serializable> persistentService;
+	private boolean initializeEntities = false;
 	
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	public void initialize(Object control, String property, Class<?> clazz) {
 		if (persistentService == null) {
 			log.warn("Nothing to do without persistent service");
@@ -59,7 +62,11 @@ public class AnnotationControlInitializer implements ControlInitializer {
 		for (Annotation a : annotations) {
 			if (ManyToOne.class.equals(a.annotationType()) && control instanceof JComboBox) {
 				// fill combo from persistent service
-				List<?> entities = persistentService.getAll(propertyType);
+				List<Object> entities =  (List<Object>) persistentService.getAll(propertyType);
+				if (isInitializeEntities()) {
+					for (Object entity : entities)
+						persistentService.initialize(entity);
+				}
 				((JComboBox) control).setModel(new ListComboBoxModel(entities));
 			}
 		}
@@ -87,15 +94,29 @@ public class AnnotationControlInitializer implements ControlInitializer {
 	/**
 	 * @return the persistentService
 	 */
-	public PersistentService<? extends Object, ? extends Serializable> getPersistentService() {
+	public PersistentService<Object, ? extends Serializable> getPersistentService() {
 		return persistentService;
 	}
 	
 	/**
 	 * @param persistentService the persistentService to set
 	 */
-	public void setPersistentService(PersistentService<? extends Object, ? extends Serializable> persistentService) {
+	public void setPersistentService(PersistentService<Object, ? extends Serializable> persistentService) {
 		this.persistentService = persistentService;
+	}
+
+	/**
+	 * @return the initializeEntities
+	 */
+	public boolean isInitializeEntities() {
+		return initializeEntities;
+	}
+
+	/**
+	 * @param initializeEntities the initializeEntities to set
+	 */
+	public void setInitializeEntities(boolean initializeEntities) {
+		this.initializeEntities = initializeEntities;
 	}
 
 }

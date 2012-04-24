@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.service;
 
+import info.joseluismartin.dao.Dao;
 import info.joseluismartin.dao.PageableDataSource;
 
 import java.io.Serializable;
@@ -58,5 +59,7 @@ public interface PersistentService<T, PK extends Serializable> extends PageableD
 	<E> E get(PK id, Class<E> clazz);
 	
 	<E> List<E> getAll(Class<E> clazz);
+	
+	Dao<T, PK> getDao();
 	
 }

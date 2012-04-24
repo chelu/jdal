@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
+import org.springframework.beans.factory.parsing.CompositeComponentDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
@@ -58,6 +59,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String PERSISTENT_SERVICE = "persistentService";
 	private static final String FILTER = "filter";
 	private static final String FILTER_VIEW = "filterView";
+	private static final String TABLE_SERVICE = "tableService";
+	private static final String NAME = "name";
 
 	
 	/**
@@ -76,6 +79,9 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(ID))
 			name = element.getAttribute(ID);
 		
+		parserContext.pushContainingComponent(
+				new CompositeComponentDefinition(name, parserContext.extractSource(element)));
+	
 		// Bean names
 		String tableModelBeanName = name + LIST_TABLE_MODEL_SUFFIX;
 		String tablePanelBeanName = name + TABLE_PANEL_SUFFIX;
@@ -103,6 +109,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		// create ListTableModel
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(ListTableModel.class);
+		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bdb.addPropertyValue("modelClass", entity);
 		NodeList nl = element.getElementsByTagNameNS(element.getNamespaceURI(), COLUMNS);
 	
@@ -115,13 +122,20 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		// create PageableTable
 		bdb = BeanDefinitionBuilder.genericBeanDefinition(PageableTable.class);
+		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bdb.addPropertyReference(DATA_SOURCE, dataSource);
 		bdb.addPropertyReference(PAGINATOR_VIEW, paginator);
 		bdb.addPropertyReference(TABLE_MODEL, tableModelBeanName);
+		bdb.addPropertyValue(NAME, pageableTableBeanName);
+		
+		if (element.hasAttribute(TABLE_SERVICE)) 
+			bdb.addPropertyReference(TABLE_SERVICE, element.getAttribute(TABLE_SERVICE));
+			
 		registerBeanDefinition(element, parserContext, pageableTableBeanName, bdb);
 		
 		// create TablePanel
 		bdb = BeanDefinitionBuilder.genericBeanDefinition(TablePanel.class);
+		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bdb.addPropertyReference(TABLE, pageableTableBeanName);
 		bdb.addPropertyReference(ACTIONS, actions);
 		bdb.addPropertyReference(GUI_FACTORY, guiFactory);
@@ -133,6 +147,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		registerBeanDefinition(element, parserContext, tablePanelBeanName, bdb);
 		
+		parserContext.popAndRegisterContainingComponent();
 		
 		return null;
 	}

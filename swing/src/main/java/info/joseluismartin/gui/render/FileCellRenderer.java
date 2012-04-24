@@ -28,7 +28,6 @@ import javax.swing.JList;
  * ListCellRenderer that displays values with icon from extension.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public class FileCellRenderer extends DefaultListCellRenderer {
 

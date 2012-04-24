@@ -22,4 +22,5 @@ package info.joseluismartin.gui.bind;
 public interface ControlInitializer {
 	
 	void initialize(Object control, String property, Class<?> clazz);
+	void setInitializeEntities(boolean initializeEntities);
 }

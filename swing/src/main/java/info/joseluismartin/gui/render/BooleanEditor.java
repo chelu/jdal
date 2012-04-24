@@ -4,7 +4,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 
 /**
- * Boolean Editor from JTable. JTable by default not handle boolean primitive values
+ * Boolean Editor for JTable. JTable by default not handle boolean primitive values
  *
  */
 public class BooleanEditor extends DefaultCellEditor {

@@ -416,9 +416,9 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	}
 
 	/**
-	 * @return
+	 * @return entity class
 	 */
-	private Class<T> getEntityClass() {
+	public Class<T> getEntityClass() {
 		return entityClass;
 	}
 

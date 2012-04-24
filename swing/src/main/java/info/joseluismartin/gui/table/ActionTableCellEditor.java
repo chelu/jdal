@@ -30,7 +30,7 @@ import javax.swing.table.TableCellEditor;
 
 /**
  * TableCellEditor that execute Actions on clicks. If Action is a TableRowAction set
- * a TableModel and row on TableRowAction.
+ * a TableModel and row on it.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
