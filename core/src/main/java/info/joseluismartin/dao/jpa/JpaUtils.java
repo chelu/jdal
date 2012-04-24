@@ -144,9 +144,10 @@ public abstract class JpaUtils {
 	 * @param propertyPath property path String like "customer.order.price"
 	 * @return a new Path for property
 	 */
-	public static Path<?> getPath(Path<?> path, String propertyPath) {
+	@SuppressWarnings("unchecked")
+	public static <T> Path<T> getPath(Path<?> path, String propertyPath) {
 		if (StringUtils.isEmpty(propertyPath))
-			return path;
+			return (Path<T>) path;
 		
 		String name = StringUtils.substringBefore(propertyPath, PropertyUtils.PROPERTY_SEPARATOR);
 		Path<?> p = path.get(name); 
