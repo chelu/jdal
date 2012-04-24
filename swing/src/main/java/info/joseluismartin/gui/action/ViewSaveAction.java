@@ -52,7 +52,7 @@ public class ViewSaveAction extends ViewAction {
 		view.update();
 		boolean valid = view.validateView();
 		
-		if (view.validateView()) {
+		if (valid) {
 			service.save(getView().getModel());
 			getDialog().setVisible(false);
 			getDialog().dispose();
