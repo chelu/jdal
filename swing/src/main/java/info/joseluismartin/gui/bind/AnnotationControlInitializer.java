@@ -15,24 +15,26 @@
  */
 package info.joseluismartin.gui.bind;
 
-import groovy.swing.binding.JComboBoxMetaMethods;
+import info.joseluismartin.annotations.Reference;
 import info.joseluismartin.gui.list.ListComboBoxModel;
 import info.joseluismartin.service.PersistentService;
+import info.joseluismartin.util.BeanUtils;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
 import javax.swing.JComboBox;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 
@@ -41,17 +43,17 @@ import org.springframework.util.ReflectionUtils;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class AnnotationControlInitializer implements ControlInitializer {
 	
-
 	private static final Log log = LogFactory.getLog(AnnotationControlInitializer.class);
 	private PersistentService<Object, ?extends Serializable> persistentService;
 	private boolean initializeEntities = false;
+	private boolean firstNull = false;
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	public void initialize(Object control, String property, Class<?> clazz) {
 		if (persistentService == null) {
 			log.warn("Nothing to do without persistent service");
@@ -62,14 +64,51 @@ public class AnnotationControlInitializer implements ControlInitializer {
 		for (Annotation a : annotations) {
 			if (ManyToOne.class.equals(a.annotationType()) && control instanceof JComboBox) {
 				// fill combo from persistent service
-				List<Object> entities =  (List<Object>) persistentService.getAll(propertyType);
-				if (isInitializeEntities()) {
-					for (Object entity : entities)
-						persistentService.initialize(entity);
-				}
+				List<Object> entities = getEntityList(propertyType);
 				((JComboBox) control).setModel(new ListComboBoxModel(entities));
 			}
+			if (Reference.class.equals(a.annotationType()) && control instanceof JComboBox) {
+				Reference r = (Reference) a;
+				Class type = void.class.equals(r.target()) ? propertyType : r.target();
+				List entities = getEntityList(type);
+				List values = StringUtils.isEmpty(r.property()) ?  entities : 
+					getValueList(entities, r.property());
+				
+				((JComboBox) control).setModel(new ListComboBoxModel(values));
+			}
 		}
+	}
+
+	private List<Object> getEntityList(Class<?> propertyType) {
+		List entities =  persistentService.getAll(propertyType);
+		if (isInitializeEntities()) {
+			for (Object entity : entities)
+				persistentService.initialize(entity);
+		}
+		if (isFirstNull())
+			entities.add(0, null);
+		
+		return entities;
+	}
+
+	/**
+	 * @param entities
+	 * @return
+	 */
+	private List getValueList(List entities, String propertyName) {
+		List values = new ArrayList(entities.size());
+		Iterator iter = entities.iterator();
+	
+		while (iter.hasNext()) {
+			Object value = iter.next();
+			if  (value == null)
+				values.add(null);
+			else {
+				values.add(BeanUtils.getProperty(value, propertyName));
+			}
+		}
+		
+		return values;
 	}
 
 	/**
@@ -117,6 +156,20 @@ public class AnnotationControlInitializer implements ControlInitializer {
 	 */
 	public void setInitializeEntities(boolean initializeEntities) {
 		this.initializeEntities = initializeEntities;
+	}
+
+	/**
+	 * @return the firstNull
+	 */
+	public boolean isFirstNull() {
+		return firstNull;
+	}
+
+	/**
+	 * @param firstNull the firstNull to set
+	 */
+	public void setFirstNull(boolean firstNull) {
+		this.firstNull = firstNull;
 	}
 
 }
