@@ -13,22 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui.form;
+package info.joseluismartin.db;
 
 import info.joseluismartin.gui.AbstractView;
 import info.joseluismartin.gui.ViewDialog;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
+import info.joseluismartin.gui.form.BoxFormBuilder;
+import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.gui.list.ListComboBoxModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
@@ -44,9 +46,13 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	private JTextField host = new JTextField();
 	private JTextField dbName = new JTextField();
 	private JTextField user = new JTextField();
+	private JPasswordField password = new JPasswordField();
 	private JButton test;
 	private JLabel testResult = new JLabel(" ");
-	private List<Database> databases = new ArrayList<Database>();
+	
+	public DbConnectionForm() {
+		this(new DbConnection());
+	}
 	
 	/**
 	 * @param dbConnection
@@ -63,6 +69,7 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	 * Init method, called by container after property sets.
 	 */
 	public void init() {
+		database.setModel(new ListComboBoxModel(Database.DATABASES));
 		autobind();
 	}
 
@@ -71,8 +78,11 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	 */
 	@Override
 	protected JComponent buildPanel() {
-		BoxFormBuilder fb = new BoxFormBuilder();
-		fb.setDebug(true);
+		BoxFormBuilder fb = new BoxFormBuilder(FormUtils.createTitledBorder(getMessage("DbConnectionForm.title")));
+		fb.row();
+		fb.startBox();
+		fb.setFixedHeight(true);
+		fb.row();
 		fb.add(getMessage("DbConnectionForm.database"),database);
 		fb.row();
 		fb.add(getMessage("DbConnectionForm.host"),host);
@@ -82,45 +92,36 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 		fb.add(getMessage("DbConnectionForm.dbName"), dbName);
 		fb.row();
 		fb.add(getMessage("DbConnectionForm.user"), user);
+		fb.row();
+		fb.add(getMessage("DbConnectionForm.password"), password);
+		fb.endBox();
+		fb.row();
+		fb.startBox();
+		fb.row();
+		fb.startBox();
+		fb.row();
+		fb.add(Box.createHorizontalGlue());
+		fb.add(test, 50);
+		fb.add(Box.createHorizontalGlue());
+		fb.endBox();
+		fb.row();
+		fb.add(testResult);
+		fb.endBox();
 		
-		JComponent c = fb.getForm();
-
-		Box box = Box.createVerticalBox();
-		box.add(c);
-		box.add(Box.createVerticalStrut(10));
-		box.add(test);
-		box.add(Box.createVerticalStrut(10));
-		box.add(testResult);
-		
-		box.setBorder(FormUtils.createTitledBorder(getMessage("DbConnectionForm.title")));
-		
-		return box;
+		return fb.getForm();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
+		update();
 		if (getModel().test()) {
 			testResult.setText(getMessage("DbConnectionForm.success"));
 		}
 		else {
 			testResult.setText(getMessage("DbConnectionForm.failed"));
 		}
-	}
-
-	/**
-	 * @return the databases
-	 */
-	public List<Database> getDatabases() {
-		return databases;
-	}
-
-	/**
-	 * @param databases the databases to set
-	 */
-	public void setDatabases(List<Database> databases) {
-		this.databases = databases;
 	}
 	
 	/**

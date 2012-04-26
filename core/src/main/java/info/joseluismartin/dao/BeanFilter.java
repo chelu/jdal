@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
@@ -42,11 +43,16 @@ public class BeanFilter implements Filter, Serializable {
 
 	
 	public BeanFilter() {
-		this(BeanFilter.class.getSimpleName());
+		this.filterName = StringUtils.uncapitalize(this.getClass().getSimpleName());
+		init();
 	}
 	
 	public BeanFilter(String filterName) {
 		this.filterName = filterName;
+		init();
+	}	
+
+	private void init() {
 		ignoredProperties.add(PARAMETER_MAP);
 		ignoredProperties.add(FILTER_NAME);
 		ignoredProperties.add("class");

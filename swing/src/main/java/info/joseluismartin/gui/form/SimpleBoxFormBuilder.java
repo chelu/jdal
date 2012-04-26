@@ -86,13 +86,14 @@ public class SimpleBoxFormBuilder {
 				((JComponent) c).setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 		}
 		addBox(c);
-		// don't add Labels to focus transversal
-		if (!(c instanceof JLabel)) {
-			focusTransversal.add(c);
-		}
 
 		if (!c.isMaximumSizeSet() || c.getMaximumSize().getHeight() > rowHeight)
 			c.setMaximumSize(new Dimension(Short.MAX_VALUE, rowHeight));
+	}
+	
+	public void add(Component c, int maxWidth) {
+		add(c);
+		setMaxWidth(maxWidth);
 	}
 	
 	public void addBox(Component c) {
@@ -106,8 +107,14 @@ public class SimpleBoxFormBuilder {
 			column.add(Box.createVerticalStrut(defaultSpace));
 		
 		column.add(c);
-	
+		
+		// don't add Labels to focus transversal
+		if (!(c instanceof JLabel)) {
+			focusTransversal.add(c);
+		}
+		
 		index++;
+		
 	}
 	
 	/**

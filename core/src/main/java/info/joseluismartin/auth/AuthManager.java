@@ -38,7 +38,7 @@ public class AuthManager implements AuthService {
 	 */
 	public boolean authUser(User user, String password) {
 		return user == null ? false 
-				: authStrategy.validate(user.getPassword(), user.getPassword());
+				: authStrategy.validate(password, user.getPassword());
 	}
 
 	// AuthService Start

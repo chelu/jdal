@@ -13,25 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui.form;
+package info.joseluismartin.db;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * Database model for use with DbConnectionForm
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public class Database {
+	
+	public static List<Database> DATABASES;
+	
+	private static String[][] DBDATA = {
+		{ "MySQL", "mysql", "com.mysql.jdbc.Driver", "3306" }
+	};
+	
+	static {
+		DATABASES  = new ArrayList<Database>();
+		
+		for (String[] d : DBDATA) {
+			DATABASES.add(new Database(d[0], d[1], d[2], d[3]));
+		}
+
+	}
+
 	private String name;
 	private String jdbcName;
 	private String driver;
+	private String defaultPort;
 	
 	public Database() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 	
-	public Database(String name, String jdbcName, String driver) {
+	public Database(String name, String jdbcName, String driver, String defaultPort) {
 		this.name = name;
 		this.jdbcName = jdbcName;
 		this.driver = driver;
+		this.defaultPort = defaultPort;
+		
 	}
 	
 	/**
@@ -71,5 +94,23 @@ public class Database {
 	 */
 	public void setDriver(String driver) {
 		this.driver = driver;
+	}
+	
+	public String toString() {
+		return name;
+	}
+
+	/**
+	 * @return the defaultPort
+	 */
+	public String getDefaultPort() {
+		return defaultPort;
+	}
+
+	/**
+	 * @param defaultPort the defaultPort to set
+	 */
+	public void setDefaultPort(String defaultPort) {
+		this.defaultPort = defaultPort;
 	}
 }

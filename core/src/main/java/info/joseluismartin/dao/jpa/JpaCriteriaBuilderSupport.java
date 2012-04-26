@@ -47,7 +47,7 @@ public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements 
 		root = criteria.from(entityClass);
 		this.cb = cb;
 		
-		doBuild(criteria, cb, filter);
+		doBuild(criteria, cb, (F) filter);
 		
 		return criteria;
 	}
@@ -58,7 +58,7 @@ public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements 
 	 * @param cb
 	 * @param filter
 	 */
-	protected abstract void doBuild(CriteriaQuery<T> criteria, CriteriaBuilder cb, Filter filter);
+	protected abstract void doBuild(CriteriaQuery<T> criteria, CriteriaBuilder cb, F filter);
 	
 	/**
 	 * Add a '=' Restriction on property

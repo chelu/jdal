@@ -15,8 +15,12 @@
  */
 package info.joseluismartin.beans;
 
+import java.util.Properties;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.core.env.PropertySource;
 
 /**
  * Minimalistic singleton with application context
@@ -28,7 +32,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class AppCtx {
 	
 	/** spring application context */
-	private static ApplicationContext context = null;
+	private static ClassPathXmlApplicationContext context = null;
+	/** init properties */
+	private static PropertySource<?> propertySource;
 	
 	/** 
 	 * Search on classpath for context definition files and return the application context
@@ -37,14 +43,19 @@ public class AppCtx {
 	 */
 	public synchronized static ApplicationContext getInstance() {
 		if (context == null) {
-			context = new ClassPathXmlApplicationContext(
-					new String[] {
-//							"classpath*:/applicationContext-resources.xml",
-//							"classpath*:/applicationContext-dao.xml",
-//							"classpath*:/applicationContext.xml",
-							"classpath*:**/applicationContext*.xml" });
+			context = new ClassPathXmlApplicationContext();
+			if (propertySource != null) {
+				context.getEnvironment().getPropertySources().addFirst(propertySource);
+			}
+			
+			context.setConfigLocation("classpath*:**/applicationContext*.xml");
+			context.refresh();
 		}
 		
 		return context;
+	}
+	
+	public synchronized static void setProperties(String name, Properties properties) {
+		propertySource = new PropertiesPropertySource(name, properties);
 	}
 }

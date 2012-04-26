@@ -118,6 +118,10 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 				// build criteria
 				jcb.build(c, cb, filter);
 			}
+			else {
+				log.error("No CriteriaBuilder found for filter name [" + filter.getFilterName() + "]");
+				c.from(entityClass);
+			}
 		}
 		else {
 			c.select(c.from(getEntityClass()));

@@ -15,11 +15,10 @@
  */
 package info.joseluismartin.gui.action;
 
+import info.joseluismartin.gui.form.FormUtils;
+
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Cancel Action for ViewDialog
@@ -28,16 +27,18 @@ import org.apache.commons.logging.LogFactory;
  */
 public class DialogCancelAction extends DialogAction {
 	
-	private static final Log log = LogFactory.getLog(DialogCancelAction.class);
-	/**
-	 * 
-	 */
+	private static final String ICON = "/images/16x16/dialog-cancel.png";
+
 	public DialogCancelAction() {
 		this.setName("Cancel");
 	}
+	
 
-	private static final long serialVersionUID = 1L;
-
+	public void init() {
+		if (getIcon() == null)
+			setIcon(FormUtils.getIcon(ICON));
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

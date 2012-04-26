@@ -79,6 +79,9 @@ public class BoxFormBuilder {
 		builder.add(c);
 	}
 
+	public void add(Component c, int maxWidth) {
+		builder.add(c, maxWidth);
+	}
 	/**
 	 * @param name
 	 * @param c

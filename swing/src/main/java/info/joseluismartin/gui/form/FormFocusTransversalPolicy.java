@@ -21,14 +21,19 @@ import java.awt.FocusTraversalPolicy;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * FocusTraversalProvider for FormBuilder
+ * FocusTraversalProvider for BoxFormBuilder
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 	
+	private static final Log log = LogFactory.getLog(FormFocusTransversalPolicy.class);
 	ArrayList<Component> components = new ArrayList<Component>();
 	
 	@Override
@@ -41,11 +46,32 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 				component = component.getParent();
 	
 		int index = components.indexOf(component);
+		
+		if (index == -1) { // not owner
+			Container childContainer =  getTopmostProvider(container, component);
+			if (childContainer == null)
+				return getFirstComponent(container);
+			
+			FocusTraversalPolicy ftp = childContainer.getFocusTraversalPolicy();
+			if (ftp != null && ftp != this) {
+				Component next =  ftp.getComponentAfter(childContainer, component);
+				if (next != ftp.getFirstComponent(container)) 
+					return next;
+				
+				// child cycle
+				index = components.indexOf(childContainer);
+				if (index == -1) {
+					log.warn("I can't figure what is the next component, returning null...");
+					return null;
+				}
+			}
+		}
+		
 		index++;
 		
 		if (index < components.size() && index >= 0) {
-			Component c =  components.get(index);
-			if (c.isEnabled()) 
+			Component c = getComponent(index);
+			if (c.isEnabled() && c.isFocusable()) 
 				return c;
 			else 
 				return getComponentAfter(container, c);
@@ -53,6 +79,22 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 		
 		return getFirstComponent(container);
 	}
+
+
+	private Component getComponent(int index) {
+		Component c =  components.get(index);
+		if (c instanceof Container) {
+			Container cc  = (Container) c;
+			if (cc.isFocusTraversalPolicyProvider() || cc.isFocusCycleRoot())
+				c = cc.getFocusTraversalPolicy().getFirstComponent(cc);
+			else if (cc instanceof JScrollPane) {
+				if (((JScrollPane) cc).getViewport().getComponentCount() > 0)
+				c = ((JScrollPane) cc).getViewport().getComponent(0);
+			}
+		}
+		return c;
+	}
+
 
 	@Override
 	public Component getComponentBefore(Container aContainer,
@@ -62,7 +104,7 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 		index--;
 		
 		if (index < components.size() && index >= 0) {
-			Component c =  components.get(index);
+			Component c = getComponent(index);
 			if (c.isEnabled()) 
 				return c;
 			else 
@@ -75,11 +117,7 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 	@Override
 	public Component getDefaultComponent(Container aContainer) {
 		if (components.size() > 0) {
-			Component c = components.get(0);
-			if (c.isEnabled())
-				return c;
-			else 
-				return getComponentAfter(aContainer, c);
+			return getComponent(0);
 		}
 		
 		return null;
@@ -106,4 +144,35 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 	public void add(Component c) {
 		components.add(c);
 	}
+	
+	/**
+	 * @param component
+	 * @return
+	 */
+	private FocusTraversalPolicy getFocusTraversalPolicyForComponent(Component component) {
+		Container c = null;
+		while ((c = component.getParent()) != null) {
+			if (c.isFocusTraversalPolicyProvider()) 
+				return c.getFocusTraversalPolicy();
+				component = c;
+		}
+		
+		return null;
+	}
+	
+	 Container getTopmostProvider(Container focusCycleRoot, Component aComponent) {
+	        Container aCont = aComponent.getParent();
+	        Container ftp = null;
+	        while (aCont  != focusCycleRoot && aCont != null) {
+	            if (aCont.isFocusTraversalPolicyProvider()) {
+	                ftp = aCont;
+	            }
+	            aCont = aCont.getParent();
+	        }
+	        if (aCont == null) {
+	            return null;
+	        }
+	        return ftp;
+	    }
+
 }

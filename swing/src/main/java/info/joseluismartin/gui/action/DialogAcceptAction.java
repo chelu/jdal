@@ -17,6 +17,7 @@ package info.joseluismartin.gui.action;
 
 import info.joseluismartin.gui.View;
 import info.joseluismartin.gui.ViewDialog;
+import info.joseluismartin.gui.form.FormUtils;
 
 import java.awt.event.ActionEvent;
 
@@ -28,15 +29,17 @@ import java.awt.event.ActionEvent;
  */
 public class DialogAcceptAction extends ViewAction {
 
-	/**
-	 * 
-	 */
+	private static final String ICON = "/images/16x16/dialog-ok.png";
+	
 	public DialogAcceptAction() {
 		this.setName("Accept");
 	}
 
-	private static final long serialVersionUID = 1L;
-
+	public void init() {
+		if (getIcon() == null)
+			setIcon(FormUtils.getIcon(ICON));
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

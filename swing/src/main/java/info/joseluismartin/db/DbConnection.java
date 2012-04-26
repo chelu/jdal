@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui.form;
+package info.joseluismartin.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -30,18 +32,27 @@ public class DbConnection {
 	
 	private static Log log = LogFactory.getLog(DbConnection.class);
 	
+	public static final String DRIVER = "jdbc.driverClassName";
+	public static final String URL = "jdbc.url";
+	public static final String USERNAME = "jdbc.username";
+	public static final String PASSWORD = "jdbc.password";
+	public static final String FILE_NAME = "jdbc.properties";
+	
 	private Database database;
 	private String host;
-	private int port;
+	private String port;
 	private String dbName;
 	private String user;
+	private String password;
+	private String url;
 	
 	public boolean test() {
 		boolean success = false;
 		// Try to connect
 		try {
 	      Class.forName(database.getDriver());
-	      Connection conn = DriverManager.getConnection(dbName, user, ""); 
+	      String connectionUrl = url != null ? url : buildUrl();
+	      Connection conn = DriverManager.getConnection(connectionUrl, user, password); 
 	      conn.close(); 
 	      success = true;
 
@@ -85,14 +96,14 @@ public class DbConnection {
 	/**
 	 * @return the port
 	 */
-	public int getPort() {
+	public String getPort() {
 		return port;
 	}
 	
 	/**
 	 * @param port the port to set
 	 */
-	public void setPort(int port) {
+	public void setPort(String port) {
 		this.port = port;
 	}
 	
@@ -120,5 +131,80 @@ public class DbConnection {
 	 */
 	public void setUser(String user) {
 		this.user = user;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return JDBC url connection string
+	 */
+	public String buildUrl() {
+		if (StringUtils.isEmpty(port))
+			port = database.getDefaultPort();
+		
+		this.url = "jdbc:" + getDatabase().getJdbcName() + "://" + getHost() +
+				":" + getPort() + "/" + getDbName(); 
+		return url;
+	}
+
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	/**
+	 * @param driver
+	 */
+	public void setDriver(String driver) {
+		if (database == null)
+			database = new Database();
+		
+		database.setDriver(driver);
+		
+	}
+	
+	public String getDriver() {
+		return database != null ? database.getDriver() : null;
+	}
+	
+	public void fromProperties(Properties prop) {
+		setUser(prop.getProperty(USERNAME));
+		setPassword(prop.getProperty(PASSWORD));
+		setUrl(prop.getProperty(URL));
+		setDriver(prop.getProperty(DRIVER));
+	}
+
+	/**
+	 * @return connection properties
+	 */
+	public Properties toProperties() {
+		Properties prop = new Properties();
+		prop.put(DRIVER, getDatabase().getDriver());
+		prop.put(URL, getUrl());
+		prop.put(USERNAME, getUser());
+		prop.put(PASSWORD, getPassword());
+
+		return prop;
 	}
 }
