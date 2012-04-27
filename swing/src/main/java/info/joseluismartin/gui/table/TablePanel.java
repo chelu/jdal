@@ -172,7 +172,7 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	public void refresh() {
 		if (reportListView != null) 
 			reportListView.refresh();
-		if (filterView !=null)
+		if (filterView != null)
 			filterView.refresh();
 		table.refresh();
 	}

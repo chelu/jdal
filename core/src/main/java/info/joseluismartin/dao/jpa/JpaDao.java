@@ -95,7 +95,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		query.setFirstResult(page.getStartIndex());
 		
 		page.setData(query.getResultList());
-		
+		page.setPageableDataSource(this);
 		return page;
 	}
 	
@@ -272,7 +272,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	}
 	
 	/**
-	 * Apply filter to parametriced Quer
+	 * Apply filter to parametriced Query
 	 * @param query the query to apply filter on
 	 * @param filter Filter to apply
 	 */

@@ -16,6 +16,7 @@
 package info.joseluismartin.gui.table;
 
 import info.joseluismartin.gui.PageableTable;
+import info.joseluismartin.gui.View;
 import info.joseluismartin.gui.form.FormUtils;
 
 import java.awt.event.ActionEvent;
@@ -36,11 +37,12 @@ public class ClearFilterAction extends TablePanelAction {
 
 	public void actionPerformed(ActionEvent arg0) {
 		PageableTable table = getTablePanel().getTable();
-		if (getTablePanel().getFilterView() != null)
-			getTablePanel().getFilterView().clear();
-	
-		table.setFilter(null);
-		table.getPaginator().firstPage();
+		if (getTablePanel().getFilterView() != null) {
+			View<Object> filterView = getTablePanel().getFilterView();
+			filterView.clear();
+			table.setFilter(filterView.getModel());
+			table.getPaginator().firstPage();
+		}
 	}
 	
 }

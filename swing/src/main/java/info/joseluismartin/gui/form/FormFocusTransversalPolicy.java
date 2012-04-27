@@ -59,10 +59,14 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 					return next;
 				
 				// child cycle
-				index = components.indexOf(childContainer);
+				do {
+					index = components.indexOf(childContainer);
+					childContainer = childContainer.getParent();
+				} while (index == -1 || childContainer == null);
+				
 				if (index == -1) {
-					log.warn("I can't figure what is the next component, returning null...");
-					return null;
+					log.warn("I can't figure what is the next component");
+					return getFirstComponent(container);
 				}
 			}
 		}
@@ -83,8 +87,9 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 
 	private Component getComponent(int index) {
 		Component c =  components.get(index);
+		Container cc = null;
 		if (c instanceof Container) {
-			Container cc  = (Container) c;
+			cc  = (Container) c;
 			if (cc.isFocusTraversalPolicyProvider() || cc.isFocusCycleRoot())
 				c = cc.getFocusTraversalPolicy().getFirstComponent(cc);
 			else if (cc instanceof JScrollPane) {
@@ -92,7 +97,7 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 				c = ((JScrollPane) cc).getViewport().getComponent(0);
 			}
 		}
-		return c;
+		return c != null ? c : cc;
 	}
 
 
@@ -149,6 +154,7 @@ public class FormFocusTransversalPolicy extends FocusTraversalPolicy {
 	 * @param component
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private FocusTraversalPolicy getFocusTraversalPolicyForComponent(Component component) {
 		Container c = null;
 		while ((c = component.getParent()) != null) {

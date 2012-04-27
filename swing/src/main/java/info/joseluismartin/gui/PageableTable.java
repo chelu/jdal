@@ -112,8 +112,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private JScrollPane tableScrollPane;
 	/** row sorter that query a new page for server side order */
 	private ModelRowSorter<ListTableModel> sorter;
-	/** filter view with filter data */
-	private Object filter;
 	/** visiblity column descriptor in use */
 	private List<ColumnDescriptor> columnDescriptors;
 	/** visibility box for select visible columns in visibililty menu */
@@ -156,8 +154,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		sorter = new ModelRowSorter<ListTableModel>(tableModel);
 		sorter.addRowSorterListener(this);
 		// configure paginator
-		page.addPaginatorListener(this);
 		paginatorView.setPaginator(page);
+		page.addPaginatorListener(this);
 	
 		createColumnDescriptos();
 		table = new JTable(tableModel, tableModel.getTableColumnModel());
@@ -172,7 +170,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		add(tableScrollPane, BorderLayout.CENTER);
 		add(paginatorView.getPanel(), BorderLayout.SOUTH);
 		createMenu();
-		
+		page.setPageableDataSource(dataSource);
 		// goto first page
 		page.firstPage();
 		// restore table state
@@ -225,6 +223,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 					tableModel.getDisplayNames().get(i), true));
 		}
 	}
+	
 
 	/** 
 	 * Handle sort changes in model sorter. 
@@ -235,6 +234,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		if (sorter.getSortKeys().size() > 0 && 
 				tableModel.isPropertyColumn(sorter.getSortKeys().get(0).getColumn())) {
 			// set first page
+			configurePage();
 			page.firstPage();
 		}
 	}
@@ -256,7 +256,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 * Load new page from data source
 	 * @param page
 	 */
-	private void loadPage() {
+	private void configurePage() {
 		Page.Order order = Page.Order.ASC;
 		String sortPropertyName = null;
 		List<? extends SortKey> keys = sorter.getSortKeys();
@@ -271,10 +271,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		}
 		page.setSortName(sortPropertyName);
 		page.setOrder(order);
-		page.setFilter(filter);
-		dataSource.getPage(page);
-		tableModel.setList(page.getData());
-		
 	}
 	
 	/**
@@ -282,7 +278,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 * @see info.joseluismartin.dao.PaginatorListener#pageChanged(info.joseluismartin.dao.PageChangedEvent)
 	 */
 	public void pageChanged(PageChangedEvent event) {
-		loadPage();
 		tableModel.setList(page.getData());
 	}
 	
@@ -532,29 +527,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		
 	}
 	
-	class SaveUserPreferencesAction extends AbstractAction {
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-	}
-	
-	class LoadUserPreferencesAction extends AbstractAction {
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	}
-	
 	private class TableListener extends MouseAdapter {
 
 		@Override
@@ -619,7 +591,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	}
 
 	public void refresh() {
-		pageChanged(null);
+		page.setPage(page.getPage());
 	}
 	
 	/**
@@ -639,14 +611,14 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 * @return the filter
 	 */
 	public Object getFilter() {
-		return filter;
+		return page.getFilter();
 	}
 
 	/**
 	 * @param filter the filter to set
 	 */
 	public void setFilter(Object filter) {
-		this.filter = filter;
+		page.setFilter(filter);
 	}
 
 	/**

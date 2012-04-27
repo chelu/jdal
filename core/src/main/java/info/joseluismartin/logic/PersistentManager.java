@@ -32,10 +32,10 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public  class PersistentManager<T, PK extends Serializable> implements PersistentService<T, PK> {
-	
+public class PersistentManager<T, PK extends Serializable> implements PersistentService<T, PK> {
+
 	private final static Log log = LogFactory.getLog(PersistentManager.class);
-	
+
 	public static final int DEFAULT_DEPTH = 2;
 	protected Dao<T, PK> dao;
 
@@ -45,7 +45,6 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	public void delete(T entity) {
 		dao.delete(entity);
 	}
-
 
 	/**
 	 * {@inheritDoc}
@@ -62,7 +61,6 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 		dao.initialize(entity);
 		return entity;
 	}
-	
 
 	/**
 	 * {@inheritDoc}
@@ -70,8 +68,6 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	public List<T> getAll() {
 		return dao.getAll();
 	}
-
-
 
 	/**
 	 * {@inheritDoc}
@@ -94,11 +90,11 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	 */
 	public Collection<T> save(Collection<T> collection) {
 		List<T> saved = new ArrayList<T>();
-		
+
 		for (T t : collection) {
 			saved.add(dao.save(t));
 		}
-		
+
 		return saved;
 	}
 
@@ -107,16 +103,16 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	 */
 	public void deleteById(PK id) {
 		dao.deleteById(id);
-		
+
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void deleteById(Collection<PK> ids) {
-		for (PK id : ids) 
+		for (PK id : ids)
 			dao.deleteById(id);
-		
+
 	}
 
 	/**
@@ -132,7 +128,7 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	public Page<T> getPage(Page<T> page) {
 		return dao.getPage(page);
 	}
-	
+
 	public Dao<T, PK> getDao() {
 		return dao;
 	}
@@ -140,7 +136,7 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 	public void setDao(Dao<T, PK> dao) {
 		this.dao = dao;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -148,14 +144,12 @@ public  class PersistentManager<T, PK extends Serializable> implements Persisten
 		return dao.get(id);
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */
 	public <E> E get(PK id, Class<E> clazz) {
 		return dao.get(id, clazz);
 	}
-
 
 	/**
 	 * {@inheritDoc}

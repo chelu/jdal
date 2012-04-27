@@ -57,7 +57,7 @@ public class DatabaseManager {
 			prop.load(new FileInputStream(properties));
 			conn.fromProperties(prop);
 			
-			if (conn.test())
+			if (conn.test())  // Connection OK
 				return conn;
 			
 			while (askToCreateConnection() && createConnection(conn) != null) {
