@@ -16,9 +16,10 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.form.BoxFormBuilder;
+import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.gui.list.ListListModel;
 
-import java.awt.Container;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,120 +30,134 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.event.EventListenerList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.context.support.ResourceBundleMessageSource;
+
 /**
+ * A Twing List editor.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public class Selector<T> extends JPanel {
 
-	private static final long serialVersionUID = 1L;
 	private String name;
+	/** available list items */
 	private ListListModel available = new ListListModel();
+	/** selected list items */
 	private ListListModel selected = new ListListModel();
+	/** all items */
 	private List<T> all = new ArrayList<T>();
-	
+
 	private JList availableList;
 	private JList selectedList;
 	
-	private JButton addSelectedButton;
-	private JButton removeSelectedButton;
-	
-	private Icon rightArrow;
-	private Icon leftArrow;
-	
-	  /** A list of event listeners for this component. */
-    protected EventListenerList listenerList = new EventListenerList();
-    protected boolean firingActionEvent = false;
+	private JTextField availableSearch = new JTextField();
+	private JTextField selectedSearch = new JTextField();
 
+	private Icon rightArrow = FormUtils.getIcon("images/button_right.png");
+	private Icon leftArrow = FormUtils.getIcon("images/button_left.png");
+
+	/** A list of event listeners for this component. */
+	protected EventListenerList listenerList = new EventListenerList();
+	protected boolean firingActionEvent = false;
+	@Autowired
+	private MessageSource messageSource;
 	
+	private int buttonWidth = 30;
+	private int buttonHeight = 30;
+	private boolean showSearchFields = false;
+
 	public Selector() {
 	}
-	
+
 	public Selector(List<T> all) {
 		this(all, new ArrayList<T>());
 		this.all = all;
-		
+
 	}
-	
+
 	public Selector(List<T> available, List<T> selected) {
 		this.available = new ListListModel(available);
 		this.selected = new ListListModel(selected);
 		all.addAll(available);
 		all.addAll(selected);
 	}
-	
+
 	public void init() {
-		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+
 		availableList = new JList(available);
 		selectedList = new JList(selected);
+		availableSearch.setVisible(showSearchFields);
+		selectedSearch.setVisible(showSearchFields);
 		
-		if (rightArrow == null) {
-			rightArrow = new ImageIcon(getClass().getResource("/images/button_right.png"));
+		JButton addButton = new JButton(new AddSelectedAction());
+		JButton removeButton = new JButton(new RemoveSelectedAction());
+		addButton.setMinimumSize(new Dimension(buttonWidth, buttonHeight));
+		removeButton.setMinimumSize(new Dimension(buttonWidth, buttonHeight));
+
+		// test message source
+		if (messageSource == null) {
+			messageSource= new ResourceBundleMessageSource();
+			((ResourceBundleMessageSource) messageSource).setBasename("i18n.jdal");
 		}
-		if (leftArrow == null) {
-			leftArrow = new ImageIcon(getClass().getResource("/images/button_left.png"));
-		}
-		addSelectedButton = new JButton(new AddSelectedAction());
-		removeSelectedButton = new JButton(new RemoveSelectedAction());
+
+		MessageSourceAccessor msa = new MessageSourceAccessor(messageSource);
+
+		BoxFormBuilder fb = new BoxFormBuilder();
+		fb.row(Short.MAX_VALUE);
+		fb.startBox();
+		fb.row();
+		fb.add(availableSearch);
+		fb.row();
+		fb.add(FormUtils.newLabelForBox(msa.getMessage("Selector.available")));
+		fb.row(Short.MAX_VALUE);
+		fb.add(new JScrollPane(availableList));
+		fb.endBox();
+		fb.startBox();
+		fb.row(Short.MAX_VALUE);
+		fb.add(Box.createVerticalGlue());
+		fb.row(buttonHeight);
+		fb.add(removeButton);
+		fb.row(Short.MAX_VALUE);
+		fb.add(Box.createVerticalGlue());
+		fb.endBox();
+		fb.setMaxWidth(buttonWidth);
+		fb.startBox();
+		fb.row(Short.MAX_VALUE);
+		fb.add(Box.createVerticalGlue());
+		fb.row(buttonHeight);
+		fb.add(addButton);
+		fb.row(Short.MAX_VALUE);
+		fb.add(Box.createVerticalGlue());
+		fb.endBox();
+		fb.setMaxWidth(buttonWidth);
+		fb.startBox();
+		fb.row();
+		fb.add(selectedSearch);
+		fb.row();
+		fb.add(FormUtils.newLabelForBox(msa.getMessage("Selector.selected")));
+		fb.row(Short.MAX_VALUE);
+		fb.add(new JScrollPane(selectedList));
+		fb.endBox();
 		
-		JLabel availableLabel = new JLabel("Disponibles");
-		JLabel selectedLabel = new JLabel("Asignadas");
-		JScrollPane availableScroll = new JScrollPane(availableList);
-		JScrollPane selectedScroll = new JScrollPane(selectedList);
-		availableList.setVisibleRowCount(3);
-		selectedList.setVisibleRowCount(3);
-		
-		// Three Columns
-		BoxFormBuilder b = new BoxFormBuilder();
-		
-		b.add(availableLabel);
-		b.next();
-		b.add(selectedLabel);
-		b.row();
-		b.add(availableScroll);
-		Box arrowBox = Box.createHorizontalBox();
-		removeSelectedButton.setAlignmentX(Container.CENTER_ALIGNMENT);
-		addSelectedButton.setAlignmentX(Container.CENTER_ALIGNMENT);
-		arrowBox.add(removeSelectedButton);
-		arrowBox.add(Box.createHorizontalStrut(5));
-		arrowBox.add(addSelectedButton);
-	
-		b.add(arrowBox);
-		arrowBox.setAlignmentY(Container.CENTER_ALIGNMENT);
-		arrowBox.setAlignmentX(Container.CENTER_ALIGNMENT);
-		arrowBox.setMaximumSize(new Dimension(70, 30));
-		b.add(selectedScroll);
-		
-		Box box = (Box) b.getForm();
-		box.getComponent(0).setMaximumSize(new Dimension(300, 200));
-		box.getComponent(2).setMaximumSize(new Dimension(70, 30));
-		box.getComponent(4).setMaximumSize(new Dimension(300, 200));
-		box.setMaximumSize(new Dimension(400, 200));
-		
-		add(Box.createHorizontalGlue());
-		add(box);
-		add(Box.createHorizontalGlue());
-		
-		availableScroll.setMaximumSize(new Dimension(300, 200));
-		availableScroll.setPreferredSize(new Dimension(300,100));
-		availableScroll.setAlignmentX(Container.RIGHT_ALIGNMENT);
-		availableLabel.setAlignmentX(Container.RIGHT_ALIGNMENT);
-		selectedScroll.setMaximumSize(new Dimension(300, 200));
-		selectedScroll.setPreferredSize(new Dimension(300,100));
-		selectedScroll.setAlignmentX(Container.LEFT_ALIGNMENT);
-		selectedLabel.setAlignmentX(Container.LEFT_ALIGNMENT);
+		setLayout(new BorderLayout());
+		add(fb.getForm(), BorderLayout.CENTER);
 	}
-	
+
+	/**
+	 * Add selected values to selected list.
+	 */
 	private void addSelected() {
 		Object[] selectedValues = availableList.getSelectedValues();
 		if (selectedValues.length > 0) {
@@ -154,15 +169,18 @@ public class Selector<T> extends JPanel {
 			fireActionEvent();
 		}
 	}
-	
+
 	/**
-	 * 
+	 * Clear selections on both lists
 	 */
 	private void clearSelections() {
 		availableList.clearSelection();
 		selectedList.clearSelection();
 	}
 
+	/**
+	 * Remove selected values from selected list
+	 */
 	private void removeSelected() {
 		Object[] selectedValues = selectedList.getSelectedValues();
 		if (selectedValues.length > 0) {
@@ -176,25 +194,33 @@ public class Selector<T> extends JPanel {
 	}
 
 	/**
-	 * 
+	 * Notify listeners that selected values changes
 	 */
 	protected void fireActionEvent() {
 		if (!firingActionEvent) {
 			firingActionEvent = true;
 			ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "selectorChanged");
-			
+
 			for (ActionListener listener : listenerList.getListeners(ActionListener.class))
 				listener.actionPerformed(event);
-		
+
 			firingActionEvent = false;
 		}
 	}
 
+	/**
+	 * Get Available list
+	 * @return List with available values
+	 */
 	@SuppressWarnings("unchecked")
 	public List<T> getAvailable() {
 		return available.getList();
 	}
 
+	/**
+	 * Sets the available list
+	 * @param available list to set
+	 */
 	public void setAvailable(List<T> available) {
 		this.available.clear();
 		this.available.addAll(available);
@@ -204,6 +230,10 @@ public class Selector<T> extends JPanel {
 		selected.addAll(l);
 	}
 
+	/**
+	 * Gets the selected values
+	 * @return List with selected values
+	 */
 	@SuppressWarnings("unchecked")
 	public List<T> getSelected() {
 		return selected.getList();
@@ -240,42 +270,8 @@ public class Selector<T> extends JPanel {
 	public void setLeftArrow(Icon leftArrow) {
 		this.leftArrow = leftArrow;
 	}
-	
-	private class AddSelectedAction extends AbstractAction {
-		
-		private static final long serialVersionUID = 1L;
 
-		public AddSelectedAction() {
-			putValue(Action.SMALL_ICON, rightArrow);
-		}
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 */
-		public void actionPerformed(ActionEvent e) {
-			addSelected();
-			
-		}
-		
-	}
-	
-	private class RemoveSelectedAction extends AbstractAction {
-		
-		private static final long serialVersionUID = 1L;
-
-		public RemoveSelectedAction() {
-			putValue(Action.SMALL_ICON, leftArrow);
-		}
-
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 */
-		public void actionPerformed(ActionEvent e) {
-			removeSelected();
-		}
-		
-	}
-	
 	/**
 	 * Add an ActionListener
 	 * @param listener ActionListener to add
@@ -284,7 +280,7 @@ public class Selector<T> extends JPanel {
 		if (listener != null) 
 			listenerList.add(ActionListener.class, listener);
 	}
-	
+
 	/**
 	 * Remove an ActionListener
 	 * @param listener ActionListener to remove
@@ -305,5 +301,85 @@ public class Selector<T> extends JPanel {
 	 */
 	public void setAll(List<T> all) {
 		this.all = all;
+	}
+	
+	/**
+	 * @return the buttonWidth
+	 */
+	public int getButtonWidth() {
+		return buttonWidth;
+	}
+
+	/**
+	 * @param buttonWidth the buttonWidth to set
+	 */
+	public void setButtonWidth(int buttonWidth) {
+		this.buttonWidth = buttonWidth;
+	}
+
+	/**
+	 * @return the buttonHeight
+	 */
+	public int getButtonHeight() {
+		return buttonHeight;
+	}
+
+	/**
+	 * @param buttonHeight the buttonHeight to set
+	 */
+	public void setButtonHeight(int buttonHeight) {
+		this.buttonHeight = buttonHeight;
+	}
+
+	/**
+	 * @return the showSearchFields
+	 */
+	public boolean isShowSearchFields() {
+		return showSearchFields;
+	}
+
+	/**
+	 * @param showSearchFields the showSearchFields to set
+	 */
+	public void setShowSearchFields(boolean showSearchFields) {
+		this.showSearchFields = showSearchFields;
+	}
+	
+	public static void main(String[] args) {
+		ApplicationContextGuiFactory.setPlasticLookAndFeel();
+		Selector<Object> selector = new Selector<Object>();
+		selector.init();
+		JFrame f = new JFrame();
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.add(selector);
+		f.setSize(800, 800);
+		f.setVisible(true);
+	}
+	
+	private class AddSelectedAction extends AbstractAction {
+
+		private static final long serialVersionUID = 1L;
+
+		public AddSelectedAction() {
+			putValue(Action.SMALL_ICON, rightArrow);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			addSelected();
+
+		}
+	}
+
+	private class RemoveSelectedAction extends AbstractAction {
+
+		private static final long serialVersionUID = 1L;
+
+		public RemoveSelectedAction() {
+			putValue(Action.SMALL_ICON, leftArrow);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			removeSelected();
+		}
 	}
 }
