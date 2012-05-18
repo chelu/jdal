@@ -30,7 +30,6 @@ public class JdalSwingNamespaceHandler extends NamespaceHandlerSupport {
 		registerBeanDefinitionParser("defaults", new DefaultsBeanDefinitionParser());
 		registerBeanDefinitionParser("table", new TableBeanDefinitionParser());
 		registerBeanDefinitionParser("column", new ColumnBeanDefinitionParser());
-		
 	}
 
 }

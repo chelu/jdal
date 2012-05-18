@@ -158,9 +158,9 @@ public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 		bindingResult = new BeanPropertyBindingResult(getModel(), getModel().getClass().getSimpleName());
 	}
 	
-	public void autobind() {
+	public void autobind(Object view) {
 		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
-		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(this);
+		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(view);
 		// iterate on model properties
 		for (PropertyDescriptor pd : bw.getPropertyDescriptors()) {
 			String propertyName = pd.getName();

@@ -51,6 +51,22 @@ public class ViewAccessor extends AbstractControlAccessor {
 	public View  getControl() {
 		return (View) super.getControl();
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void addControlChangeListener(ControlChangeListener l) {
+		getControl().addControlChangeListener(l);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void removeControlChangeListener(ControlChangeListener l) {
+		getControl().removeControlChangeListener(l);
+	}
 	
 	
 

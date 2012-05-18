@@ -90,7 +90,7 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 	 */
 	protected void fireControlChange() {
 		for (ControlChangeListener l : listeners)
-			l.controlChange(new ControlEvent(this));
+			l.controlChange(new ControlEvent(getControl()));
 	}
 	
 	/**

@@ -33,6 +33,7 @@ public class SelectorAccessor extends AbstractControlAccessor implements ActionL
 
 	public SelectorAccessor(Object selector) {
 		super(selector);
+		getControl().addActionListener(this);
 	}
 	
 	/**

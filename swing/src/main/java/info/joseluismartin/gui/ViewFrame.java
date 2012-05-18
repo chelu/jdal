@@ -15,12 +15,15 @@
  */
 package info.joseluismartin.gui;
 
-import info.joseluismartin.gui.action.DialogCancelAction;
 import info.joseluismartin.gui.action.ViewAction;
+import info.joseluismartin.gui.bind.ControlChangeListener;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -41,13 +44,27 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	private static final long serialVersionUID = 1L;
 	private View<Object> view;
 	private ViewAction acceptAction;
-	private DialogCancelAction cancelAction;
+	private ViewAction cancelAction;
 	private JButton acceptButton;
 	private JButton cancelButton;
 	private int windowWidth;
 	private int windowHeight;
 	private EventListenerList listenerList = new EventListenerList();
 
+	/**
+	 * Default Ctor
+	 */
+	public ViewFrame() {
+		super();
+	}
+	
+	/**
+	 * Compatibility ctor with ViewDialog.
+	 * @param owner
+	 */
+	public ViewFrame(Frame owner) {
+		super();
+	}
 
 	public void init() {
 		add(view.getPanel(), BorderLayout.CENTER);
@@ -55,7 +72,9 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		setTitle(view.getModel().toString());
 		setLocationRelativeTo(null);
 		setSize(new Dimension(windowWidth, windowHeight));
-		pack();
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new CloseListener());
+	//	pack();
 	}
 
 	protected Component createButtonBox() {
@@ -104,13 +123,14 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		this.acceptAction.setDialog(this);
 	}
 
-	public DialogCancelAction getCancelAction() {
+	public ViewAction getCancelAction() {
 		return cancelAction;
 	}
 
-	public void setCancelAction(DialogCancelAction cancelAction) {
+	public void setCancelAction(ViewAction cancelAction) {
 		this.cancelAction = cancelAction;
 		cancelAction.setDialog(this);
+		cancelAction.setView(view);
 	}
 
 	public Object getModel() {
@@ -188,7 +208,6 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	 * {@inheritDoc}
 	 */
 	public void cancel() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -196,24 +215,21 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	 * {@inheritDoc}
 	 */
 	public void setClean() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setDirty() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isDirty() {
-		// TODO Auto-generated method stub
-		return false;
+		return view.isDirty();
 	}
 
 	/**
@@ -236,5 +252,32 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	 */
 	public String getErrorMessage() {
 		return view.getErrorMessage();
+	}
+	
+	private class CloseListener extends WindowAdapter {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void windowClosing(WindowEvent e) {
+			cancelAction.actionPerformed(null);
+		}
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void addControlChangeListener(ControlChangeListener listener) {
+		view.addControlChangeListener(listener);
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void removeControlChangeListener(ControlChangeListener listener) {
+		view.removeControlChangeListener(listener);
 	}
 }

@@ -130,6 +130,9 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		if (element.hasAttribute(TABLE_SERVICE)) 
 			bdb.addPropertyReference(TABLE_SERVICE, element.getAttribute(TABLE_SERVICE));
+		
+		if (element.hasAttribute(FILTER))
+			bdb.addPropertyReference(FILTER, element.getAttribute(FILTER));
 			
 		registerBeanDefinition(element, parserContext, pageableTableBeanName, bdb);
 		
@@ -142,8 +145,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.addPropertyValue(EDITOR, editor);
 		bdb.addPropertyReference(PERSISTENT_SERVICE, dataSource);
 		
-		if (element.hasAttribute(FILTER))
-			bdb.addPropertyReference(FILTER_VIEW, element.getAttribute(FILTER));
+		if (element.hasAttribute(FILTER_VIEW))
+			bdb.addPropertyReference(FILTER_VIEW, element.getAttribute(FILTER_VIEW));
 		
 		registerBeanDefinition(element, parserContext, tablePanelBeanName, bdb);
 		

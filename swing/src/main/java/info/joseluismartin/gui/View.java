@@ -16,6 +16,8 @@
 package info.joseluismartin.gui;
 
 
+import info.joseluismartin.gui.bind.ControlChangeListener;
+
 import javax.swing.JComponent;
 
 /**
@@ -62,5 +64,16 @@ public interface View<T> extends Binder<T>{
 	 * Enable/Disable All controls
 	 */
 	void enableView(boolean enabled);
-
+	
+	/**
+	 * Add a ControlChangeListener to be notified on view changes.
+	 * @param listener the ControlChangeListener to add.
+	 */
+	void addControlChangeListener(ControlChangeListener listener);
+	
+	/**
+	 * Remove a previously added ControlChangeListener
+	 * @param listener ControlChangeListener to remove.
+	 */
+	void removeControlChangeListener(ControlChangeListener listener);
 }

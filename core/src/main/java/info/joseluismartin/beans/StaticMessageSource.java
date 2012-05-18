@@ -17,6 +17,9 @@ package info.joseluismartin.beans;
 
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 
@@ -26,9 +29,11 @@ import org.springframework.context.MessageSourceResolvable;
  */
 public class StaticMessageSource {
 	
-	static MessageSource messageSource = null;
-	static Locale locale = Locale.getDefault();
-
+	@Autowired
+	private static MessageSource messageSource = null;
+	private static Locale locale = Locale.getDefault();
+	private static final Log log = LogFactory.getLog(StaticMessageSource.class);
+	
 	private StaticMessageSource(MessageSource messageSource) {
 		StaticMessageSource.messageSource = messageSource;
 	}
@@ -39,7 +44,7 @@ public class StaticMessageSource {
 	public static MessageSource getMessageSource() {
 		return messageSource;
 	}
-
+	
 	/**
 	 * @param messageSource the messageSource to set
 	 */
@@ -55,9 +60,10 @@ public class StaticMessageSource {
 	public static String getMessage(String code) {
 		try {
 			return messageSource == null ?
-				code : messageSource.getMessage(code, null, Locale.getDefault());
+				code : messageSource.getMessage(code, null, locale);
 		}
 		catch (Exception e) {
+			log.error(e);
 			return code;
 		}
 	}

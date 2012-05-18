@@ -66,7 +66,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	/** go to first page button */ 
 	private JButton firstPageButton;
 	/** String array with available page sizes */
-	private String[] pageSizes;
+	private String[] pageSizes = {"10", "25", "50", "100", "All"};
 	/** Label to show info about selected page */
 	private JLabel statusLabel;
 	private JLabel countLabel;

@@ -125,6 +125,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	protected int height = 0;
 	/** control initializer */
 	private ControlInitializer controlInitializer;
+	private List<ControlChangeListener> listeners = new ArrayList<ControlChangeListener>();
 	
 	/**
 	 * Default ctor
@@ -299,6 +300,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 		// refresh subviews
 		for (View<Object> v : subViews)
 			v.refresh();
+		
+		setDirty(false);
 	}
 	
 	/**
@@ -323,6 +326,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	 */
 	public void controlChange(ControlEvent e) {
 		setDirty(true);
+		fireControlChange(e);
 	}
 	
 	/**
@@ -489,6 +493,29 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 				msr.getDefaultMessage() : messageSource.getMessage(msr, Locale.getDefault());
 	}
 	
+	
+	public void addControlChangeListener(ControlChangeListener l) {
+		if (!listeners.contains(l))
+			listeners.add(l);
+		
+	}
+	
+	
+	public void removeControlChangeListener(ControlChangeListener l) {
+		if (!listeners.contains(l))
+			listeners.remove(l);
+		
+	}
+	
+	/**
+	 * Notifiy Listeners that control value has changed	
+	 */
+	protected void fireControlChange(ControlEvent e) {
+		for (ControlChangeListener l : listeners)
+			l.controlChange(new ControlEvent(e));
+	}
+	
+	
 	/**
 	 * Add a property name  to ignore on binding.
 	 * @param propertyName property name to ignore
@@ -608,7 +635,12 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	 * @return the dirty
 	 */
 	public boolean isDirty() {
-		return dirty;
+		boolean d = dirty;
+		for (View<Object> v : subViews) {
+			d = d || v.isDirty();
+		}
+		
+		return d;
 	}
 
 	/**

@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 
 /**
- * A FormBuilder that create form using columns of Box.
+ * A FormBuilder that create form using BoxLayouts
  * Add components using a implicit cursor.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -331,7 +331,5 @@ public class SimpleBoxFormBuilder {
 	public void setCharWidth(int charWidth) {
 		this.charWidth = charWidth;
 	}
-
-	
 
 }

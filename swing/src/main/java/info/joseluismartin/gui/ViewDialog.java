@@ -18,6 +18,7 @@ package info.joseluismartin.gui;
 import info.joseluismartin.gui.action.DialogAcceptAction;
 import info.joseluismartin.gui.action.DialogCancelAction;
 import info.joseluismartin.gui.action.ViewAction;
+import info.joseluismartin.gui.bind.ControlChangeListener;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -213,6 +214,21 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 	 */
 	public String getErrorMessage() {
 		return view.getErrorMessage();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void addControlChangeListener(ControlChangeListener listener) {
+		view.addControlChangeListener(listener);
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void removeControlChangeListener(ControlChangeListener listener) {
+		view.removeControlChangeListener(listener);
 	}
 
 }

@@ -126,6 +126,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private TableService tableService;
 	/** Message Source */
 	private MessageSource messageSource = new ResourceBundleMessageSource();
+	/** Show right menu when true */
+	private boolean showMenu = true;
 	
 	// Menus
 	JMenuBar rightMenuBar;
@@ -136,7 +138,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private Icon cancelIcon;
 	private Icon userMenuIcon;
 	
-
 	// Attributes needed to work with Page objects in Reports
 	private String sortPropertyName;
 	private Page.Order order;
@@ -154,6 +155,11 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		sorter = new ModelRowSorter<ListTableModel>(tableModel);
 		sorter.addRowSorterListener(this);
 		// configure paginator
+		if (paginatorView == null) {
+			paginatorView = new PaginatorView();
+			paginatorView.init();
+		}
+		
 		paginatorView.setPaginator(page);
 		page.addPaginatorListener(this);
 	
@@ -169,7 +175,10 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		this.setBackground(Color.WHITE);
 		add(tableScrollPane, BorderLayout.CENTER);
 		add(paginatorView.getPanel(), BorderLayout.SOUTH);
-		createMenu();
+		
+		if (showMenu)
+			createMenu();
+		
 		page.setPageableDataSource(dataSource);
 		// goto first page
 		page.firstPage();
@@ -687,6 +696,20 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 */
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
+	}
+
+	/**
+	 * @return the showMenu
+	 */
+	public boolean isShowMenu() {
+		return showMenu;
+	}
+
+	/**
+	 * @param showMenu the showMenu to set
+	 */
+	public void setShowMenu(boolean showMenu) {
+		this.showMenu = showMenu;
 	}
 }
 
