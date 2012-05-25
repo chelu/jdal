@@ -149,9 +149,10 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 	}
 	
 	/**
-	 * @param element
-	 * @param parserContext
-	 * @return
+	 * Register default TablePanel Actions
+	 * @param element current element
+	 * @param parserContext parserContext
+	 * @return a new ComponentDefinition with default table action list.
 	 */
 	private ComponentDefinition registerDefaultTableActions(Element element, ParserContext parserContext) {
 		ManagedList<Object> actions = new ManagedList<Object>(7);

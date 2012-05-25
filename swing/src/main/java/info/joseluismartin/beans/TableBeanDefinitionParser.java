@@ -17,7 +17,6 @@ package info.joseluismartin.beans;
 
 import info.joseluismartin.gui.ListTableModel;
 import info.joseluismartin.gui.PageableTable;
-import info.joseluismartin.gui.table.TablePanel;
 
 import java.util.List;
 
@@ -43,6 +42,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String ENTITY = "entity";
 	private static final String ID = "id";
 	private static final String TABLE_PANEL_SUFFIX = "Table";
+	private static final String TABLE_PANEL_CLASS ="tablePanelClass";
 	private static final String LIST_TABLE_MODEL_SUFFIX = "TableModel";
 	private static final String PAGEABLE_TABLE_SUFFIX = "PageableTable";
 	private static final String SERVICE_SUFFIX = "Service";
@@ -61,6 +61,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String FILTER_VIEW = "filterView";
 	private static final String TABLE_SERVICE = "tableService";
 	private static final String NAME = "name";
+	private static final String SHOW_MENU = "showMenu";
 
 	
 	/**
@@ -133,11 +134,18 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		if (element.hasAttribute(FILTER))
 			bdb.addPropertyReference(FILTER, element.getAttribute(FILTER));
+		
+		if (element.hasAttribute(SHOW_MENU))
+			bdb.addPropertyValue(SHOW_MENU, element.getAttribute(SHOW_MENU));
 			
 		registerBeanDefinition(element, parserContext, pageableTableBeanName, bdb);
 		
 		// create TablePanel
-		bdb = BeanDefinitionBuilder.genericBeanDefinition(TablePanel.class);
+		String tablePanelClassName = "info.joseluismartin.gui.table.TablePanel";
+		if (element.hasAttribute(TABLE_PANEL_CLASS))
+			tablePanelClassName = element.getAttribute(TABLE_PANEL_CLASS);
+		
+		bdb = BeanDefinitionBuilder.genericBeanDefinition(tablePanelClassName);
 		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bdb.addPropertyReference(TABLE, pageableTableBeanName);
 		bdb.addPropertyReference(ACTIONS, actions);

@@ -19,15 +19,17 @@
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="entity"       type="xsd:string" use="required" />
-		<xsd:attribute name="id"           type="xsd:string" />
-		<xsd:attribute name="paginator"    type="xsd:string" />
-		<xsd:attribute name="dataSource"   type="xsd:string" />
-		<xsd:attribute name="editor"       type="xsd:string"/>
-		<xsd:attribute name="actions"      type="xsd:string"/>
-		<xsd:attribute name="filter"       type="xsd:string"/>
-		<xsd:attribute name="filterView"   type="xsd:string"/>
-		<xsd:attribute name="tableService" type="xsd:string"/>
+		<xsd:attribute name="entity"          type="xsd:string" use="required" />
+		<xsd:attribute name="id"              type="xsd:string" />
+		<xsd:attribute name="paginator"       type="xsd:string" />
+		<xsd:attribute name="dataSource"      type="xsd:string" />
+		<xsd:attribute name="editor"          type="xsd:string"/>
+		<xsd:attribute name="actions"         type="xsd:string"/>
+		<xsd:attribute name="filter"          type="xsd:string"/>
+		<xsd:attribute name="filterView"      type="xsd:string"/>
+		<xsd:attribute name="tableService"    type="xsd:string"/>
+		<xsd:attribute name="showMenu"        type="xsd:boolean"/>
+		<xsd:attribute name="tablePanelClass" type="xsd:string" />
    </xsd:complexType>
    
    <xsd:complexType name="columnType">
