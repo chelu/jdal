@@ -15,15 +15,19 @@
  */
 package info.joseluismartin.gui.bind;
 
+import info.joseluismartin.beans.SimpleTypeConverter;
 import info.joseluismartin.gui.View;
 
 import java.awt.Component;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.SimpleTypeConverter;
+import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.beans.TypeConverter;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 
 /**
  * Base class for ControlAccessors
@@ -43,6 +47,7 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 	 * Default ctor.
 	 */
 	public AbstractControlAccessor() {
+		this(null);
 	}
 	
 	/**
@@ -51,6 +56,11 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 	 */
 	public AbstractControlAccessor(Object control)  {
 		setControl(control);
+		if (converter instanceof PropertyEditorRegistry) {
+			PropertyEditorRegistry per = (PropertyEditorRegistry) converter;
+			per.registerCustomEditor(Date.class, 
+					new CustomDateEditor(SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT), true));
+		}
 	}
 
 	/**
@@ -70,7 +80,6 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 			listeners.remove(l);
 		
 	}
-	
 	
 	/**
 	 * Convert Object to required type using <code>SimpleTypeConverter</code>
