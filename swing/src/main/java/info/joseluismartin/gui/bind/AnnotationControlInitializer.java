@@ -17,6 +17,7 @@ package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.annotations.Reference;
 import info.joseluismartin.gui.list.ListComboBoxModel;
+import info.joseluismartin.gui.list.ListListModel;
 import info.joseluismartin.service.PersistentService;
 import info.joseluismartin.util.BeanUtils;
 
@@ -30,6 +31,7 @@ import java.util.List;
 
 import javax.persistence.ManyToOne;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -62,11 +64,16 @@ public class AnnotationControlInitializer implements ControlInitializer {
 		Class<?> propertyType = BeanUtils.getPropertyDescriptor(clazz, property).getPropertyType();
 		Annotation[] annotations = getAnnotations(property, clazz);
 		for (Annotation a : annotations) {
-			if (ManyToOne.class.equals(a.annotationType()) && control instanceof JComboBox) {
-				// fill combo from persistent service
+			if (ManyToOne.class.equals(a.annotationType())) {
 				List<Object> entities = getEntityList(propertyType);
-				((JComboBox) control).setModel(new ListComboBoxModel(entities));
+				if (control instanceof JComboBox) {
+					((JComboBox) control).setModel(new ListComboBoxModel(entities));
+				}
+				else if (control instanceof JList) {
+					((JList) control).setModel(new ListListModel(entities));
+				}
 			}
+				
 			if (Reference.class.equals(a.annotationType()) && control instanceof JComboBox) {
 				Reference r = (Reference) a;
 				Class type = void.class.equals(r.target()) ? propertyType : r.target();
