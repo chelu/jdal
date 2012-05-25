@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JToggleButton;
 import javax.swing.text.JTextComponent;
@@ -115,6 +116,7 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 		accessors.put(JToggleButton.class, ToggleButtonAccessor.class);
 		accessors.put(JComboBox.class, ComboAccessor.class);
 		accessors.put(View.class, ViewAccessor.class);
+		accessors.put(JLabel.class, LabelAccessor.class);
 	}
 
 	// Getters and Setters
