@@ -40,7 +40,7 @@ public class CollectionPersistenceService<T, PK extends Serializable> implements
 	private String propertyKey = "id";
 	
 	public CollectionPersistenceService() {
-
+		collection = new ArrayList<T>();
 	}
 	
 	/**
@@ -64,10 +64,13 @@ public class CollectionPersistenceService<T, PK extends Serializable> implements
 		
 		int startIndex = page.getStartIndex() < list.size() ? page.getStartIndex() : list.size() - 1;
 		int toIndex = (page.getStartIndex() + page.getPageSize());
-		toIndex =  toIndex < list.size() ?  toIndex : list.size() - 1;
+		toIndex =  toIndex < list.size() ?  toIndex : list.size();
 	
-		if (!StringUtils.isEmpty(page.getSortName()))
+		if (!StringUtils.isEmpty(page.getSortName())) {
 			Collections.sort(list, new PropertyComparator(page.getSortName()));
+			if (page.getOrder() == Page.Order.DESC)
+				Collections.reverse(list);
+		}
 			
 		page.setData(list.subList(startIndex, toIndex));
 		page.setCount(list.size());
