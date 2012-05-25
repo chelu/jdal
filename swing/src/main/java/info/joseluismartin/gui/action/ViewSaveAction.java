@@ -59,7 +59,7 @@ public class ViewSaveAction extends ViewAction {
 		boolean valid = view.validateView();
 		
 		if (valid) {
-			if (view.isDirty() && service != null)
+			if (service != null)
 				service.save(getView().getModel());
 			
 			getDialog().setVisible(false);
