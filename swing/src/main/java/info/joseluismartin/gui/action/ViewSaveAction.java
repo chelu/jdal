@@ -18,6 +18,7 @@ package info.joseluismartin.gui.action;
 import info.joseluismartin.gui.Editor;
 import info.joseluismartin.gui.View;
 import info.joseluismartin.gui.ViewDialog;
+import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.service.PersistentService;
 
 import java.awt.event.ActionEvent;
@@ -31,12 +32,17 @@ import javax.swing.JOptionPane;
  */
 public class ViewSaveAction extends ViewAction {
 
-	private static final long serialVersionUID = 1L;
+	private static final String DEFAULT_ICON = 	"/images/16x16/dialog-ok.png";
+	private static final String DEFAULT_NAME = "Accept";
+	private PersistentService<Object, Serializable> service;
+
+	public ViewSaveAction() {
+		setIcon(FormUtils.getIcon(DEFAULT_ICON));
+		setName(DEFAULT_NAME);
+	}
 	
-	PersistentService<Object, Serializable> service;
-	
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
 		beforeSave();
@@ -53,7 +59,9 @@ public class ViewSaveAction extends ViewAction {
 		boolean valid = view.validateView();
 		
 		if (valid) {
-			service.save(getView().getModel());
+			if (view.isDirty() && service != null)
+				service.save(getView().getModel());
+			
 			getDialog().setVisible(false);
 			getDialog().dispose();
 			
