@@ -324,6 +324,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 				});
 			}
 		}
+		((View<Object>) dlg).refresh();
 		
 		return dlg;
 	}
@@ -415,6 +416,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 */
 	public void setDataSource(PageableDataSource<Object> dataSource) {
 		this.dataSource = dataSource;
+		// review datasource duplicatin
+		page.setPageableDataSource(dataSource);
 	}
 	
 	public Paginator getPaginator() {
