@@ -27,6 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
@@ -111,6 +112,10 @@ public class SimpleBoxFormBuilder {
 		// don't add Labels to focus transversal
 		if (!(c instanceof JLabel)) {
 			focusTransversal.add(c);
+		}
+		else { // null or empty labels don't size well
+			if (StringUtils.isEmpty(((JLabel) c).getText()))
+				((JLabel) c).setText(" ");
 		}
 		
 		index++;
