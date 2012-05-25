@@ -50,8 +50,6 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 
 	private static final long serialVersionUID = 1L;
 	
-	/** Persistent Service used to get data */
-	private PersistentService<Object, Serializable> persistentService;
 	/** Bean name of the editor component */
 	private String editorName;
 	/** GuiFactory to get model editor */
@@ -223,11 +221,11 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	}
 
 	public PersistentService<Object, Serializable> getPersistentService() {
-		return persistentService;
+		return getDataSource();
 	}
 
 	public void setPersistentService(PersistentService<Object, Serializable> ps) {
-		this.persistentService = ps;
+		table.setDataSource(ps);
 	}
 	
 	public JDialog getDialog() {
@@ -258,7 +256,7 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	}
 
 	public PersistentService<Object, Serializable> getDataSource() {
-		return persistentService; 
+		return (PersistentService<Object, Serializable>) table.getDataSource(); 
 	}
 
 	public Object getFilter() {
