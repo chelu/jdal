@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns="http://www.jdal.org/schema/jdal"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jdal.org/schema/jdal"
+	xmlns:tool="http://www.springframework.org/schema/tool"
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool-3.1.xsd"/>
 
 	<xsd:annotation>
 		<xsd:documentation>
@@ -22,6 +25,11 @@
 				<xsd:documentation source="java:java.lang.Class">
 					<![CDATA[The fully qualified name of the entity class.]]>
 				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class"/>
+					</tool:annotation>
+				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="serviceClass" type="xsd:string" />
