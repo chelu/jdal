@@ -186,4 +186,36 @@ public class BoxFormBuilder {
 		builder.row(rowHeight);
 	}
 
+	/**
+	 * @return default row height
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#getDefaultRowHeight()
+	 */
+	public int getDefaultRowHeight() {
+		return builder.getDefaultRowHeight();
+	}
+
+	/**
+	 * @param defaultRowHeight
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#setDefaultRowHeight(int)
+	 */
+	public void setDefaultRowHeight(int defaultRowHeight) {
+		builder.setDefaultRowHeight(defaultRowHeight);
+	}
+
+	/**
+	 * @return default space
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#getDefaultSpace()
+	 */
+	public int getDefaultSpace() {
+		return builder.getDefaultSpace();
+	}
+
+	/**
+	 * @param defaultSpace
+	 * @see info.joseluismartin.gui.form.SimpleBoxFormBuilder#setDefaultSpace(int)
+	 */
+	public void setDefaultSpace(int defaultSpace) {
+		builder.setDefaultSpace(defaultSpace);
+	}
+
 }

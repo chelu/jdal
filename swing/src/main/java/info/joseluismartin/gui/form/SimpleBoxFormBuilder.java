@@ -18,6 +18,7 @@ package info.joseluismartin.gui.form;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,18 +63,20 @@ public class SimpleBoxFormBuilder {
 	 * Default Ctor 
 	 */
 	public SimpleBoxFormBuilder() {
+		this(calculateDefaultHeight(), null);
 	}
 	
+
 	public SimpleBoxFormBuilder(Border border) {
-		this.border = border;
+		this(calculateDefaultHeight(), border);
 	}
 	
-	public SimpleBoxFormBuilder(int rowHeight) {
-		this(rowHeight, null);
+	public SimpleBoxFormBuilder(int defaultRowHeight) {
+		this(defaultRowHeight, null);
 	}
 	
-	public SimpleBoxFormBuilder(int rowHeight, Border border) {
-		this.rowHeight = rowHeight;
+	public SimpleBoxFormBuilder(int defaultRowHeight, Border border) {
+		this.defaultRowHeight = defaultRowHeight;
 		this.border = border;
 	}
 	
@@ -88,8 +92,20 @@ public class SimpleBoxFormBuilder {
 		}
 		addBox(c);
 
-		if (!c.isMaximumSizeSet() || c.getMaximumSize().getHeight() > rowHeight)
-			c.setMaximumSize(new Dimension(Short.MAX_VALUE, rowHeight));
+		if (rowHeight != Short.MAX_VALUE) {
+			Dimension d = c.getPreferredSize();
+			d.height = rowHeight;
+			c.setPreferredSize(d);
+
+			c.setMinimumSize(d);
+			
+			if (!c.isMaximumSizeSet() || c.getMaximumSize().getHeight() > rowHeight) {
+				c.setMaximumSize(new Dimension(Short.MAX_VALUE, rowHeight));
+			}
+			
+			
+		}
+		
 	}
 	
 	public void add(Component c, int maxWidth) {
@@ -155,7 +171,8 @@ public class SimpleBoxFormBuilder {
 	public void add(String name, Component c) {
 		JLabel label = new JLabel(name);
 		add(label);
-		setMaxWidth(name.length()*charWidth);
+		Rectangle2D rec = label.getFontMetrics(label.getFont()).getStringBounds(name, container.getGraphics());
+		setMaxWidth(rec.getBounds().width);
 		add(c);
 	}
 	
@@ -170,7 +187,7 @@ public class SimpleBoxFormBuilder {
 	}
 	
 	public void row() {
-		row(defaultRowHeight + defaultSpace);
+		row(defaultRowHeight);
 	}
 
 	/**
@@ -194,18 +211,33 @@ public class SimpleBoxFormBuilder {
 		for (int h : rowsHeight)
 			columnHeight += h;
 		
+		// add space into components (fillers)
+		columnHeight += (rows) * defaultSpace;
+		
 		for (int i = 0; i < columns.size(); i++) {
 			Box box = columns.get(i);
 			int maxWidth = columnsWidth.get(i) == 0 ? Short.MAX_VALUE : columnsWidth.get(i);
 			box.setMaximumSize(new Dimension(maxWidth, columnHeight));
+			if (maxWidth < Short.MAX_VALUE && columnHeight < Short.MAX_VALUE)
+				box.setMinimumSize(new Dimension(maxWidth, columnHeight));
+				box.setPreferredSize(new Dimension(maxWidth, columnHeight));
+				
 		}
 		
 		container.setFocusTraversalPolicy(focusTransversal);
 		container.setFocusTraversalPolicyProvider(true);
 		container.setSize(Short.MAX_VALUE, columnHeight);
 		
-		if (isFixedHeight())
-			container.setMaximumSize(new Dimension(Short.MAX_VALUE, columnHeight));
+		if (isFixedHeight()) {
+			Dimension maxSize = new Dimension(Short.MAX_VALUE, columnHeight);
+			
+			if (container.isMaximumSizeSet()) {
+				maxSize = container.getMaximumSize();
+				maxSize.height = columnHeight;
+			}
+			
+			container.setMaximumSize(maxSize);
+		}
 		
 		if (isDebug())
 			container.setBorder(BorderFactory.createLineBorder(Color.BLUE));
@@ -335,6 +367,14 @@ public class SimpleBoxFormBuilder {
 	 */
 	public void setCharWidth(int charWidth) {
 		this.charWidth = charWidth;
+	}
+	
+	/**
+	 * @return
+	 */
+	private static int calculateDefaultHeight() {
+		Dimension d =  new JTextField().getPreferredSize();
+		return d != null ? d.height : 25;
 	}
 
 }
