@@ -51,7 +51,7 @@ public class DbConnection {
 		// Try to connect
 		try {
 	      Class.forName(database.getDriver());
-	      String connectionUrl = url != null ? url : buildUrl();
+	      String connectionUrl = buildUrl();
 	      Connection conn = DriverManager.getConnection(connectionUrl, user, password); 
 	      conn.close(); 
 	      success = true;
@@ -154,8 +154,16 @@ public class DbConnection {
 		if (StringUtils.isEmpty(port))
 			port = database.getDefaultPort();
 		
-		this.url = "jdbc:" + getDatabase().getJdbcName() + "://" + getHost() +
+		// FIXME: obiusly :)
+		if (database.getName().equals("ORACLE")) {
+			this.url = "jdbc:" + getDatabase().getJdbcName() + "://@" + getHost() +
+					":" + getPort() + ":" + getDbName(); 
+		}
+		else {
+			this.url = "jdbc:" + getDatabase().getJdbcName() + "://" + getHost() +
 				":" + getPort() + "/" + getDbName(); 
+		}
+		
 		return url;
 	}
 
@@ -171,6 +179,30 @@ public class DbConnection {
 	 */
 	public void setUrl(String url) {
 		this.url = url;
+		try {
+			String[] parts = url.split("//");
+			String[] hpd = parts[1].split(":");
+			if (hpd[0].startsWith("@"))
+				setHost(hpd[0].substring(1));
+			else 
+				setHost(hpd[0]);
+			
+			if (hpd.length == 3) {
+				setPort(hpd[1]);
+				setDbName(hpd[2]);
+			}
+			else {
+				String[] pd = hpd[1].split("/");
+				setPort(pd[0]);
+				setDbName(pd[1]);
+				
+			}
+		}
+		catch (Exception e) {
+			log.error(e);
+		}
+			
+		
 	}
 
 	/**
@@ -193,6 +225,10 @@ public class DbConnection {
 		setPassword(prop.getProperty(PASSWORD));
 		setUrl(prop.getProperty(URL));
 		setDriver(prop.getProperty(DRIVER));
+		
+		for (Database db :Database.DATABASES)
+			if (db.getDriver().equals(getDriver()))
+				setDatabase(db);
 	}
 
 	/**

@@ -28,7 +28,8 @@ public class Database {
 	public static List<Database> DATABASES;
 	
 	private static String[][] DBDATA = {
-		{ "MySQL", "mysql", "com.mysql.jdbc.Driver", "3306" }
+		{ "MySQL", "mysql", "com.mysql.jdbc.Driver", "3306" }, 
+		{ "ORACLE", "oracle:thin", "oracle.jdbc.driver.OracleDriver", "1521" }
 	};
 	
 	static {

@@ -41,6 +41,9 @@ import org.springframework.context.MessageSource;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class SimpleBoxFormBuilder {
+	
+	public static final int SIZE_UNDEFINED = Short.MAX_VALUE;
+	
 	private static final Log log = LogFactory.getLog(SimpleBoxFormBuilder.class);
 	private Box container = Box.createHorizontalBox();
 	private List<Box> columns = new ArrayList<Box>();
@@ -172,7 +175,7 @@ public class SimpleBoxFormBuilder {
 		JLabel label = new JLabel(name);
 		add(label);
 		Rectangle2D rec = label.getFontMetrics(label.getFont()).getStringBounds(name, container.getGraphics());
-		setMaxWidth(rec.getBounds().width);
+		setMaxWidth(rec.getBounds().width + 10);
 		add(c);
 	}
 	

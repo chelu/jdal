@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui.form;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -38,6 +39,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
@@ -231,6 +233,14 @@ public abstract class FormUtils {
 		label.setMaximumSize(new Dimension(Short.MAX_VALUE, label.getFont().getSize() + 10));
 		label.setAlignmentX(Container.CENTER_ALIGNMENT);
 		return label;
+	}
+
+	/**
+	 * @param parent component parent
+	 * @param message message to show
+	 */
+	public static void showError(Component parent, String message) {
+		JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 	
 }

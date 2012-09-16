@@ -20,8 +20,11 @@ import info.joseluismartin.gui.ViewDialog;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 import info.joseluismartin.gui.form.BoxFormBuilder;
 import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.gui.form.SimpleBoxFormBuilder;
 import info.joseluismartin.gui.list.ListComboBoxModel;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -48,7 +51,7 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	private JTextField user = new JTextField();
 	private JPasswordField password = new JPasswordField();
 	private JButton test;
-	private JLabel testResult = new JLabel(" ");
+	private JLabel testResult = new JLabel();
 	
 	public DbConnectionForm() {
 		this(new DbConnection());
@@ -59,8 +62,6 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	 */
 	public DbConnectionForm(DbConnection dbConnection) {
 		super(dbConnection);
-		test = new JButton(getMessage("DbConnectionForm.test"));
-		test.addActionListener(this);
 	
 		
 	}
@@ -69,7 +70,12 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	 * Init method, called by container after property sets.
 	 */
 	public void init() {
+		test = new JButton(getMessage("DbConnectionForm.test"));
+		test.addActionListener(this);
 		database.setModel(new ListComboBoxModel(Database.DATABASES));
+		FormUtils.setBold(testResult);
+		testResult.setHorizontalAlignment(JLabel.CENTER);
+		testResult.setAlignmentX(Component.CENTER_ALIGNMENT);
 		autobind();
 	}
 
@@ -79,6 +85,7 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 	@Override
 	protected JComponent buildPanel() {
 		BoxFormBuilder fb = new BoxFormBuilder(FormUtils.createTitledBorder(getMessage("DbConnectionForm.title")));
+		
 		fb.row();
 		fb.startBox();
 		fb.setFixedHeight(true);
@@ -97,16 +104,16 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 		fb.endBox();
 		fb.row();
 		fb.startBox();
-		fb.row();
-		fb.startBox();
+		fb.setFixedHeight(true);
 		fb.row();
 		fb.add(Box.createHorizontalGlue());
-		fb.add(test, 50);
+		fb.add(test);
 		fb.add(Box.createHorizontalGlue());
 		fb.endBox();
 		fb.row();
-		fb.add(testResult);
-		fb.endBox();
+		fb.add(testResult, SimpleBoxFormBuilder.SIZE_UNDEFINED);
+		fb.row(SimpleBoxFormBuilder.SIZE_UNDEFINED);
+		fb.add(Box.createVerticalGlue());
 		
 		return fb.getForm();
 	}
@@ -118,9 +125,20 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 		update();
 		if (getModel().test()) {
 			testResult.setText(getMessage("DbConnectionForm.success"));
+			testResult.setForeground(new Color(0, 150, 0));
 		}
 		else {
 			testResult.setText(getMessage("DbConnectionForm.failed"));
+			testResult.setForeground(Color.RED);
+		}
+	}
+	
+	@Override
+	public void doRefresh() {
+		for (Database db : Database.DATABASES) {
+			if (db.equals(getModel().getDatabase())) {
+				database.setSelectedItem(db);
+			}
 		}
 	}
 	
@@ -137,5 +155,6 @@ public class DbConnectionForm  extends AbstractView<DbConnection>
 		d.init();
 		d.setVisible(true);
 	}
+
 
 }

@@ -131,9 +131,13 @@ public class AnnotationControlInitializer implements ControlInitializer {
 			fa = field.getAnnotations();
 		}
 		Method method = BeanUtils.getPropertyDescriptor(clazz, property).getReadMethod();
-		Annotation[] ma = method.getAnnotations();
-		Annotation[] annotations = (Annotation[]) ArrayUtils.addAll(fa, ma);
-		return annotations;
+		if (method != null) {
+			Annotation[] ma = method.getAnnotations();
+			Annotation[] annotations = (Annotation[]) ArrayUtils.addAll(fa, ma);
+			return annotations;
+		}
+		
+		return fa;
 	}
 	
 	
