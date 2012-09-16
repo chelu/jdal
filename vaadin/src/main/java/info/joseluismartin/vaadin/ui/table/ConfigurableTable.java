@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 
@@ -63,6 +64,7 @@ import com.vaadin.ui.Table;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @SuppressWarnings("serial")
+@Configurable
 public class ConfigurableTable extends Table {
 	
 	private boolean usingChecks = false;
@@ -70,7 +72,7 @@ public class ConfigurableTable extends Table {
 	private TableSorter sorter;
 	private Map<String, Column> columnMap = new HashMap<String, Column>();
 	@Autowired
-	private MessageSource messageSource;
+	private transient MessageSource messageSource;
 	
 	
 	/**

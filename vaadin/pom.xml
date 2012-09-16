@@ -41,10 +41,8 @@
 						<index>true</index>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<!--
-								Implementation-Title and Implementation-Version come from the
-								POM by default
-							-->
+							<!-- Implementation-Title and Implementation-Version come from the 
+								POM by default -->
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
 						<manifestEntries>
@@ -88,7 +86,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>sonatype</id>
@@ -111,7 +109,7 @@
 			</distributionManagement>
 		</profile>
 	</profiles>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.vaadin</groupId>
@@ -129,6 +127,25 @@
 			<version>5.1.14</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.1.1.RELEASE</version>
+		</dependency>
+
+
 
 	</dependencies>
 </project>

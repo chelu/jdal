@@ -20,16 +20,18 @@ import com.vaadin.ui.Button.ClickEvent;
 
 import org.springframework.context.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
+@Configurable
 public abstract class TableButtonListener extends ButtonListener {
 	
 	private PageableTable<?> table;
 	@Autowired
-	protected MessageSource messageSource;
+	protected transient MessageSource messageSource;
 	
 	
 	public TableButtonListener() {

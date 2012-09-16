@@ -115,7 +115,7 @@ public abstract class JpaUtils {
 				return (Root<T>) r.as(clazz);
 			}
 		}
-		return null;
+		return (Root<T>) query.getRoots().iterator().next();
 	}
 	
 	/**

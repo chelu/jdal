@@ -34,6 +34,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.MessageSource;
 
 import com.vaadin.data.Container;
@@ -62,6 +63,7 @@ import com.vaadin.ui.Window.CloseListener;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@Configurable
 public class PageableTable<T> extends CustomComponent implements PaginatorListener, 
 	Container.ItemSetChangeListener, ItemClickListener, CloseListener {
 
@@ -74,9 +76,9 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** the external paginator */
 	private VaadinPaginator<T> paginator;
 	/** persistentService */
-	private PersistentService<T, Serializable>  service;
+	private transient PersistentService<T, Serializable>  service;
 	/** page */
-	private Page<T> page;
+	private transient Page<T> page;
 	/** Filter */
 	private Filter beanFilter;
 	/** container to use when using external paginator */
@@ -85,7 +87,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	private String editor;
 	/** Gui Factory used to get editor instances */
 	@Autowired
-	private GuiFactory guiFactory;
+	private transient GuiFactory guiFactory;
 	/** if true, pagesLength change to pageSize */
 	private boolean autoResize = true;
 	/** if true, will create a editor when none configured */
@@ -153,7 +155,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		
 	}
 
-	
 	/**
 	 * Create a ButtonBox from TableAction List
 	 * @return HorizontalLayout with Buttons
@@ -169,7 +170,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		
 		return hl;
 	}
-
 
 	/**
 	 * {@inheritDoc}
@@ -331,13 +331,27 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	public String getEditor() {
 		return editor;
 	}
-
-
+	
 	/**
 	 * @param editor the editor to se
+	 * @deprecated use getEditorName instead
 	 */
 	public void setEditor(String editor) {
 		this.editor = editor;
+	}
+
+	/**
+	 * @param editorName the editor to se
+	 */
+	public void setEditorName(String editorName) {
+		this.editor = editorName;
+	}
+	
+	/**
+	 * @return the editor name
+	 */
+	public String getEditorName() {
+		return editor;
 	}
 
 
