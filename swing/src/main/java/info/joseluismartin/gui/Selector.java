@@ -76,6 +76,7 @@ public class Selector<T> extends JPanel {
 	
 	private int buttonWidth = 30;
 	private int buttonHeight = 30;
+	private int listWidth = 300;
 	private boolean showSearchFields = false;
 
 	public Selector() {
@@ -95,9 +96,9 @@ public class Selector<T> extends JPanel {
 	}
 
 	public void init() {
-
 		availableList = new JList(available);
 		selectedList = new JList(selected);
+		
 		availableSearch.setVisible(showSearchFields);
 		selectedSearch.setVisible(showSearchFields);
 		
@@ -105,6 +106,15 @@ public class Selector<T> extends JPanel {
 		JButton removeButton = new JButton(new RemoveSelectedAction());
 		addButton.setMinimumSize(new Dimension(buttonWidth, buttonHeight));
 		removeButton.setMinimumSize(new Dimension(buttonWidth, buttonHeight));
+		
+		JScrollPane availableScroll = new JScrollPane(availableList);
+		JScrollPane selectedScroll = new JScrollPane(selectedList);
+		availableScroll.setPreferredSize(new Dimension(listWidth, 200));
+		selectedScroll.setPreferredSize(new Dimension(listWidth, 200));
+		availableScroll.setMinimumSize(new Dimension(listWidth, 100));
+		selectedScroll.setMinimumSize(new Dimension(listWidth, 100));
+		
+
 
 		// test message source
 		if (messageSource == null) {
@@ -113,8 +123,9 @@ public class Selector<T> extends JPanel {
 		}
 
 		MessageSourceAccessor msa = new MessageSourceAccessor(messageSource);
-
+		
 		BoxFormBuilder fb = new BoxFormBuilder();
+		fb.setDebug(true);
 		fb.row(Short.MAX_VALUE);
 		fb.startBox();
 		fb.row();
@@ -122,7 +133,7 @@ public class Selector<T> extends JPanel {
 		fb.row();
 		fb.add(FormUtils.newLabelForBox(msa.getMessage("Selector.available")));
 		fb.row(Short.MAX_VALUE);
-		fb.add(new JScrollPane(availableList));
+		fb.add(availableScroll);
 		fb.endBox();
 		fb.startBox();
 		fb.row(Short.MAX_VALUE);
@@ -148,7 +159,7 @@ public class Selector<T> extends JPanel {
 		fb.row();
 		fb.add(FormUtils.newLabelForBox(msa.getMessage("Selector.selected")));
 		fb.row(Short.MAX_VALUE);
-		fb.add(new JScrollPane(selectedList));
+		fb.add(selectedScroll);
 		fb.endBox();
 		
 		setLayout(new BorderLayout());
@@ -348,6 +359,7 @@ public class Selector<T> extends JPanel {
 	public static void main(String[] args) {
 		ApplicationContextGuiFactory.setPlasticLookAndFeel();
 		Selector<Object> selector = new Selector<Object>();
+		selector.setAvailable((Arrays.asList(new Object[] {"lala"})));
 		selector.init();
 		JFrame f = new JFrame();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -382,4 +394,34 @@ public class Selector<T> extends JPanel {
 			removeSelected();
 		}
 	}
+
+	/**
+	 * @return the messageSource
+	 */
+	public MessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	/**
+	 * @param messageSource the messageSource to set
+	 */
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+
+	/**
+	 * @return the listWidth
+	 */
+	public int getListWidth() {
+		return listWidth;
+	}
+
+	/**
+	 * @param listWidth the listWidth to set
+	 */
+	public void setListWidth(int listWidth) {
+		this.listWidth = listWidth;
+	}
+
+	
 }
