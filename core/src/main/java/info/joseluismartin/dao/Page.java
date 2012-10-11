@@ -50,7 +50,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	/** page number  */
 	private int page = 1;
 	/** PageableDataSource that loads the page */
-	private PageableDataSource<T> pageableDataSource;
+	private transient PageableDataSource<T> pageableDataSource;
 	/** Paginator Listeners */
 	private ArrayList<PaginatorListener> listeners = new ArrayList<PaginatorListener>();
 
@@ -218,7 +218,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	 * {@inheritDoc}
 	 */
 	public int getStartIndex() {
-		return (page - 1)*pageSize;
+		return (page - 1) * pageSize;
 	}
 
 	/**
@@ -262,6 +262,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 			// need to recalculate current page
 			page = (int) Math.ceil(getStartIndex()/pageSize) + 1;
 			this.pageSize = pageSize;
+			load();
 			firePageChangedEvent();
 		}
 	}

@@ -16,6 +16,7 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.beans.AppCtx;
+import info.joseluismartin.beans.MessageSourceWrapper;
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.dao.Page.Order;
 import info.joseluismartin.dao.PageChangedEvent;
@@ -78,7 +79,6 @@ import javax.swing.table.TableCellRenderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
  * A JPanel with  a JTable and paginator. 
@@ -116,16 +116,16 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private List<ColumnDescriptor> columnDescriptors;
 	/** visibility box for select visible columns in visibililty menu */
 	private VisibilityBox visibilityBox;
-	/** Gui Factory */
-	GuiFactory guiFactory;
+	/** Gui Factory to gets editors */
+	private GuiFactory guiFactory;
 	/** editor name */
-	String editorName;
+	private String editorName;
 	/** Open editors Map hold editors that are open for a  model */
 	private Map<Object, Window> openDialogs = Collections.synchronizedMap(new HashMap<Object, Window>()); 
 	/** TableState service */
 	private TableService tableService;
 	/** Message Source */
-	private MessageSource messageSource = new ResourceBundleMessageSource();
+	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
 	/** Show right menu when true */
 	private boolean showMenu = true;
 	
@@ -169,7 +169,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		table.setRowSorter(sorter);
 		table.setRowHeight(22);
 		table.addMouseListener(new TableListener());
-		// table.addMouseMotionListener(new HighLightRowListener());
 		tableScrollPane = new JScrollPane(table);
 		setLayout(layout);
 		this.setBackground(Color.WHITE);
@@ -262,8 +261,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	}
 	
 	/**
-	 * Load new page from data source
-	 * @param page
+	 * Configure sort and order in page from sorter
 	 */
 	private void configurePage() {
 		Page.Order order = Page.Order.ASC;
@@ -564,7 +562,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 						((Frame) dlg).requestFocus();
 					}
 					dlg.setLocationRelativeTo(null);
-			//		dlg.setAlwaysOnTop(true);
 					dlg.setVisible(true);
 				}
 			}
@@ -638,8 +635,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 * @param renderer
 	 * @see javax.swing.JTable#setDefaultRenderer(java.lang.Class, javax.swing.table.TableCellRenderer)
 	 */
-	public void setDefaultRenderer(Class<?> columnClass,
-			TableCellRenderer renderer) {
+	public void setDefaultRenderer(Class<?> columnClass, TableCellRenderer renderer) {
 		table.setDefaultRenderer(columnClass, renderer);
 	}
 	
@@ -691,14 +687,14 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 * @return the messageSource
 	 */
 	public MessageSource getMessageSource() {
-		return messageSource;
+		return messageSource.getMessageSource();
 	}
 
 	/**
 	 * @param messageSource the messageSource to set
 	 */
 	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
+		this.messageSource.setMessageSource(messageSource);
 	}
 
 	/**

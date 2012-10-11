@@ -99,7 +99,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** Filter Form */
 	private Form filterForm;
 	/** FormFieldFactory used when creating editor forms */
-	private FormFieldFactory formFieldFactory;
+	private transient FormFieldFactory formFieldFactory;
 	/** the entity class */
 	private Class<T> entityClass;
 	/** Message Source */

@@ -77,6 +77,7 @@ public class Selector<T> extends JPanel {
 	private int buttonWidth = 30;
 	private int buttonHeight = 30;
 	private int listWidth = 300;
+	private int listheight = 100;
 	private boolean showSearchFields = false;
 
 	public Selector() {
@@ -109,10 +110,10 @@ public class Selector<T> extends JPanel {
 		
 		JScrollPane availableScroll = new JScrollPane(availableList);
 		JScrollPane selectedScroll = new JScrollPane(selectedList);
-		availableScroll.setPreferredSize(new Dimension(listWidth, 200));
-		selectedScroll.setPreferredSize(new Dimension(listWidth, 200));
-		availableScroll.setMinimumSize(new Dimension(listWidth, 100));
-		selectedScroll.setMinimumSize(new Dimension(listWidth, 100));
+		availableScroll.setPreferredSize(new Dimension(listWidth, listheight));
+		selectedScroll.setPreferredSize(new Dimension(listWidth, listheight));
+		availableScroll.setMinimumSize(new Dimension(listWidth, listheight));
+		selectedScroll.setMinimumSize(new Dimension(listWidth, listheight));
 		
 
 
@@ -125,7 +126,7 @@ public class Selector<T> extends JPanel {
 		MessageSourceAccessor msa = new MessageSourceAccessor(messageSource);
 		
 		BoxFormBuilder fb = new BoxFormBuilder();
-		fb.setDebug(true);
+
 		fb.row(Short.MAX_VALUE);
 		fb.startBox();
 		fb.row();
@@ -421,6 +422,20 @@ public class Selector<T> extends JPanel {
 	 */
 	public void setListWidth(int listWidth) {
 		this.listWidth = listWidth;
+	}
+
+	/**
+	 * @return the listheight
+	 */
+	public int getListheight() {
+		return listheight;
+	}
+
+	/**
+	 * @param listheight the listheight to set
+	 */
+	public void setListheight(int listheight) {
+		this.listheight = listheight;
 	}
 
 	

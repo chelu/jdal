@@ -34,6 +34,10 @@ public class MessageSourceWrapper implements MessageSource {
 	private static final Log log = LogFactory.getLog(MessageSourceWrapper.class);
 	private MessageSource messageSource;
 	
+	public MessageSourceWrapper() {
+		
+	}
+	
 	/**
 	 * @param messageSource
 	 */
@@ -48,7 +52,7 @@ public class MessageSourceWrapper implements MessageSource {
 	 * @param code message code
 	 * @return message or code if none defined
 	 */
-	protected String getMessage(String code) {
+	public String getMessage(String code) {
 		try {
 			return messageSource == null ?
 				code : messageSource.getMessage(code, null, Locale.getDefault());
@@ -65,7 +69,7 @@ public class MessageSourceWrapper implements MessageSource {
 	 * @param msr message source resolvable
 	 * @return message or code if none defined
 	 */
-	protected String getMessage(MessageSourceResolvable msr) {
+	public String getMessage(MessageSourceResolvable msr) {
 		return messageSource == null ?
 				msr.getDefaultMessage() : messageSource.getMessage(msr, Locale.getDefault());
 	}
@@ -83,6 +87,15 @@ public class MessageSourceWrapper implements MessageSource {
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
+	
+	/**
+	 * @param code
+	 * @param args
+	 */
+	public String getMessage(String code, Object[] args) {
+		return getMessage(code, args, "", Locale.getDefault());
+	}
+
 
 	/**
 	 * @param code
@@ -93,7 +106,7 @@ public class MessageSourceWrapper implements MessageSource {
 	 * @see org.springframework.context.MessageSource#getMessage(java.lang.String, java.lang.Object[], java.lang.String, java.util.Locale)
 	 */
 	public String getMessage(String code, Object[] args, String defaultMessage, Locale locale) {
-		return messageSource.getMessage(code, args, defaultMessage, locale);
+		return messageSource == null ? code : messageSource.getMessage(code, args, defaultMessage, locale);
 	}
 
 	/**
@@ -105,7 +118,7 @@ public class MessageSourceWrapper implements MessageSource {
 	 * @see org.springframework.context.MessageSource#getMessage(java.lang.String, java.lang.Object[], java.util.Locale)
 	 */
 	public String getMessage(String code, Object[] args, Locale locale) throws NoSuchMessageException {
-		return messageSource.getMessage(code, args, locale);
+		return messageSource == null ? code : messageSource.getMessage(code, args, locale);
 	}
 
 	/**
@@ -116,7 +129,7 @@ public class MessageSourceWrapper implements MessageSource {
 	 * @see org.springframework.context.MessageSource#getMessage(org.springframework.context.MessageSourceResolvable, java.util.Locale)
 	 */
 	public String getMessage(MessageSourceResolvable resolvable, Locale locale) throws NoSuchMessageException {
-		return messageSource.getMessage(resolvable, locale);
+		return messageSource == null ? resolvable.getDefaultMessage() : messageSource.getMessage(resolvable, locale);
 	}
 	
 	

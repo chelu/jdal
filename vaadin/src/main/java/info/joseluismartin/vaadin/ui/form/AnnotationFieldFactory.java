@@ -42,7 +42,7 @@ import com.vaadin.ui.Field;
 public class AnnotationFieldFactory extends ConfigurableFieldFactory {
 	
 	@Autowired
-	private PersistentServiceFactory persistentServiceFactory;
+	private transient PersistentServiceFactory persistentServiceFactory;
 	
 	private Map<Class<?extends Annotation>, FieldBuilder> annotationMap = Collections.synchronizedMap(
 			new HashMap<Class<? extends Annotation>, FieldBuilder>());

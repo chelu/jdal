@@ -62,6 +62,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String TABLE_SERVICE = "tableService";
 	private static final String NAME = "name";
 	private static final String SHOW_MENU = "showMenu";
+	private static final String MESSAGE_SOURCE = "messageSource";
 
 	
 	/**
@@ -108,6 +109,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(EDITOR))
 			editor = element.getAttribute(EDITOR);
 		
+		
 		// create ListTableModel
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(ListTableModel.class);
 		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
@@ -137,6 +139,9 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		if (element.hasAttribute(SHOW_MENU))
 			bdb.addPropertyValue(SHOW_MENU, element.getAttribute(SHOW_MENU));
+		
+		if (element.hasAttribute(MESSAGE_SOURCE))
+			bdb.addPropertyReference(MESSAGE_SOURCE, element.getAttribute(MESSAGE_SOURCE));
 			
 		registerBeanDefinition(element, parserContext, pageableTableBeanName, bdb);
 		

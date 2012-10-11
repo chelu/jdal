@@ -52,7 +52,7 @@ public class ColumnDefinition {
 	 * @return the displayName
 	 */
 	public String getDisplayName() {
-		return displayName;
+		return displayName == null ? name : displayName;
 	}
 	/**
 	 * @param displayName the displayName to set

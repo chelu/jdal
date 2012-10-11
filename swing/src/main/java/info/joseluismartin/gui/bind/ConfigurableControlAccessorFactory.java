@@ -18,6 +18,8 @@ package info.joseluismartin.gui.bind;
 import info.joseluismartin.gui.Selector;
 import info.joseluismartin.gui.View;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
@@ -96,7 +98,9 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 			} catch (IllegalArgumentException e) {
 				log.error(e);
 			} catch (InvocationTargetException e) {
-				log.error(e);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				e.printStackTrace(new PrintStream(baos));
+				log.error(baos);
 			}
 		}
 		else {

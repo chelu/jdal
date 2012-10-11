@@ -23,25 +23,27 @@ import info.joseluismartin.vaadin.ui.Box;
 
 import java.io.Serializable;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.MessageSource;
+
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Select;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-
-import org.springframework.context.MessageSource;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Paginator implementation for Vaadin framework
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@Configurable
 public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginator, Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -65,7 +67,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/** Listen buttons clicks */
 	private ButtonClickListener buttonClickListener = new ButtonClickListener();
 	@Autowired
-	private MessageSource messageSource;
+	private transient MessageSource messageSource;
 	
 	/** 
 	 * Creates a new paginator with default page size of 10 records

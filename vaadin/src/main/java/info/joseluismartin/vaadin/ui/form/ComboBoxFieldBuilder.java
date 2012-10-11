@@ -35,10 +35,10 @@ import com.vaadin.ui.Select;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ComboBoxFieldBuilder implements FieldBuilder {
+public class ComboBoxFieldBuilder implements FieldBuilder, Serializable {
 	
 	@Autowired
-	private PersistentServiceFactory persistentServiceFactory;
+	private transient PersistentServiceFactory persistentServiceFactory;
 	
 	/**
 	 * Creates a new ComboBoxFieldFactory

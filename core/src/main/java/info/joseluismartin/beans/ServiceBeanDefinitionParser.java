@@ -17,6 +17,7 @@ package info.joseluismartin.beans;
 
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanReference;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
@@ -88,6 +89,7 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 			}
 			
 			daoBuilder.addConstructorArgValue(className);
+			daoBuilder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 			String daoBeanName = name  + DAO_SUFFIX;
 			registerBeanDefinition(parserContext, daoBuilder, daoBeanName); 
 			

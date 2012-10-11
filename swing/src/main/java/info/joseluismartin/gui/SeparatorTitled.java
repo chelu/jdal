@@ -15,6 +15,8 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.gui.form.FormUtils;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -33,8 +35,17 @@ public class SeparatorTitled extends Box {
 	private static final long serialVersionUID = 1L;
 
 	public SeparatorTitled(String title) {
+		this(title, false);
+	}
+	
+	public SeparatorTitled(String title, boolean bold) {
+	
 		super(BoxLayout.LINE_AXIS);
 		JLabel titleLabel = new JLabel(title);
+		
+		if (bold)
+			FormUtils.setBold(titleLabel);
+		
 		titleLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		this.add(titleLabel);
 		this.add(Box.createHorizontalStrut(5));

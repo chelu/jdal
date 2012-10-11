@@ -95,7 +95,7 @@ public class SimpleBoxFormBuilder {
 		}
 		addBox(c);
 
-		if (rowHeight != Short.MAX_VALUE) {
+		if (rowHeight < Short.MAX_VALUE) {
 			Dimension d = c.getPreferredSize();
 			d.height = rowHeight;
 			c.setPreferredSize(d);
@@ -221,10 +221,11 @@ public class SimpleBoxFormBuilder {
 			Box box = columns.get(i);
 			int maxWidth = columnsWidth.get(i) == 0 ? Short.MAX_VALUE : columnsWidth.get(i);
 			box.setMaximumSize(new Dimension(maxWidth, columnHeight));
-			if (maxWidth < Short.MAX_VALUE && columnHeight < Short.MAX_VALUE)
+			
+			if (maxWidth < Short.MAX_VALUE && columnHeight < Short.MAX_VALUE) {
 				box.setMinimumSize(new Dimension(maxWidth, columnHeight));
 				box.setPreferredSize(new Dimension(maxWidth, columnHeight));
-				
+			}
 		}
 		
 		container.setFocusTraversalPolicy(focusTransversal);

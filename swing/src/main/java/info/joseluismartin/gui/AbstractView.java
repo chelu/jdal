@@ -315,6 +315,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	 * Listen control for changes.
 	 */
 	public void listen(Object control) {
+		checkFactories();
 		ControlAccessor c = controlAccessorFactory.getControlAccessor(control);
 		if (c != null) {
 			c.addControlChangeListener(this);

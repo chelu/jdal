@@ -38,6 +38,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -474,4 +475,5 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	public <E> List<E> getAll(Class<E> clazz) {
 		return getSession().createCriteria(clazz).list();
 	}
+
 }

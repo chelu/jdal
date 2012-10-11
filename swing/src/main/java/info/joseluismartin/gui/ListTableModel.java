@@ -15,6 +15,8 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.beans.MessageSourceWrapper;
+
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.util.ClassUtils;
 
 /**
@@ -98,6 +102,8 @@ public class ListTableModel implements TableModel {
 	private List<ColumnDefinition> columns = new ArrayList<ColumnDefinition>();
 	/** Default TableCellRenderer */
 	private TableCellRenderer defaultTableCellRenderer;
+	/** MessageSource */
+	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
 
 	/**
 	 * Creates a new ListTableModel with model set to List l
@@ -119,10 +125,11 @@ public class ListTableModel implements TableModel {
 	 * @return String with column name
 	 */
 	public String getColumnName(int columnIndex) {
+		String name = "";
 		if (isPropertyColumn(columnIndex)) {
-			return displayNames.get(columnToPropertyIndex(columnIndex));
+			name  = messageSource.getMessage(displayNames.get(columnToPropertyIndex(columnIndex)));
 		}
-		return "";
+		return name;
 	}
 
 	/**
@@ -740,5 +747,20 @@ public class ListTableModel implements TableModel {
 		}
 
 		return sortPropertyName;
+	}
+
+	/**
+	 * @return the messageSource
+	 */
+	public MessageSource getMessageSource() {
+		return this.messageSource.getMessageSource();
+	}
+
+	/**
+	 * @param messageSource the messageSource to set
+	 */
+	@Autowired
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource.setMessageSource(messageSource);
 	}
 }
