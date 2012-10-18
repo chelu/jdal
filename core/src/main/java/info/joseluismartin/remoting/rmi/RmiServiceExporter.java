@@ -40,9 +40,8 @@ public class RmiServiceExporter extends org.springframework.remoting.rmi.RmiServ
 		}
 		else {
 			// RMI Invokers. 
-			RmiInvocationHandler wrapper = (RmiInvocationHandler) exportedObject;
 			ProxyFactory factory = new ProxyFactory(getServiceInterface(), 
-					new RmiExporterServiceInterceptor(wrapper));
+					new RmiServiceInterceptor((RmiInvocationHandler) exportedObject));
 
 			this.remoteService = factory.getProxy();
 		}

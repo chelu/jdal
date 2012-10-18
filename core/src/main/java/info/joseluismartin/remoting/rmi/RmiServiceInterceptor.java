@@ -30,7 +30,7 @@ import org.springframework.remoting.support.RemoteInvocationBasedAccessor;
 public class RmiServiceInterceptor extends RemoteInvocationBasedAccessor 
 	implements MethodInterceptor, Serializable  {
 	
-	RmiInvocationHandler invocationHandler; 
+	private RmiInvocationHandler invocationHandler; 
 	
 	public RmiServiceInterceptor(RmiInvocationHandler invocationHandler) {
 		this.invocationHandler = invocationHandler;
