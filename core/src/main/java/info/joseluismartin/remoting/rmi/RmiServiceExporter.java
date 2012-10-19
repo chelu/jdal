@@ -29,6 +29,7 @@ import org.springframework.remoting.rmi.RmiInvocationHandler;
 public class RmiServiceExporter extends org.springframework.remoting.rmi.RmiServiceExporter {
 
 	private Object remoteService;
+	private String remoteServiceName;
 
 	@Override
 	protected Remote getObjectToExport() {
@@ -41,7 +42,7 @@ public class RmiServiceExporter extends org.springframework.remoting.rmi.RmiServ
 		else {
 			// RMI Invokers. 
 			ProxyFactory factory = new ProxyFactory(getServiceInterface(), 
-					new RmiServiceInterceptor((RmiInvocationHandler) exportedObject));
+					new RmiServiceInterceptor((RmiInvocationHandler) exportedObject, remoteServiceName));
 
 			this.remoteService = factory.getProxy();
 		}
@@ -51,6 +52,15 @@ public class RmiServiceExporter extends org.springframework.remoting.rmi.RmiServ
 
 	public Object getRemoteService()  {
 		return remoteService;
+	}
+	
+	/** 
+	 * Override to get access to the serviceName
+	 */
+	@Override
+	public void setServiceName(String serviceName) {
+		this.remoteServiceName = serviceName;
+		super.setServiceName(serviceName);
 	}
 
 

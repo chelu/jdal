@@ -35,9 +35,15 @@ public class RmiServiceInterceptor extends RemoteInvocationBasedAccessor
 	implements MethodInterceptor, Serializable  {
 	
 	private RmiInvocationHandler invocationHandler; 
+	private String serviceName;
 	
 	public RmiServiceInterceptor(RmiInvocationHandler invocationHandler) {
+		this(invocationHandler, null);
+	}
+	
+	public RmiServiceInterceptor(RmiInvocationHandler invocationHandler, String serviceName) {
 		this.invocationHandler = invocationHandler;
+		this.serviceName = serviceName;
 	}
 
 	/**
@@ -60,6 +66,12 @@ public class RmiServiceInterceptor extends RemoteInvocationBasedAccessor
 	 */
 	private String extractServiceUrl() {
 		String toParse = invocationHandler.toString();
-		return 	"rmi://" + StringUtils.substringBefore(StringUtils.substringAfter(toParse, "endpoint:["), "]");
+		String url = "rmi://" + StringUtils.substringBefore(
+				StringUtils.substringAfter(toParse, "endpoint:["), "]");
+		
+		if (serviceName != null)
+			url = StringUtils.substringBefore(url, ":") + "/" + serviceName;
+		
+		return url;
 	}
 }
