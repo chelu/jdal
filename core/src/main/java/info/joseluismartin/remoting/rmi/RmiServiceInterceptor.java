@@ -16,11 +16,15 @@
 package info.joseluismartin.remoting.rmi;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.remoting.rmi.RmiClientInterceptorUtils;
 import org.springframework.remoting.rmi.RmiInvocationHandler;
 import org.springframework.remoting.support.RemoteInvocationBasedAccessor;
+
 
 /**
  * Aop Alliance Interceptor that delegate calls to a RmiInvocationHandler.
@@ -40,6 +44,22 @@ public class RmiServiceInterceptor extends RemoteInvocationBasedAccessor
 	 * {@inheritDoc}
 	 */
 	public Object invoke(MethodInvocation invocation) throws Throwable {
-		return invocationHandler.invoke(createRemoteInvocation(invocation));
+		try {
+			return invocationHandler.invoke(createRemoteInvocation(invocation));
+		}
+		catch (RemoteException ex) {
+				throw RmiClientInterceptorUtils.convertRmiAccessException(
+				    invocation.getMethod(), ex, RmiClientInterceptorUtils.isConnectFailure(ex), 
+				    extractServiceUrl());
+			}
+	}
+
+	/**
+	 * Try to extract service Url from invationHandler.toString();
+	 * @return Service Url
+	 */
+	private String extractServiceUrl() {
+		String toParse = invocationHandler.toString();
+		return 	"rmi://" + StringUtils.substringBefore(StringUtils.substringAfter(toParse, "endpoint:["), "]");
 	}
 }
