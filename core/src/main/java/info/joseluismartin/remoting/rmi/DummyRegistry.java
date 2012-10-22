@@ -21,6 +21,7 @@ import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
+import java.util.Hashtable;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -28,39 +29,51 @@ import java.rmi.registry.Registry;
  */
 public class DummyRegistry implements Registry {
 
+	private Hashtable<String, Remote> registry = new Hashtable<String, Remote>();
 	/**
 	 * {@inheritDoc}
 	 */
 	public Remote lookup(String name) throws RemoteException, NotBoundException, AccessException {
-		throw new NotBoundException("This registry is dummy");
+		Remote obj = registry.get(name);
+		
+		if (obj == null)
+			throw new NotBoundException(name);
+		
+		return registry.get(name);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void bind(String name, Remote obj) throws RemoteException, AlreadyBoundException, AccessException {
+		if (registry.containsKey(name))
+			throw new AlreadyBoundException(name);
 		
+		registry.put(name, obj);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void unbind(String name) throws RemoteException, NotBoundException, AccessException {
+		Object obj = registry.remove(name);
 		
+		if (obj == null)
+			throw new NotBoundException(name);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void rebind(String name, Remote obj) throws RemoteException, AccessException {
-		
+		registry.put(name, obj);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public String[] list() throws RemoteException, AccessException {
-		return new String[0];
+		return registry.keySet().toArray(new String[0]);
 	}
 
 }

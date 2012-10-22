@@ -15,6 +15,8 @@
  */
 package info.joseluismartin.remoting.rmi;
 
+import info.joseluismartin.remoting.ReferenceInvocationExecutor;
+
 import java.rmi.Remote;
 
 import org.springframework.aop.framework.ProxyFactory;
@@ -30,6 +32,10 @@ public class RmiServiceExporter extends org.springframework.remoting.rmi.RmiServ
 
 	private Object remoteService;
 	private String remoteServiceName;
+	
+	public RmiServiceExporter() {
+		setRemoteInvocationExecutor(new ReferenceInvocationExecutor());
+	}
 
 	@Override
 	protected Remote getObjectToExport() {
