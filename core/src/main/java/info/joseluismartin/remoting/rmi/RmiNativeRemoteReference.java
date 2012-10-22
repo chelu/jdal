@@ -44,7 +44,6 @@ public class RmiNativeRemoteReference extends UrlBasedRemoteReference {
 	public RmiNativeRemoteReference(Remote remoteService, Class serviceInterface) {
 		this.remoteService = remoteService;
 		setServiceInterface(serviceInterface);
-		setServiceUrl("test");
 	}
 
 	/**
