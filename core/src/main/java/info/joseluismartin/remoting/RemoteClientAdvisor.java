@@ -39,6 +39,14 @@ public class RemoteClientAdvisor extends AbstractGenericPointcutAdvisor {
 		});
 	}
 	
+	public RemoteClientAdvisor(final RemoteClient remoteClient) {
+		setAdvice(new MethodInterceptor() {
+			public Object invoke(MethodInvocation invocation) throws Throwable {
+				return remoteClient.getRemoteReference();
+			}
+		});
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

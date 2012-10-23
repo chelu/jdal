@@ -20,13 +20,10 @@ import info.joseluismartin.remoting.RemoteClient;
 import info.joseluismartin.remoting.RemoteClientAdvisor;
 import info.joseluismartin.remoting.RemoteReference;
 
-import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.remoting.rmi.RmiClientInterceptor;
-import org.springframework.remoting.rmi.RmiInvocationHandler;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
