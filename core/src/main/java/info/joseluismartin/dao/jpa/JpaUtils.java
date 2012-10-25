@@ -279,5 +279,15 @@ public abstract class JpaUtils {
 			copyFetches(f, toFetch);
 		}
 	}
+	
+	public static boolean hasPath(Path<?> path, String propertyPath) {
+		try {
+			getPath(path, propertyPath);
+			return true;
+		}
+		catch (Exception e) { // Hibernate throws NPE here.
+			return false;
+		}
+	}
 }
 

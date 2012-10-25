@@ -148,8 +148,10 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		page.setCount((em.createQuery(countCriteria).getSingleResult())
 				.intValue());
 		
-		if (page.getSortName() != null) 
-			criteria.orderBy(getOrder(page, criteria));
+		Order order = getOrder(page, criteria);
+		
+		if (order != null)
+			criteria.orderBy(order);
 		
 		return em.createQuery(criteria);
 	}
@@ -216,10 +218,15 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * @return
 	 */
 	private <K> SingularAttribute<? super K, ?> getIdAttribute(Class<K> clazz) {
-		Type<?> type = em.getMetamodel().entity(clazz).getIdType();
-		EntityType<K> entity =  em.getMetamodel().entity(clazz);
-		SingularAttribute<? super K, ?> id = entity.getId(type.getJavaType());
-		return id;
+		try {
+			Type<?> type = em.getMetamodel().entity(clazz).getIdType();
+			EntityType<K> entity =  em.getMetamodel().entity(clazz);
+			SingularAttribute<? super K, ?> id = entity.getId(type.getJavaType());
+			return id;
+		} 
+		catch (IllegalArgumentException iae) {
+			return null;
+		}
 	}
 	
 	/**
@@ -232,13 +239,34 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		Root<T> root = JpaUtils.findRoot(criteria, getEntityClass());
 		String propertyPath = page.getSortName();
+		Path<?> path = null;
+		Order order = null;
 		
-		if (log.isDebugEnabled())
-			log.debug("Setting order as: " + propertyPath);
-
-		Path<?> path = JpaUtils.getPath(root, propertyPath);
-
-		return page.getOrder() == Page.Order.ASC ? cb.asc(path) : cb.desc(path);
+		if (propertyPath == null) {  
+			// no sort property default to name or PK
+			if (JpaUtils.hasPath(root, "name")) {
+				path = root.get("name");
+			}
+			else {
+				// try PK
+				SingularAttribute<? super T, ?> id = getIdAttribute();
+				if (id != null) {
+					path = root.get(getIdAttribute());
+				}
+			}			
+		}
+		else { 
+			// use sort property
+			if (log.isDebugEnabled())
+				log.debug("Setting order as: " + propertyPath);
+			path = JpaUtils.getPath(root, propertyPath);
+		}
+		
+		if (path != null) {
+			order = page.getOrder() == Page.Order.ASC ? cb.asc(path) : cb.desc(path);
+		}
+		
+		return order;
 	}
 	
 	/**
