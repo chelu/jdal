@@ -22,10 +22,12 @@ import info.joseluismartin.dao.jpa.query.EntityTypeQueryFinder;
 import info.joseluismartin.dao.jpa.query.QueryFinder;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Parameter;
@@ -37,7 +39,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.Attribute.PersistentAttributeType;
 import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
 
@@ -56,6 +61,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
  */
 public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	
+	private static final int DEFAULT_DEPTH = 2;
 	private static final Log log = LogFactory.getLog(JpaDao.class);
 	@PersistenceContext
 	private EntityManager em;
@@ -63,6 +69,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	private Map<String, JpaCriteriaBuilder<T>> criteriaBuilderMap = Collections.synchronizedMap(
 			new HashMap<String, JpaCriteriaBuilder<T>>());
 	private QueryFinder queryFinder;
+	private boolean onDeleteSetNull = true;
 	
 	/**
 	 * Default Ctor, When using it, you need to set entityClass 
@@ -341,6 +348,9 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		if (!em.contains(entity))
 			entity = em.merge(entity);
 		
+		if (onDeleteSetNull)
+			nullReferences(entity);
+		
 		em.remove(entity);
 	}
 
@@ -348,8 +358,34 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * {@inheritDoc}
 	 */
 	public void deleteById(PK id) {
-		em.remove(get(id));
+		delete(get(id));
 		
+	}
+	
+	/**
+	 * @param entity
+	 */
+	private void nullReferences(T entity) {
+		EntityType<T> type = em.getMetamodel().entity(getEntityClass());
+		Set<PluralAttribute<? super T, ?, ?>> attributes = type.getPluralAttributes();
+		for (PluralAttribute<? super T, ?, ?> a : attributes) {
+			if (PersistentAttributeType.ONE_TO_MANY == a.getPersistentAttributeType()) {
+				Collection<?> association =  (Collection<?>) PropertyAccessorFactory.forDirectFieldAccess(entity)
+						.getPropertyValue(a.getName());
+
+				if (association != null) {
+					EntityType<?> associationType = em.getMetamodel().entity(a.getBindableJavaType());
+					for (Attribute<?, ?> sa : associationType.getAttributes()) {
+						if (PersistentAttributeType.MANY_TO_ONE == sa.getPersistentAttributeType() &&
+								sa.getJavaType().equals(entity.getClass())) {
+							for (Object o : association) {
+								PropertyAccessorFactory.forDirectFieldAccess(o).setPropertyValue(sa.getName(), null);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -364,6 +400,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * {@inheritDoc}
 	 */
 	public T initialize(T entity) {
+		initialize(entity, DEFAULT_DEPTH);
 		return entity;
 	}
 
@@ -371,6 +408,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * {@inheritDoc}
 	 */
 	public T initialize(T entity, int depth) {
+		JpaUtils.initialize(em, entity, depth);
 		return entity;
 	}
 
@@ -491,6 +529,20 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 */
 	public void setEntityClass(Class<T> entityClass) {
 		this.entityClass = entityClass;
+	}
+
+	/**
+	 * @return the onDeleteSetNull
+	 */
+	public boolean isOnDeleteSetNull() {
+		return onDeleteSetNull;
+	}
+
+	/**
+	 * @param onDeleteSetNull the onDeleteSetNull to set
+	 */
+	public void setOnDeleteSetNull(boolean onDeleteSetNull) {
+		this.onDeleteSetNull = onDeleteSetNull;
 	}
 
 }
