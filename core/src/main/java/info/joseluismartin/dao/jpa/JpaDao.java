@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Parameter;
@@ -363,23 +362,48 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	}
 	
 	/**
-	 * @param entity
+	 * Null References on one to many and one to one associations
+	 * @param entity entity
 	 */
 	private void nullReferences(T entity) {
 		EntityType<T> type = em.getMetamodel().entity(getEntityClass());
-		Set<PluralAttribute<? super T, ?, ?>> attributes = type.getPluralAttributes();
-		for (PluralAttribute<? super T, ?, ?> a : attributes) {
-			if (PersistentAttributeType.ONE_TO_MANY == a.getPersistentAttributeType()) {
-				Collection<?> association =  (Collection<?>) PropertyAccessorFactory.forDirectFieldAccess(entity)
-						.getPropertyValue(a.getName());
 
+		if (log.isDebugEnabled()) 
+			log.debug("Null references on entity " + type.getName());
+		
+		for (Attribute<?, ?> a :  type.getAttributes()) {
+			if (PersistentAttributeType.ONE_TO_MANY == a.getPersistentAttributeType() ||
+					PersistentAttributeType.ONE_TO_ONE == a.getPersistentAttributeType()) {
+				Object association =  PropertyAccessorFactory.forDirectFieldAccess(entity)
+						.getPropertyValue(a.getName());
 				if (association != null) {
-					EntityType<?> associationType = em.getMetamodel().entity(a.getBindableJavaType());
-					for (Attribute<?, ?> sa : associationType.getAttributes()) {
-						if (PersistentAttributeType.MANY_TO_ONE == sa.getPersistentAttributeType() &&
-								sa.getJavaType().equals(entity.getClass())) {
-							for (Object o : association) {
-								PropertyAccessorFactory.forDirectFieldAccess(o).setPropertyValue(sa.getName(), null);
+					EntityType<?> associationType = null;
+					if (a.isCollection()) {
+						associationType = em.getMetamodel().entity(
+								((PluralAttribute<?, ?, ?>)a).getBindableJavaType());
+					}
+					else {
+						associationType = em.getMetamodel().entity(a.getJavaType());
+
+					}
+
+					for (Attribute<?, ?> aa : associationType.getAttributes()) {
+						if (aa.getJavaType().equals(entity.getClass())) {
+							if (PersistentAttributeType.MANY_TO_ONE == aa.getPersistentAttributeType()) {
+								if (log.isDebugEnabled()) {
+									log.debug("Null ManyToOne reference on " + 
+											associationType.getName() + "." + aa.getName());
+								}
+								for (Object o : (Collection<?>) association) {
+									PropertyAccessorFactory.forDirectFieldAccess(o).setPropertyValue(aa.getName(), null);
+								}
+							}
+							else if (PersistentAttributeType.ONE_TO_ONE == aa.getPersistentAttributeType()) {
+								if (log.isDebugEnabled()) {
+									log.debug("Null OneToOne reference on " + 
+											associationType.getName() + "." + aa.getName());
+								}
+								PropertyAccessorFactory.forDirectFieldAccess(association).setPropertyValue(aa.getName(), null);
 							}
 						}
 					}
