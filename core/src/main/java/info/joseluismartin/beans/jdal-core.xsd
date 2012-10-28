@@ -12,8 +12,20 @@
 		</xsd:documentation>
 	</xsd:annotation>
 
-	<xsd:element name="service" type="serviceType" />
-	<xsd:element name="criteria" type="criteriaType" />
+	<xsd:element name="service" type="serviceType" >
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[Declares a PersistentService for a entity class]]>
+		    </xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="criteria" type="criteriaType">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[Binds a CriteriaBuilder with a filter name]]>
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
 
 	<xsd:complexType name="serviceType">
 		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
@@ -32,8 +44,30 @@
 				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="serviceClass" type="xsd:string" />
-		<xsd:attribute name="daoClass" type="xsd:string" />
+		<xsd:attribute name="serviceClass" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[The fully qualified name of the persistent service class.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="daoClass" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[The fully qualified name of the dao class.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
 	</xsd:complexType>
 
 	<xsd:complexType name="criteriaType">

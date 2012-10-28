@@ -30,11 +30,12 @@ import javax.swing.JOptionPane;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
+@SuppressWarnings("rawtypes")
 public class ViewSaveAction extends ViewAction {
 
 	private static final String DEFAULT_ICON = 	"/images/16x16/dialog-ok.png";
 	private static final String DEFAULT_NAME = "Accept";
-	private PersistentService<Object, Serializable> service;
+	private PersistentService service;
 
 	public ViewSaveAction() {
 		setIcon(FormUtils.getIcon(DEFAULT_ICON));
@@ -53,6 +54,7 @@ public class ViewSaveAction extends ViewAction {
 	 * Save the view model, show a message to user if there are
 	 * validation errors.
 	 */
+	@SuppressWarnings("unchecked")
 	private boolean save() {
 		View<?> view = getView();
 		view.update();
@@ -113,7 +115,7 @@ public class ViewSaveAction extends ViewAction {
 		return service;
 	}
 
-	public void setService(PersistentService<Object, Serializable> service) {
+	public void setService(PersistentService<?, Serializable> service) {
 		this.service = service;
 	}
 }

@@ -37,6 +37,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
@@ -236,11 +238,32 @@ public abstract class FormUtils {
 	}
 
 	/**
+	 * Show error message
+	 * @param message message to show
+	 */
+	public static void showError(String message) {
+		showError(null, message);
+	}
+	
+	/**
+	 * Show error message
 	 * @param parent component parent
 	 * @param message message to show
 	 */
 	public static void showError(Component parent, String message) {
 		JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public static JDialog newDialog(Component component) {
+		return newDialog(null, component);
+	}
+
+	/**
+	 * @param object
+	 * @param component
+	 * @return
+	 */
+	public static JDialog newDialog(Window parent, Component component) {
 	}
 	
 }

@@ -39,7 +39,7 @@ public class LoadPreferencesAction extends PageableTableAction {
 	/**
 	 * @param pageableTable
 	 */
-	public LoadPreferencesAction(PageableTable pageableTable) {
+	public LoadPreferencesAction(PageableTable<?> pageableTable) {
 		this(pageableTable, null, null);
 	}
 
@@ -49,7 +49,7 @@ public class LoadPreferencesAction extends PageableTableAction {
 	 * @param name
 	 * @param icon
 	 */
-	public LoadPreferencesAction(PageableTable pageableTable, String name, Icon icon) {
+	public LoadPreferencesAction(PageableTable<?> pageableTable, String name, Icon icon) {
 		super(pageableTable, name, icon);
 		init();
 	}
@@ -59,7 +59,7 @@ public class LoadPreferencesAction extends PageableTableAction {
 	 * @param pageableTable
 	 * @param name
 	 */
-	public LoadPreferencesAction(PageableTable pageableTable, String name) {
+	public LoadPreferencesAction(PageableTable<?> pageableTable, String name) {
 		this(pageableTable, name, null);
 	}
 

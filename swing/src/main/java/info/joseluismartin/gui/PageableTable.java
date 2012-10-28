@@ -15,7 +15,6 @@
  */
 package info.joseluismartin.gui;
 
-import info.joseluismartin.beans.AppCtx;
 import info.joseluismartin.beans.MessageSourceWrapper;
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.dao.Page.Order;
@@ -57,7 +56,6 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -91,7 +89,7 @@ import org.springframework.context.MessageSource;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @SuppressWarnings("unchecked")
-public class PageableTable extends JPanel implements RowSorterListener, PaginatorListener {
+public class PageableTable<T> extends JPanel implements RowSorterListener, PaginatorListener {
 	
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(PageableTable.class);
@@ -103,9 +101,9 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	/** the paginator view */
 	private PaginatorView paginatorView;
 	/** Page used to query PageableDataSource */
-	private Page<Object> page  = new Page<Object>();
+	private Page<T> page  = new Page<T>();
 	/** pageable datasource to request data page by page */
-	private PageableDataSource<Object> dataSource;
+	private PageableDataSource<T> dataSource;
 	/** list table model for the table */
 	private ListTableModel tableModel;
 	/** scroll pane used as table container */
@@ -128,6 +126,8 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
 	/** Show right menu when true */
 	private boolean showMenu = true;
+	/** Change Listeners */
+	private ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	
 	// Menus
 	JMenuBar rightMenuBar;
@@ -286,6 +286,7 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	 */
 	public void pageChanged(PageChangedEvent event) {
 		tableModel.setList(page.getData());
+		fireChangeEvent();
 	}
 	
 	/**
@@ -388,6 +389,24 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		tableService.saveState(state);
 	}
 
+	public void addChangeListener(ChangeListener l) {
+		if (!changeListeners.contains(l))
+			changeListeners.add(l);
+	}
+	
+	public void removeChangeListener(ChangeListener l) {
+		changeListeners.remove(l);
+	}
+	
+	/**
+	 * Notify ChangeListeners that state change
+	 */
+	private void fireChangeEvent()  {
+		ChangeEvent e = new ChangeEvent(this);
+		
+		for (ChangeListener l : changeListeners)
+			l.stateChanged(e);
+	}
 	/**
 	 * @return the paginatorView
 	 */
@@ -405,16 +424,16 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 	/**
 	 * @return the dataSource
 	 */
-	public PageableDataSource<Object> getDataSource() {
+	public PageableDataSource<T> getDataSource() {
 		return dataSource;
 	}
 
 	/**
 	 * @param dataSource the dataSource to set
 	 */
-	public void setDataSource(PageableDataSource<Object> dataSource) {
+	public void setDataSource(PageableDataSource<T> dataSource) {
 		this.dataSource = dataSource;
-		// review datasource duplicatin
+		// review datasource duplication
 		page.setPageableDataSource(dataSource);
 	}
 	
@@ -603,19 +622,6 @@ public class PageableTable extends JPanel implements RowSorterListener, Paginato
 		page.setPage(page.getPage());
 	}
 	
-	/**
-	 * Simple test main method
-	 * @param args
-	 */
-	public static void main (String[] args) {
-		PageableTable incidencesTable = (PageableTable) AppCtx.getInstance().getBean("incidentTable");
-		JFrame f = new JFrame();
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.getContentPane().add(incidencesTable);
-		f.setSize(new Dimension(800, 600));
-		f.setVisible(true);
-	}
-
 	/**
 	 * @return the filter
 	 */

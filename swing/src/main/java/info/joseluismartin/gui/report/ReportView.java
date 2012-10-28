@@ -16,7 +16,6 @@
 package info.joseluismartin.gui.report;
 
 import info.joseluismartin.gui.AbstractView;
-import info.joseluismartin.gui.ApplicationContextGuiFactory;
 import info.joseluismartin.gui.form.BoxFormBuilder;
 import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.gui.list.ListComboBoxModel;
@@ -129,7 +128,7 @@ public class ReportView extends AbstractView<Report> {
 		mainBox.getForm().setOpaque(true);
 		
 		JComponent mainPanel = mainBox.getForm();
-		mainPanel.setBorder(ApplicationContextGuiFactory.createTitledBorder("Informe"));
+		mainPanel.setBorder(FormUtils.createTitledBorder("Informe"));
 		
 		return mainPanel;
 	}

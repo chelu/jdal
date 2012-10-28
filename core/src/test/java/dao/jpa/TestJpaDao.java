@@ -23,6 +23,7 @@ import info.joseluismartin.dao.jpa.JpaUtils;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -58,6 +59,7 @@ public class TestJpaDao extends TestCase {
 	
 	@Resource
 	private JpaDao<Book, Long> bookDao;
+	@Resource JpaDao<Category, Long> categoryDao;
 	
 	@Test
 	@Transactional
@@ -68,7 +70,7 @@ public class TestJpaDao extends TestCase {
 		page.setFilter(bf);
 		bookDao.getPage(page);
 		List<Book> books = page.getData();
-		assertEquals(books.size(), 8);
+		assertEquals(10, books.size());
 	}
 	
 	@Test
@@ -147,5 +149,12 @@ public class TestJpaDao extends TestCase {
 		assertEquals(4, page.getData().size());
 	}
 	
+	@Test
+	@Transactional
+	public void testInitialize() {
+		Category category = categoryDao.get(1L);
+		categoryDao.initialize(category);
+		Set<Book> books = category.getBooks();
+	}
 
 }

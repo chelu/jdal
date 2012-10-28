@@ -15,7 +15,6 @@
  */
 package info.joseluismartin.logic;
 
-import info.joseluismartin.dao.Dao;
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.service.PersistentService;
 
@@ -29,8 +28,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
+ * Bulk all generics in one object to avoid excesive parametrization.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public class ContextPersistentManager implements PersistentService<Object, Serializable> {
 
@@ -41,8 +41,8 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 
 	public void init() {
 		for (PersistentService<Object, Serializable> ps : services) {
-			if (ps.getDao() != null)
-				serviceMap.put(ps.getDao().getEntityClass(), ps);
+			if (ps.getEntityClass() != null)
+				serviceMap.put(ps.getEntityClass(), ps);
 		}
 	}
 
@@ -151,8 +151,8 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 	/**
 	 * {@inheritDoc}
 	 */
-	public Dao<Object, Serializable> getDao() {
-		return null;
+	public Class<Object> getEntityClass() {
+		return Object.class;
 	}
 	
 	/**

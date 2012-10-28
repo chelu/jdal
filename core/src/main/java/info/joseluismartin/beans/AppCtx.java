@@ -48,7 +48,7 @@ public class AppCtx {
 				context.getEnvironment().getPropertySources().addFirst(propertySource);
 			}
 			
-			context.setConfigLocation("classpath:**/applicationContext*.xml");
+			context.setConfigLocation("classpath*:/applicationContext*.xml");
 			context.refresh();
 		}
 		

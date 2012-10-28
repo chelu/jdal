@@ -60,6 +60,6 @@ public interface PersistentService<T, PK extends Serializable> extends PageableD
 	
 	<E> List<E> getAll(Class<E> clazz);
 	
-	Dao<T, PK> getDao();
+	Class<T> getEntityClass();
 	
 }

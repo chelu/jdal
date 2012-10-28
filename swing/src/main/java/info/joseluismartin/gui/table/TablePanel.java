@@ -46,7 +46,7 @@ import javax.swing.KeyStroke;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class TablePanel extends JPanel implements ReportDataProvider {
+public class TablePanel<T> extends JPanel implements ReportDataProvider {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -57,7 +57,7 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	/** TablePanel name */
 	private String name;
 	/** Pageable table used to show records */
-	private PageableTable table;
+	private PageableTable<T> table;
 	/** A filter view */
 	private View<Object> filterView;
 	/** ComboBox with reports available to execute on filtered data */
@@ -192,7 +192,7 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 	/**
 	 * @return the PagebleTable.
 	 */
-	public PageableTable getTable() {
+	public PageableTable<T> getTable() {
 		return table;
 	}
 	
@@ -220,11 +220,11 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 		this.name = name;
 	}
 
-	public PersistentService<Object, Serializable> getPersistentService() {
+	public PersistentService<T, Serializable> getPersistentService() {
 		return getDataSource();
 	}
 
-	public void setPersistentService(PersistentService<Object, Serializable> ps) {
+	public void setPersistentService(PersistentService<T, ?extends Serializable> ps) {
 		table.setDataSource(ps);
 	}
 	
@@ -255,8 +255,8 @@ public class TablePanel extends JPanel implements ReportDataProvider {
 		this.reportListView = reportListView;
 	}
 
-	public PersistentService<Object, Serializable> getDataSource() {
-		return (PersistentService<Object, Serializable>) table.getDataSource(); 
+	public PersistentService<T, Serializable> getDataSource() {
+		return (PersistentService<T, Serializable>) table.getDataSource(); 
 	}
 
 	public Object getFilter() {

@@ -28,7 +28,7 @@ import javax.swing.Icon;
  */
 public abstract class PageableTableAction extends BeanAction {
 	
-	private PageableTable table;
+	private PageableTable<?> table;
 	
 	public PageableTableAction() {
 		
@@ -37,16 +37,16 @@ public abstract class PageableTableAction extends BeanAction {
 	/**
 	 * @param pageableTable
 	 */
-	public PageableTableAction(PageableTable pageableTable) {
+	public PageableTableAction(PageableTable<?> pageableTable) {
 		this(pageableTable, null, null);
 	}
 	
-	public PageableTableAction(PageableTable pageableTable, String name) {
+	public PageableTableAction(PageableTable<?> pageableTable, String name) {
 		this(pageableTable, name, null);
 		
 	}
 	
-	public PageableTableAction(PageableTable pageableTable, String name, Icon icon) {
+	public PageableTableAction(PageableTable<?> pageableTable, String name, Icon icon) {
 		this.table = pageableTable;
 		setName(name);
 		setIcon(icon);
@@ -55,14 +55,14 @@ public abstract class PageableTableAction extends BeanAction {
 	/**
 	 * @return the table
 	 */
-	public PageableTable getTable() {
+	public PageableTable<?> getTable() {
 		return table;
 	}
 
 	/**
 	 * @param table the table to set
 	 */
-	public void setTable(PageableTable table) {
+	public void setTable(PageableTable<?> table) {
 		this.table = table;
 	}
 

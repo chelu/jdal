@@ -27,7 +27,9 @@ public abstract class TableManagerSupport implements TableService {
 	 * {@inheritDoc}
 	 */
 	public TableState getState(String name) {
-		getUser();
+		if (getUser() == null)
+			return null;
+		
 		TableState state = null;
 		String visibleColumns = userPreferenceDao.findUserPreferenceValue(getUser(),
 				getPreferenceName(name, VISIBLE_COLUMNS));

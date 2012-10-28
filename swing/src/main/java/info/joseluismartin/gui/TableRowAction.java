@@ -29,7 +29,7 @@ public abstract class TableRowAction extends IconAction implements Cloneable {
 	/** the row object */
 	private Object row;
 	/** the table model */
-	private PageableTable table;
+	private PageableTable<?> table;
 	
 	/** 
 	 * {@inheritDoc}
@@ -59,14 +59,14 @@ public abstract class TableRowAction extends IconAction implements Cloneable {
 	/**
 	 * @return the table
 	 */
-	public PageableTable getTable() {
+	public PageableTable<?> getTable() {
 		return table;
 	}
 
 	/**
 	 * @param table the table to set
 	 */
-	public void setTable(PageableTable table) {
+	public void setTable(PageableTable<?> table) {
 		this.table = table;
 	}
 }

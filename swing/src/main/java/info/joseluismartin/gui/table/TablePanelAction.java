@@ -25,19 +25,19 @@ import info.joseluismartin.gui.action.BeanAction;
 public abstract class TablePanelAction extends BeanAction {
 
 	private static final long serialVersionUID = 1L;
-	private TablePanel tablePanel;
+	private TablePanel<?> tablePanel;
 	
 	
 	/**
 	 * @return the tablePanel
 	 */
-	public TablePanel getTablePanel() {
+	public TablePanel<?> getTablePanel() {
 		return tablePanel;
 	}
 	/**
 	 * @param tablePanel the tablePanel to set
 	 */
-	public void setTablePanel(TablePanel tablePanel) {
+	public void setTablePanel(TablePanel<?> tablePanel) {
 		this.tablePanel = tablePanel;
 	}
 	

@@ -15,7 +15,6 @@
  */
 package info.joseluismartin.logic;
 
-import info.joseluismartin.dao.Dao;
 import info.joseluismartin.dao.Page;
 import info.joseluismartin.service.PersistentService;
 import info.joseluismartin.util.BeanUtils;
@@ -200,8 +199,9 @@ public class CollectionPersistenceService<T, PK extends Serializable> implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public Dao<T, PK> getDao() {
-		return null;
+	@SuppressWarnings("unchecked")
+	public Class<T> getEntityClass() {
+		return (Class<T>) (collection.isEmpty() ? null : collection.iterator().next().getClass());
 	}
 
 	/**

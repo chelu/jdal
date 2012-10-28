@@ -157,4 +157,11 @@ public class PersistentManager<T, PK extends Serializable> implements Persistent
 	public <E> List<E> getAll(Class<E> clazz) {
 		return dao.getAll(clazz);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Class<T> getEntityClass() {
+		return dao.getEntityClass();
+	}
 }

@@ -40,7 +40,7 @@ public class RemoveAllAction extends TablePanelAction {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		PageableTable table = getTablePanel().getTable();
+		PageableTable<?> table = getTablePanel().getTable();
 		List<Serializable> selectedKeys = table.getTableModel().getChecked();
 		
 		if (selectedKeys.size() == 0)

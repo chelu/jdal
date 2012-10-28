@@ -41,7 +41,7 @@ public class DeleteRowAction extends TableRowAction {
 		if (JOptionPane.showConfirmDialog(null, message, "Confirme, por favor", 
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			service.delete(getRow());
-			((PageableTable)e.getSource()).refresh();
+			((PageableTable<?>)e.getSource()).refresh();
 		}
 		
 	}

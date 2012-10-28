@@ -17,6 +17,8 @@ package info.joseluismartin.dao.jpa;
 
 import info.joseluismartin.dao.Filter;
 
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -100,5 +102,16 @@ public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements 
 		toMatch = toMatch.replace('*', '%');
 		toMatch = "%" + toMatch + "%";
 		return cb.like(JpaUtils.<String>getPath(root, propertyName), toMatch);
+	}
+
+	/**
+	 * Add where expression to criteria with AND.
+	 * @param criteria criteria
+	 * @param cb Criteria Builder
+	 * @param predicates predicates to add
+	 */
+	protected void addAndWhere(CriteriaQuery<T> criteria, CriteriaBuilder cb, List<Predicate> predicates) {
+		if (predicates.size() > 0)
+			criteria.where(cb.and(predicates.toArray(new Predicate[] {})));
 	}
 }

@@ -39,7 +39,7 @@ public class SavePreferencesAction extends PageableTableAction {
 	/**
 	 * @param pageableTable
 	 */
-	public SavePreferencesAction(PageableTable pageableTable) {
+	public SavePreferencesAction(PageableTable<?> pageableTable) {
 		this(pageableTable, null, null);
 	}
 	
@@ -48,7 +48,7 @@ public class SavePreferencesAction extends PageableTableAction {
 	 * @param name
 	 * @param icon
 	 */
-	public SavePreferencesAction(PageableTable pageableTable, String name, Icon icon) {
+	public SavePreferencesAction(PageableTable<?> pageableTable, String name, Icon icon) {
 		super(pageableTable, name, icon);
 		init();
 	}
@@ -57,7 +57,7 @@ public class SavePreferencesAction extends PageableTableAction {
 	 * @param pageableTable
 	 * @param name
 	 */
-	public SavePreferencesAction(PageableTable pageableTable, String name) {
+	public SavePreferencesAction(PageableTable<?> pageableTable, String name) {
 		this(pageableTable, name,  null);
 	}
 
