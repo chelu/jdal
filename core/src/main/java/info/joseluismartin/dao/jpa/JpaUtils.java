@@ -17,10 +17,14 @@ package info.joseluismartin.dao.jpa;
 
 import info.joseluismartin.beans.PropertyUtils;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Fetch;
@@ -29,8 +33,15 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.Attribute.PersistentAttributeType;
+import javax.persistence.metamodel.CollectionAttribute;
+import javax.persistence.metamodel.EntityType;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.PropertyAccessor;
+import org.springframework.beans.PropertyAccessorFactory;
+
 
 /**
  * Utility class for dealing with JPA API
@@ -280,6 +291,12 @@ public abstract class JpaUtils {
 		}
 	}
 	
+	/**
+	 * Test if the path exists
+	 * @param path path to test on
+	 * @param propertyPath path to test
+	 * @return true if path exists
+	 */
 	public static boolean hasPath(Path<?> path, String propertyPath) {
 		try {
 			getPath(path, propertyPath);
@@ -289,5 +306,118 @@ public abstract class JpaUtils {
 			return false;
 		}
 	}
-}
+	
+	/**
+	 * Initialize a entity. 
+	 * @param em entity manager to use
+	 * @param entity entity to initialize
+	 * @param depth max depth on recursion
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void initialize(EntityManager em, Object entity, int depth) {
+		// return on nulls, depth = 0 or already initialized objects
+		if (entity == null || depth == 0) { 
+			return; 
+		}
+		
+		PersistenceUnitUtil unitUtil = em.getEntityManagerFactory().getPersistenceUnitUtil();
+		EntityType entityType = em.getMetamodel().entity(entity.getClass());
+		Set<Attribute>  attributes = entityType.getDeclaredAttributes();
+		
+		Object attached = em.find(entity.getClass(), unitUtil.getIdentifier(entity));
+		
+		for (Attribute a : attributes) {
+			if (!unitUtil.isLoaded(entity, a.getName())) {
+				if (a.isCollection()) {
+					intializeCollection(em, entity, attached,  a, depth);
+				}
+				else if(a.isAssociation()) {
+					intialize(em, entity, attached, a, depth);
+				}
+			}
+		}
+	}
+	
 
+	/** 
+	 * Initialize entity attribute
+	 * @param em
+	 * @param entity
+	 * @param a
+	 * @param depth
+	 */
+	@SuppressWarnings("rawtypes")
+	private static void intialize(EntityManager em, Object entity, Object attached, Attribute a, int depth) {
+		Object value = PropertyAccessorFactory.forDirectFieldAccess(attached).getPropertyValue(a.getName());
+		if (!em.getEntityManagerFactory().getPersistenceUnitUtil().isLoaded(value)) {
+			em.refresh(value);
+		}
+		
+		PropertyAccessorFactory.forDirectFieldAccess(entity).setPropertyValue(a.getName(), value);
+		
+		initialize(em, value, depth - 1);
+	}
+
+	/**
+	 * Initialize collection
+	 * @param em
+	 * @param entity
+	 * @param a
+	 * @param i
+	 */
+	@SuppressWarnings("rawtypes")
+	private static void intializeCollection(EntityManager em, Object entity, Object attached, 
+			Attribute a, int depth) {
+		PropertyAccessor accessor = PropertyAccessorFactory.forDirectFieldAccess(attached);
+		Collection c = (Collection) accessor.getPropertyValue(a.getName());
+		
+		for (Object o : c)
+			initialize(em, o, depth -1);
+		
+		PropertyAccessorFactory.forDirectFieldAccess(entity).setPropertyValue(a.getName(), c);
+	}
+	
+	/**
+	 * Get all attributes where type or element type is assignable from class and has persistent type
+	 * @param type entity type
+	 * @param persistentType persistentType
+	 * @param clazz class
+	 * @return Set with matching attributes
+	 */
+	public static Set<Attribute<?, ?>> getAttributes(EntityType<?> type, PersistentAttributeType persistentType, 
+			Class<?> clazz) {
+		Set<Attribute<?, ?>> attributes = new HashSet<Attribute<?, ?>>();
+		
+		for (Attribute<?, ?> a : type.getAttributes()) {
+			if (a.getPersistentAttributeType() == persistentType && isTypeOrElementType(a, clazz)) {
+				attributes.add(a);
+			}
+		}
+		
+		return attributes;
+	}
+	
+	/**
+	 * Get all attributes of type by persistent type
+	 * @param type 
+	 * @param persistentType
+	 * @return a set with all attributes of type with persistent type persistentType.
+	 */
+	public static Set<Attribute<?, ?>> getAttributes(EntityType<?> type, PersistentAttributeType persistentType) {
+		return getAttributes(type, persistentType, Object.class);
+	}
+	
+	/**
+	 * Test if attribute is type or in collections has element type
+	 * @param attribute attribute to test
+	 * @param clazz Class to test
+	 * @return true if clazz is asignable from type or element type
+	 */
+	public static boolean isTypeOrElementType(Attribute<?, ?> attribute, Class<?> clazz) {
+		if (attribute.isCollection()) {
+			return clazz.isAssignableFrom(((CollectionAttribute<?, ?>) attribute).getBindableJavaType());
+		}
+		
+		return clazz.isAssignableFrom(attribute.getJavaType());
+	}
+}
