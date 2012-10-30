@@ -16,6 +16,7 @@
 package info.joseluismartin.beans;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 
 public abstract class PropertyUtils {
 
@@ -43,5 +44,10 @@ public abstract class PropertyUtils {
 	
 	public static String getNestedPath(String propertyPath) { 
 		return StringUtils.substringAfter(propertyPath, PROPERTY_SEPARATOR);
+	}
+	
+	public static String toHumanReadable(String propertyName) {
+		String humanReadable = getPropertyName(propertyName).replaceAll("([A-Z])", " $1").trim();
+		return WordUtils.capitalize(humanReadable);
 	}
 }

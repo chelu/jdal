@@ -15,6 +15,8 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.beans.PropertyUtils;
+
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -52,7 +54,7 @@ public class ColumnDefinition {
 	 * @return the displayName
 	 */
 	public String getDisplayName() {
-		return displayName == null ? name : displayName;
+		return displayName == null ? PropertyUtils.toHumanReadable(name) : displayName;
 	}
 	/**
 	 * @param displayName the displayName to set
