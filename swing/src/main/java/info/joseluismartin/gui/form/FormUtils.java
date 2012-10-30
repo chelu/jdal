@@ -15,12 +15,15 @@
  */
 package info.joseluismartin.gui.form;
 
+import info.joseluismartin.gui.SimpleDialog;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -37,7 +40,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -254,16 +256,23 @@ public abstract class FormUtils {
 		JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 	
+	/**
+	 * Creates a new JDialog with default accept/cancel buttons
+	 * @param component to show in
+	 * @return new created dialog
+	 */
 	public static JDialog newDialog(Component component) {
 		return newDialog(null, component);
 	}
 
 	/**
-	 * @param object
-	 * @param component
-	 * @return
+	 * Creates a new JDialog with default accept/cancel buttons
+	 * @param owner owner window
+	 * @param component component to show in
+	 * @return new crated dialog
 	 */
-	public static JDialog newDialog(Window parent, Component component) {
+	public static JDialog newDialog(Window owner, Component component) {
+		return new SimpleDialog(owner, component);
 	}
 	
 }
