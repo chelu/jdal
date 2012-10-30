@@ -28,7 +28,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 
 /**
- * Attachment View for IncidentsAttachmentMouseListener
+ * Attachment View 
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */

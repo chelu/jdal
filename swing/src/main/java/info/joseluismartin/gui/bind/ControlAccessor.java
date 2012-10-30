@@ -57,4 +57,6 @@ public interface ControlAccessor {
 	 * @return true if control is enabled
 	 */
 	boolean isEnabled();
+	
+	boolean isTextControl();
 }

@@ -45,6 +45,8 @@ public class ToggleButtonAccessor extends AbstractControlAccessor implements Cha
 	 * {@inheritDoc}
 	 */
 	public void setControlValue(Object value) {
+		if (value == null)
+			value = false;
 		getControl().setSelected(convertIfNecessary(value, Boolean.class));
 	}
 	

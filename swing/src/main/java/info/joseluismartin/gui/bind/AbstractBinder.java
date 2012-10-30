@@ -142,6 +142,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
 		wrapper.registerCustomEditor(Date.class, 
 				new CustomDateEditor(SimpleDateFormat.getDateTimeInstance(), true));
+
 		return wrapper;
 	}
 	// Getters and Setters

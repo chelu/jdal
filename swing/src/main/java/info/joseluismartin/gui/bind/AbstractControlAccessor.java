@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JLabel;
+import javax.swing.text.JTextComponent;
+
 import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.beans.TypeConverter;
 import org.springframework.beans.TypeMismatchException;
@@ -134,6 +137,12 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 			return ((Component) control).isEnabled();
 		
 		return true;
+	}
+	
+	public boolean isTextControl() {
+		return 
+				control instanceof JLabel ||
+				control instanceof JTextComponent;
 	}
 
 }

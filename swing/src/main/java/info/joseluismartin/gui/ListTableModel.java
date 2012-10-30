@@ -16,6 +16,7 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.beans.MessageSourceWrapper;
+import info.joseluismartin.gui.table.AnnotationFormatTableCellRenderer;
 
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
@@ -101,7 +102,7 @@ public class ListTableModel implements TableModel {
 	/** ColumnDefintion List */
 	private List<ColumnDefinition> columns = new ArrayList<ColumnDefinition>();
 	/** Default TableCellRenderer */
-	private TableCellRenderer defaultTableCellRenderer;
+	private TableCellRenderer defaultTableCellRenderer = new AnnotationFormatTableCellRenderer();
 	/** MessageSource */
 	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
 

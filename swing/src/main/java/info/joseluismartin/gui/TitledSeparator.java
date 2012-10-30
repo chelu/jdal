@@ -41,7 +41,7 @@ public class TitledSeparator extends Box {
 	private Color color;
 	
 	public TitledSeparator(String title) {
-		this(title, NORMAL);
+		this(title, BORDER);
 	}
 	
 	public TitledSeparator(String title, int fontType) {
