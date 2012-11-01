@@ -16,6 +16,7 @@
 package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.View;
+import info.joseluismartin.logic.CollectionPersistenceService;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -83,7 +84,6 @@ public class ConfigurableBinderFactory implements BinderFactory {
 				log.error(e);
 			}
 		}
-		
 		else {
 			binder = new ControlBinder(controlAccessorFactory);
 		}
@@ -93,6 +93,7 @@ public class ConfigurableBinderFactory implements BinderFactory {
 	
 	private void initDefaultBinders() {
 		binders.put(View.class, ViewBinder.class);
+		binders.put(CollectionPersistenceService.class, CollectionPersistentServiceBinder.class);
 		
 	}
 

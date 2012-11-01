@@ -39,6 +39,10 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.BeanCreationException;
+
 /**
  * A Panel with PageableTable, Filter and Button Box to hold TablePanelActions.
  * Hold a Paginator to navigate across pages.
@@ -49,7 +53,7 @@ import javax.swing.KeyStroke;
 public class TablePanel<T> extends JPanel implements ReportDataProvider {
 
 	private static final long serialVersionUID = 1L;
-	
+	private static final Log log = LogFactory.getLog(TablePanel.class);
 	/** Bean name of the editor component */
 	private String editorName;
 	/** GuiFactory to get model editor */
@@ -229,12 +233,26 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 	}
 	
 	public JDialog getDialog() {
-		JDialog dlg = guiFactory.getDialog(editorName);
-		return dlg;
+		try {
+			JDialog dlg = guiFactory.getDialog(editorName);
+			return dlg;
+		}
+		catch (BeanCreationException bce) {
+			if (log.isWarnEnabled())
+				log.warn("Can't get editor [" + editorName + "]");
+		}
+		return null;
 	}
 	
 	public JDialog getDialog(Object toEdit) {
-		return (JDialog) guiFactory.getObject(editorName, new Object[] {toEdit});
+		try {
+			return (JDialog) guiFactory.getObject(editorName, new Object[] {toEdit});
+		}
+		catch (BeanCreationException bce) {
+			if (log.isWarnEnabled())
+				log.warn("Can't get editor [" + editorName + "]");
+		}
+		return null;
 	}
 
 	public String getEditorName() {
@@ -301,5 +319,24 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 	 */
 	public void setGuiFactory(GuiFactory guiFactory) {
 		this.guiFactory = guiFactory;
+	}
+
+	/**
+	 * @return List of selected models
+	 */
+	public List<T> getSelected() {
+		List<Serializable> keys = table.getChecked();
+		List<T> selected = new ArrayList();
+		for (Serializable id : keys) {
+			T t = getPersistentService().get(id);
+			if (t != null)
+				selected.add(getPersistentService().get(id));
+		}
+
+		return selected;
+	}
+	
+	public List<T> getVisibleSelected() {
+		return table.getVisibleSelected();
 	}
 }

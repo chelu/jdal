@@ -37,8 +37,10 @@ public class AddAction extends TablePanelAction {
 
 	public void actionPerformed(ActionEvent e) {
 		JDialog dlg = getTablePanel().getDialog();
-		dlg.setModal(true);
-		dlg.setVisible(true);
-		getTablePanel().refresh();
+		if (dlg != null) {
+			dlg.setModal(true);
+			dlg.setVisible(true);
+			getTablePanel().refresh();
+		}
 	}
 }

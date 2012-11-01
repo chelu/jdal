@@ -43,6 +43,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -151,6 +152,11 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		cancelIcon = FormUtils.getIcon(cancelIcon, "/images/16x16/dialog-cancel.png");
 		visibilityMenuIcon = FormUtils.getIcon(visibilityMenuIcon, "/images/16x16/view-choose.png");
 		userMenuIcon = FormUtils.getIcon(userMenuIcon, "/images/table/16x16/users.png");
+		
+		if (tableModel == null) {
+			tableModel = new ListTableModel();
+		}
+		
 		// Server side sorter
 		sorter = new ModelRowSorter<ListTableModel>(tableModel);
 		sorter.addRowSorterListener(this);
@@ -716,6 +722,21 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	public void setShowMenu(boolean showMenu) {
 		this.showMenu = showMenu;
 	}
+
+	/**
+	 * @return List of checked keys
+	 */
+	public List<Serializable> getChecked() {
+		return tableModel.getChecked();
+	}
+
+	/**
+	 * @return model selected and visible in current page
+	 */
+	public List<T> getVisibleSelected() {
+		return tableModel.getVisibleChecked();
+	}
+
 }
 
 /**

@@ -645,6 +645,17 @@ public class ListTableModel implements TableModel {
 	public List<Serializable> getChecked() {
 		return new ArrayList<Serializable>(selectedRowSet);
 	}
+	
+	public List getVisibleChecked() {
+		List visibleChecked = new ArrayList();
+		
+		for (int i = 0; i < checks.size(); i++) {
+			if (checks.get(i)) 
+				visibleChecked.add(list.get(i));
+		}
+		
+		return visibleChecked;
+	}
 
 	/**
 	 * Uncheck All checks
@@ -749,6 +760,8 @@ public class ListTableModel implements TableModel {
 
 		return sortPropertyName;
 	}
+	
+
 
 	/**
 	 * @return the messageSource

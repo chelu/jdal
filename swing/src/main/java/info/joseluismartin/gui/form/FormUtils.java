@@ -62,6 +62,9 @@ import org.springframework.core.io.Resource;
 @SuppressWarnings("unchecked")
 public abstract class FormUtils {
 	
+	public static final Icon CANCEL_ICON = getIcon("images/16x16/dialog-cancel.png");
+	public static final Icon OK_ICON = getIcon("/images/16x16/dialog-ok.png");
+	
 	private static final Log log = LogFactory.getLog(FormUtils.class);
 	
 	public static void link(final JComboBox primary, final JComboBox dependent, final String propertyName) {
@@ -149,6 +152,10 @@ public abstract class FormUtils {
 	public static JButton newOKButton() {
 		String text = UIManager.getString("OptionPane.okButtonText");
 		Icon icon = UIManager.getIcon("OptionPane.okIcon");
+		
+		if (icon == null) 
+			icon = OK_ICON;
+		
 		int mnemonic = getMnemonic("OptionPane.okButtonMnemonic");
 		JButton b = new JButton(text, icon);
 		b.setMnemonic(mnemonic);
@@ -164,6 +171,10 @@ public abstract class FormUtils {
 	public static JButton newCancelButton() {
 		String text = UIManager.getString("OptionPane.cancelButtonText");
 		Icon icon = UIManager.getIcon("OptionPane.cancelIcon");
+		
+		if (icon == null)
+			icon = CANCEL_ICON;
+		
 		int mnemonic = getMnemonic("OptionPane.cancelButtonMnemonic");
 		JButton b = new JButton(text, icon);
 		b.setMnemonic(mnemonic);

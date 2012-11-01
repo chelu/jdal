@@ -65,8 +65,12 @@ public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 		PropertyBinder binder =  binderFactory.getBinder(component.getClass());
 		if (binder != null) {
 			binder.bind(component, propertyName, model, readOnly);
-			binders.put(propertyName, (Binder<T>) binder);
+			addBinder(propertyName, binder);
 		}
+	}
+
+	public void addBinder(String propertyName, PropertyBinder binder) {
+		binders.put(propertyName, (Binder<T>) binder);
 	}
 
 	public void refresh() {
