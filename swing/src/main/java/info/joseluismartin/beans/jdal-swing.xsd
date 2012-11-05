@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns="http://www.jdal.org/schema/swing"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tool="http://www.springframework.org/schema/tool"
     targetNamespace="http://www.jdal.org/schema/swing"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified">
+    
+   <xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool-3.1.xsd"/>
 
    <xsd:element name="defaults" />
    <xsd:element name="column" type="columnType" />
@@ -19,17 +22,119 @@
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="entity"          type="xsd:string" use="required" />
+		
+		<xsd:attribute name="entity"          type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[The fully qualified name of the entity class.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
 		<xsd:attribute name="id"              type="xsd:string" />
+		
 		<xsd:attribute name="paginator"       type="xsd:string" />
-		<xsd:attribute name="dataSource"      type="xsd:string" />
-		<xsd:attribute name="editor"          type="xsd:string"/>
-		<xsd:attribute name="actions"         type="xsd:string"/>
-		<xsd:attribute name="filter"          type="xsd:string"/>
-		<xsd:attribute name="filterView"      type="xsd:string"/>
-		<xsd:attribute name="tableService"    type="xsd:string"/>
-		<xsd:attribute name="showMenu"        type="xsd:boolean"/>
-		<xsd:attribute name="tablePanelClass" type="xsd:string" />
+		
+		<xsd:attribute name="dataSource"      type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[PersistentService used to retreive data.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type type="info.joseluismartin.service.PersistentService"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		<xsd:attribute name="editor" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[Reference bean used to edit table rows]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type type="java.awt.Window"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		<xsd:attribute name="actions" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[List of actions to use with table panel]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type type="java.util.List"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		
+		<xsd:attribute name="filter" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[Filter to apply when quering for pages.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref" />
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		<xsd:attribute name="filterView" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[filter view to used to show table filter]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref" />
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		<xsd:attribute name="tableService"    type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[TableService to use when persisting table options.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type type="info.joseluismartin.service.TableService"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		<xsd:attribute name="showMenu"        type="xsd:boolean">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[Show the table left menu.]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		
+		<xsd:attribute name="tablePanelClass" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[TablePanel class to use with this table]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="info.joseluismartin.gui.table.TablePanel"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
    </xsd:complexType>
    
    <xsd:complexType name="columnType">
