@@ -154,7 +154,7 @@ public class ListTableModel implements TableModel {
 	}
 
 	private int columntoToActionIndex(int columnIndex) {
-		return columnIndex - pds.size() - (usingActions ? 1 : 0);
+		return columnIndex - pds.size() - (usingChecks ? 1 : 0);
 	}
 
 	/**

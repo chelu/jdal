@@ -56,7 +56,22 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>sonatype</id>
+			<distributionManagement>
+				<repository>
+					<id>sonatype-nexus-staging</id>
+					<name>Nexus Release Repository</name>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
+			<build>
+				<plugins>
+					<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
@@ -84,19 +99,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 			</plugin>
-		</plugins>
-	</build>
-
-	<profiles>
-		<profile>
-			<id>sonatype</id>
-			<distributionManagement>
-				<repository>
-					<id>sonatype-nexus-staging</id>
-					<name>Nexus Release Repository</name>
-					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-				</repository>
-			</distributionManagement>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>sonatype-snapshots</id>

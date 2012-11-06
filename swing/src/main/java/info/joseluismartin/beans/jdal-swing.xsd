@@ -102,7 +102,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 		
-		<xsd:attribute name="tableService"    type="xsd:string">
+		<xsd:attribute name="tableService" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation source="java:java.lang.Class">
 					<![CDATA[TableService to use when persisting table options.]]>
@@ -115,7 +115,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 		
-		<xsd:attribute name="showMenu"        type="xsd:boolean">
+		<xsd:attribute name="showMenu" type="xsd:boolean">
 			<xsd:annotation>
 				<xsd:documentation source="java:java.lang.Class">
 					<![CDATA[Show the table left menu.]]>

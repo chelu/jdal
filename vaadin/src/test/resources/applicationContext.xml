@@ -135,7 +135,7 @@
    </bean>
    
 	<bean id="bookPageableTable" class="info.joseluismartin.vaadin.ui.table.PageableTable"
-		scope="prototype">
+		scope="session">
 		<property name="table" ref="table" />
 		<property name="paginator" ref="paginator" />
 		<property name="service" ref="bookService" />
@@ -148,6 +148,8 @@
 		</property>
 		<property name="guiFactory" ref="guiFactory" />
 		<property name="actions" ref="actionList" />
+		
+		<aop:scoped-proxy/>
 	</bean>
 
 	<!--  Action List for table buttons -->
