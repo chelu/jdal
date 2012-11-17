@@ -324,15 +324,19 @@ public abstract class JpaUtils {
 		EntityType entityType = em.getMetamodel().entity(entity.getClass());
 		Set<Attribute>  attributes = entityType.getDeclaredAttributes();
 		
-		Object attached = em.find(entity.getClass(), unitUtil.getIdentifier(entity));
+		Object id = unitUtil.getIdentifier(entity);
 		
-		for (Attribute a : attributes) {
-			if (!unitUtil.isLoaded(entity, a.getName())) {
-				if (a.isCollection()) {
-					intializeCollection(em, entity, attached,  a, depth);
-				}
-				else if(a.isAssociation()) {
-					intialize(em, entity, attached, a, depth);
+		if (id != null) {
+			Object attached = em.find(entity.getClass(), unitUtil.getIdentifier(entity));
+
+			for (Attribute a : attributes) {
+				if (!unitUtil.isLoaded(entity, a.getName())) {
+					if (a.isCollection()) {
+						intializeCollection(em, entity, attached,  a, depth);
+					}
+					else if(a.isAssociation()) {
+						intialize(em, entity, attached, a, depth);
+					}
 				}
 			}
 		}

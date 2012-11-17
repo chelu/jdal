@@ -15,7 +15,6 @@
  */
 package info.joseluismartin.service;
 
-import info.joseluismartin.dao.Dao;
 import info.joseluismartin.dao.PageableDataSource;
 
 import java.io.Serializable;

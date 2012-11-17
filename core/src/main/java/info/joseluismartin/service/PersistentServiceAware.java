@@ -13,41 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui.bind;
+package info.joseluismartin.service;
 
-import info.joseluismartin.logic.CollectionPersistenceService;
-
-import java.util.Collection;
+import java.io.Serializable;
 
 /**
+ * Interface for classes that hold a persistent service.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
-public class CollectionPersistentServiceBinder extends AbstractBinder {
+public interface PersistentServiceAware<T> {
 
 	/**
-	 * {@inheritDoc}
+	 * Set PersistentService to use
+	 * @param persistentService 
 	 */
-	@Override
-	protected void doRefresh() {
-		getComponent().getCollection().clear();
-		getComponent().save((Collection) getValue());
-		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void doUpdate() {
-		setValue(getComponent().getAll());
-		
-	}
+	void setPersistentService(PersistentService<T, ?extends Serializable> persistentService);
 	
-	@Override
-	public CollectionPersistenceService getComponent() {
-		return (CollectionPersistenceService) component;
-	}
-
 }

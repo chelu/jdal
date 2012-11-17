@@ -38,7 +38,7 @@ public class RmiServiceExporter extends org.springframework.remoting.rmi.RmiServ
 	}
 
 	@Override
-	protected Remote getObjectToExport() {
+	public Remote getObjectToExport() {
 		Remote exportedObject = super.getObjectToExport();
 
 		if (getService() instanceof Remote && (
