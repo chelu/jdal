@@ -18,8 +18,8 @@ package info.joseluismartin.beans;
 import info.joseluismartin.gui.ApplicationContextGuiFactory;
 import info.joseluismartin.gui.PaginatorView;
 import info.joseluismartin.gui.bind.AnnotationControlInitializer;
+import info.joseluismartin.gui.bind.ConfigurableBinderFactory;
 import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
-import info.joseluismartin.gui.bind.ControlAccessorBinderFactory;
 import info.joseluismartin.gui.table.AddAction;
 import info.joseluismartin.gui.table.ApplyFilterAction;
 import info.joseluismartin.gui.table.ClearFilterAction;
@@ -114,7 +114,7 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 	 */
 	private ComponentDefinition registerBinderFactory(Element element, ParserContext parserContext) {
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(
-				ControlAccessorBinderFactory.class);
+				ConfigurableBinderFactory.class);
 		bdb.addPropertyReference(ACCESSOR_FACTORY_BEAN_NAME, ACCESSOR_FACTORY_BEAN_NAME);
 		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), BINDER_FACTORY_BEAN_NAME);
 		registerBeanComponentDefinition(element, parserContext, bcd);	

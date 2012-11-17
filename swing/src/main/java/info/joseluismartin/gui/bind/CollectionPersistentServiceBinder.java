@@ -19,6 +19,8 @@ import info.joseluismartin.logic.CollectionPersistenceService;
 
 import java.util.Collection;
 
+import org.hibernate.validator.util.privilegedactions.GetAnnotationParameter;
+
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
@@ -31,7 +33,8 @@ public class CollectionPersistentServiceBinder extends AbstractBinder {
 	 */
 	@Override
 	protected void doRefresh() {
-		((CollectionPersistenceService) component).setCollection((Collection) getValue());
+		getComponent().getCollection().clear();
+		getComponent().save((Collection) getValue());
 		
 	}
 
@@ -40,8 +43,13 @@ public class CollectionPersistentServiceBinder extends AbstractBinder {
 	 */
 	@Override
 	protected void doUpdate() {
-		setValue(((CollectionPersistenceService) component).getAll());
+		setValue(getComponent().getAll());
 		
+	}
+	
+	@Override
+	public CollectionPersistenceService getComponent() {
+		return (CollectionPersistenceService) component;
 	}
 
 }

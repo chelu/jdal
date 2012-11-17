@@ -17,11 +17,6 @@ package info.joseluismartin.gui.editor;
 
 import info.joseluismartin.gui.Editor;
 
-import java.awt.Component;
-import java.util.Locale;
-
-import javax.swing.JOptionPane;
-
 import org.springframework.context.MessageSource;
 
 /**
@@ -31,21 +26,8 @@ import org.springframework.context.MessageSource;
 public class DirtyState implements EditorState {
 	
 	private MessageSource messageSource;
-	private Editor editor;
+	private Editor<?> editor;
 	public final static String CONFIRM_MESSAGE_KEY = "editor.confirm.message";
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void cancel() {
-		Component parent = null;
-		if (editor instanceof Component)
-			parent = (Component) editor;
-		
-		String message = messageSource.getMessage(CONFIRM_MESSAGE_KEY, null, Locale.getDefault());
-		if (JOptionPane.showConfirmDialog(parent, message, "", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) 
-			editor.cancel();
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -71,14 +53,14 @@ public class DirtyState implements EditorState {
 	/**
 	 * @return the editor
 	 */
-	public Editor getEditor() {
+	public Editor<?> getEditor() {
 		return editor;
 	}
 
 	/**
 	 * @param editor the editor to set
 	 */
-	public void setEditor(Editor editor) {
+	public void setEditor(Editor<?> editor) {
 		this.editor = editor;
 	}
 

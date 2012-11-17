@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ViewCancelAction extends ViewAction {
+public class ViewCancelAction<T> extends ViewAction<T> {
 
 	private static final String ICON = "/images/16x16/dialog-cancel.png";
 	
@@ -50,9 +50,11 @@ public class ViewCancelAction extends ViewAction {
 					JOptionPane.showConfirmDialog(getView().getPanel(), 
 							StaticMessageSource.getMessage("ViewCancelAction.dirty"))) {
 			
-				getDialog().setVisible(false);
 				getDialog().dispose();
 			}
+		}
+		else {
+			getDialog().dispose();
 		}
 	}
 }

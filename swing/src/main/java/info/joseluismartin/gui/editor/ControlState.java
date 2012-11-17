@@ -40,7 +40,7 @@ import javax.swing.text.JTextComponent;
 public class ControlState implements ActionListener, ChangeListener, KeyListener, 
 	ListSelectionListener, EditorListener {
 	
-	private Editor editor;
+	private Editor<?> editor;
 	
 	public void listen(Object c) {
 		if (c instanceof JComboBox) {
@@ -56,7 +56,7 @@ public class ControlState implements ActionListener, ChangeListener, KeyListener
 			((JList) c).addListSelectionListener(this);
 		}
 		else if (c instanceof Editor) {
-			((Editor) c).addEditorListener(this);
+			((Editor<?>) c).addEditorListener(this);
 		}
 	}
 
@@ -119,14 +119,14 @@ public class ControlState implements ActionListener, ChangeListener, KeyListener
 	/**
 	 * @return the editor
 	 */
-	public Editor getEditor() {
+	public Editor<?> getEditor() {
 		return editor;
 	}
 
 	/**
 	 * @param editor the editor to set
 	 */
-	public void setEditor(Editor editor) {
+	public void setEditor(Editor<?> editor) {
 		this.editor = editor;
 	}
 

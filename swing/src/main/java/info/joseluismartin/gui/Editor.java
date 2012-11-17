@@ -15,15 +15,31 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.service.PersistentServiceAware;
+
 /**
+ * interface for model editors
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
-public interface Editor {
+public interface Editor<T> extends PersistentServiceAware<T> {
 	
+	/**
+	 * Add an editor listener to be notified on editor events
+	 * @param listener editor listener to add
+	 */
 	void addEditorListener(EditorListener listener);
+	
+	/**
+	 * Remove a previusly added EditorListener
+	 * @param listener
+	 */
+	void removeEditorListener(EditorListener listener);
+	
+	
+	/**
+	 * Save editing model
+	 */
 	void save();
-	void setClean();
-	void setDirty();
-	void cancel();
+
 }

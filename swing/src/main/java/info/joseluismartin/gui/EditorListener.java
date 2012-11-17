@@ -23,5 +23,9 @@ import java.util.EventListener;
  */
 public interface EditorListener extends EventListener {
 	
+	/**
+	 * notify that model change state
+	 * @param e editor event
+	 */
 	void modelChanged(EditorEvent e);
 }

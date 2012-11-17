@@ -22,35 +22,25 @@ import info.joseluismartin.gui.Editor;
  *
  */
 public class CleanState implements EditorState {
-	private Editor editor;
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void cancel() {
-		editor.cancel();
-		
-	}
+	private Editor<?> editor;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void save() {
-		// nothing to save
-		editor.cancel();
 	}
 
 	/**
 	 * @return the editor
 	 */
-	public Editor getEditor() {
+	public Editor<?> getEditor() {
 		return editor;
 	}
 
 	/**
 	 * @param editor the editor to set
 	 */
-	public void setEditor(Editor editor) {
+	public void setEditor(Editor<?> editor) {
 		this.editor = editor;
 	}
 

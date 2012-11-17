@@ -20,6 +20,7 @@ import info.joseluismartin.gui.View;
 import info.joseluismartin.gui.ViewDialog;
 import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.service.PersistentService;
+import info.joseluismartin.service.PersistentServiceAware;
 
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
@@ -27,15 +28,15 @@ import java.io.Serializable;
 import javax.swing.JOptionPane;
 
 /**
+ * Generic Save Action for ViewDialog.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
-@SuppressWarnings("rawtypes")
-public class ViewSaveAction extends ViewAction {
+public class ViewSaveAction<T> extends ViewAction<T> implements PersistentServiceAware<T> {
 
 	private static final String DEFAULT_ICON = 	"/images/16x16/dialog-ok.png";
 	private static final String DEFAULT_NAME = "Accept";
-	private PersistentService service;
+	private PersistentService<T, ?extends Serializable> service;
 
 	public ViewSaveAction() {
 		setIcon(FormUtils.getIcon(DEFAULT_ICON));
@@ -56,13 +57,13 @@ public class ViewSaveAction extends ViewAction {
 	 */
 	@SuppressWarnings("unchecked")
 	private boolean save() {
-		View<?> view = getView();
+		View<T> view = getView();
 		view.update();
 		boolean valid = view.validateView();
 		
 		if (valid) {
 			if (service != null)
-				service.save(getView().getModel());
+				service.save(view.getModel());
 			
 			getDialog().setVisible(false);
 			getDialog().dispose();
@@ -73,7 +74,7 @@ public class ViewSaveAction extends ViewAction {
 			}
 			
 			if (getDialog() instanceof Editor) {
-				((Editor) getDialog()).save();
+				((Editor<T>) getDialog()).save();
 			}
 		}
 		else {
@@ -111,11 +112,20 @@ public class ViewSaveAction extends ViewAction {
 		
 	}
 
-	public PersistentService<Object, Serializable> getService() {
+	@Deprecated
+	public PersistentService<T, ?extends Serializable> getService() {
 		return service;
 	}
 
-	public void setService(PersistentService<?, Serializable> service) {
-		this.service = service;
+	@Deprecated
+	public void setService(PersistentService<T, ?extends Serializable> service) {
+		this.service = (PersistentService<T, ? extends Serializable>) service;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setPersistentService(PersistentService<T, ? extends Serializable> persistentService) {
+		this.service = persistentService;
 	}
 }

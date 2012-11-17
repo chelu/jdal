@@ -17,6 +17,8 @@ package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.action.ViewAction;
 import info.joseluismartin.gui.bind.ControlChangeListener;
+import info.joseluismartin.service.PersistentService;
+import info.joseluismartin.service.PersistentServiceAware;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -24,6 +26,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -38,18 +41,19 @@ import org.springframework.validation.BindingResult;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ViewFrame extends JFrame implements View<Object>, Editor {
+public class ViewFrame<T> extends JFrame implements View<T>, Editor<T> {
 
 
 	private static final long serialVersionUID = 1L;
-	private View<Object> view;
-	private ViewAction acceptAction;
-	private ViewAction cancelAction;
+	private View<T> view;
+	private ViewAction<T> acceptAction;
+	private ViewAction<T> cancelAction;
 	private JButton acceptButton;
 	private JButton cancelButton;
 	private int windowWidth;
 	private int windowHeight;
 	private EventListenerList listenerList = new EventListenerList();
+	private PersistentService<T, ?extends Serializable> persistentService;
 
 	/**
 	 * Default Ctor
@@ -67,6 +71,8 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 	}
 
 	public void init() {
+		acceptAction.setView(view);
+		cancelAction.setView(view);
 		add(view.getPanel(), BorderLayout.CENTER);
 		add(createButtonBox(), BorderLayout.SOUTH);
 		setTitle(view.getModel().toString());
@@ -74,7 +80,6 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		setSize(new Dimension(windowWidth, windowHeight));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new CloseListener());
-	//	pack();
 	}
 
 	protected Component createButtonBox() {
@@ -105,35 +110,35 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		
 	}
 
-	public View<Object> getView() {
+	public View<T> getView() {
 		return view;
 	}
 
-	public void setView(View<Object> view) {
+	public void setView(View<T> view) {
 		this.view = view;
 	}
 
-	public ViewAction getAcceptAction() {
+	public ViewAction<T> getAcceptAction() {
 		return acceptAction;
 	}
 
-	public void setAcceptAction(ViewAction acceptAction) {
+	public void setAcceptAction(ViewAction<T> acceptAction) {
 		this.acceptAction = acceptAction;
 		this.acceptAction.setView(view);
 		this.acceptAction.setDialog(this);
 	}
 
-	public ViewAction getCancelAction() {
+	public ViewAction<T> getCancelAction() {
 		return cancelAction;
 	}
 
-	public void setCancelAction(ViewAction cancelAction) {
+	public void setCancelAction(ViewAction<T> cancelAction) {
 		this.cancelAction = cancelAction;
 		cancelAction.setDialog(this);
 		cancelAction.setView(view);
 	}
 
-	public Object getModel() {
+	public T getModel() {
 		return view.getModel();
 	}
 
@@ -146,7 +151,7 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		setTitle(view.getModel().toString());
 	}
 
-	public void setModel(Object model) {
+	public void setModel(T model) {
 		view.setModel(model);
 	}
 
@@ -203,28 +208,6 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		listenerList.remove(EditorListener.class, l);
 	}
 
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void cancel() {
-		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setClean() {
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setDirty() {
-
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -254,18 +237,6 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		return view.getErrorMessage();
 	}
 	
-	private class CloseListener extends WindowAdapter {
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void windowClosing(WindowEvent e) {
-			cancelAction.actionPerformed(null);
-		}
-		
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -273,11 +244,29 @@ public class ViewFrame extends JFrame implements View<Object>, Editor {
 		view.addControlChangeListener(listener);
 		
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public void removeControlChangeListener(ControlChangeListener listener) {
 		view.removeControlChangeListener(listener);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setPersistentService(PersistentService<T, ?extends Serializable> persistentService) {
+		this.persistentService = persistentService;
+		
+		if (this.acceptAction instanceof PersistentServiceAware)
+			((PersistentServiceAware<T>) acceptAction).setPersistentService(this.persistentService);
+		
+	}
+	
+	
+	private class CloseListener extends WindowAdapter {
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			cancelAction.actionPerformed(null);
+		}
 	}
 }

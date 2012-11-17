@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2009-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,45 +16,36 @@
 package info.joseluismartin.gui.table;
 
 import info.joseluismartin.gui.PageableTable;
-import info.joseluismartin.gui.form.FormUtils;
 
 import java.awt.event.ActionEvent;
-import java.io.Serializable;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
-
 /**
- * Remove all checked rows from TablePanel
+ * Remove only visible selected items on a table panel.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class RemoveAllAction extends TablePanelAction {
-	
-	public static final String DEFAULT_ICON = "/images/table/22x22/edit-delete.png";
-	private static final long serialVersionUID = 1L;
-	
-	public RemoveAllAction() {
-		setIcon(FormUtils.getIcon(getIcon(), DEFAULT_ICON));
-	}
+public class RemoveAllVisibleAction extends RemoveAllAction {
 
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent e) {
-		PageableTable<?> table = getTablePanel().getTable();
-		List<Serializable> selectedKeys = table.getTableModel().getChecked();
+	
+		PageableTable<Object> table = getTablePanel().getTable(); 
+		List<Object> selected = getTablePanel().getVisibleSelected();
 		
-		if (selectedKeys.size() == 0)
+		if (selected.size() == 0)
 			return;	// nothing to do
 		
-		String message = "This will delete " + selectedKeys.size() + " ";
-		message += selectedKeys.size() == 1 ? "record" : "records";
+		String message = "This will delete " + selected.size() + " ";
+		message += selected.size() == 1 ? "record" : "records";
 		message +=  ". ¿Are you sure?";
 		
 		if (JOptionPane.showConfirmDialog(getTablePanel(), message, "Confirmation Message", 
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			table.getTableModel().uncheckAll();
-			getTablePanel().getPersistentService().deleteById(selectedKeys);
+			getTablePanel().getPersistentService().delete(selected);
 			// refresh table
 			table.getPaginator().firstPage();
 		}

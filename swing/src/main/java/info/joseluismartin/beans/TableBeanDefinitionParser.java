@@ -54,6 +54,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String TABLE = "table";
 	private static final String COLUMNS = "columns";
 	private static final String ACTIONS = "actions";
+	private static final String USE_ACTIONS = "useActions";
 	private static final String GUI_FACTORY = "guiFactory";
 	private static final String EDITOR = "editorName";
 	private static final String PERSISTENT_SERVICE = "persistentService";
@@ -153,7 +154,6 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb = BeanDefinitionBuilder.genericBeanDefinition(tablePanelClassName);
 		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bdb.addPropertyReference(TABLE, pageableTableBeanName);
-		bdb.addPropertyReference(ACTIONS, actions);
 		bdb.addPropertyReference(GUI_FACTORY, guiFactory);
 		bdb.addPropertyValue(EDITOR, editor);
 		bdb.addPropertyReference(PERSISTENT_SERVICE, dataSource);
@@ -161,6 +161,9 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(FILTER_VIEW))
 			bdb.addPropertyReference(FILTER_VIEW, element.getAttribute(FILTER_VIEW));
 		
+		if (!element.hasAttribute(USE_ACTIONS) || "true".equals(element.getAttribute(USE_ACTIONS)))
+			bdb.addPropertyReference(ACTIONS, actions);
+			
 		registerBeanDefinition(element, parserContext, tablePanelBeanName, bdb);
 		
 		parserContext.popAndRegisterContainingComponent();

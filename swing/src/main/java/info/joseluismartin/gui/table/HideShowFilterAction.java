@@ -44,6 +44,7 @@ public class HideShowFilterAction extends TablePanelAction {
 		setName("Hide Filter");
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent e) {
 		View<Object> filterView = getTablePanel().getFilterView();
 		if (filterView != null) {

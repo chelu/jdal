@@ -35,6 +35,7 @@ public class ClearFilterAction extends TablePanelAction {
 		setIcon(FormUtils.getIcon(getIcon(), DEFAULT_ICON));
 	}
 
+	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent arg0) {
 		PageableTable<?> table = getTablePanel().getTable();
 		if (getTablePanel().getFilterView() != null) {

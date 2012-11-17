@@ -69,7 +69,6 @@ public class ListTableModel implements TableModel {
 	private final static Log log = LogFactory.getLog(ListTableModel.class);
 
 	/** List holder for models */
-
 	private List list;
 	/** TableModel listeners */
 	private ArrayList<TableModelListener> listeners = new ArrayList<TableModelListener>();
@@ -225,12 +224,13 @@ public class ListTableModel implements TableModel {
 			else
 				selectedRowSet.remove(getPrimaryKey(row));
 
-			return;
 		}
-		int index = columnToPropertyIndex(columnIndex);
-		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(list.get(rowIndex));
-		bw.setPropertyValue(columnNames.get(index), value);
-		fireTableCellUpdated(rowIndex, columnIndex);
+		else if (isPropertyColumn(columnIndex)) {
+			int index = columnToPropertyIndex(columnIndex);
+			BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(list.get(rowIndex));
+			bw.setPropertyValue(columnNames.get(index), value);
+			fireTableCellUpdated(rowIndex, columnIndex);
+		}
 	}
 
 	/**
@@ -580,6 +580,10 @@ public class ListTableModel implements TableModel {
 	public void setColumnNames(List<String> columnNames) {
 		this.columnNames = columnNames;
 	}
+	
+	public void setColumnNames(String[] columnNames) {
+		setColumnNames(Arrays.asList(columnNames));
+	}
 
 	public List<String> getDisplayNames() {
 		return displayNames;
@@ -587,6 +591,10 @@ public class ListTableModel implements TableModel {
 
 	public void setDisplayNames(List<String> displayNames) {
 		this.displayNames = displayNames;
+	}
+	
+	public void setDisplayNames(String[] displayNames) {
+		setDisplayNames(Arrays.asList(displayNames));
 	}
 
 	public boolean isUsingChecks() {

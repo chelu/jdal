@@ -22,16 +22,16 @@ import info.joseluismartin.gui.View;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class ViewAction extends DialogAction {
+public abstract class ViewAction<T> extends DialogAction {
 
 	private static final long serialVersionUID = 1L;
-	private View<?> view;
+	private View<T> view;
 
-	public View<?> getView() {
+	public View<T> getView() {
 		return view;
 	}
 
-	public void setView(View<?> view) {
+	public void setView(View<T> view) {
 		this.view = view;
 	}
 }

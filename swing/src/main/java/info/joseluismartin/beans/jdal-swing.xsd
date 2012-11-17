@@ -79,6 +79,14 @@
 			</xsd:annotation>
 		</xsd:attribute>
 		
+		<xsd:attribute name="useActions" type="xsd:boolean">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[Set to false to avoid setting default table actions.]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		
 		
 		<xsd:attribute name="filter" type="xsd:string">
 			<xsd:annotation>
@@ -117,7 +125,7 @@
 		
 		<xsd:attribute name="showMenu" type="xsd:boolean">
 			<xsd:annotation>
-				<xsd:documentation source="java:java.lang.Class">
+				<xsd:documentation>
 					<![CDATA[Show the table left menu.]]>
 				</xsd:documentation>
 			</xsd:annotation>

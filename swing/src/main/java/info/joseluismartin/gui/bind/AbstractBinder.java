@@ -108,16 +108,14 @@ public abstract class AbstractBinder implements PropertyBinder {
 	 * @param value the value to set
 	 */
 	protected void setValue(Object value) {
-		if (value == null || value != oldValue) {
-			BeanWrapper wrapper = getBeanWrapper();
-			try {
-				wrapper.setPropertyValue(propertyName, value);
-				oldValue = value;
-			}
-			catch (PropertyAccessException pae) {
-				log.error(pae);
-				errorProcessor.processPropertyAccessException(component, pae, bindingResult);
-			}
+		BeanWrapper wrapper = getBeanWrapper();
+		try {
+			wrapper.setPropertyValue(propertyName, value);
+			oldValue = value;
+		}
+		catch (PropertyAccessException pae) {
+			log.error(pae);
+			errorProcessor.processPropertyAccessException(component, pae, bindingResult);
 		}
 	}
 	

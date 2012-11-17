@@ -29,11 +29,11 @@ public class DeselectAllAction extends TablePanelAction {
 
 	public static final String DEFAULT_ICON = "/images/table/22x22/uncheckbox.png";
 	
-	public void init() {
+	public DeselectAllAction() {
 		setIcon(FormUtils.getIcon(getIcon(), DEFAULT_ICON));
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		getTablePanel().getTable().getTableModel().uncheckAll();
+		getTablePanel().unSelectAll();
 	}
 }

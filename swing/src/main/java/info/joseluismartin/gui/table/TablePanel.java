@@ -16,7 +16,7 @@
 package info.joseluismartin.gui.table;
 
 import info.joseluismartin.dao.Page;
-import info.joseluismartin.dao.PageableDataSource;
+import info.joseluismartin.gui.EditorListener;
 import info.joseluismartin.gui.GuiFactory;
 import info.joseluismartin.gui.PageableTable;
 import info.joseluismartin.gui.View;
@@ -27,6 +27,7 @@ import info.joseluismartin.service.PersistentService;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Window;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +36,13 @@ import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.BeanCreationException;
 
 /**
@@ -54,8 +56,6 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(TablePanel.class);
-	/** Bean name of the editor component */
-	private String editorName;
 	/** GuiFactory to get model editor */
 	private GuiFactory guiFactory;
 	/** TablePanel name */
@@ -68,22 +68,25 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 	private ReportListView reportListView;
 	/** the TablePanelAction list */
 	private List<Action> actions = new ArrayList<Action>();
+	/** property values to configure new created editors */
+	private PropertyValues propertyValues; 
+	/** Action component holder */
+	private Box controlBox;
 	
 	/** 
 	 * Creates new TablePanel
 	 */
 	public TablePanel() {
+		BorderLayout layout = new BorderLayout();
+		layout.setVgap(10);
+		layout.setHgap(10);
+		setLayout(layout);
 	}
 	
 	/**
 	 * Initialize TablePanel after property set. Usally called by container.
 	 */
 	public void init() {
-		BorderLayout layout = new BorderLayout();
-		layout.setVgap(10);
-		layout.setHgap(10);
-		setLayout(layout);
-
 		// Header
 		this.add(createFilterBox(), BorderLayout.NORTH);
 		this.add(createTableBox(), BorderLayout.CENTER);
@@ -93,9 +96,6 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 		
 		if (guiFactory != null)
 			table.setGuiFactory(guiFactory);
-		
-		if (editorName != null)
-			table.setEditorName(editorName);
 		
 		// Key Bindings
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F2"), "addAction");
@@ -135,8 +135,9 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 	 */
 	private Component createFilterBox() {
 		Box header = Box.createVerticalBox();
-		header.add(Box.createVerticalStrut(10));
+		
 		if (filterView != null) {
+			header.add(Box.createVerticalStrut(10));
 			filterView.refresh();
 			header.add(filterView.getPanel());
 		}
@@ -151,11 +152,17 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 	 * @return Box with buttons from actions
 	 */
 	protected Box createControlBox() {
-		Box controlBox = Box.createHorizontalBox();
+		controlBox = Box.createHorizontalBox();
+		populateControlBox();
+		
+		return controlBox;
+	}
+
+	public void populateControlBox() {
 		if (actions != null) {
 			for (Action a : actions) {
 				if (a instanceof TablePanelAction)
-					((TablePanelAction) a).setTablePanel(this);
+					((TablePanelAction) a).setTablePanel((TablePanel<Object>) this);
 
 				JButton b = new JButton(a);
 				controlBox.add(b);
@@ -164,8 +171,6 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 		}
 		controlBox.add(Box.createHorizontalGlue());
 		controlBox.setAlignmentX(Container.LEFT_ALIGNMENT);
-		
-		return controlBox;
 	}
 	
 	/**
@@ -184,11 +189,11 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 	 * them in PageableTable.
 	 */
 	public void selectAll() {
-		PageableDataSource dataSource = table.getDataSource();
-		Page page = new Page(Integer.MAX_VALUE);
-		if (filterView != null)
-			page.setFilter(filterView.getModel());
-		table.getTableModel().check(dataSource.getKeys(page));
+		table.selectAll();
+	}
+	
+	public void unSelectAll() {
+		table.unSelectAll();
 	}
 	
 	// Getters and Setters
@@ -232,38 +237,45 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 		table.setDataSource(ps);
 	}
 	
-	public JDialog getDialog() {
+	public Window getDialog() {
 		try {
-			JDialog dlg = guiFactory.getDialog(editorName);
+			Window dlg = table.getEditor();
+		
+			if (dlg instanceof View && propertyValues != null) {
+				View view = (View) dlg;
+				new BeanWrapperImpl(view.getModel()).setPropertyValues(propertyValues);
+				view.refresh();
+			}
+			
 			return dlg;
 		}
 		catch (BeanCreationException bce) {
 			if (log.isWarnEnabled())
-				log.warn("Can't get editor [" + editorName + "]");
+				log.warn("Can't get editor [" + table.getEditorName() + "]");
+			
+			log.error(bce);
 		}
 		return null;
 	}
 	
-	public JDialog getDialog(Object toEdit) {
+	public Window getDialog(Object toEdit) {
 		try {
-			return (JDialog) guiFactory.getObject(editorName, new Object[] {toEdit});
+			return table.getEditor(toEdit);
 		}
 		catch (BeanCreationException bce) {
 			if (log.isWarnEnabled())
-				log.warn("Can't get editor [" + editorName + "]");
+				log.warn("Can't get editor [" + table.getEditorName() + "]");
 		}
 		return null;
 	}
 
 	public String getEditorName() {
-		return editorName;
+		return table.getEditorName();
 	}
 
-	public void setEditorName(String editor) {
-		this.editorName = editor;
+	public void setEditorName(String editorName) {
+		table.setEditorName(editorName);
 	}
-	
-	
 	
 	public ReportListView getReportListView() {
 		return reportListView;
@@ -303,6 +315,10 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 	 */
 	public void setActions(List<Action> actions) {
 		this.actions = actions;
+		if (controlBox != null) {
+			controlBox.removeAll();
+			populateControlBox();
+		}
 	}
 
 
@@ -338,5 +354,35 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 	
 	public List<T> getVisibleSelected() {
 		return table.getVisibleSelected();
+	}
+
+	/**
+	 * @return the propertyValues
+	 */
+	public PropertyValues getPropertyValues() {
+		return propertyValues;
+	}
+
+	/**
+	 * @param propertyValues the propertyValues to set
+	 */
+	public void setPropertyValues(PropertyValues propertyValues) {
+		this.propertyValues = propertyValues;
+	}
+
+	/**
+	 * @param listener
+	 * @see info.joseluismartin.gui.PageableTable#addEditorListener(info.joseluismartin.gui.EditorListener)
+	 */
+	public void addEditorListener(EditorListener listener) {
+		table.addEditorListener(listener);
+	}
+
+	/**
+	 * @param listener
+	 * @see info.joseluismartin.gui.PageableTable#removeEditorListener(info.joseluismartin.gui.EditorListener)
+	 */
+	public void removeEditorListener(EditorListener listener) {
+		table.removeEditorListener(listener);
 	}
 }

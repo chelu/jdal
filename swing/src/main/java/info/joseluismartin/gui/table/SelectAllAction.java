@@ -29,7 +29,7 @@ public class SelectAllAction extends TablePanelAction {
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_ICON = "/images/table/22x22/checkbox.png";
 	
-	public void init() {
+	public SelectAllAction() {
 		setIcon(FormUtils.getIcon(getIcon(), DEFAULT_ICON));
 	}
 

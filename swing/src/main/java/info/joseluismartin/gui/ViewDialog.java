@@ -16,13 +16,17 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.action.DialogAcceptAction;
-import info.joseluismartin.gui.action.DialogCancelAction;
 import info.joseluismartin.gui.action.ViewAction;
+import info.joseluismartin.gui.action.ViewCancelAction;
 import info.joseluismartin.gui.bind.ControlChangeListener;
+import info.joseluismartin.service.PersistentService;
+import info.joseluismartin.service.PersistentServiceAware;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -36,20 +40,22 @@ import org.springframework.validation.BindingResult;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ViewDialog<T> extends JDialog implements View<T>  {
+public class ViewDialog<T> extends JDialog implements View<T>, Editor<T>  {
 	
 	public static final int OK = 0;
 	public static final int CANCEL= 1;
 	
 	private static final long serialVersionUID = 1L;
 	private View<T> view;
-	private ViewAction acceptAction = new DialogAcceptAction();
-	private DialogCancelAction cancelAction = new DialogCancelAction(); 
+	private ViewAction<T> acceptAction = new DialogAcceptAction<T>();
+	private ViewAction<T> cancelAction = new ViewCancelAction<T>(); 
 	private JButton acceptButton;
 	private JButton cancelButton;
-	private int dialogWidth = 750;
-	private int dialogHeight = 750;
+	private int windowWidth = 750;
+	private int windowHeight = 750;
 	private int value = CANCEL;
+	private PersistentService<T, ?extends Serializable> persistentService;
+	private ArrayList<EditorListener> editorListeners = new ArrayList<EditorListener>();
 	
 	public ViewDialog() {
 		this(null);
@@ -66,12 +72,13 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 
 	public void init() {
 		acceptAction.setView(view);
+		cancelAction.setView(view);
 
 		add(view.getPanel(), BorderLayout.CENTER);
 		if (view.getModel() != null)
 			setTitle(view.getModel().toString());
 		add(createButtonBox(), BorderLayout.SOUTH);
-		setSize(dialogWidth, dialogHeight);
+		setSize(windowWidth, windowHeight);
 		setLocationRelativeTo(null);
 	}
 
@@ -93,23 +100,28 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 		this.view = view;
 	}
 
-	public ViewAction getAcceptAction() {
+	public ViewAction<T> getAcceptAction() {
 		return acceptAction;
 	}
 
-	public void setAcceptAction(ViewAction acceptAction) {
+	public void setAcceptAction(ViewAction<T> acceptAction) {
 		this.acceptAction = acceptAction;
 		this.acceptAction.setView(view);
 		this.acceptAction.setDialog(this);
 	}
 
-	public DialogCancelAction getCancelAction() {
+	public ViewAction<T> getCancelAction() {
 		return cancelAction;
 	}
 
-	public void setCancelAction(DialogCancelAction cancelAction) {
+	public void setCancelAction(ViewAction<T> cancelAction) {
 		this.cancelAction = cancelAction;
+		cancelAction.setView(view);
 		cancelAction.setDialog(this);
+	}
+	
+	public boolean isAccepted() {
+		return value == OK;
 	}
 
 	/**
@@ -128,30 +140,38 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 
 	/**
 	 * @return the dialogWidth
+	 * @deprecated use getWindowWidth
 	 */
+	@Deprecated
 	public int getDialogWidth() {
-		return dialogWidth;
+		return windowWidth;
 	}
 
 	/**
 	 * @param dialogWidth the dialogWidth to set
+	 * @deprecated use setWindowWidth
 	 */
+	@Deprecated
 	public void setDialogWidth(int dialogWidth) {
-		this.dialogWidth = dialogWidth;
+		this.windowWidth = dialogWidth;
 	}
 
 	/**
 	 * @return the dialogHeight
+	 * @deprecated use getWindowHeight
 	 */
+	@Deprecated
 	public int getDialogHeight() {
-		return dialogHeight;
+		return windowHeight;
 	}
 
 	/**
 	 * @param dialogHeight the dialogHeight to set
+	 * @deprecated use setWindoHeigth
 	 */
+	@Deprecated
 	public void setDialogHeight(int dialogHeight) {
-		this.dialogHeight = dialogHeight;
+		this.windowHeight = dialogHeight;
 	}
 
 	public void clear() {
@@ -190,7 +210,6 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 	 * {@inheritDoc}
 	 */
 	public boolean isDirty() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -229,6 +248,96 @@ public class ViewDialog<T> extends JDialog implements View<T>  {
 	 */
 	public void removeControlChangeListener(ControlChangeListener listener) {
 		view.removeControlChangeListener(listener);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public void setPersistentService(PersistentService<T, ? extends Serializable> persistentService) {
+		if (this.acceptAction instanceof PersistentServiceAware)
+			((PersistentServiceAware<T>) acceptAction).setPersistentService(persistentService);
+		
+		this.persistentService = persistentService;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void addEditorListener(EditorListener listener) {
+		if (!editorListeners.contains(listener))
+				editorListeners.add(listener);
+		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void save() {
+		// persistentService.save(view.getModel());
+		fireModelChanged();
+		
+	}
+
+	/**
+	 * Notify editor listeners that model changed
+	 */
+	private void fireModelChanged() {
+		EditorEvent event = new EditorEvent(this, getModel());
+		
+		for (EditorListener listener : editorListeners) {
+			listener.modelChanged(event);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void removeEditorListener(EditorListener listener) {
+		editorListeners.remove(listener);
+		
+	}
+
+	/**
+	 * @return the windwoWidth
+	 */
+	public int getWindwoWidth() {
+		return windowWidth;
+	}
+
+	/**
+	 * @param windwoWidth the windwoWidth to set
+	 */
+	public void setWindwoWidth(int windwoWidth) {
+		this.windowWidth = windwoWidth;
+	}
+
+	/**
+	 * @return the windowHeight
+	 */
+	public int getWindowHeight() {
+		return windowHeight;
+	}
+
+	/**
+	 * @param windowHeight the windowHeight to set
+	 */
+	public void setWindowHeight(int windowHeight) {
+		this.windowHeight = windowHeight;
+	}
+
+	/**
+	 * @return the windowWidth
+	 */
+	public int getWindowWidth() {
+		return windowWidth;
+	}
+
+	/**
+	 * @param windowWidth the windowWidth to set
+	 */
+	public void setWindowWidth(int windowWidth) {
+		this.windowWidth = windowWidth;
 	}
 
 }

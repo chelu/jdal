@@ -18,12 +18,13 @@ package info.joseluismartin.gui;
 import java.util.EventObject;
 
 /**
+ * Editor event, hold a reference to editing model.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public class EditorEvent extends EventObject implements ModelHolder<Object> {
 	
-	Object model;
+	private Object model;
 
 	/**
 	 * @param source

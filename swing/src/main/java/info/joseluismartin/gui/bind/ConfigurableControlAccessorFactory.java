@@ -17,6 +17,7 @@ package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.gui.Selector;
 import info.joseluismartin.gui.View;
+import info.joseluismartin.gui.table.TablePanel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -58,7 +59,6 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 	public ConfigurableControlAccessorFactory() {
 		initDefaultAccessors();
 	}
-
 
 	/**
 	 * {@inheritDoc}
@@ -121,6 +121,7 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 		accessors.put(JComboBox.class, ComboAccessor.class);
 		accessors.put(View.class, ViewAccessor.class);
 		accessors.put(JLabel.class, LabelAccessor.class);
+		accessors.put(TablePanel.class, TablePanelAccessor.class);
 	}
 
 	// Getters and Setters

@@ -27,7 +27,7 @@ import java.awt.event.ActionEvent;
  * @author Jose Luis Martin
  *
  */
-public class DialogAcceptAction extends ViewAction {
+public class DialogAcceptAction<T> extends ViewAction<T> {
 
 	private static final String ICON = "/images/16x16/dialog-ok.png";
 	
@@ -43,15 +43,22 @@ public class DialogAcceptAction extends ViewAction {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent e) {
-		View<?> view = getView();
+		View<T> view = getView();
 		view.update();
 		
-		if (getDialog() instanceof ViewDialog) {
-			((ViewDialog<?>) getDialog()).setValue(ViewDialog.OK);
-		}
+		if (view.validateView()) {
 		
-		getDialog().dispose();
+			if (getDialog() instanceof ViewDialog) {
+				((ViewDialog<T>) getDialog()).setValue(ViewDialog.OK);
+			}
+		
+			getDialog().dispose();
+		}
+		else {
+			FormUtils.showError(view.getErrorMessage());
+		}
 	}
 
 }

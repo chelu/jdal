@@ -250,7 +250,7 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 				errors.getObjectName().equals(binder.getBindingResult().getObjectName()))
 			errors.addAllErrors(binder.getBindingResult());
 		
-		// update ubviews
+		// update subviews
 		for (View<Object>  v : subViews) {
 			v.update();
 			if (errors != null && v.getBindingResult() != null &&
@@ -258,7 +258,8 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 				errors.addAllErrors(v.getBindingResult());
 		}
 		
-	
+		// allow subclasses to do something after the update
+		afterUpdate();
 	}
 
 	/**
@@ -275,6 +276,14 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	 * Callback method on update()
 	 */
 	protected void doUpdate() {
+		
+	}
+	
+	/**
+	 * Callback method on update() 
+	 */
+	
+	protected void afterUpdate() {
 		
 	}
 	
@@ -305,9 +314,16 @@ public abstract class AbstractView<T> implements View<T>, ControlChangeListener,
 	}
 	
 	/**
-	 * Callback method for refresh()
+	 * Allow subclasses to do custom refresh
 	 */
 	protected void doRefresh() {
+		
+	}
+	
+	/**
+	 * Allow subclasses to do something after refresh
+	 */
+	protected void afterRefresh() {
 		
 	}
 

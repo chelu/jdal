@@ -21,7 +21,6 @@ import info.joseluismartin.gui.ListTableModel;
 import info.joseluismartin.gui.PageableTable;
 import info.joseluismartin.gui.SimpleDialog;
 import info.joseluismartin.logic.CollectionPersistenceService;
-import info.joseluismartin.model.Country;
 
 import java.awt.Dimension;
 import java.io.Serializable;
@@ -31,8 +30,6 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 
 /**
  * View for showing Lists in a TablePanel

@@ -26,6 +26,7 @@ import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.gui.table.LoadPreferencesAction;
 import info.joseluismartin.gui.table.SavePreferencesAction;
 import info.joseluismartin.model.TableState;
+import info.joseluismartin.service.PersistentService;
 import info.joseluismartin.service.TableService;
 
 import java.awt.BorderLayout;
@@ -33,10 +34,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -129,6 +128,10 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	private boolean showMenu = true;
 	/** Change Listeners */
 	private ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+	/** Editor Listeners */
+	private ArrayList<EditorListener> editorListeners = new ArrayList<EditorListener>();
+	/** true if table propagate persistent service to editors */
+	private boolean configureEditors = true;
 	
 	// Menus
 	JMenuBar rightMenuBar;
@@ -301,11 +304,26 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	
 	public Window getEditor() {
 		Window owner = SwingUtilities.getWindowAncestor(this);
+		Window window;
+		if (owner instanceof Frame) {
+			window = (Window) guiFactory.getObject(editorName, new Object[] {owner});
+		}
+		else { 
+			window = (Window) guiFactory.getObject(editorName);
+		}
 		
-		if (owner instanceof Frame)
-			return (Window) guiFactory.getObject(editorName, new Object[] {owner});
+		if (window instanceof Editor) {
+			Editor<T> editor = (Editor<T>) window;
+			if (dataSource instanceof PersistentService && configureEditors) {
+				editor.setPersistentService((PersistentService<T,?extends Serializable>) dataSource);
+			}
+			// add editor listeners
+			for (EditorListener listener : editorListeners) {
+				editor.addEditorListener(listener);
+			}
+		}
 		
-		return (Window) guiFactory.getObject(editorName);
+		return window;
 	}
 	
 	/**
@@ -321,7 +339,8 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 			((View<Object>) dlg).refresh();
 			dlg.addWindowListener(new DialogWindowListener());
 			if (dlg instanceof Editor) {
-				((Editor) dlg).addEditorListener(new EditorListener() {
+				Editor<T> editor = (Editor<T>) dlg;
+				editor.addEditorListener(new EditorListener() {
 					
 					public void modelChanged(EditorEvent e) {
 						refresh();
@@ -329,7 +348,7 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 				});
 			}
 		}
-		((View<Object>) dlg).refresh();
+		((View<T>) dlg).refresh();
 		
 		return dlg;
 	}
@@ -737,6 +756,44 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		return tableModel.getVisibleChecked();
 	}
 
+	/**
+	 * Select all posible filtered results.
+	 */
+	public void selectAll() {
+		Page<T> page = new Page<T>(Integer.MAX_VALUE);
+		page.setFilter(this.page.getFilter());
+		tableModel.check(dataSource.getKeys(page));
+	}
+
+	/**
+	 *  Un select all selected 
+	 */
+	public void unSelectAll() {
+		tableModel.uncheckAll();
+	}
+
+	/**
+	 * @return the configureEditors
+	 */
+	public boolean isConfigureEditors() {
+		return configureEditors;
+	}
+
+	/**
+	 * @param configureEditors the configureEditors to set
+	 */
+	public void setConfigureEditors(boolean configureEditors) {
+		this.configureEditors = configureEditors;
+	}
+
+	public void addEditorListener(EditorListener listener) {
+		if (!editorListeners.contains(listener))
+			editorListeners.add(listener);
+	}
+	
+	public void removeEditorListener(EditorListener listener) {
+		editorListeners.remove(listener);
+	}
 }
 
 /**
@@ -838,7 +895,6 @@ class VisibilityItem extends JComponent implements ChangeListener {
 	public void refresh() {
 		check.setSelected(cd.isVisible());
 	}
-
 	
 	/**
 	 * Update the columnDescriptor when check change
@@ -921,46 +977,3 @@ class VisibilityBox extends JComponent {
 	}
 }
 
-// FIXME: move to appropiate package
-class HighLightRowListener extends MouseAdapter {
-	
-	private int highLightedRow = -1;
-	Rectangle dirtyRegion = null;
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		JTable table = (JTable) e.getSource();
-		try {
-			int row = table.rowAtPoint(e.getPoint());
-			Graphics g = table.getGraphics();
-			// row changed
-			if (highLightedRow != row) {
-				if (null != dirtyRegion) {
-					table.paintImmediately(dirtyRegion);
-				}
-
-				if (!table.getSelectionModel().isSelectedIndex(row)) {
-					for (int j = 0; j < table.getRowCount(); j++) {
-						if (row == j) {
-							// highlight
-							Rectangle firstRowRect = table.getCellRect(row, 0,
-									false);
-							Rectangle lastRowRect = table.getCellRect(row,
-									table.getColumnCount() - 1, false);
-							dirtyRegion = firstRowRect.union(lastRowRect);
-							g.setColor(new Color(0xff, 0xff, 0, 100));
-							g.fillRect((int) dirtyRegion.getX(),
-									(int) dirtyRegion.getY(),
-									(int) dirtyRegion.getWidth(),
-									(int) dirtyRegion.getHeight());
-						}
-					}
-				}
-				
-			}
-			highLightedRow = row;
-		} catch (Exception ex) {}
-	}
-}

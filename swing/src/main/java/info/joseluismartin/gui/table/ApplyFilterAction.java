@@ -30,8 +30,9 @@ public class ApplyFilterAction extends TablePanelAction {
 		setIcon(FormUtils.getIcon(getIcon(), DEFAULT_ICON));
 	}
 
-
+	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent arg0) {
+		
 		View<Object> filterView = getTablePanel().getFilterView();
 		if (filterView != null) {
 			filterView.update();

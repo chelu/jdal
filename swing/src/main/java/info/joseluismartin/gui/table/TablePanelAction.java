@@ -22,22 +22,27 @@ import info.joseluismartin.gui.action.BeanAction;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@SuppressWarnings("rawtypes")
 public abstract class TablePanelAction extends BeanAction {
 
 	private static final long serialVersionUID = 1L;
-	private TablePanel<?> tablePanel;
+
+	private TablePanel tablePanel;
 	
+	public void init() {
+		
+	}
 	
 	/**
 	 * @return the tablePanel
 	 */
-	public TablePanel<?> getTablePanel() {
+	public TablePanel getTablePanel() {
 		return tablePanel;
 	}
 	/**
 	 * @param tablePanel the tablePanel to set
 	 */
-	public void setTablePanel(TablePanel<?> tablePanel) {
+	public void setTablePanel(TablePanel tablePanel) {
 		this.tablePanel = tablePanel;
 	}
 	

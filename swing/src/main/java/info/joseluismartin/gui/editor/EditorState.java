@@ -28,9 +28,4 @@ public interface EditorState {
 	 */
 	void save();
 	
-	/**
-	 * cancel editor
-	 */
-	void cancel();
-
 }
