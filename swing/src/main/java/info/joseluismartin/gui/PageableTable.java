@@ -126,6 +126,8 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
 	/** Show right menu when true */
 	private boolean showMenu = true;
+	/** Show paginator */
+	private boolean showPaginator = true;
 	/** Change Listeners */
 	private ArrayList<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	/** Editor Listeners */
@@ -158,20 +160,28 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		
 		if (tableModel == null) {
 			tableModel = new ListTableModel();
-		}
+		}	
+		
+		setLayout(layout);
 		
 		// Server side sorter
 		sorter = new ModelRowSorter<ListTableModel>(tableModel);
 		sorter.addRowSorterListener(this);
 		// configure paginator
-		if (paginatorView == null) {
-			paginatorView = new PaginatorView();
-			paginatorView.init();
+		if (showPaginator) {
+			if (paginatorView == null) {
+				paginatorView = new PaginatorView();
+				paginatorView.init();
+			}
+		
+			paginatorView.setPaginator(page);
+			page.addPaginatorListener(this);
+			add(paginatorView.getPanel(), BorderLayout.SOUTH);
+		}
+		else {
+			page.setPageSize(Integer.MAX_VALUE);
 		}
 		
-		paginatorView.setPaginator(page);
-		page.addPaginatorListener(this);
-	
 		createColumnDescriptos();
 		table = new JTable(tableModel, tableModel.getTableColumnModel());
 		table.setAutoCreateRowSorter(false);
@@ -179,10 +189,10 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		table.setRowHeight(22);
 		table.addMouseListener(new TableListener());
 		tableScrollPane = new JScrollPane(table);
-		setLayout(layout);
+	
 		this.setBackground(Color.WHITE);
 		add(tableScrollPane, BorderLayout.CENTER);
-		add(paginatorView.getPanel(), BorderLayout.SOUTH);
+	
 		
 		if (showMenu)
 			createMenu();
@@ -793,6 +803,20 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	
 	public void removeEditorListener(EditorListener listener) {
 		editorListeners.remove(listener);
+	}
+
+	/**
+	 * @return the showPaginator
+	 */
+	public boolean isShowPaginator() {
+		return showPaginator;
+	}
+
+	/**
+	 * @param showPaginator the showPaginator to set
+	 */
+	public void setShowPaginator(boolean showPaginator) {
+		this.showPaginator = showPaginator;
 	}
 }
 

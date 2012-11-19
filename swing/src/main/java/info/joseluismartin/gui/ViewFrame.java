@@ -15,7 +15,9 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.gui.action.DialogAcceptAction;
 import info.joseluismartin.gui.action.ViewAction;
+import info.joseluismartin.gui.action.ViewCancelAction;
 import info.joseluismartin.gui.bind.ControlChangeListener;
 import info.joseluismartin.service.PersistentService;
 import info.joseluismartin.service.PersistentServiceAware;
@@ -46,8 +48,8 @@ public class ViewFrame<T> extends JFrame implements View<T>, Editor<T> {
 
 	private static final long serialVersionUID = 1L;
 	private View<T> view;
-	private ViewAction<T> acceptAction;
-	private ViewAction<T> cancelAction;
+	private ViewAction<T> acceptAction = new DialogAcceptAction<T>();
+	private ViewAction<T> cancelAction = new ViewCancelAction<T>();
 	private JButton acceptButton;
 	private JButton cancelButton;
 	private int windowWidth;
@@ -73,6 +75,8 @@ public class ViewFrame<T> extends JFrame implements View<T>, Editor<T> {
 	public void init() {
 		acceptAction.setView(view);
 		cancelAction.setView(view);
+		acceptAction.setDialog(this);
+		cancelAction.setDialog(this);
 		add(view.getPanel(), BorderLayout.CENTER);
 		add(createButtonBox(), BorderLayout.SOUTH);
 		setTitle(view.getModel().toString());

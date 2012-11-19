@@ -22,6 +22,7 @@ import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -188,6 +189,7 @@ public class ListTableModel implements TableModel {
 		// return check
 		if (usingChecks) {
 			if (columnIndex == 0) {
+				fillChecksIfNecesary(rowIndex);
 				return checks.get(rowIndex);
 			} else {
 				columnIndex--;
@@ -203,6 +205,18 @@ public class ListTableModel implements TableModel {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param rowIndex
+	 */
+	private void fillChecksIfNecesary(int rowIndex) {
+		if (checks.size() >= rowIndex) {
+			for (int i = checks.size() -1 ; i < rowIndex; i++) {
+				checks.add(Boolean.FALSE);
+			}
+		}
+		
 	}
 
 	private Object getCellValue(int rowIndex, int columnIndex) {
@@ -784,5 +798,24 @@ public class ListTableModel implements TableModel {
 	@Autowired
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource.setMessageSource(messageSource);
+	}
+
+	/**
+	 * Check all models on list
+	 */
+	public void checkAll() {
+		fillChecks(true);
+	}
+
+	/**
+	 * @param toRemove
+	 */
+	public void removeAll(Collection toRemove) {
+		list.removeAll(toRemove);
+		fireTableChanged();
+	}
+	
+	public void remove(Object toRemove) {
+		list.remove(list.indexOf(toRemove));
 	}
 }

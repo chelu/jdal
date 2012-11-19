@@ -23,8 +23,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 
-import org.jfree.util.SortOrder;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 
@@ -38,10 +38,27 @@ import org.springframework.beans.support.PropertyComparator;
 public class ListTableModelSorter extends RowSorter<ListTableModel> {
 	
 	private ListTableModel model;
-	private SortKey key;
+	private SortKey key = new SortKey(0, javax.swing.SortOrder.ASCENDING);
 	private MutableSortDefinition sortDefinition = new MutableSortDefinition();
  	private Comparator comparator = new PropertyComparator(sortDefinition);
+ 	
+ 	/**
+	 * 
+	 */
+	public ListTableModelSorter() {
+		super();
+	}
 
+
+	/**
+	 * @param model
+	 */
+	public ListTableModelSorter(ListTableModel model) {
+		super();
+		this.model = model;
+	}
+
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -55,6 +72,13 @@ public class ListTableModelSorter extends RowSorter<ListTableModel> {
 	 */
 	@Override
 	public void toggleSortOrder(int column) {
+		if (key.getColumn() != column) {
+			key = new SortKey(column, javax.swing.SortOrder.ASCENDING);
+		}
+		else {
+			key = new SortKey(column, key.getSortOrder() == SortOrder.ASCENDING ?
+					SortOrder.DESCENDING : SortOrder.ASCENDING);
+		}
 		sort();
 	}
 
@@ -81,7 +105,6 @@ public class ListTableModelSorter extends RowSorter<ListTableModel> {
 	public void setSortKeys(List<? extends SortKey> keys) {
 		if (!keys.isEmpty()) {
 			this.key = keys.get(0);
-			sortDefinition.setAscending(SortOrder.ASCENDING.equals(key.getSortOrder()));
 			sort();
 		}
 	}
@@ -93,8 +116,9 @@ public class ListTableModelSorter extends RowSorter<ListTableModel> {
 	private void sort() {
 		String propertyName = model.getPropertyName(key.getColumn());
 		sortDefinition.setProperty(propertyName);
+		sortDefinition.setAscending(SortOrder.ASCENDING.equals(key.getSortOrder()));
 		Collections.sort(model.getList(), comparator);
-		
+		fireSortOrderChanged();
 	}
 
 	/**

@@ -285,5 +285,14 @@ public abstract class FormUtils {
 	public static JDialog newDialog(Window owner, Component component) {
 		return new SimpleDialog(owner, component);
 	}
+
+	/**
+	 * Creates empty border
+	 * @param size border size
+	 * @return empty border
+	 */
+	public static Border createEmptyBorder(int size) {
+		return BorderFactory.createEmptyBorder(size, size, size, size);
+	}
 	
 }
