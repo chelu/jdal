@@ -16,15 +16,18 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.gui.form.FormUtils;
+import info.joseluismartin.gui.list.ListListModel;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,6 +36,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * A Container with List for select visible panel.
  * 
@@ -40,13 +46,20 @@ import javax.swing.event.ListSelectionListener;
  */
 public class ListPane extends JPanel implements ListSelectionListener {
 
-	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_TABLE_ICON = "/images/table/table.png";
-	private List<PanelHolder> panels;
-	private JList list = new JList();
+	private static final long serialVersionUID = 1L;
+	private static final Log log = LogFactory.getLog(ListPane.class);
+	private List<PanelHolder> panels = new ArrayList<PanelHolder>();
+	private JList list;
 	private Icon tableIcon;
 	private JPanel editorPanel = new JPanel(new BorderLayout());
 	private JSplitPane split;
+	private ListCellRenderer renderer = new ListCellRenderer();
+	private List<ListSelectionListener> listeners = new ArrayList<ListSelectionListener>();
+	
+	public ListPane() {
+		list = new JList(new ListListModel(panels));
+	}
 	
 	public void init() {
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
@@ -54,12 +67,11 @@ public class ListPane extends JPanel implements ListSelectionListener {
 		for (PanelHolder p : panels)
 			p.getPanel().setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
 			
-		list = new JList(panels.toArray());
 		list.setBorder(BorderFactory.createEmptyBorder(5, 5	, 5, 5));
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setVisibleRowCount(-1);
 		list.addListSelectionListener(this);
-		list.setCellRenderer(new ListCellRenderer());
+		list.setCellRenderer(renderer);
 		list.setSelectedIndex(0);
 		JScrollPane scroll = new JScrollPane(list);
 		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, editorPanel);
@@ -77,9 +89,28 @@ public class ListPane extends JPanel implements ListSelectionListener {
 		editorPanel.add(panel.getPanel());
 		editorPanel.revalidate();
 		editorPanel.repaint();
+		
+		fireValueChanged(e);
 	}
 
 
+	/**
+	 * @param e
+	 */
+	private void fireValueChanged(ListSelectionEvent e) {
+		for (ListSelectionListener lsl : listeners)
+			lsl.valueChanged(e);
+	}
+	
+	public void addListSelectionListener(ListSelectionListener l) {
+		if (!listeners.contains(l)) 
+			listeners.add(l);
+	}
+	
+	public void removeListSelectionListener(ListSelectionListener l) {
+		listeners.remove(l);
+	}
+	
 	/**
 	 * @return the tableIcon
 	 */
@@ -92,6 +123,10 @@ public class ListPane extends JPanel implements ListSelectionListener {
 	 */
 	public void setTableIcon(Icon tableIcon) {
 		this.tableIcon = tableIcon;
+	}
+	
+	public void setCellHeight(int height) {
+		list.setFixedCellHeight(height);
 	}
 	
 	class ListCellRenderer extends DefaultListCellRenderer {
@@ -125,5 +160,24 @@ public class ListPane extends JPanel implements ListSelectionListener {
 	 */
 	public void setPanels(List<PanelHolder> panels) {
 		this.panels = panels;
+	}
+	
+	public void addPanel(Object panel, String name, Icon icon) {
+		PanelHolder holder = null;
+		if (panel instanceof View) {
+			holder = new ViewPanelHolder((View<?>) panel);
+		}
+		else if (panel instanceof JComponent) {
+			holder = new JComponentPanelHolder((JComponent) panel);
+		}
+		else {
+			if (log.isWarnEnabled())
+				log.warn("Try to add unsupported object type [" + panel.getClass().getName());
+			return;
+		}
+		
+		holder.setIcon(icon);
+		holder.setName(name); 
+		panels.add(holder);
 	}
 }

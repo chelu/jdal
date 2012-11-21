@@ -42,6 +42,12 @@ public class SimpleTypeConverter extends org.springframework.beans.SimpleTypeCon
 					pe.setValue(value);
 					return (T) pe.getAsText();
 				}
+				
+				try {
+					return super.convertIfNecessary(value, requiredType, methodParam);	
+				} catch(Exception e) {
+					return (T) value.toString();
+				}
 			}
 			else {
 				return (T) "";
