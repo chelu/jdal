@@ -15,36 +15,32 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
+import info.joseluismartin.text.FormatUtils;
+
 import java.text.ParseException;
 import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.format.AnnotationFormatterFactory;
 import org.springframework.format.Parser;
 import org.springframework.format.Printer;
-import org.springframework.format.annotation.NumberFormat;
-import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
 
 /**
- * Generic ControlBinder that use a ControlAccessorFactory to get/set control values
+ * Generic <code>Binder</code> that use a <code>ControlAccessorFactory</code> to get/set 
+ * control values. Handle <code>NumberFormat</code> and <code>PeriodFormat</code> 
+ * annotations when binding string values to text components.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.1
  * @see info.joseluismartin.gui.Binder
  * @see info.joseluismartin.gui.bind.AbstractBinder
+ * @since 1.1
  */
 public class ControlBinder extends AbstractBinder {
 	
 	private static final Log log = LogFactory.getLog(ControlBinder.class);
 	private ControlAccessorFactory controlAccessorFactory;
 	private ControlAccessor controlAccessor;
-	private AnnotationFormatterFactory<NumberFormat> formatFactory = new NumberFormatAnnotationFormatterFactory();
-	
+
 	public ControlBinder() {
 		this(new ConfigurableControlAccessorFactory());
 	}
@@ -88,7 +84,7 @@ public class ControlBinder extends AbstractBinder {
 		Object value = controlAccessor.getControlValue();
 		
 		if (controlAccessor.isTextControl()) {
-			Parser<Object> parser = getParser();
+			Parser<?> parser = getParser();
 			if (parser != null)
 				try {
 					value = parser.parse((String) value, Locale.getDefault());
@@ -102,29 +98,12 @@ public class ControlBinder extends AbstractBinder {
 	
 	@SuppressWarnings("unchecked")
 	protected Printer<Object> getPrinter() {
-		Printer<Object> printer = null;
-		PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(getModel().getClass(), propertyName);
-		Method method = pd.getReadMethod();
-		NumberFormat numberFormat = AnnotationUtils.getAnnotation(method, NumberFormat.class);
-		
-		if (numberFormat != null)
-			printer = (Printer<Object>) formatFactory.getPrinter(numberFormat, pd.getPropertyType());
-		
-		return printer;
+		return (Printer<Object>) FormatUtils.getPrinter(getModel().getClass(), propertyName);
 	}
 	
 	
-	@SuppressWarnings("unchecked")
-	protected Parser<Object> getParser() {
-		Parser<Object> parser = null;
-		PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(getModel().getClass(), propertyName);
-		Method method = pd.getReadMethod();
-		NumberFormat numberFormat = AnnotationUtils.getAnnotation(method, NumberFormat.class);
-		
-		if (numberFormat != null)
-			parser = (Parser<Object>) formatFactory.getParser(numberFormat, pd.getPropertyType());
-		
-		return parser;
+	protected Parser<?> getParser() {
+		return FormatUtils.getParser(getModel().getClass(), propertyName);
 	}
 	
 

@@ -139,6 +139,9 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 		return true;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isTextControl() {
 		return 
 				control instanceof JLabel ||

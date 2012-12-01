@@ -35,6 +35,7 @@ public class AppCtx {
 	private static ClassPathXmlApplicationContext context = null;
 	/** init properties */
 	private static PropertySource<?> propertySource;
+	private static String config;
 	
 	/** 
 	 * Search on classpath for context definition files and return the application context
@@ -47,8 +48,8 @@ public class AppCtx {
 			if (propertySource != null) {
 				context.getEnvironment().getPropertySources().addFirst(propertySource);
 			}
-			
-			context.setConfigLocation("classpath*:/applicationContext*.xml");
+			String location = "classpath*:/" + (config != null ? config + "/" : "") + "applicationContext*.xml";
+			context.setConfigLocation(location);
 			context.refresh();
 		}
 		
@@ -57,5 +58,9 @@ public class AppCtx {
 	
 	public synchronized static void setProperties(String name, Properties properties) {
 		propertySource = new PropertiesPropertySource(name, properties);
+	}
+	
+	public static void setConfigPackage(String config) {
+		AppCtx.config = config;
 	}
 }

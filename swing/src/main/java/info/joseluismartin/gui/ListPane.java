@@ -58,7 +58,7 @@ public class ListPane extends JPanel implements ListSelectionListener {
 	private List<ListSelectionListener> listeners = new ArrayList<ListSelectionListener>();
 	
 	public ListPane() {
-		list = new JList(new ListListModel(panels));
+		
 	}
 	
 	public void init() {
@@ -67,6 +67,7 @@ public class ListPane extends JPanel implements ListSelectionListener {
 		for (PanelHolder p : panels)
 			p.getPanel().setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
 			
+		list = new JList(new ListListModel(panels));
 		list.setBorder(BorderFactory.createEmptyBorder(5, 5	, 5, 5));
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setVisibleRowCount(-1);

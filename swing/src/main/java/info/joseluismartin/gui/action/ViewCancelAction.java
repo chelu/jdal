@@ -39,6 +39,8 @@ public class ViewCancelAction<T> extends ViewAction<T> {
 	public void init() {
 		if (getIcon() == null)
 			setIcon(FormUtils.getIcon(ICON));
+		
+		setName(StaticMessageSource.getMessage(getName()));
 	}
 
 	/**

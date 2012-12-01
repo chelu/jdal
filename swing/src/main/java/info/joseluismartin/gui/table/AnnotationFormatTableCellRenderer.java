@@ -24,6 +24,7 @@ import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import org.springframework.format.Printer;
@@ -37,6 +38,7 @@ public class AnnotationFormatTableCellRenderer extends DefaultTableCellRenderer 
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
@@ -48,7 +50,7 @@ public class AnnotationFormatTableCellRenderer extends DefaultTableCellRenderer 
 				ListTableModel listTableModel = (ListTableModel) tableModel;
 				Class<?> modelClass = ((ListTableModel) tableModel).getModelClass();
 				String propertyName = listTableModel.getPropertyName(column);
-				Printer<Object> printer = FormatUtils.getPrinter(modelClass, propertyName);
+				Printer<Object> printer = (Printer<Object>) FormatUtils.getPrinter(modelClass, propertyName);
 				if (printer != null) {
 					value = printer.print(value, Locale.getDefault());
 					JLabel label  = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -57,8 +59,12 @@ public class AnnotationFormatTableCellRenderer extends DefaultTableCellRenderer 
 				}
 			}
 		}
-		return table.getDefaultRenderer(clazz)
-			.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		TableCellRenderer renderer = table.getDefaultRenderer(clazz);
+		
+		return renderer != null ? 
+				renderer.getTableCellRendererComponent(
+						table, value, isSelected, hasFocus, row, column) :
+					null;
 	}
 
 }

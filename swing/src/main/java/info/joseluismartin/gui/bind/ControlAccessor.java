@@ -58,5 +58,9 @@ public interface ControlAccessor {
 	 */
 	boolean isEnabled();
 	
+	/**
+	 * Test if control is a TextControlAccessor.
+	 * @return true if you want to format text in the control, false otherwise.
+	 */
 	boolean isTextControl();
 }

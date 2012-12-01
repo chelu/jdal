@@ -253,10 +253,13 @@ public class Selector<T> extends JPanel {
 
 	public void setSelected(List<T> selected) {
 		this.selected.clear();
-		this.selected.addAll(selected);
 		available.clear();
 		available.addAll(all);
-		available.removeAll(selected);
+		
+		if (selected != null) {
+			this.selected.addAll(selected);
+			available.removeAll(selected);
+		}
 	}
 
 	public String getName() {

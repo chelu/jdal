@@ -23,6 +23,7 @@ import info.joseluismartin.gui.bind.ConfigurableControlAccessorFactory;
 import info.joseluismartin.gui.table.AddAction;
 import info.joseluismartin.gui.table.ApplyFilterAction;
 import info.joseluismartin.gui.table.ClearFilterAction;
+import info.joseluismartin.gui.table.CollectionTableCellRenderer;
 import info.joseluismartin.gui.table.DeselectAllAction;
 import info.joseluismartin.gui.table.HideShowFilterAction;
 import info.joseluismartin.gui.table.RemoveAllAction;
@@ -63,6 +64,7 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 	public static final String DEFAULT_GUI_FACTORY = "defaultGuiFactory";
 	public static final String CONTROL_INITIALIZER = "controlInitializer";
 	public static final String PERSISTENT_SERVICE = "persistentService";
+	public static final String COLLECTION_TABLE_CELL_RENDERER_BEAN_NAME = "collectionTableCellRenderer";
 
 	/**
 	 * {@inheritDoc}
@@ -78,6 +80,7 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 		ccd.addNestedComponent(registerPaginatorView(element, parserContext));
 		ccd.addNestedComponent(registerDefaultTableActions(element, parserContext));
 		ccd.addNestedComponent(registerDefaultGuiFactory(element, parserContext));
+		ccd.addNestedComponent(registerCollectionTableCellRenderer(element, parserContext));
 //		ccd.addNestedComponent(registerControlInitializer(element, parserContext));
 		
 		parserContext.getReaderContext().fireComponentRegistered(ccd);
@@ -85,6 +88,21 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 		return null;
 	}
 	
+
+	/**
+	 * Register CollectionTableCellRenderer
+	 * @param element
+	 * @param parserContext
+	 * @return
+	 */
+	private ComponentDefinition registerCollectionTableCellRenderer(Element element, ParserContext parserContext) {
+		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(CollectionTableCellRenderer.class);
+		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
+		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), COLLECTION_TABLE_CELL_RENDERER_BEAN_NAME);
+		registerBeanComponentDefinition(element, parserContext, bcd);	
+		return bcd;
+	}
+
 
 	/**
 	 * @param registry

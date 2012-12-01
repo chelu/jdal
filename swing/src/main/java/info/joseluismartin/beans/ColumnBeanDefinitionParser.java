@@ -27,7 +27,8 @@ import org.w3c.dom.Element;
  */
 public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionParser {
 	
-	private static final Object SCOPE_ATTRIBUTE = "scope";
+	private static final String SCOPE_ATTRIBUTE = "scope";
+	private static final String RENDERER_ATTRIBUTE = "renderer"; 
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -37,7 +38,8 @@ public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 
 	@Override
 	protected boolean isEligibleAttribute(String attributeName) {
-		return super.isEligibleAttribute(attributeName) && !SCOPE_ATTRIBUTE.equals(attributeName);
+		return super.isEligibleAttribute(attributeName) && !SCOPE_ATTRIBUTE.equals(attributeName)
+				&& !RENDERER_ATTRIBUTE.equals(attributeName);
 	}
 
 	/**
@@ -46,6 +48,9 @@ public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 	@Override
 	protected void postProcess(BeanDefinitionBuilder beanDefinition, Element element) {
 		beanDefinition.setScope("prototype");
+		
+		if (element.hasAttribute(RENDERER_ATTRIBUTE))
+			beanDefinition.addPropertyReference(RENDERER_ATTRIBUTE, element.getAttribute(RENDERER_ATTRIBUTE));
 	}
 	
 	
