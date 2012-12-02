@@ -76,6 +76,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
 /**
@@ -383,8 +384,11 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		for (ColumnDescriptor cd : columnDescriptors) {
 			cd.setVisible(state.getVisibleColumns().contains(cd.getPropertyName()));
 		}
-		paginatorView.getPaginator().setPageSize(state.getPageSize());
 		updateVisibleColumns();
+		
+		if (paginatorView != null) {
+			getPaginator().setPageSize(state.getPageSize());
+		}
 	}
 	
 	
@@ -734,6 +738,7 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	/**
 	 * @param messageSource the messageSource to set
 	 */
+	@Autowired
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource.setMessageSource(messageSource);
 	}

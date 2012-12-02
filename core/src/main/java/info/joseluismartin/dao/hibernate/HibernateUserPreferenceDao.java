@@ -28,6 +28,20 @@ import org.hibernate.criterion.Restrictions;
  */
 public class HibernateUserPreferenceDao extends HibernateDao<UserPreference, Long> implements UserPreferenceDao  {
 
+	/**
+	 * 
+	 */
+	public HibernateUserPreferenceDao() {
+		this(UserPreference.class);
+	}
+
+	/**
+	 * @param persistentClass
+	 */
+	public HibernateUserPreferenceDao(Class<UserPreference> persistentClass) {
+		super(persistentClass);
+	}
+
 	private static final String USER_PROPERTY = "user";
 	private static final String NAME_PROPERTY = "name";
 

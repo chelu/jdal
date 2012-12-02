@@ -115,7 +115,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		firstPageButton = new JButton(new FirstPageAction());
 		statusLabel = new JLabel();
 		countLabel = new JLabel();
-		JLabel numberPagesLabel =  new JLabel(getMessage("PaginatorView.pageSize"));
+		JLabel numberPagesLabel =  new JLabel(getMessage("PaginatorView.pageSize") +  " ");
 		pageSizeCombo.setMaximumSize(new Dimension(70, 30));
 		numberPagesLabel.setAlignmentX(Container.RIGHT_ALIGNMENT);
 		
@@ -167,7 +167,13 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		lastPageButton.setEnabled(hasNext);
 		previousPageButton.setEnabled(hasPrevious);
 		firstPageButton.setEnabled(hasPrevious);
-		pageSizeCombo.setSelectedItem(String.valueOf(paginator.getPageSize()));
+		
+		if (Integer.MAX_VALUE ==  paginator.getPageSize()) {
+			pageSizeCombo.setSelectedIndex(pageSizeCombo.getItemCount() -1);
+		}
+		else {
+			pageSizeCombo.setSelectedItem(String.valueOf(paginator.getPageSize()));
+		}
 	}
 	
 	/**
@@ -273,7 +279,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 			pageSize = Integer.parseInt(item.trim());
 		}
 		catch(NumberFormatException nfe) {
-			pageSize = Short.MAX_VALUE;
+			pageSize = Integer.MAX_VALUE;
 		}
 		
 		return pageSize;
