@@ -15,8 +15,8 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.beans.MessageSourceWrapper;
 import info.joseluismartin.gui.action.BeanAction;
-
 import info.joseluismartin.gui.form.FormUtils;
 import info.joseluismartin.service.PersistentService;
 
@@ -42,9 +42,9 @@ import javax.swing.event.TableModelListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.dao.DataAccessException;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataAccessException;
 
 /**
  * Simple table editor 
@@ -81,7 +81,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	private PersistentService<T, Serializable> service;
 	
 	/** MessageSource */
-	private MessageSource messageSource = new ResourceBundleMessageSource();
+	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
 	/** 
 	 * Creates new TableEditor 
 	 */
@@ -396,5 +396,20 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	 */
 	public void setRefreshIcon(Icon refreshIcon) {
 		this.refreshIcon = refreshIcon;
+	}
+
+	/**
+	 * @return the messageSource
+	 */
+	public MessageSource getMessageSource() {
+		return messageSource.getMessageSource();
+	}
+
+	/**
+	 * @param messageSource the messageSource to set
+	 */
+	@Autowired
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource.setMessageSource(messageSource);
 	}
 }
