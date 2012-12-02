@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui.table;
 
+import info.joseluismartin.beans.MessageSourceWrapper;
 import info.joseluismartin.gui.PageableTable;
 import info.joseluismartin.gui.form.FormUtils;
 
@@ -23,6 +24,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
 
 /**
@@ -34,6 +38,7 @@ public class RemoveAllAction extends TablePanelAction {
 	
 	public static final String DEFAULT_ICON = "/images/table/22x22/edit-delete.png";
 	private static final long serialVersionUID = 1L;
+
 	
 	public RemoveAllAction() {
 		setIcon(FormUtils.getIcon(getIcon(), DEFAULT_ICON));
@@ -47,11 +52,10 @@ public class RemoveAllAction extends TablePanelAction {
 		if (selectedKeys.size() == 0)
 			return;	// nothing to do
 		
-		String message = "This will delete " + selectedKeys.size() + " ";
-		message += selectedKeys.size() == 1 ? "record" : "records";
-		message +=  ". ¿Are you sure?";
+		String message = messageSource.getMessage("RemoveAllAction.confirm", new Object[] { selectedKeys.size() });
 		
-		if (JOptionPane.showConfirmDialog(getTablePanel(), message, "Confirmation Message", 
+		if (JOptionPane.showConfirmDialog(getTablePanel(), message, 	
+				messageSource.getMessage("RemoveAllAction.confirmationMessage"),
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			table.getTableModel().uncheckAll();
 			getTablePanel().getPersistentService().deleteById(selectedKeys);
@@ -59,4 +63,5 @@ public class RemoveAllAction extends TablePanelAction {
 			table.getPaginator().firstPage();
 		}
 	}
+	
 }

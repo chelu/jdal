@@ -15,10 +15,14 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.beans.MessageSourceWrapper;
 import info.joseluismartin.beans.PropertyUtils;
 
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
 /**
  * A Column definition for configuring ListTableModel with
@@ -37,6 +41,7 @@ public class ColumnDefinition {
 	private TableCellRenderer renderer;
 	private TableCellEditor editor;
 	private Class<?> clazz;
+	private MessageSourceWrapper messageSourceWrapper = new MessageSourceWrapper();
 	
 	/**
 	 * @return the name
@@ -54,7 +59,15 @@ public class ColumnDefinition {
 	 * @return the displayName
 	 */
 	public String getDisplayName() {
-		return displayName == null ? PropertyUtils.toHumanReadable(name) : displayName;
+		if (displayName == null) {
+			return PropertyUtils.toHumanReadable(name);
+		}
+		
+		if (messageSourceWrapper.hasMessage(displayName)) {
+			return messageSourceWrapper.getMessage(displayName);
+		}
+		
+		return displayName;
 	}
 	/**
 	 * @param displayName the displayName to set
@@ -133,6 +146,15 @@ public class ColumnDefinition {
 	 */
 	public void setClazz(Class<?> clazz) {
 		this.clazz = clazz;
+	}
+	
+	@Autowired
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSourceWrapper.setMessageSource(messageSource);
+	}
+	
+	public MessageSource getMessageSource() {
+		return messageSourceWrapper.getMessageSource();
 	}
 	
 }

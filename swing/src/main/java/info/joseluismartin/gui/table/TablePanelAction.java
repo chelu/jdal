@@ -15,6 +15,10 @@
  */
 package info.joseluismartin.gui.table;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+
+import info.joseluismartin.beans.MessageSourceWrapper;
 import info.joseluismartin.gui.action.BeanAction;
 
 /**
@@ -26,9 +30,9 @@ import info.joseluismartin.gui.action.BeanAction;
 public abstract class TablePanelAction extends BeanAction {
 
 	private static final long serialVersionUID = 1L;
-
 	private TablePanel tablePanel;
-	
+	protected MessageSourceWrapper messageSource = new MessageSourceWrapper();
+
 	public void init() {
 		
 	}
@@ -46,5 +50,18 @@ public abstract class TablePanelAction extends BeanAction {
 		this.tablePanel = tablePanel;
 	}
 	
-	
+	/**
+	 * @return the messageSource
+	 */
+	public MessageSource getMessageSource() {
+		return messageSource.getMessageSource();
+	}
+
+	/**
+	 * @param messageSource the messageSource to set
+	 */
+	@Autowired
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource.setMessageSource(messageSource);
+	}
 }

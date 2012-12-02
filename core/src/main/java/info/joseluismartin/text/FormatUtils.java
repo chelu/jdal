@@ -105,9 +105,12 @@ public abstract class FormatUtils {
 	public static Field getDeclaredField(PropertyDescriptor pd) {
 	
 		try {
-			return pd.getPropertyType().getDeclaredField(pd.getName());
-		} catch (Exception e) {
-			log.warn("Cannot access to field: " + pd.getName());
+			return pd.getReadMethod().getDeclaringClass().getDeclaredField(pd.getName());
+		} 
+		catch (Exception e) {
+			if (log.isDebugEnabled())
+				log.debug("Cannot access to field: " + pd.getName());
+			
 			return null;
 		}
 	}

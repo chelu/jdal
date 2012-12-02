@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui.table;
 
+import info.joseluismartin.beans.MessageSourceWrapper;
 import info.joseluismartin.gui.View;
 import info.joseluismartin.gui.form.FormUtils;
 
@@ -41,7 +42,7 @@ public class HideShowFilterAction extends TablePanelAction {
 		showFilterIcon = FormUtils.getIcon(showFilterIcon, DEFAULT_SHOW_FILTER_ICON);
 		hideFilterIcon = FormUtils.getIcon(hideFilterIcon, DEFAULT_HIDE_FILTER_ICON);
 		setIcon(hideFilterIcon);
-		setName("Hide Filter");
+		setName(messageSource.getMessage("HideShowFilterAction.hideFilter"));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -49,7 +50,11 @@ public class HideShowFilterAction extends TablePanelAction {
 		View<Object> filterView = getTablePanel().getFilterView();
 		if (filterView != null) {
 			filterView.getPanel().setVisible(!filterView.getPanel().isVisible());
-			String value = filterView.getPanel().isVisible() ? "Hide Filter" : "Show Filter";
+			
+			String value = filterView.getPanel().isVisible() ? 
+					messageSource.getMessage("HideShowFilterAction.hideFilter") :
+						messageSource.getMessage("HideShowFilterAction.showFilter");
+					
 			Icon icon = filterView.getPanel().isVisible() ? hideFilterIcon : showFilterIcon;
 			setName(value);
 			setIcon(icon);

@@ -56,6 +56,7 @@ public class ViewPanelHolder extends PanelHolder {
 
 	@Override
 	public String getName() {
-		return super.getName() != null ? super.getName() : view.getName();
+		return super.getName() != null ? super.getName() : 
+			messageWrapper.getMessage(view.getName());
 	}
 }

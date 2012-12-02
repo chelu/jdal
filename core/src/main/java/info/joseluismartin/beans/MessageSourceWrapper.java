@@ -132,5 +132,23 @@ public class MessageSourceWrapper implements MessageSource {
 		return messageSource == null ? resolvable.getDefaultMessage() : messageSource.getMessage(resolvable, locale);
 	}
 	
+	/**
+	 * Test if code is resolved
+	 * @param code code to resolved
+	 * @return true if source can resolve code
+	 */
+	public boolean hasMessage(String code) {
+		if  (messageSource == null)
+			return false;
+		
+		try {
+			messageSource.getMessage(code, null, Locale.getDefault());
+			return true;
+		} 
+		catch (NoSuchMessageException nsme) {
+			return false;
+		}
+	}
+	
 	
 }

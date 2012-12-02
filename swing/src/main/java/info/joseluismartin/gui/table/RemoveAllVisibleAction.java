@@ -38,11 +38,10 @@ public class RemoveAllVisibleAction extends RemoveAllAction {
 		if (selected.size() == 0)
 			return;	// nothing to do
 		
-		String message = "This will delete " + selected.size() + " ";
-		message += selected.size() == 1 ? "record" : "records";
-		message +=  ". ¿Are you sure?";
+		String message = messageSource.getMessage("RemoveAllAction.confirm", new Object[] { selected.size() });
 		
-		if (JOptionPane.showConfirmDialog(getTablePanel(), message, "Confirmation Message", 
+		if (JOptionPane.showConfirmDialog(getTablePanel(), message,
+				messageSource.getMessage("RemoveAllAction.confirmationMessage"), 
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			table.getTableModel().uncheckAll();
 			getTablePanel().getPersistentService().delete(selected);

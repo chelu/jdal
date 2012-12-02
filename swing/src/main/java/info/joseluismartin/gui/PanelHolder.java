@@ -15,8 +15,13 @@
  */
 package info.joseluismartin.gui;
 
+import info.joseluismartin.beans.MessageSourceWrapper;
+
 import javax.swing.Icon;
 import javax.swing.JComponent;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
 /**
  * A Holder for gui component classes
@@ -24,6 +29,8 @@ import javax.swing.JComponent;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public abstract class PanelHolder {
+	
+	protected MessageSourceWrapper messageWrapper = new MessageSourceWrapper();
 	
 	public PanelHolder() {
 		
@@ -58,7 +65,7 @@ public abstract class PanelHolder {
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return name != null ?  messageWrapper.getMessage(name) : null;
 	}
 
 	/**
@@ -71,5 +78,14 @@ public abstract class PanelHolder {
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	public MessageSource getMessageSource() {
+		return this.messageWrapper.getMessageSource();
+	}
+	
+	@Autowired
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageWrapper.setMessageSource(messageSource);
 	}
 }
