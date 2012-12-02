@@ -26,7 +26,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Locale;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -36,9 +35,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-
-import org.springframework.context.MessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
  * PaginatorView with control buttons to manage paginator.
@@ -70,9 +66,6 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	/** Label to show info about selected page */
 	private JLabel statusLabel;
 	private JLabel countLabel;
-	
-	/** MessageSource for internacionalization */
-	private MessageSource messageSource = new ResourceBundleMessageSource();
 	
 	// Icons 
 	private Icon nextIcon;
@@ -107,7 +100,6 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		previousIcon = FormUtils.getIcon(previousIcon, DEFAULT_PREVIOUS_ICON);
 		lastIcon = FormUtils.getIcon(lastIcon, DEFAULT_LAST_ICON);
 		firstIcon = FormUtils.getIcon(firstIcon, DEFAULT_FIRST_ICON);
-		
 	}
 	
 	/**
@@ -123,7 +115,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 		firstPageButton = new JButton(new FirstPageAction());
 		statusLabel = new JLabel();
 		countLabel = new JLabel();
-		JLabel numberPagesLabel =  new JLabel("Page Size: ");
+		JLabel numberPagesLabel =  new JLabel(getMessage("PaginatorView.pageSize"));
 		pageSizeCombo.setMaximumSize(new Dimension(70, 30));
 		numberPagesLabel.setAlignmentX(Container.RIGHT_ALIGNMENT);
 		
@@ -167,8 +159,7 @@ public class PaginatorView extends AbstractView<Paginator> implements PaginatorL
 	 */
 	public void doRefresh() {
 		statusLabel.setText("" + paginator.getPage() + " / " + paginator.getTotalPages());
-		countLabel.setText(messageSource.getMessage("PaginatorView.records", null, "Records: ", 
-				Locale.getDefault())  + paginator.getCount());
+		countLabel.setText(getMessage("PaginatorView.records") + " " + paginator.getCount());
         // disable buttons on fist and last page
 		boolean hasNext = paginator.hasNext();
 		boolean hasPrevious = paginator.hasPrevious();
