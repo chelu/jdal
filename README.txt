@@ -1,4 +1,4 @@
-JDAL Library 1.2.0 (April 2012)
+JDAL Library 1.3.1 (December 2012)
 -------------------------------------------------------------------------------
 http://www.jdal.org
 
@@ -27,16 +27,16 @@ CONTENT
 core:              JDAL Core Library          Data access and common classes
 swing:             JDAL Swing Library         Swing binding and UI
 vaadin:            JDAL Vaadin Library        Vaadin Spring Integration
-aspects:           JDAL Aspects Library       Aspect Library)
+aspects:           JDAL Aspects Library       Aspect Library
 web:               JDAL Web Library           Web Library
   
 
-COMPILE-------------------------------------------------------------------------------
+COMPILE
 -------------------------------------------------------------------------------
 
 mvn package or mvn package -Dmaven.skip.test=true  (to avoid test)
 
-Test need sample database, install from jda-samples
+Test need sample database, install from jdal-samples in library/db/library.sql
 
 
 INSTALL

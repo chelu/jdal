@@ -18,4 +18,4 @@
    The name "JDAL" and "JDAL Swing"  must not be used to
    endorse or promote products derived from this software without
    prior written permission. For written permission, please contact
-   jlm@joseluismartin.info
+   Jose Luis Martin, jlm@joseluismartin.info
