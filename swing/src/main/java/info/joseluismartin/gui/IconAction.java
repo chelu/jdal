@@ -58,7 +58,7 @@ public abstract class IconAction extends AbstractAction  {
 		this.messageWrapper.setMessageSource(messageSource);
 	}
 	
-	public MessageSourceWrapper getMesasgeWrapper() {
+	public MessageSourceWrapper getMessageWrapper() {
 		return messageWrapper;
 	}
 }

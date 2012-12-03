@@ -816,6 +816,7 @@ public class ListTableModel implements TableModel {
 	}
 	
 	public void remove(Object toRemove) {
-		list.remove(list.indexOf(toRemove));
+		if (toRemove != null)
+			list.remove(toRemove);
 	}
 }

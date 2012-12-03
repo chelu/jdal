@@ -50,7 +50,7 @@ public class ViewCancelAction<T> extends ViewAction<T> {
 		if (getView().isDirty()) {
 			if (JOptionPane.YES_OPTION == 
 					JOptionPane.showConfirmDialog(getView().getPanel(), 
-							StaticMessageSource.getMessage("ViewCancelAction.dirty"))) {
+							getMessageWrapper().getMessage("ViewCancelAction.dirty"))) {
 			
 				getDialog().dispose();
 			}
