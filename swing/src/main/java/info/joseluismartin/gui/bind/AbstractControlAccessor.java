@@ -86,10 +86,10 @@ public abstract class AbstractControlAccessor implements ControlAccessor {
 	
 	/**
 	 * Convert Object to required type using <code>SimpleTypeConverter</code>
-	 * @param <T>
-	 * @param value
-	 * @param requiredType
-	 * @return
+	 * @param <T> type to convert to
+	 * @param value value to convert
+	 * @param requiredType type to convert
+	 * @return converted type
 	 * @throws TypeMismatchException
 	 * @see org.springframework.beans.TypeConverter#convertIfNecessary(java.lang.Object, java.lang.Class)
 	 */

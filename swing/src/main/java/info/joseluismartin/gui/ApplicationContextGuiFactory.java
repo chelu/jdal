@@ -110,6 +110,17 @@ public class ApplicationContextGuiFactory implements GuiFactory, ApplicationCont
 		
 		return bean != null ? (View<?>) bean : null;
 	}
+	
+	/**
+	 * @param name view name
+	 * @param clazz view class template
+	 * @return the view or null if none.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> View<T> getView(String name, Class<T> clazz) {
+		return (View<T>) getView(name);
+	}
+
 
 	public Object getObject(String name, Object[] args) {
 		return context.getBean(name, args);

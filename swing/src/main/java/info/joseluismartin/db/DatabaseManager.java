@@ -51,8 +51,9 @@ public class DatabaseManager {
 		DbConnection conn = new DbConnection();
 	
 		try {
-			if (!properties.exists() || properties.createNewFile()) 
-				return null;
+			if (!properties.exists())
+				if (!properties.createNewFile()) 
+					return null;
 			
 			prop.load(new FileInputStream(properties));
 			conn.fromProperties(prop);

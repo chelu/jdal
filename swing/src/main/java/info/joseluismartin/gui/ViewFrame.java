@@ -36,6 +36,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindingResult;
 
 /**
@@ -79,7 +80,10 @@ public class ViewFrame<T> extends JFrame implements View<T>, Editor<T> {
 		cancelAction.setDialog(this);
 		add(view.getPanel(), BorderLayout.CENTER);
 		add(createButtonBox(), BorderLayout.SOUTH);
-		setTitle(view.getModel().toString());
+	
+		if (view.getModel() != null && StringUtils.isEmpty(getTitle()))
+			setTitle(view.getModel().toString());
+		
 		setLocationRelativeTo(null);
 		setSize(new Dimension(windowWidth, windowHeight));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

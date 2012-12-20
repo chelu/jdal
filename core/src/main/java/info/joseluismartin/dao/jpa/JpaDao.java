@@ -362,7 +362,9 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	}
 	
 	/**
-	 * Null References on one to many and one to one associations
+	 * Null References on one to many and one to one associations.
+	 * Will only work if association has annotated with a mappedBy attribute.
+	 * 
 	 * @param entity entity
 	 */
 	private void nullReferences(T entity) {
@@ -386,25 +388,25 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 						associationType = em.getMetamodel().entity(a.getJavaType());
 
 					}
-
-					for (Attribute<?, ?> aa : associationType.getAttributes()) {
-						if (aa.getJavaType().equals(entity.getClass())) {
-							if (PersistentAttributeType.MANY_TO_ONE == aa.getPersistentAttributeType()) {
-								if (log.isDebugEnabled()) {
-									log.debug("Null ManyToOne reference on " + 
-											associationType.getName() + "." + aa.getName());
-								}
-								for (Object o : (Collection<?>) association) {
-									PropertyAccessorFactory.forDirectFieldAccess(o).setPropertyValue(aa.getName(), null);
-								}
+					
+					String mappedBy = JpaUtils.getMappedBy(a);
+					if (mappedBy != null) {
+						Attribute<?,?> aa = associationType.getAttribute(mappedBy);
+						if (PersistentAttributeType.MANY_TO_ONE == aa.getPersistentAttributeType()) {
+							if (log.isDebugEnabled()) {
+								log.debug("Null ManyToOne reference on " + 
+										associationType.getName() + "." + aa.getName());
 							}
-							else if (PersistentAttributeType.ONE_TO_ONE == aa.getPersistentAttributeType()) {
-								if (log.isDebugEnabled()) {
-									log.debug("Null OneToOne reference on " + 
-											associationType.getName() + "." + aa.getName());
-								}
-								PropertyAccessorFactory.forDirectFieldAccess(association).setPropertyValue(aa.getName(), null);
+							for (Object o : (Collection<?>) association) {
+								PropertyAccessorFactory.forDirectFieldAccess(o).setPropertyValue(aa.getName(), null);
 							}
+						}
+						else if (PersistentAttributeType.ONE_TO_ONE == aa.getPersistentAttributeType()) {
+							if (log.isDebugEnabled()) {
+								log.debug("Null OneToOne reference on " + 
+										associationType.getName() + "." + aa.getName());
+							}
+							PropertyAccessorFactory.forDirectFieldAccess(association).setPropertyValue(aa.getName(), null);
 						}
 					}
 				}

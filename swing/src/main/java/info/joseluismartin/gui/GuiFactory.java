@@ -56,6 +56,19 @@ public interface GuiFactory {
 	
 	Object getObject(String name, Object[] params);
 	
+	/**
+	 * Gets a named view instance
+	 * @param name the view name
+	 * @return the view or null if none.
+	 */
 	View<?> getView(String name);
+	
+	/** 
+	 * Gets a named view instance.
+	 * @param name view name
+	 * @param clazz view class template
+	 * @return the view or null if none.
+	 */
+	public <T> View<T> getView(String name, Class<T> clazz);
 
 }

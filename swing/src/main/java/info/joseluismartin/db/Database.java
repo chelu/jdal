@@ -29,7 +29,8 @@ public class Database {
 	
 	private static String[][] DBDATA = {
 		{ "MySQL", "mysql", "com.mysql.jdbc.Driver", "3306" }, 
-		{ "ORACLE", "oracle:thin", "oracle.jdbc.driver.OracleDriver", "1521" }
+		{ "ORACLE", "oracle:thin", "oracle.jdbc.driver.OracleDriver", "1521" }, 
+		{ "SQLite", "sqlite", "org.sqlite.JDBC", "" }
 	};
 	
 	static {

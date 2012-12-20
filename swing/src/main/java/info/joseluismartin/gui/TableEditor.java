@@ -161,7 +161,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	}
 	
 	/**
-	 * @return
+	 * @return header
 	 */
 	protected Container createHeader() {
 		JLabel label = new JLabel(getName());

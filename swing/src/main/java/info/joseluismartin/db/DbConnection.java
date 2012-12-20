@@ -160,11 +160,27 @@ public class DbConnection {
 					":" + getPort() + ":" + getDbName(); 
 		}
 		else {
-			this.url = "jdbc:" + getDatabase().getJdbcName() + "://" + getHost() +
-				":" + getPort() + "/" + getDbName(); 
+			StringBuilder sb = new StringBuilder("jdbc:");
+			sb.append(getDatabase().getJdbcName());
+			sb.append("://");
+			
+			if (!StringUtils.isEmpty(getHost())) 
+				sb.append(getHost());
+			
+			if (!StringUtils.isEmpty(getPort())) {
+				sb.append(":");
+				sb.append(getPort());
+			}
+			
+			if (!StringUtils.isEmpty(getDbName())) {
+				sb.append("/");
+				sb.append(getDbName());
+			}
+				
+			this.url = sb.toString();
 		}
-		
-		return url;
+			
+			return url;
 	}
 
 	/**

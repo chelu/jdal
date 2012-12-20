@@ -61,8 +61,8 @@ public class BoxFormBuilder {
 
 	public void startBox() {
 		startBox(null);
-		
 	}
+	
 	
 	public void endBox() {
 		JComponent c = builder.getForm();

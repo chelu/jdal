@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package info.joseluismartin.gui.bind;
+package info.joseluismartin.exception;
+
+import java.lang.Thread.UncaughtExceptionHandler;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * A Factory for ControlAccessors
+ * UncaughtExceptionHandler that silently log the exception.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.1
- * @see info.joseluismartin.gui.bind.ControlAccessor
+ * @since 1.3
  */
-public interface ControlAccessorFactory {
+public class LogginExceptionHandler implements UncaughtExceptionHandler {
+
+	private static final Log log = LogFactory.getLog(LogginExceptionHandler.class);
 	
 	/**
-	 * Try to find a control accessor for a Class, use super Class if none is configured.
-	 * 
-	 * @param control control for looking the control accessor
-	 * @return a ControlAccessor for that class or null if none
+	 * {@inheritDoc}
 	 */
-	ControlAccessor getControlAccessor(Object control);
+	public void uncaughtException(Thread t, Throwable e) {
+		log.error(e);
+	}
 
 }

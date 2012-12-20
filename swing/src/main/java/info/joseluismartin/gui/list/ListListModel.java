@@ -71,4 +71,9 @@ public class ListListModel extends AbstractListModel {
 		fireContentsChanged(this, -1, -1);
 		
 	}
+	
+	public void add(Object item) {
+		list.add(item);
+		fireContentsChanged(this, getSize() - 1, getSize());
+	}
 }

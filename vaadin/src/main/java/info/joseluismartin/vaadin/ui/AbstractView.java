@@ -28,12 +28,12 @@ import com.vaadin.ui.Component;
  */
 public abstract class AbstractView<T> implements View<T>, Serializable {
 	
-	Component component;
-	T model;
+	private Component component;
+	private T model;
 
 	/**
 	 * Build the Component of view.
-	 * @return
+	 * @return view component
 	 */
 	protected abstract Component buildPanel();
 

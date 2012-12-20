@@ -17,6 +17,10 @@ package info.joseluismartin.dao.jpa;
 
 import info.joseluismartin.beans.PropertyUtils;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +28,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -119,6 +126,7 @@ public abstract class JpaUtils {
 	 * @param clazz root type
 	 * @return Root<T> of null if none
 	 */
+	@SuppressWarnings("unchecked")
 	public static  <T> Root<T> findRoot(CriteriaQuery<?> query, Class<T> clazz) {
 
 		for (Root<?> r : query.getRoots()) {
@@ -423,5 +431,43 @@ public abstract class JpaUtils {
 		}
 		
 		return clazz.isAssignableFrom(attribute.getJavaType());
+	}
+	
+	
+	/**
+	 * Gets the mappedBy value from an attribute
+	 * @param attribute attribute
+	 * @return mappedBy value or null if none.
+	 */
+	public static String getMappedBy(Attribute<?, ?> attribute) {
+		String mappedBy = null;
+		
+		if (attribute.isAssociation()) {
+			Annotation[] annotations = null;
+			Member member = attribute.getJavaMember();
+			if (member instanceof Field) {
+				annotations = ((Field) member).getAnnotations();
+			}
+			else if (member instanceof Method) {
+				annotations = ((Method) member).getAnnotations();
+			}
+			
+			for (Annotation a : annotations) {
+				if (a.annotationType().equals(OneToMany.class)) {
+					mappedBy = ((OneToMany) a).mappedBy();
+					break;
+				}
+				else if (a.annotationType().equals(ManyToMany.class)) {
+					mappedBy = ((ManyToMany) a).mappedBy();
+					break;
+				}
+				else if (a.annotationType().equals(OneToOne.class)) {
+					mappedBy = ((OneToOne) a).mappedBy();
+					break;
+				}
+			}
+		}
+		
+		return "".equals(mappedBy) ? null : mappedBy;
 	}
 }

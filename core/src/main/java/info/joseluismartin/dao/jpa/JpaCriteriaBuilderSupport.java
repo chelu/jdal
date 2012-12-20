@@ -82,8 +82,7 @@ public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements 
 	
 	/**
 	 * Add a '>=' Restriction on property
-	 * @param criteria Criteria to add restriction
-	 * @param property property path
+	 * @param propertyName property path
 	 * @param value restriction value
 	 */
 	protected <Y extends Comparable<? super Y>> Predicate greatThanOrEqualTo(String propertyName,  Y value) {
@@ -93,8 +92,7 @@ public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements 
 	/**
 	 * Add a like Restriction adding wrapping value on '%' and replacing '*'
 	 * for '%'
-	 * @param criteria Criteria to add restriction
-	 * @param property property path
+	 * @param propertyName property path
 	 * @param value text for the ilike restriction
 	 */
 	protected Predicate like(String propertyName, String value) {

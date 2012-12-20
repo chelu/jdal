@@ -75,7 +75,6 @@ public abstract class AbstractBinder implements PropertyBinder {
 	/**
 	 * Hook method to do bind via Component Listeners
 	 * By default, do nothing
-	 * @param component Component to bind
 	 */
 	protected void doBind() {
 		

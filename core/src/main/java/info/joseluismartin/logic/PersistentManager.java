@@ -162,6 +162,9 @@ public class PersistentManager<T, PK extends Serializable> implements Persistent
 	 * {@inheritDoc}
 	 */
 	public Class<T> getEntityClass() {
-		return dao.getEntityClass();
+		if (dao != null)
+			return dao.getEntityClass();
+		
+		return null;
 	}
 }

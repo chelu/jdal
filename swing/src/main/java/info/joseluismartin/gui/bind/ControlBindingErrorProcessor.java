@@ -22,6 +22,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.DefaultBindingErrorProcessor;
 
 /**
+ * Add a a Error holding the control that has failed.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class ControlBindingErrorProcessor extends DefaultBindingErrorProcessor {

@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 
 /**
  * Simple Dialog 
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class SimpleDialog extends JDialog implements ActionListener {
@@ -55,6 +56,7 @@ public class SimpleDialog extends JDialog implements ActionListener {
 	
 	public SimpleDialog(Component component, String title) {
 		this(null, component, title);
+		setSize(800, 600);
 	}
 	
 	public SimpleDialog(Window owner, Component component, String title) {

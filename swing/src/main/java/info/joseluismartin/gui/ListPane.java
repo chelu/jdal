@@ -56,6 +56,7 @@ public class ListPane extends JPanel implements ListSelectionListener {
 	private JSplitPane split;
 	private ListCellRenderer renderer = new ListCellRenderer();
 	private List<ListSelectionListener> listeners = new ArrayList<ListSelectionListener>();
+	private int cellHeight = 0;
 	
 	public ListPane() {
 		
@@ -74,13 +75,15 @@ public class ListPane extends JPanel implements ListSelectionListener {
 		list.addListSelectionListener(this);
 		list.setCellRenderer(renderer);
 		list.setSelectedIndex(0);
+		
+		if (cellHeight != 0)
+			list.setFixedCellHeight(cellHeight);
+		
 		JScrollPane scroll = new JScrollPane(list);
 		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, editorPanel);
 		split.setResizeWeight(0);
 		split.setDividerLocation(150);
 		add(split);
-	
-		
 	}
 	
 	
@@ -126,8 +129,8 @@ public class ListPane extends JPanel implements ListSelectionListener {
 		this.tableIcon = tableIcon;
 	}
 	
-	public void setCellHeight(int height) {
-		list.setFixedCellHeight(height);
+	public void setCellHeight(int cellHeight) {
+		this.cellHeight = cellHeight;
 	}
 	
 	class ListCellRenderer extends DefaultListCellRenderer {
