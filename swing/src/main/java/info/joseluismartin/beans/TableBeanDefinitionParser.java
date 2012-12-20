@@ -175,14 +175,14 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	 * Register BeanDefinition and apply default bean attributes.
 	 * @param element
 	 * @param parserContext
-	 * @param tableModelBeanName
+	 * @param beanName
 	 * @param bdb
 	 */
-	private void registerBeanDefinition(Element element, ParserContext parserContext, String tableModelBeanName,
+	private void registerBeanDefinition(Element element, ParserContext parserContext, String beanName,
 			BeanDefinitionBuilder bdb) {
 		AbstractBeanDefinition bd = bdb.getBeanDefinition();
-		parserContext.getDelegate().parseBeanDefinitionAttributes(element, tableModelBeanName, null, bd);
-		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), tableModelBeanName);
+		parserContext.getDelegate().parseBeanDefinitionAttributes(element, beanName, null, bd);
+		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), beanName);
 		parserContext.registerBeanComponent(bcd);
 	}
 

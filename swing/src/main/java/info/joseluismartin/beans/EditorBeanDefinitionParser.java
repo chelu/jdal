@@ -15,23 +15,29 @@
  */
 package info.joseluismartin.beans;
 
-import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.xml.BeanDefinitionParser;
+import org.springframework.beans.factory.xml.ParserContext;
+import org.w3c.dom.Element;
 
 /**
+ * BeanDefinitionParser for swing:editor 
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 1.3.2
  */
-public class JdalSwingNamespaceHandler extends NamespaceHandlerSupport {
+public class EditorBeanDefinitionParser implements BeanDefinitionParser {
 
+	private static final String VIEW = "view";
+	private static final String FRAME_CLASS = "info.joseluismartin.gui.ViewFrame";
+	private static final String DIALOG_CLASS = "info.joseluismartin.gui.ViewDialog";
+	private static final String ID = "id";
 	/**
 	 * {@inheritDoc}
 	 */
-	public void init() {
-		registerBeanDefinitionParser("defaults", new DefaultsBeanDefinitionParser());
-		registerBeanDefinitionParser("table", new TableBeanDefinitionParser());
-		registerBeanDefinitionParser("column", new ColumnBeanDefinitionParser());
-		registerBeanDefinitionParser("editor", new EditorBeanDefinitionParser());
-		registerBeanDefinitionParser("columns", new ColumnsBeanDefinitionParser());
+	public BeanDefinition parse(Element element, ParserContext parserContext) {
+		
+		return null;
 	}
 
 }

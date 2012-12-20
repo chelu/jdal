@@ -27,6 +27,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -41,6 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 	
+	private static final String ID = "id";
 	private static final String DAO_SUFFIX = "Dao";
 	private static final String SERVICE_SUFFIX = "Service";
 	private static final String JPA_DAO_CLASS_NAME = "info.joseluismartin.dao.jpa.JpaDao";
@@ -61,6 +63,7 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 		// default dao and service classes
 		String daoClassName = JPA_DAO_CLASS_NAME;
 		String serviceClassName = PERSISTENT_SERVICE_CLASS_NAME;
+		String name = null;
 		
 		if (element.hasAttribute(DAO_CLASS)) 
 			daoClassName = element.getAttribute(DAO_CLASS);
@@ -68,11 +71,15 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(SERVICE_CLASS))
 			serviceClassName = element.getAttribute(SERVICE_CLASS);
 		
+		if (element.hasAttribute(NAME))
+			name = element.getAttribute(NAME);
+			
 		if (element.hasAttribute(ENTITY)) {
 			String className = element.getAttribute(ENTITY);
-			String name = StringUtils.uncapitalize(
+			if (name == null) {
+				name = StringUtils.uncapitalize(
 					StringUtils.substringAfterLast(className, PropertyUtils.PROPERTY_SEPARATOR));
-			
+			}
 			parserContext.pushContainingComponent(
 					new CompositeComponentDefinition(name, parserContext.extractSource(element)));
 		
@@ -88,7 +95,7 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 				daoBuilder.addPropertyValue(CRITERIA_BUILDER_MAP, builders);
 			}
 			
-			daoBuilder.addConstructorArgValue(className);
+			daoBuilder.addConstructorArgValue(ClassUtils.resolveClassName(className, null));
 			daoBuilder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 			String daoBeanName = name  + DAO_SUFFIX;
 			registerBeanDefinition(parserContext, daoBuilder, daoBeanName); 
