@@ -15,6 +15,10 @@
  */
 package info.joseluismartin.beans;
 
+import info.joseluismartin.util.BeanUtils;
+
+import java.beans.PropertyDescriptor;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 
@@ -49,5 +53,15 @@ public abstract class PropertyUtils {
 	public static String toHumanReadable(String propertyName) {
 		String humanReadable = getPropertyName(propertyName).replaceAll("([A-Z])", " $1").trim();
 		return WordUtils.capitalize(humanReadable);
+	}
+	
+	public static PropertyDescriptor getPropertyDescriptor(Class<?> clazz, String propertyPath) {
+		PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(clazz, 
+				getFirstPropertyName(getFirstPropertyName(propertyPath)));
+			
+		if (isNested(propertyPath))  // recurse
+			return getPropertyDescriptor(pd.getPropertyType(), getNestedPath(propertyPath));
+			
+		return pd;
 	}
 }

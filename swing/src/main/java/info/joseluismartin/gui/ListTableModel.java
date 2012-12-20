@@ -16,6 +16,7 @@
 package info.joseluismartin.gui;
 
 import info.joseluismartin.beans.MessageSourceWrapper;
+import info.joseluismartin.beans.PropertyUtils;
 import info.joseluismartin.gui.table.AnnotationFormatTableCellRenderer;
 
 import java.beans.PropertyDescriptor;
@@ -46,6 +47,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -303,7 +305,7 @@ public class ListTableModel implements TableModel {
 		else {
 			pds = new ArrayList<PropertyDescriptor>(columnNames.size());
 			for (String name : columnNames) {
-				PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(modelClass, name);
+				PropertyDescriptor pd = PropertyUtils.getPropertyDescriptor(modelClass, name);
 				if (pd == null)
 					throw new RuntimeException("Invalid property [" + name +"]" + 
 							" for model class [" + modelClass.getName() + "]");
@@ -645,6 +647,9 @@ public class ListTableModel implements TableModel {
 	 * @return the primary key of model, if any
 	 */
 	private Object getPrimaryKey(Object row) {
+		if (BeanUtils.getPropertyDescriptor(modelClass, id) == null)
+			return row;
+		
 		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(row);
 		return wrapper.getPropertyValue(id);
 	}
