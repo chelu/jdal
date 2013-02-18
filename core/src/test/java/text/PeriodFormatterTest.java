@@ -16,10 +16,10 @@
 package text;
 
 import static org.junit.Assert.assertEquals;
-import info.joseluismartin.text.PeriodFormatter;
 
 import java.util.Locale;
 
+import org.jdal.text.PeriodFormatter;
 import org.junit.Test;
 
 

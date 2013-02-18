@@ -15,12 +15,6 @@
  */
 package dao.jpa;
 
-import info.joseluismartin.dao.BeanFilter;
-import info.joseluismartin.dao.Filter;
-import info.joseluismartin.dao.Page;
-import info.joseluismartin.dao.jpa.JpaDao;
-import info.joseluismartin.dao.jpa.JpaUtils;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +32,11 @@ import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.dao.BeanFilter;
+import org.jdal.dao.Filter;
+import org.jdal.dao.Page;
+import org.jdal.dao.jpa.JpaDao;
+import org.jdal.dao.jpa.JpaUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;

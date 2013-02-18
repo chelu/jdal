@@ -15,13 +15,6 @@
  */
 package bind;
 
-import info.joseluismartin.gui.bind.ComboAccessor;
-import info.joseluismartin.gui.bind.ControlChangeListener;
-import info.joseluismartin.gui.bind.ControlEvent;
-import info.joseluismartin.gui.bind.ListAccessor;
-import info.joseluismartin.gui.bind.TextComponentAccessor;
-import info.joseluismartin.gui.bind.ToggleButtonAccessor;
-import info.joseluismartin.gui.list.ListListModel;
 
 import java.util.Arrays;
 
@@ -32,6 +25,13 @@ import javax.swing.JTextField;
 
 import junit.framework.TestCase;
 
+import org.jdal.ui.bind.ComboAccessor;
+import org.jdal.ui.bind.ControlChangeListener;
+import org.jdal.ui.bind.ControlEvent;
+import org.jdal.ui.bind.ListAccessor;
+import org.jdal.ui.bind.TextComponentAccessor;
+import org.jdal.ui.bind.ToggleButtonAccessor;
+import org.jdal.ui.list.ListListModel;
 import org.junit.Test;
 
 

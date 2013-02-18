@@ -1,13 +1,13 @@
 package dao.jpa;
 
-import info.joseluismartin.model.Entity;
-
 import java.util.Date;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import org.jdal.model.Entity;
 
 @NamedQuery(name="booksByAuthorName", query="SELECT b FROM Book b WHERE b.author.name= :authorName")
 @javax.persistence.Entity

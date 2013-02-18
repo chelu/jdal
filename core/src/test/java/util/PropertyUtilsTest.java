@@ -16,8 +16,8 @@
 package util;
 
 import static org.junit.Assert.assertEquals;
-import info.joseluismartin.beans.PropertyUtils;
 
+import org.jdal.beans.PropertyUtils;
 import org.junit.Test;
 
 /**

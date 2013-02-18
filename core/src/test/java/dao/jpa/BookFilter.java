@@ -1,8 +1,8 @@
 package dao.jpa;
 
-import info.joseluismartin.dao.BeanFilter;
-
 import java.util.Date;
+
+import org.jdal.dao.BeanFilter;
 
 /**
  * Filter for Books

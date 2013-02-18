@@ -46,7 +46,7 @@
 				<xsd:appinfo>
 					<tool:annotation kind="ref">
 						<tool:expected-type
-							type="info.joseluismartin.service.PersistentService" />
+							type="org.jdal.service.PersistentService" />
 					</tool:annotation>
 				</xsd:appinfo>
 			</xsd:annotation>
@@ -116,7 +116,7 @@
 				</xsd:documentation>
 				<xsd:appinfo>
 					<tool:annotation kind="ref">
-						<tool:expected-type type="info.joseluismartin.service.TableService" />
+						<tool:expected-type type="org.jdal.service.TableService" />
 					</tool:annotation>
 				</xsd:appinfo>
 			</xsd:annotation>
@@ -163,7 +163,7 @@
 				</xsd:documentation>
 				<xsd:appinfo>
 					<tool:annotation kind="ref">
-						<tool:expected-type type="info.joseluismartin.gui.View" />
+						<tool:expected-type type="org.jdal.gui.View" />
 					</tool:annotation>
 				</xsd:appinfo>
 			</xsd:annotation>
