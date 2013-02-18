@@ -21,8 +21,6 @@ import com.vaadin.terminal.ThemeResource;
 
 public class VaadinResourcePropertyEditor extends PropertyEditorSupport {
 	
-	// private static final String CLASSPATH_PREFIX = "classpath:";
-	
 	/**
 	 * {@inheritDoc}
 	 */

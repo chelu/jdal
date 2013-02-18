@@ -9,6 +9,7 @@
 		schemaLocation="http://www.springframework.org/schema/tool/spring-tool-3.1.xsd" />
 	
 	<xsd:import namespace="http://www.springframework.org/schema/beans"/>
+	
 	<xsd:element name="defaults" />
 	<xsd:element name="column" type="columnType" />
 	<xsd:element name="columns" type="columnSequenceType" />
@@ -172,11 +173,6 @@
 				<xsd:documentation>
 					<![CDATA[choose if use a JDialog or JFrame, defaults to JDialog.]]>
 				</xsd:documentation>
-				<xsd:appinfo>
-					<tool:annotation kind="ref">
-						<tool:expected-type type="info.joseluismartin.gui.View" />
-					</tool:annotation>
-				</xsd:appinfo>
 			</xsd:annotation>
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:string">

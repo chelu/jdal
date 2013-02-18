@@ -69,5 +69,9 @@ public interface ItemIdStrategy extends ItemSetChangeListener {
 	 */
 	void itemLoaded(int index, Item item);
 	
+	public Item getItem(Object itemId);
+	
+	public boolean containsId(Object itemId);
+	
 
 }

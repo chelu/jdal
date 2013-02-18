@@ -29,6 +29,7 @@ import org.springframework.context.MessageSource;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -69,6 +70,11 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	@Autowired
 	private transient MessageSource messageSource;
 	
+	private String nextIconUrl = "images/table/go-next.png";
+	private String previousIconUrl = "images/table/go-previous.png";
+	private String lastIconUrl = "images/table/go-last.png";
+	private String firstIconUrl = "images/table/go-first.png";
+	
 	/** 
 	 * Creates a new paginator with default page size of 10 records
 	 */
@@ -83,6 +89,32 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	public VaadinPaginator(Page<T> page) {
 		setModel(page);
 		page.firstPage();
+	}
+	
+	public void init() {
+		if (next == null) {
+			setNext(createButton(nextIconUrl));
+		}
+		
+		if (this.last == null) {
+			setLast(createButton(lastIconUrl));
+		}
+		
+		if (this.previous == null) {
+			setPrevious(createButton(previousIconUrl));
+		}
+		
+		if (this.first == null) {
+			setFirst(createButton(firstIconUrl));
+		}
+		
+	}
+
+	private Button createButton(String icon) {
+		Button b = new Button();
+		b.setIcon(new ThemeResource(icon));
+
+		return b;
 	}
 
 	/**
@@ -414,5 +446,61 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	 */
 	public void setCount(int count) {
 		getModel().setCount(count);
+	}
+
+	/**
+	 * @return the nextIconUrl
+	 */
+	public String getNextIconUrl() {
+		return nextIconUrl;
+	}
+
+	/**
+	 * @param nextIconUrl the nextIconUrl to set
+	 */
+	public void setNextIconUrl(String nextIconUrl) {
+		this.nextIconUrl = nextIconUrl;
+	}
+
+	/**
+	 * @return the previousIconUrl
+	 */
+	public String getPreviousIconUrl() {
+		return previousIconUrl;
+	}
+
+	/**
+	 * @param previousIconUrl the previousIconUrl to set
+	 */
+	public void setPreviousIconUrl(String previousIconUrl) {
+		this.previousIconUrl = previousIconUrl;
+	}
+
+	/**
+	 * @return the lastIconUrl
+	 */
+	public String getLastIconUrl() {
+		return lastIconUrl;
+	}
+
+	/**
+	 * @param lastIconUrl the lastIconUrl to set
+	 */
+	public void setLastIconUrl(String lastIconUrl) {
+		this.lastIconUrl = lastIconUrl;
+	}
+
+	/**
+	 * @return the firstIconUrl
+	 */
+	public String getFirstIconUrl() {
+		return firstIconUrl;
+	}
+
+	/**
+	 * @param firstIconUrl the firstIconUrl to set
+	 */
+	public void setFirstIconUrl(String firstIconUrl) {
+		this.firstIconUrl = firstIconUrl;
 	}
 }

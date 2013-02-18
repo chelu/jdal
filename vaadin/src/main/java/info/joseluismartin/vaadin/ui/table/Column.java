@@ -32,6 +32,7 @@ public class Column implements Serializable {
 	private String name;
 	private String displayName;
 	private int width = -1;
+	private float expandRatio = 0.0f;
  	private String align;
 	private Resource icon;
 	private boolean sortable = true;
@@ -177,5 +178,19 @@ public class Column implements Serializable {
 	 */
 	public void setPropertyEditor(PropertyEditor propertyEditor) {
 		this.propertyEditor = propertyEditor;
+	}
+
+	/**
+	 * @return the expandRatio
+	 */
+	public float getExpandRatio() {
+		return expandRatio;
+	}
+
+	/**
+	 * @param expandRatio the expandRatio to set
+	 */
+	public void setExpandRatio(float expandRatio) {
+		this.expandRatio = expandRatio;
 	}
 }

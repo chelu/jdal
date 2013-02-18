@@ -26,6 +26,7 @@ import com.vaadin.ui.Component;
  *
  */
 public class AppCtxGuiFactory implements GuiFactory, ApplicationContextAware  {
+	
 	private ApplicationContext context;
 
 	/**

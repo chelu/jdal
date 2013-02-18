@@ -15,7 +15,9 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
+
 
 /**
  * Actionf to apply the filter on PageableTable
@@ -24,7 +26,11 @@ import com.vaadin.ui.Button.ClickEvent;
  * @since 1.1
  */
 public class FindAction extends TableButtonListener {
-
+	
+	public FindAction() {
+		setIcon(new ThemeResource("images/table/edit-find.png"));
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

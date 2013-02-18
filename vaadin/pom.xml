@@ -72,33 +72,33 @@
 			<build>
 				<plugins>
 					<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<detectLinks>true</detectLinks>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<phase>verify</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-			</plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<detectLinks>true</detectLinks>
+						</configuration>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -148,8 +148,10 @@
 			<artifactId>spring-test</artifactId>
 			<version>3.1.1.RELEASE</version>
 		</dependency>
-
-
-
+		<dependency>
+			<groupId>org.freedesktop.tango</groupId>
+			<artifactId>tango-icon-theme</artifactId>
+			<version>0.8.90</version>
+		</dependency>
 	</dependencies>
 </project>

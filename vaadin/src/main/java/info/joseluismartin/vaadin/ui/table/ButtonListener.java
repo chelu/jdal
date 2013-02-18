@@ -29,6 +29,7 @@ public abstract class ButtonListener implements ClickListener {
 	private String caption;
 	private String description;
 	private Resource icon;
+	private String defaultIcon;
 	
 	
 	/**
@@ -101,6 +102,20 @@ public abstract class ButtonListener implements ClickListener {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the defaultIcon
+	 */
+	public String getDefaultIcon() {
+		return defaultIcon;
+	}
+
+	/**
+	 * @param defaultIcon the defaultIcon to set
+	 */
+	public void setDefaultIcon(String defaultIcon) {
+		this.defaultIcon = defaultIcon;
 	}
 
 

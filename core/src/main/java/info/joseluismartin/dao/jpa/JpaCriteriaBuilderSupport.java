@@ -44,7 +44,7 @@ public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements 
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public CriteriaQuery<T> build(CriteriaQuery<T> criteria, CriteriaBuilder cb, Filter filter) {
+	public synchronized CriteriaQuery<T> build(CriteriaQuery<T> criteria, CriteriaBuilder cb, Filter filter) {
 		this.filter = (F) filter;
 		root = criteria.from(entityClass);
 		this.cb = cb;

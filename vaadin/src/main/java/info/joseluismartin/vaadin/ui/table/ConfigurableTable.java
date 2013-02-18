@@ -59,8 +59,6 @@ import com.vaadin.ui.Table;
  * <property>
  * </code>
  * 
- * ConfigurableTable use persistenService.getPage() to get List of models.
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @SuppressWarnings("serial")
@@ -110,6 +108,7 @@ public class ConfigurableTable extends Table {
 		String[] displayNames = new String[size];
 		String[] alignments = new String[size];
 		int[] widths = new int[size];
+		float[] expandRatios = new float[size];
 				
 		for (int i = 0; i < size; i++) {
 			visibleColumns[i] = columns.get(i).getName();
@@ -127,8 +126,12 @@ public class ConfigurableTable extends Table {
 		this.setColumnAlignments(alignments);
 		
 		for (int i = 0; i < size; i++) {
-			if ( widths[i] != -1)
+			if ( widths[i] != -1) {
 				this.setColumnWidth(visibleColumns[i], widths[i]);
+			}
+			else if (expandRatios[i] != 0) {
+				this.setColumnExpandRatio(visibleColumns[i], expandRatios[i]);
+			}
 		}
 	}
 
@@ -244,7 +247,7 @@ public class ConfigurableTable extends Table {
 
 
 	/**
-	 * Intantiate editor Class and set property as DataSource if 
+	 * Instantiate editor Class and set property as DataSource if 
 	 * the editor is Property.Viewer (it should be).
 	 * @param property property to set
 	 * @param editorClass class to instantiate

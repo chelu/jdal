@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 
 /**
@@ -25,6 +26,9 @@ import com.vaadin.ui.Button.ClickEvent;
  */
 public class RefreshAction extends TableButtonListener {
 
+	public RefreshAction() {
+		setIcon(new ThemeResource("images/table/reload.png"));
+	}
 	/**
 	 * {@inheritDoc}
 	 */

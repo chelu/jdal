@@ -15,12 +15,14 @@
  */
 package info.joseluismartin.vaadin.ui.table;
 
-import com.vaadin.terminal.Resource;
-import com.vaadin.ui.Button.ClickEvent;
+import info.joseluismartin.beans.MessageSourceWrapper;
 
-import org.springframework.context.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.MessageSource;
+
+import com.vaadin.terminal.Resource;
+import com.vaadin.ui.Button.ClickEvent;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -30,8 +32,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 public abstract class TableButtonListener extends ButtonListener {
 	
 	private PageableTable<?> table;
-	@Autowired
-	protected transient MessageSource messageSource;
+	
+
+	protected transient MessageSourceWrapper messageSource = new MessageSourceWrapper();
 	
 	
 	public TableButtonListener() {
@@ -44,6 +47,10 @@ public abstract class TableButtonListener extends ButtonListener {
 
 	public TableButtonListener(String caption) {
 		this(caption, null);
+	}
+	
+	public void init() {
+		
 	}
 
 	/**
@@ -69,14 +76,15 @@ public abstract class TableButtonListener extends ButtonListener {
 	 * @return the messageSource
 	 */
 	public MessageSource getMessageSource() {
-		return messageSource;
+		return messageSource.getMessageSource();
 	}
 
 	/**
 	 * @param messageSource the messageSource to set
 	 */
+	@Autowired
 	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
+		this.messageSource.setMessageSource(messageSource);
 	}
 	
 }

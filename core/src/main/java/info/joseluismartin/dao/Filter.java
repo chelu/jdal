@@ -22,6 +22,21 @@ import java.util.Map;
  *
  */
 public interface Filter {
+	
+	/**
+	 * Gets the filter name
+	 * @return the filter name
+	 */
 	public String getFilterName();
+	
+	/**
+	 * Get filter values as map
+	 * @return map with filter values.
+	 */
 	public Map<String, Object> getParameterMap();
+	
+	/**
+	 * Clear filter values 
+	 */
+	public void clear();
 }

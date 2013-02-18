@@ -105,6 +105,8 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** Message Source */
 	@Autowired
 	private MessageSource messageSource;
+	private String name;
+	private VerticalLayout verticalLayout;
 	
 	public PageableTable() {
 	}
@@ -113,25 +115,35 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		this.entityClass = entityClass;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void init() {
 		// build Component
-		VerticalLayout vbox = new VerticalLayout();
-		vbox.setSizeUndefined();
-		vbox.setSpacing(true);
+		verticalLayout = new VerticalLayout();
+		verticalLayout.setSizeUndefined();
+		verticalLayout.setSpacing(true);
 		// filter 
 		if (filterEditor != null && filterForm == null) {
 			filterForm = (Form) guiFactory.getComponent(filterEditor);
 		}
+		
 		if (filterForm != null) {
-			filterForm.setItemDataSource(new BeanItem<Filter>(beanFilter), filterForm.getVisibleItemProperties());
-			vbox.addComponent(filterForm);
+			if (beanFilter !=null) {
+				filterForm.setItemDataSource(new BeanItem<Filter>(beanFilter), filterForm.getVisibleItemProperties());
+			}
+			else {
+				BeanItem<Filter> item = (BeanItem<Filter>) filterForm.getItemDataSource();
+				beanFilter = item.getBean();
+			}
+			verticalLayout.addComponent(filterForm);
 		}
+		
 		// action group
 		if (actions.size() > 0) {
-			vbox.addComponent(createButtonBox());
+			verticalLayout.addComponent(createButtonBox());
 		}
 		// table
-		vbox.addComponent(table);
+		verticalLayout.addComponent(table);
+		verticalLayout.setExpandRatio(table, 1.0f);
 		
 		// paginator
 		if (paginator != null) {
@@ -142,17 +154,23 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			// set external sorting, ie don't call Container.sort()
 			table.setSorter(new PageSorter());
 			Component p = paginator.getComponent();
-			vbox.addComponent(p);
-			vbox.setComponentAlignment(p, Alignment.MIDDLE_CENTER);
+			verticalLayout.addComponent(p);
+			verticalLayout.setComponentAlignment(p, Alignment.MIDDLE_CENTER);
 			table.setPageLength(page.getPageSize());
 			if (beanFilter != null)
 				page.setFilter(beanFilter);
 		}
 	
 		table.addListener((ItemClickListener) this);
-		this.setCompositionRoot(vbox);
+		this.setCompositionRoot(verticalLayout);
 		this.setSizeUndefined();
 		
+	}
+	
+	public void setWidthFull() {
+		this.setWidth("100%");
+		verticalLayout.setWidth("100%");
+		table.setWidth("100%");
 	}
 
 	/**
@@ -524,5 +542,33 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	public void windowClose(CloseEvent e) {
 		if (((FormDialog) e.getWindow()).isDirty())
 			loadPage();
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the verticalLayout
+	 */
+	public VerticalLayout getVerticalLayout() {
+		return verticalLayout;
+	}
+
+	/**
+	 * @param verticalLayout the verticalLayout to set
+	 */
+	public void setVerticalLayout(VerticalLayout verticalLayout) {
+		this.verticalLayout = verticalLayout;
 	}
 }

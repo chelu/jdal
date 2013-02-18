@@ -57,4 +57,12 @@ public class DefaultFilter implements Filter {
 		return parameterMap.put(key, value);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public void clear() {
+		this.parameterMap.clear();
+		
+	}
+
 }

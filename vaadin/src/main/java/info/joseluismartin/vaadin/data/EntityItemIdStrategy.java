@@ -21,8 +21,9 @@ import info.joseluismartin.service.PersistentService;
 import java.io.Serializable;
 import java.util.Collection;
 
-import com.vaadin.data.Item;
 import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItem;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -60,22 +61,27 @@ public class EntityItemIdStrategy implements ItemIdStrategy {
 	 * {@inheritDoc}
 	 */
 	public int indexOfId(Object itemId) {
-		// TODO Auto-generated method stub
-		return 0;
+		// FIXME: this will iterate over all entities. 
+		for (int i = 0; i < containerDataSource.size(); i++) {
+			if (itemId.equals(containerDataSource.getItemByIndex(i)))
+				return i;
+		}
+		
+		return -1;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object lastItemId() {
-		return null;
+		return getIdByIndex(containerDataSource.size() - 1);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void setContainerDataSource(ContainerDataSource<?> containerDataSource) {
-		// TODO Auto-generated method stub
+		this.containerDataSource = containerDataSource;
 		
 	}
 
@@ -93,6 +99,20 @@ public class EntityItemIdStrategy implements ItemIdStrategy {
 	public void containerItemSetChange(ItemSetChangeEvent event) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Item getItem(Object itemId) {
+		return new BeanItem<Object>(itemId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean containsId(Object itemId) {
+		return true;
 	}
 
 }

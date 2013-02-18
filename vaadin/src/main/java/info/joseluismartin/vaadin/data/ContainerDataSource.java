@@ -73,6 +73,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	
 	private boolean readThrough = false;
 	private boolean writeThrough= false;
+	private String sortProperty;
 	
 	public ContainerDataSource() {
 		this(null, null);
@@ -89,6 +90,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	}
 
 	public void init() {
+		page.setSortName(getSortProperty());
 		loadPage();
 	}
 	
@@ -220,11 +222,8 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public Item getItem(Object itemId) {
+		return itemIdStrategy.getItem(itemId);
 		
-		if (!containsId(itemId))
-			return null;
-
-		return getItemByIndex(indexOfId(itemId));
 	}
 
 	public int getPageContaining(int index) {
@@ -292,8 +291,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 * {@inheritDoc}
 	 */
 	public boolean containsId(Object itemId) {
-		int index = indexOfId(itemId);
-		return index >= 0 && index < page.getCount();
+		return itemIdStrategy.containsId(itemId);
 	}
 
 	/**
@@ -400,7 +398,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 
 	/**
 	 * @param t
-	 * @return
+	 * @return bean item
 	 */
 	@SuppressWarnings("unchecked")
 	private BeanItem<T> getDirtyOrCreate(T t) {
@@ -667,5 +665,19 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 */
 	public Page<T> getPage() {
 		return page;
+	}
+
+	/**
+	 * @return the sortProperty
+	 */
+	public String getSortProperty() {
+		return sortProperty;
+	}
+
+	/**
+	 * @param sortProperty the sortBy to set
+	 */
+	public void setSortProperty(String sortProperty) {
+		this.sortProperty = sortProperty;
 	}
 }

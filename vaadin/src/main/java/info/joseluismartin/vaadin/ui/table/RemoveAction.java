@@ -21,6 +21,7 @@ import info.joseluismartin.vaadin.ui.FormUtils;
 
 import java.util.Collection;
 
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 
 /**
@@ -29,6 +30,10 @@ import com.vaadin.ui.Button.ClickEvent;
  */
 public class RemoveAction extends TableButtonListener {
 
+	public RemoveAction() {
+		setIcon(new ThemeResource("images/table/edit-delete.png"));
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

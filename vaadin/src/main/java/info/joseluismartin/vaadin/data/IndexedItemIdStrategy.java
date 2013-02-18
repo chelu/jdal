@@ -142,4 +142,22 @@ public class IndexedItemIdStrategy implements ItemIdStrategy {
 	 */
 	public void containerItemSetChange(ItemSetChangeEvent event) {
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Item getItem(Object itemId) {
+		if (!containsId(itemId))
+			return null;
+
+		return containerDataSource.getItemByIndex(indexOfId(itemId));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean containsId(Object itemId) {
+		int index = indexOfId(itemId);
+		return index >= 0 && index < containerDataSource.size();
+	}
 }

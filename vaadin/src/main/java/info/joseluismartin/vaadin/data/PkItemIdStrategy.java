@@ -23,17 +23,19 @@ import java.util.Map;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.util.BeanItem;
 
 /**
  * Use Primary Keys as ItemId.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@SuppressWarnings("rawtypes")
 public class PkItemIdStrategy implements ItemIdStrategy {
 
 	Map<Serializable, Integer> indexes = new HashMap<Serializable, Integer>();
 	Map<Integer, Serializable> keys = new HashMap<Integer, Serializable>();
-	ContainerDataSource<?> containerDataSource;
+	ContainerDataSource containerDataSource;
 	String identifierPropertyName = "id";
 
 	/**
@@ -115,5 +117,20 @@ public class PkItemIdStrategy implements ItemIdStrategy {
 	 */
 	public void containerItemSetChange(ItemSetChangeEvent event) {
 		getItemIds();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public Item getItem(Object itemId) {
+		return new BeanItem<Object>(containerDataSource.getService().get((Serializable) itemId));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean containsId(Object itemId) {
+		return indexes.containsKey(itemId);
 	}
 }

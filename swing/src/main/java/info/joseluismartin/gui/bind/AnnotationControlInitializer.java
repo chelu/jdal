@@ -16,7 +16,6 @@
 package info.joseluismartin.gui.bind;
 
 import info.joseluismartin.annotations.Reference;
-import info.joseluismartin.gui.Selector;
 import info.joseluismartin.gui.list.ListComboBoxModel;
 import info.joseluismartin.gui.list.ListListModel;
 import info.joseluismartin.service.PersistentService;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.swing.JComboBox;
 import javax.swing.JList;

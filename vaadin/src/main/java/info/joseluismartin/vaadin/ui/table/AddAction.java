@@ -16,16 +16,15 @@
 package info.joseluismartin.vaadin.ui.table;
 
 import info.joseluismartin.service.PersistentService;
+import info.joseluismartin.util.BeanUtils;
 import info.joseluismartin.vaadin.ui.form.FormDialog;
 
 import java.io.Serializable;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.MessageSource;
 
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.Window.CloseEvent;
@@ -39,9 +38,12 @@ import com.vaadin.ui.Window.CloseListener;
 @Configurable
 public class AddAction extends TableButtonListener {
 	
-	@Autowired
-	private transient MessageSource messageSource;
+
 	private boolean modal = true;
+	
+	public AddAction() {
+		setIcon(new ThemeResource("images/table/filenew.png"));
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -72,20 +74,6 @@ public class AddAction extends TableButtonListener {
 			}
 		});
 		table.getWindow().addWindow(dialog);
-	}
-
-	/**
-	 * @return the messageSource
-	 */
-	public MessageSource getMessageSource() {
-		return messageSource;
-	}
-
-	/**
-	 * @param messageSource the messageSource to set
-	 */
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
 	}
 
 	/**

@@ -60,7 +60,6 @@ public class BeanFilter implements Filter, Serializable {
 	
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Filter#getParameterMap()
 	 */
 	public Map<String, Object> getParameterMap() {
 		PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(getClass());
@@ -80,7 +79,24 @@ public class BeanFilter implements Filter, Serializable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Filter#getFilterName()
+	 */
+	public void clear() {
+		PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(getClass());
+		
+		for (PropertyDescriptor pd: pds) {
+			if (!ignoredProperties.contains(pd.getName())) {
+				try {
+					pd.getWriteMethod().invoke(this, (Object) null);
+				}
+				catch (Exception e) {
+					log.error("Error nullifing property: [" + pd.getName() + "]", e);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getFilterName() {
 		return filterName;
@@ -92,5 +108,7 @@ public class BeanFilter implements Filter, Serializable {
 	public void setFilterName(String name) {
 		this.filterName = name;
 	}
+	
+
 
 }
