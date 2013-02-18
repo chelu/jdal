@@ -1,8 +1,5 @@
 package org.jdal.samples.dao.filter;
 
-import info.joseluismartin.dao.Filter;
-import info.joseluismartin.dao.jpa.JpaCriteriaBuilder;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +11,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.jdal.dao.Filter;
+import org.jdal.dao.jpa.JpaCriteriaBuilder;
 import org.jdal.samples.model.Author;
 import org.jdal.samples.model.Book;
 import org.jdal.samples.model.Category;

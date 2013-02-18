@@ -15,18 +15,16 @@
  */
 package org.jdal.vaadin;
 
-import info.joseluismartin.beans.AppCtx;
-import info.joseluismartin.util.Serializer;
-import info.joseluismartin.vaadin.ui.table.PageableTable;
-
 import java.io.IOException;
 import java.util.Enumeration;
 
 import junit.framework.TestCase;
 
+import org.jdal.beans.AppCtx;
+import org.jdal.util.Serializer;
+import org.jdal.vaadin.ui.table.PageableTable;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;

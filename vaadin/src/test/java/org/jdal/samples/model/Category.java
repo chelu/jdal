@@ -1,8 +1,8 @@
 package org.jdal.samples.model;
 
-import info.joseluismartin.model.Entity;
-
 import javax.persistence.Table;
+
+import org.jdal.model.Entity;
 
 @javax.persistence.Entity
 @Table(name="categories")
