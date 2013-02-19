@@ -15,8 +15,13 @@
  */
 package org.jdal.vaadin.ui.table;
 
+import org.jdal.dao.Filter;
+import org.jdal.ui.View;
+
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Form;
+import com.vaadin.ui.Window.Notification;
 
 
 /**
@@ -34,13 +39,25 @@ public class FindAction extends TableButtonListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void buttonClick(ClickEvent event) {
-		if (getTable().getFilterForm() != null) {
-			getTable().getFilterForm().commit();
-			getTable().getPaginator().firstPage();
-		}
+		Object filterForm = getTable().getFilterForm();
 		
+		if (filterForm != null) {
+			if (filterForm instanceof Form) {
+				Form f = (Form) filterForm;
+				f.commit();
+			}
+			else if (filterForm instanceof View) {
+				View<Filter> view = (View<Filter>) filterForm;
+				view.update();
+				if (!view.validateView()) {
+					getTable().getApplication().getMainWindow()
+					.showNotification(view.getErrorMessage(), Notification.TYPE_ERROR_MESSAGE);
+				}
+			}
+			getTable().firstPage();
+		}
 	}
-
 }

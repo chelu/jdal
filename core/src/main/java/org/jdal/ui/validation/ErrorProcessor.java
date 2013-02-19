@@ -35,7 +35,7 @@ public interface ErrorProcessor {
 	void processError(Object control, FieldError error);
 	
 	/**
-	 * clear state of ErrorProcessor. Usefull for undo control changes made in processError.
+	 * clear state of ErrorProcessor. Useful for undo control changes made in processError.
 	 */
 	void reset();
 

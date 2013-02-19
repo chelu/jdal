@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,35 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.vaadin.ui;
+package org.jdal.vaadin.ui.bind;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.jdal.beans.StaticMessageSource;
+import org.jdal.ui.validation.ErrorProcessor;
+import org.springframework.validation.FieldError;
 
-import com.vaadin.ui.Component;
+import com.vaadin.terminal.UserError;
+import com.vaadin.ui.AbstractField;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class AppCtxGuiFactory implements GuiFactory, ApplicationContextAware  {
-	
-	private ApplicationContext context;
+public class UserErrorProcessor implements ErrorProcessor {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.context = applicationContext;
-		
+	public void processError(Object control, FieldError error) {
+		if (control instanceof AbstractField) {
+			AbstractField f = (AbstractField) control;
+			f.setComponentError(new UserError(StaticMessageSource.getMessage(error)));
+			
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Component getComponent(String name) {
-		return (Component) context.getBean(name);
+	public void reset() {
+		
 	}
 
 }

@@ -27,7 +27,7 @@ import javax.persistence.OneToMany;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @Entity
-public class Dog extends info.joseluismartin.model.Entity {
+public class Dog extends org.jdal.model.Entity {
 
 	private static final long serialVersionUID = 1L;
 

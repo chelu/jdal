@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 original author or authors.
+ * Copyright 2009-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.vaadin.ui;
+package org.jdal.vaadin.ui.bind;
 
+import java.util.Map;
+
+import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
+import org.jdal.ui.bind.ControlAccessor;
+
+import com.vaadin.ui.AbstractField;
 
 /**
- * Binder interface define methods common to model based
- * representation of data like Views.
- *  
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.0
- * @param <T> model type
+ *
  */
-public interface Binder<T> extends ModelHolder<T> {
+public abstract class VaadinBindingUtils {
 
-	/**
-	 * Update Model from Component
-	 */
-	void update();
-	
-	/**
-	 * Update Component from model
-	 */
-	void refresh();
+	public static void registerControlAccessors(ConfigurableControlAccessorFactory accessorFactory) {
+		Map<Class<?>, Class<?extends ControlAccessor>> accessors = accessorFactory.getAccessors();
+		
+		accessors.put(AbstractField.class, FieldAccessor.class);
+	}
 }

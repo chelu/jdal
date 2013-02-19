@@ -43,11 +43,11 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 	
 	private static final String DAO_SUFFIX = "Dao";
 	private static final String SERVICE_SUFFIX = "Service";
-	private static final String JPA_DAO_CLASS_NAME = "info.joseluismartin.dao.jpa.JpaDao";
+	private static final String JPA_DAO_CLASS_NAME = "org.jdal.dao.jpa.JpaDao";
 	private static final String ENTITY = "entity";
 	private static final String DAO_CLASS = "daoClass";
 	private static final String SERVICE_CLASS = "serviceClass";
-	private static final String PERSISTENT_SERVICE_CLASS_NAME = "info.joseluismartin.logic.PersistentManager";
+	private static final String PERSISTENT_SERVICE_CLASS_NAME = "org.jdal.logic.PersistentManager";
 	private static final String NAME = "name";
 	private static final String BUILDER = "builder";
 	private static final String CRITERIA = "criteria";

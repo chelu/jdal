@@ -310,7 +310,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/**
 	 * {@inheritDoc}
 	 */
-	public void refresh() {
+	public void doRefresh() {
 		// update status
 		int currentPage = getTotalPages() == 0 ? 0 : getPage();
 		status.setValue(currentPage + "/" + getTotalPages());
@@ -424,13 +424,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 				firstPage();
 			}
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void update() {
-		
 	}
 
 	/**

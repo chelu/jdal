@@ -25,18 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JToggleButton;
-import javax.swing.text.JTextComponent;
-
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.ui.Selector;
-import org.jdal.ui.View;
-import org.jdal.ui.table.TablePanel;
 
 /**
  * Implementation of ControlAccessorFactory using an asociative Map&lt;Class, ControlAccessor&gt;
@@ -50,14 +41,15 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 	
 	private final static Log log = LogFactory.getLog(ConfigurableControlAccessorFactory.class);
 	
-	private static ControlAccessorFactory defaultFactory;
+	private static ConfigurableControlAccessorFactory defaultFactory;
 	
 	private Map<Class<?>, Class<?extends ControlAccessor>> accessors = 
 			new Hashtable<Class<?>, Class<? extends ControlAccessor>>();
+	
 	private boolean mergeAccessors = true;
 	
 	public ConfigurableControlAccessorFactory() {
-		initDefaultAccessors();
+
 	}
 
 	/**
@@ -110,19 +102,6 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 		return accessor;
 	}
 	
-	/**
-	 * 
-	 */
-	private void initDefaultAccessors() {
-		accessors.put(JTextComponent.class, TextComponentAccessor.class);
-		accessors.put(JList.class, ListAccessor.class);
-		accessors.put(Selector.class, SelectorAccessor.class);
-		accessors.put(JToggleButton.class, ToggleButtonAccessor.class);
-		accessors.put(JComboBox.class, ComboAccessor.class);
-		accessors.put(View.class, ViewAccessor.class);
-		accessors.put(JLabel.class, LabelAccessor.class);
-		accessors.put(TablePanel.class, TablePanelAccessor.class);
-	}
 
 	// Getters and Setters
 	
@@ -130,7 +109,7 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 	 * For use without DI Container
 	 * @return a default singleton ControlAccesorFactory
 	 */
-	public static synchronized ControlAccessorFactory getDefaultFactory() {
+	public static synchronized ConfigurableControlAccessorFactory getDefaultFactory() {
 		if (defaultFactory == null)
 			defaultFactory = new ConfigurableControlAccessorFactory();
 		

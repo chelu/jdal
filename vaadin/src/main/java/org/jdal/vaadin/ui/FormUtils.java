@@ -16,10 +16,13 @@
 package org.jdal.vaadin.ui;
 
 
+import java.util.List;
+
 import org.jdal.beans.StaticMessageSource;
 import org.jdal.cmd.Command;
 import org.jdal.vaadin.ui.table.ButtonListener;
 
+import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -27,6 +30,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -163,6 +167,17 @@ public abstract class FormUtils {
 		vl.setSizeUndefined();
 		window.center();
 		window.addWindow(dlg);
+	}
+	
+	/**
+	 * Add a List of objects to a combo
+	 * @param combo combo to add items
+	 * @param items items to add
+	 */
+	public static void addItemList(AbstractSelect combo, List<?> items) {
+		combo.setItemCaptionMode(Select.ITEM_CAPTION_MODE_ID);
+		for (Object item : items)
+			combo.addItem(item);
 	}
 	
 	

@@ -1,1 +1,1 @@
-http\://www.jdal.org/schema/vaadin=info.joseluismartin.vaadin.beans.JdalVaadinNamespaceHandler
+http\://www.jdal.org/schema/vaadin=org.jdal.vaadin.beans.JdalVaadinNamespaceHandler

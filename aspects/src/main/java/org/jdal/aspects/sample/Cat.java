@@ -23,7 +23,7 @@ import javax.persistence.ManyToOne;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @Entity
-public class Cat extends info.joseluismartin.model.Entity {
+public class Cat extends org.jdal.model.Entity {
 	
 	private static final long serialVersionUID = 1L;
 

@@ -15,33 +15,39 @@
  */
 package org.jdal.vaadin.ui;
 
-import java.io.Serializable;
+import org.jdal.ui.ViewSupport;
+import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
+import org.jdal.ui.bind.ControlAccessorBinderFactory;
+import org.jdal.vaadin.ui.bind.VaadinBindingUtils;
 
 import com.vaadin.ui.Component;
 
 /**
  * <p>
- * Base class for Views. Subclases must implements buildPanel()  method
- * to create the Vaadin component of the view.
+ * Base class for Vaadin Views. Subclases must implements buildPanel()  method
+ * to create the Vaadin component.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class AbstractView<T> implements View<T>, Serializable {
+public abstract class AbstractView<T> extends ViewSupport<T> {
 	
 	private Component component;
-	private T model;
+	
+	public AbstractView() {
+		super();
+	}
 
 	/**
-	 * Build the Component of view.
-	 * @return view component
+	 * @param model
 	 */
-	protected abstract Component buildPanel();
-
+	public AbstractView(T model) {
+		super(model);
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Component getComponent() {
+	public Component getPanel() {
 		if (component == null) 
 			component = buildPanel();
 		
@@ -49,16 +55,26 @@ public abstract class AbstractView<T> implements View<T>, Serializable {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Build the view component
+	 * @return view component
 	 */
-	public T getModel() {
-		return model;
-	}
+	protected abstract Component buildPanel();
+
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setModel(T model) {
-		this.model = model;
+	@Override
+	protected void checkFactories() {
+		if (getControlAccessorFactory() == null) {
+			ConfigurableControlAccessorFactory accessorFactory = ConfigurableControlAccessorFactory.getDefaultFactory();
+			VaadinBindingUtils.registerControlAccessors(accessorFactory);
+			setControlAccessorFactory(accessorFactory);
+		}
+		
+		if (getBinderFactory() == null) {
+			setBinderFactory(new ControlAccessorBinderFactory(getControlAccessorFactory()));
+		}
 	}
+
 }

@@ -105,8 +105,8 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(
 				CustomEditorConfigurer.class);
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("java.awt.Image", "info.joseluismartin.beans.ImagePropertyEditor");
-		map.put("javax.swing.Icon", "info.joseluismartin.beans.IconPropertyEditor");
+		map.put("java.awt.Image", "org.jdal.beans.ImagePropertyEditor");
+		map.put("javax.swing.Icon", "org.jdal.beans.IconPropertyEditor");
 		bdb.addPropertyValue("customEditors", map);
 		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), 
 				CUSTOM_EDITOR_CONFIGURER_BEAN_NAME);

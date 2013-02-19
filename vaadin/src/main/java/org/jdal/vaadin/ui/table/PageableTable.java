@@ -29,6 +29,7 @@ import org.jdal.dao.Page;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PaginatorListener;
 import org.jdal.service.PersistentService;
+import org.jdal.ui.View;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.form.FormDialog;
@@ -67,7 +68,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	Container.ItemSetChangeListener, ItemClickListener, CloseListener {
 
 	private static final long serialVersionUID = 1L;
-	@SuppressWarnings("unused")
 	private static final Log log = LogFactory.getLog(PageableTable.class);
 	
 	/** the table */
@@ -96,7 +96,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** Filter editor */
 	private String filterEditor;
 	/** Filter Form */
-	private Form filterForm;
+	private Object filterForm;
 	/** FormFieldFactory used when creating editor forms */
 	private transient FormFieldFactory formFieldFactory;
 	/** the entity class */
@@ -126,14 +126,31 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		}
 		
 		if (filterForm != null) {
-			if (beanFilter !=null) {
-				filterForm.setItemDataSource(new BeanItem<Filter>(beanFilter), filterForm.getVisibleItemProperties());
+			if (filterForm instanceof Form) {
+				if (log.isDebugEnabled())
+					log.debug("Using a Form for filter view");
+				Form ff = (Form) filterForm;
+				if (beanFilter != null) {
+					ff.setItemDataSource(new BeanItem<Filter>(beanFilter), ff.getVisibleItemProperties());
+				}
+				else {
+					BeanItem<Filter> item = (BeanItem<Filter>) ff.getItemDataSource();
+					beanFilter = item.getBean();
+				}
+				verticalLayout.addComponent(ff);
 			}
-			else {
-				BeanItem<Filter> item = (BeanItem<Filter>) filterForm.getItemDataSource();
-				beanFilter = item.getBean();
+			else if (filterForm instanceof View) {
+				if (log.isDebugEnabled())
+					log.debug("Using a View for filter view");
+				View<Filter> fv = (View<Filter>) filterForm;
+				if (beanFilter != null) {
+					fv.setModel(beanFilter);
+				}
+				else {
+					beanFilter = fv.getModel();
+				}
+				verticalLayout.addComponent((Component) fv.getPanel());
 			}
-			verticalLayout.addComponent(filterForm);
 		}
 		
 		// action group
@@ -152,7 +169,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			loadPage();
 			// set external sorting, ie don't call Container.sort()
 			table.setSorter(new PageSorter());
-			Component p = paginator.getComponent();
+			Component p = paginator.getPanel();
 			verticalLayout.addComponent(p);
 			verticalLayout.setComponentAlignment(p, Alignment.MIDDLE_CENTER);
 			table.setPageLength(page.getPageSize());
@@ -325,7 +342,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	
 	/**
 	 * @return the filter Object
-	 * @see info.joseluismartin.dao.Page#getFilter()
 	 */
 	public Object getFilter() {
 		return page.getFilter();
@@ -334,7 +350,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 
 	/**
 	 * @param filter
-	 * @see info.joseluismartin.dao.Page#setFilter(java.lang.Object)
 	 */
 	public void setFilter(Object filter) {
 		page.setFilter(filter);
@@ -524,14 +539,14 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/**
 	 * @return the filterForm
 	 */
-	public Form getFilterForm() {
+	public Object getFilterForm() {
 		return filterForm;
 	}
 
 	/**
 	 * @param filterForm the filterForm to set
 	 */
-	public void setFilterForm(Form filterForm) {
+	public void setFilterForm(Object filterForm) {
 		this.filterForm = filterForm;
 	}
 
@@ -569,5 +584,14 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	public void setVerticalLayout(VerticalLayout verticalLayout) {
 		this.verticalLayout = verticalLayout;
+	}
+
+	/**
+	 * Go to first page
+	 */
+	public void firstPage() {
+		if (paginator != null)
+			paginator.firstPage();
+		
 	}
 }

@@ -31,7 +31,7 @@ public interface View<T> extends Binder<T>{
 	String getName();
 	
 	/**
-	 * Gets the view JComponent 
+	 * Gets the view Component 
 	 */
 	Object getPanel();
 	

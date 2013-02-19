@@ -1,1 +1,1 @@
-http\://www.jdal.org/schema/swing=org.jdal.vaadin.beans.JdalSwingNamespaceHandler
+http\://www.jdal.org/schema/swing=org.jdal.beans.JdalSwingNamespaceHandler

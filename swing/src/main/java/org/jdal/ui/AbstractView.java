@@ -23,6 +23,7 @@ import org.jdal.ui.bind.BinderFactory;
 import org.jdal.ui.bind.ConfigurableBinderFactory;
 import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
 import org.jdal.ui.bind.ControlAccessorFactory;
+import org.jdal.ui.bind.SwingBindingUtils;
 import org.jdal.ui.validation.ErrorProcessor;
 
 /**
@@ -98,8 +99,11 @@ public abstract class AbstractView<T> extends ViewSupport<T> {
 	@Override
 	protected void checkFactories() {
 		if (getControlAccessorFactory() == null) {
-			setControlAccessorFactory(ConfigurableControlAccessorFactory.getDefaultFactory());
+			ConfigurableControlAccessorFactory  accessorFactory = ConfigurableControlAccessorFactory.getDefaultFactory();
+			SwingBindingUtils.registerSwingAccessors(accessorFactory);
+			setControlAccessorFactory(accessorFactory);
 		}
+		
 		if (getBinderFactory() == null) {
 			setBinderFactory(ConfigurableBinderFactory.getDefaultFactory());
 		}

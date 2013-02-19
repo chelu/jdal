@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2009-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.vaadin.ui;
+package org.jdal.vaadin.ui.bind;
+
+import org.jdal.ui.bind.AbstractControlAccessor;
+
+import com.vaadin.ui.AbstractField;
 
 /**
- * Interface for classes that holds models, ie a model pointer interface
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
-
- * @param <T> model class
+ *
  */
-public interface ModelHolder<T> {
+public class FieldAccessor extends AbstractControlAccessor {
 	
 	/**
-	 * Gets model
-	 * @return the model
+	 * @param control
 	 */
-	T getModel();
-	
+	public FieldAccessor(Object control) {
+		super(control);
+	}
+
 	/**
-	 * Sets model
-	 * @param model
+	 * {@inheritDoc}
 	 */
-	void setModel(T model);
+	public Object getControlValue() {
+		AbstractField field = (AbstractField) getControl();
+		
+		return field.getValue();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setControlValue(Object value) {
+		AbstractField field = (AbstractField) getControl();
+		
+		field.setValue(value);
+		
+	}
+
 }

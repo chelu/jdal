@@ -16,6 +16,7 @@
 package org.jdal.vaadin.ui.table;
 
 import org.jdal.dao.Filter;
+import org.jdal.ui.View;
 
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
@@ -34,14 +35,21 @@ public class ClearFilterAction extends TableButtonListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void buttonClick(ClickEvent event) {
 		PageableTable<?> table = getTable();
 		Filter filter = (Filter) table.getFilter();
 		filter.clear();
-		Form form = table.getFilterForm();
-		form.discard();
+		
+		if (table.getFilterForm() instanceof Form) {
+			Form form = (Form) table.getFilterForm();
+			form.discard();
+		}
+		else if (table.getFilterForm() instanceof View) {
+			((View) table.getFilterForm()).refresh();
+		}
+		
 		table.getPaginator().firstPage();
 	}
-
 }
