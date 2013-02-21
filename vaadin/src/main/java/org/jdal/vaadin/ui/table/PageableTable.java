@@ -120,6 +120,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		verticalLayout = new VerticalLayout();
 		verticalLayout.setSizeUndefined();
 		verticalLayout.setSpacing(true);
+		
 		// filter 
 		if (filterEditor != null && filterForm == null) {
 			filterForm = (Form) guiFactory.getComponent(filterEditor);

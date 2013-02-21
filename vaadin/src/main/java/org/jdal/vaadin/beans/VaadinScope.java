@@ -32,25 +32,24 @@ import com.vaadin.Application;
  */
 public class VaadinScope implements Scope {
 	
-	Map<String, Map<String, Object>> beans = Collections.synchronizedMap(new HashMap<String, Map<String,Object>>());
-
+	private Map<String, Object> beans = Collections.synchronizedMap(new HashMap<String, Object>());
+	private Map<String, Runnable> callbacks = Collections.synchronizedMap(new HashMap<String, Runnable>());
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object get(String name, ObjectFactory<?> objectFactory) {
-		Application app = VaadinUtils.getApplication();
-		Object bean = null;
+		if (VaadinUtils.getApplication() == null)
+			throw new IllegalStateException("No Vaadin application active when requesting bean: [" + name + "]");
 		
-		if (app == null)
-			return objectFactory.getObject();
+		Object bean = beans.get(key(name));
 		
-		Map<String, Object> applicationBeans = beans.get(app.getURL());
-		
-		if (applicationBeans != null) 
-			bean = applicationBeans.get(name);
-		
-		return bean != null ? bean : objectFactory.getObject();
+		if (bean == null) {
+			bean = objectFactory.getObject();
+			beans.put(key(name), bean);
+		}
+
+		return bean;
 	}
 
 
@@ -58,25 +57,14 @@ public class VaadinScope implements Scope {
 	 * {@inheritDoc}
 	 */
 	public Object remove(String name) {
-		Application app = VaadinUtils.getApplication();
-		Object bean = null;
-		
-		if (app != null) {
-			Map<String, Object> applicationBeans = beans.get(app.getURL().toString());
-		
-			if (applicationBeans != null) 
-				bean = applicationBeans.remove(name);
-		}
-		
-		return bean; 
+		return beans.remove(key(name));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void registerDestructionCallback(String name, Runnable callback) {
-		// TODO Auto-generated method stub
-		
+		callbacks.put(key(name), callback);
 	}
 
 	/**
@@ -90,7 +78,22 @@ public class VaadinScope implements Scope {
 	 * {@inheritDoc}
 	 */
 	public String getConversationId() {
-		return VaadinUtils.getApplication().getURL().toString();
+		return VaadinUtils.getSession().getId() + "_" + VaadinUtils.getApplication().getURL().toString();
+	}
+	
+	protected String key(String name) {
+		return getConversationId() + "_" + name;
 	}
 
+	public synchronized void onApplicationClose(Application app) {
+		
+		for (String key : beans.keySet()) {
+			if (key.startsWith(getConversationId())) {
+				beans.remove(key);
+				Runnable callback = callbacks.remove(key);
+				if (callback != null)
+					callback.run();
+			}
+		}
+	}
 }

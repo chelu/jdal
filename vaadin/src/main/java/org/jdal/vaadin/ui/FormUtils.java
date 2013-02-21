@@ -16,10 +16,12 @@
 package org.jdal.vaadin.ui;
 
 
+import java.util.Collections;
 import java.util.List;
 
 import org.jdal.beans.StaticMessageSource;
 import org.jdal.cmd.Command;
+import org.jdal.util.comparator.PropertyComparator;
 import org.jdal.vaadin.ui.table.ButtonListener;
 
 import com.vaadin.ui.AbstractSelect;
@@ -27,6 +29,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -180,5 +183,12 @@ public abstract class FormUtils {
 			combo.addItem(item);
 	}
 	
+	public static ComboBox newComboBox(List<?> elements, String sortProperty, String caption) {
+		Collections.sort(elements, new PropertyComparator(sortProperty));
+		ComboBox combo = new ComboBox(caption);
+		addItemList(combo, elements);
+		
+		return combo;
+	}
 	
 }
