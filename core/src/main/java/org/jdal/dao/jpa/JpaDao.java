@@ -54,7 +54,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
  * Dao implementation for JPA
  * 
  * @author Jose Luis Martin
- * @see info.joseluismartin.dao.Dao
+ * @see org.jdal.dao.Dao
  * @since 1.1
  */
 public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
