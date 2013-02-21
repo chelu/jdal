@@ -15,29 +15,60 @@
  */
 package org.jdal.vaadin.beans;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jdal.vaadin.VaadinUtils;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
+import com.vaadin.Application;
+
 /**
+ * Scope for Vaadin.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public class VaadinScope implements Scope {
+	
+	Map<String, Map<String, Object>> beans = Collections.synchronizedMap(new HashMap<String, Map<String,Object>>());
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object get(String name, ObjectFactory<?> objectFactory) {
-		// TODO Auto-generated method stub
-		return null;
+		Application app = VaadinUtils.getApplication();
+		Object bean = null;
+		
+		if (app == null)
+			return objectFactory.getObject();
+		
+		Map<String, Object> applicationBeans = beans.get(app.getURL());
+		
+		if (applicationBeans != null) 
+			bean = applicationBeans.get(name);
+		
+		return bean != null ? bean : objectFactory.getObject();
 	}
+
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object remove(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Application app = VaadinUtils.getApplication();
+		Object bean = null;
+		
+		if (app != null) {
+			Map<String, Object> applicationBeans = beans.get(app.getURL().toString());
+		
+			if (applicationBeans != null) 
+				bean = applicationBeans.remove(name);
+		}
+		
+		return bean; 
 	}
 
 	/**
@@ -52,7 +83,6 @@ public class VaadinScope implements Scope {
 	 * {@inheritDoc}
 	 */
 	public Object resolveContextualObject(String key) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -60,8 +90,7 @@ public class VaadinScope implements Scope {
 	 * {@inheritDoc}
 	 */
 	public String getConversationId() {
-		// TODO Auto-generated method stub
-		return null;
+		return VaadinUtils.getApplication().getURL().toString();
 	}
 
 }
