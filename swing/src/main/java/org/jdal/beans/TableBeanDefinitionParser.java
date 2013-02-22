@@ -64,6 +64,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String NAME = "name";
 	private static final String SHOW_MENU = "showMenu";
 	private static final String MESSAGE_SOURCE = "messageSource";
+	private static final String SCOPE = "scope";
 
 	
 	/**
@@ -94,6 +95,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		String editor = name + EDITOR_SUFFIX;
 		String actions = DefaultsBeanDefinitionParser.DEFAULT_TABLE_ACTIONS;
 		String guiFactory = DefaultsBeanDefinitionParser.DEFAULT_GUI_FACTORY;
+		String scope = BeanDefinition.SCOPE_PROTOTYPE;
 		
 		if (element.hasAttribute(DATA_SOURCE))
 			dataSource = element.getAttribute(DATA_SOURCE);
@@ -110,10 +112,12 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(EDITOR))
 			editor = element.getAttribute(EDITOR);
 		
+		if (element.hasAttribute(SCOPE))
+			scope = element.getAttribute(SCOPE);
 		
 		// create ListTableModel
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(ListTableModel.class);
-		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
+		bdb.setScope(scope);
 		bdb.addPropertyValue("modelClass", entity);
 		NodeList nl = element.getElementsByTagNameNS(element.getNamespaceURI(), COLUMNS);
 	

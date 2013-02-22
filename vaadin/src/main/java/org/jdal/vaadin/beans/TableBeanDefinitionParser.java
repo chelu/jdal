@@ -17,19 +17,23 @@ package org.jdal.vaadin.beans;
 
 import java.util.List;
 
+import javax.swing.text.html.parser.ParserDelegator;
 
 import org.apache.commons.lang.StringUtils;
 import org.jdal.vaadin.ui.table.ConfigurableTable;
 import org.jdal.vaadin.ui.table.PageableTable;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
 import org.springframework.beans.factory.parsing.CompositeComponentDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
+import org.springframework.beans.factory.xml.NamespaceHandler;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.core.Conventions;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -130,9 +134,30 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(FILTER_FORM))
 			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(FILTER_FORM), 
 					element.getAttribute(FILTER_FORM));
+		
+		
+		parserContext.getDelegate().parseBeanDefinitionAttributes(element, pageableTableBeanName, 
+				null, bdb.getBeanDefinition());
+		
+		BeanDefinitionHolder holder = new BeanDefinitionHolder(bdb.getBeanDefinition(), pageableTableBeanName);
+		
+		// Test Decorators like aop:scoped-proxy
+		NodeList childNodes = element.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node n = childNodes.item(i);
+			if (Node.ELEMENT_NODE != n.getNodeType() || COLUMNS.equals(n.getLocalName()))
+				continue;
 			
-	
-		registerBeanDefinition(element, parserContext, pageableTableBeanName, bdb);
+			NamespaceHandler handler = parserContext.getReaderContext()
+					.getNamespaceHandlerResolver().resolve(n.getNamespaceURI());
+			if (handler != null) {
+				holder = handler.decorate(n, holder, parserContext);
+			}
+		}
+		
+		parserContext.registerBeanComponent(new BeanComponentDefinition(holder));
+		
+		// registerBeanDefinition(element, parserContext, pageableTableBeanName, bdb);
 		
 		// create ConfigurableTable
 		bdb = BeanDefinitionBuilder.genericBeanDefinition(ConfigurableTable.class);
@@ -149,7 +174,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(FIELD_FACTORY))
 			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(FIELD_FACTORY), 
 					element.getAttribute(FIELD_FACTORY));
-
+		
 		registerBeanDefinition(element, parserContext, tableBeanName, bdb);
 		
 		parserContext.popAndRegisterContainingComponent();

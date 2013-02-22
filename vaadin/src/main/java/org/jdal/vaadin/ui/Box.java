@@ -15,8 +15,12 @@
  */
 package org.jdal.vaadin.ui;
 
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractOrderedLayout;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
 
 /**
  * Utility class for work with box layouts
@@ -68,6 +72,30 @@ public abstract class Box {
 		label.setHeight(height + "px");
 		layout.addComponent(label);
 		layout.setExpandRatio(label, 0f);
+	}
+
+	/**
+	 * @return new VerticalLayout
+	 */
+	public static VerticalLayout createVerticalBox() {
+		return new VerticalLayout();
+	}
+
+	/**
+	 * @param defaultSpace
+	 * @return new struct 
+	 */
+	public static Component createHorizontalStrut(int defaultSpace) {
+		Label label = new Label(" ");
+		label.setWidth(defaultSpace, AbstractComponent.UNITS_PIXELS);
+		return label;
+	}
+
+	/**
+	 * @return new Horizontal Layout
+	 */
+	public static HorizontalLayout createHorizontalBox() {
+		return new HorizontalLayout();
 	}
 
 }

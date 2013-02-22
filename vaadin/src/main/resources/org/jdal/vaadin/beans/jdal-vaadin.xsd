@@ -66,11 +66,12 @@
 		</xsd:sequence>
 	</xsd:complexType>
 
-	<xsd:complexType name="tableType">
+	<xsd:complexType name="tableType" >
 		<xsd:sequence>
 			<xsd:element ref="columns"></xsd:element>
+			<xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
-
+		
 		<xsd:attribute name="entity" type="xsd:string" use="required">
 			<xsd:annotation>
 				<xsd:documentation source="java:java.lang.Class">
@@ -101,7 +102,6 @@
 				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
-
 		<xsd:attribute name="editor" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation>
@@ -170,9 +170,7 @@
 				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
-		
-		
-
+		<xsd:attribute name="scope" type="xsd:string" />	
 	</xsd:complexType>
 
 </xsd:schema>

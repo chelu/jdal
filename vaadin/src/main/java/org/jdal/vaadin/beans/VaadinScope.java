@@ -19,6 +19,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdal.vaadin.VaadinUtils;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
@@ -26,12 +30,14 @@ import org.springframework.beans.factory.config.Scope;
 import com.vaadin.Application;
 
 /**
- * Scope for Vaadin.
+ * Spring scope for Vaadin.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class VaadinScope implements Scope {
 	
+	public static final String SCOPE_NAME = "vaadin";
+	private static final Log log = LogFactory.getLog(VaadinScope.class);
 	private Map<String, Object> beans = Collections.synchronizedMap(new HashMap<String, Object>());
 	private Map<String, Runnable> callbacks = Collections.synchronizedMap(new HashMap<String, Runnable>());
 	
@@ -42,11 +48,20 @@ public class VaadinScope implements Scope {
 		if (VaadinUtils.getApplication() == null)
 			throw new IllegalStateException("No Vaadin application active when requesting bean: [" + name + "]");
 		
-		Object bean = beans.get(key(name));
+		String key = key(name);
+		Object bean = beans.get(key);
 		
 		if (bean == null) {
+			if (log.isDebugEnabled()) {
+				log.debug("Bean not found in scope: [" + key + "]. Creating new one");
+			}
 			bean = objectFactory.getObject();
-			beans.put(key(name), bean);
+			beans.put(key, bean);
+		}
+		else {
+			if (log.isDebugEnabled()) {
+				log.debug("Bean found in scope: [" + key + "]");
+			}
 		}
 
 		return bean;
@@ -87,13 +102,34 @@ public class VaadinScope implements Scope {
 
 	public synchronized void onApplicationClose(Application app) {
 		
+		if (log.isDebugEnabled()) 
+			log.debug("Vaadin application closing, destroying scoped beans");
+		
+		removeBeans(getConversationId());
+	}
+
+
+	private void removeBeans(String prefix) {
 		for (String key : beans.keySet()) {
-			if (key.startsWith(getConversationId())) {
+			if (key.startsWith(prefix)) {
 				beans.remove(key);
+				if (log.isDebugEnabled())
+					log.debug("Removed bean [" + key + "]");
 				Runnable callback = callbacks.remove(key);
 				if (callback != null)
 					callback.run();
 			}
 		}
+	}
+
+
+	/**
+	 * @param session
+	 */
+	public synchronized void onSessionClose(HttpSession session) {
+		if (log.isDebugEnabled()) 
+			log.debug("Sesssion closing, destroying scoped beans");
+			
+		removeBeans(session.getId());
 	}
 }
