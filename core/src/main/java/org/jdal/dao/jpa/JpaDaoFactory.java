@@ -27,9 +27,8 @@ import org.jdal.dao.DaoFactory;
  * Dao Factory implementation that create JpaDaos on the fly. 
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * 
- * @see info.joseluismartin.dao.jpa.JpaDao
- * @see info.joseluismartin.service.PersistentServiceFactory
+ * @see org.jdal.dao.jpa.JpaDao
+ * @see org.jdal.service.PersistentServiceFactory
  * @since 1.1
  */
 public class JpaDaoFactory implements DaoFactory {

@@ -124,7 +124,7 @@ public class PersistentManager<T, PK extends Serializable> implements Persistent
 	/**
 	 * {@inheritDoc}
 	 */
-	public Page<T> getPage(Page<T> page) {
+	public <K> Page<K> getPage(Page<K> page) {
 		return dao.getPage(page);
 	}
 

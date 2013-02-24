@@ -43,7 +43,7 @@ public class ContainerPersistentServiceAdapter<T, PK extends Serializable>
 	 * {@inheritDoc}
 	 */
 	
-	public Page<T> getPage(Page<T> page) {
+	public <K> Page<K> getPage(Page<K> page) {
 		if (container instanceof Sortable) {
 			Sortable sortable = (Sortable) container;
 			sortable.sort(new Object[] {page.getSortName()}, new boolean[] {page.getOrder() == Page.Order.ASC});

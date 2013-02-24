@@ -44,17 +44,18 @@ public class ListPageableDataSource<T> implements PageableDataSource<T> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Page<T> getPage(Page<T> page) {
+	@SuppressWarnings("unchecked")
+	public <K> Page<K> getPage(Page<K> page) {
 		if (list.isEmpty()) {
 			page.setCount(0);
-			page.setData(list);
+			page.setData((List<K>) list);
 			return page;
 		}
 		
 		int startIndex = page.getStartIndex() < list.size() ? page.getStartIndex() : list.size() - 1;
 		int toIndex = (page.getStartIndex() + page.getPageSize());
 		toIndex =  toIndex < list.size() ?  toIndex : list.size() - 1;
-		page.setData(list.subList(startIndex, toIndex));
+		page.setData((List<K>) list.subList(startIndex, toIndex));
 		page.setCount(list.size());
 		
 		return page;

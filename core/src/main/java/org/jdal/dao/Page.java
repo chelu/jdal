@@ -50,7 +50,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	/** page number  */
 	private int page = 1;
 	/** PageableDataSource that loads the page */
-	private transient PageableDataSource<T> pageableDataSource;
+	private transient PageableDataSource<?> pageableDataSource;
 	/** Paginator Listeners */
 	private ArrayList<PaginatorListener> listeners = new ArrayList<PaginatorListener>();
 
@@ -172,13 +172,13 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	/**
 	 * @return the pageableDataSource
 	 */
-	public PageableDataSource<T> getPageableDataSource() {
+	public PageableDataSource<?> getPageableDataSource() {
 		return pageableDataSource;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Paginator#hasNext()
+	 * @see org.jdal.dao.Paginator#hasNext()
 	 */
 	public boolean hasNext() {
 		return page < getTotalPages();
@@ -186,7 +186,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Paginator#hasPage(int)
+	 * @see org.jdal.dao.Paginator#hasPage(int)
 	 */
 	public boolean hasPage(int indexPage) {
 		return indexPage <= getTotalPages() &&  indexPage > 0;
@@ -201,7 +201,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	/**
 	 *  {@inheritDoc}
-	 * @see info.joseluismartin.dao.Paginator#setPage(int)
+	 * @see org.jdal.dao.Paginator#setPage(int)
 	 */
 	public void setPage(int indexPage) {
 		if (indexPage > 0)  {
@@ -223,7 +223,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Paginator#getTotalPages()
+	 * @see org.jdal.dao.Paginator#getTotalPages()
 	 */
 	public int getTotalPages() {
 		if (pageSize > 0)
@@ -276,7 +276,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Paginator#firstPage()
+	 * @see org.jdal.dao.Paginator#firstPage()
 	 */
 	public void firstPage() {
 		setPage(1);
@@ -285,7 +285,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Paginator#lastPage()
+	 * @see org.jdal.dao.Paginator#lastPage()
 	 */
 	public void lastPage() {
 		setPage(getTotalPages());
@@ -293,7 +293,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Paginator#nextPage()
+	 * @see org.jdal.dao.Paginator#nextPage()
 	 */
 	public void nextPage() {
 			setPage(page + 1);
@@ -302,7 +302,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	/**
 	 * {@inheritDoc}
-	 * @see info.joseluismartin.dao.Paginator#previousPage()
+	 * @see org.jdal.dao.Paginator#previousPage()
 	 */
 	public void previousPage() {
 			setPage(page - 1);
@@ -319,14 +319,16 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	
 	public void load() {
-		if (pageableDataSource != null)
-			pageableDataSource.getPage(this);
+		if (pageableDataSource != null) {
+			Page<T> newPage = pageableDataSource.getPage(this);
+			this.data = newPage.data;
+		}
 	}
 
 	/**
 	 * @param pageableDataSource the pageableDataSource to set
 	 */
-	public void setPageableDataSource(PageableDataSource<T> pageableDataSource) {
+	public void setPageableDataSource(PageableDataSource<?> pageableDataSource) {
 		this.pageableDataSource = pageableDataSource;
 	}
 }

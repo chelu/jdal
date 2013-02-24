@@ -46,9 +46,11 @@ import com.vaadin.ui.Select;
 @Configurable
 public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginator, Serializable {
 	
+	public static final String PAGINATOR = "paginator";
+	
 	private static final long serialVersionUID = 1L;
 	/** Label to show in pagination status. */
-	private Label status = new Label("-/-");
+	private Label status = new Label("- / -");
 	private Label resultCount = new Label("       ");
 	/** String array with available page sizes */
 	private String[] pageSizes;
@@ -129,11 +131,14 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		statusLayout.setWidth("8em");
 		statusLayout.addComponent(status);
 		statusLayout.setComponentAlignment(status, Alignment.MIDDLE_CENTER);
+		status.setStyleName(PAGINATOR);
 		
 		HorizontalLayout hbox = new HorizontalLayout();
 		hbox.setSpacing(true);
 		resultCount.setSizeUndefined();
 		hbox.addComponent(resultCount);
+		hbox.setComponentAlignment(resultCount, Alignment.MIDDLE_CENTER);
+		resultCount.setStyleName(PAGINATOR);
 		
 		Box.addHorizontalGlue(hbox);
 		
@@ -141,6 +146,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		hbox.addComponent(first);
 		hbox.addComponent(previous);
 		hbox.addComponent(statusLayout);
+		hbox.setComponentAlignment(statusLayout, Alignment.MIDDLE_CENTER);
 		hbox.addComponent(next);
 		hbox.addComponent(last);
 		Box.addHorizontalStruct(hbox, 10);
@@ -148,7 +154,9 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		// goto page select
 		Label goToLabel = new Label(messageSource.getMessage("vaadinPaginator.goto", null, null));
 		goToLabel.setSizeUndefined();
+		goToLabel.setStyleName(PAGINATOR);
 		hbox.addComponent(goToLabel);
+		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
 		goTo.setWidth("5em");
 		goTo.setImmediate(true);
 		hbox.addComponent(goTo);
@@ -159,6 +167,8 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 				null, null));
 		showRecords.setSizeUndefined();
 		hbox.addComponent(showRecords);
+		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_CENTER);
+		showRecords.setStyleName(PAGINATOR);
 		
 		for (String size : pageSizes) {
 			pgs.addItem(size);
@@ -269,9 +279,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	 * {@inheritDoc}
 	 */	
 	public void setPageSize(int pageSize) {
-		if (pageSize > getModel().getCount())
-			pageSize = getModel().getCount();
-		
 		getModel().setPageSize(pageSize);
 		
 	}
@@ -313,7 +320,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	public void doRefresh() {
 		// update status
 		int currentPage = getTotalPages() == 0 ? 0 : getPage();
-		status.setValue(currentPage + "/" + getTotalPages());
+		status.setValue(currentPage + " / " + getTotalPages());
 		resultCount.setValue(messageSource.getMessage("vaadinPaginator.records", null, null) 
 				+ getModel().getCount());
 

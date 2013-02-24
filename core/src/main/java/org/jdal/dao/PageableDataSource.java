@@ -28,7 +28,7 @@ public interface PageableDataSource<T> {
 	 * Fill and return a page of data
 	 * @return the page
 	 */
-	public Page<T> getPage(Page<T> page);
+	public <K> Page<K> getPage(Page<K> page);
 	/**
 	 * Gets a List with keys of page
 	 * @param page

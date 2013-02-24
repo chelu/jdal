@@ -46,14 +46,14 @@ public class IBatisDao<T, PK extends Serializable> extends SqlMapClientDaoSuppor
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("rawtypes")
-	public Page<T> getPage(Page<T> page) {
+	public <K> Page<K> getPage(Page<K> page) {
 		String queryName = getSelectQuery();
-		Page<T> queryPage = page;
+		Page<K> queryPage = page;
 		
 		// FIXME: clone the page here to map order columns from  property name to column name. 
 		// review it. Maybe better build a map with page and filter
 		if (page.getSortName() != null) {
-			queryPage = (Page<T>) page.clone();
+			queryPage = (Page<K>) page.clone();
 			queryPage.setSortName(getColumnName(page.getSortName()));
 		}
 		

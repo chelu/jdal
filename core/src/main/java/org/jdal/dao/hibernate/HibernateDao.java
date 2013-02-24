@@ -89,7 +89,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	 * @return page of results
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Page<T> getPage(Page<T> page) {
+	public <K> Page<K> getPage(Page<K> page) {
 		
 		List data = null;
 		// try named query
@@ -126,7 +126,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	 * @param page page 
 	 * @return Hibernate named Query.
 	 */
-	private Query getQuery(Page<T> page) {
+	private Query getQuery(Page<?> page) {
 		Object filter = page.getFilter();
 		
 		try {
@@ -160,7 +160,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	 * @return a new Criteria 
 	 */
 	// FIXME: Remove complexity - jlm
-	private Criteria getCriteria(Page<T> page) {
+	private Criteria getCriteria(Page<?> page) {
 		Criteria executableCriteria = getSession().createCriteria(
 				getEntityClass());
 		Object filter = page.getFilter();
@@ -247,7 +247,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	 * @param page the page
 	 * @param criteria the criteria
 	 */
-	protected void applyOrder(Page<T> page, Criteria criteria) {
+	protected void applyOrder(Page<?> page, Criteria criteria) {
 		Order order = createOrder(criteria, page.getSortName(), Page.Order.ASC.equals(page.getOrder()));
 		if (order != null) 
 			criteria.addOrder(order);

@@ -170,7 +170,10 @@
 				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="scope" type="xsd:string" />	
+		<xsd:attribute name="scope" type="xsd:string" />
+		<xsd:attribute name="order" type="xsd:string" />
+		<xsd:attribute name="sort-property" type="xsd:string" />
+		<xsd:attribute name="page-size" />	
 	</xsd:complexType>
 
 </xsd:schema>

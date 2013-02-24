@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.dao.Filter;
 import org.jdal.dao.Page;
+import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PaginatorListener;
 import org.jdal.service.PersistentService;
@@ -77,7 +78,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** persistentService */
 	private transient PersistentService<T, Serializable>  service;
 	/** page */
-	private transient Page<T> page;
+	private transient Page<T> page = new Page<T>();
 	/** Filter */
 	private Filter beanFilter;
 	/** container to use when using external paginator */
@@ -164,10 +165,11 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		
 		// paginator
 		if (paginator != null) {
-			// get initial page and wrap data in container
+			paginator.setModel(page);
 			paginator.addPaginatorListener(this);
-			page = paginator.getModel();
-			loadPage();
+			page.setPageableDataSource(service);
+			// get initial page and wrap data in container
+			paginator.firstPage();
 			// set external sorting, ie don't call Container.sort()
 			table.setSorter(new PageSorter());
 			Component p = paginator.getPanel();
@@ -213,7 +215,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		if (autoResize)
 			table.setPageLength(page.getPageSize());
 		
-		// table.setCurrentPageFirstItemIndex(page.getStartIndex());
 		loadPage();
 		
 	}
@@ -223,7 +224,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void loadPage() {
-		page = service.getPage(paginator.getModel());
+		
 		if (page.getData() != null && page.getData().size() > 0) {
 			if (container == null) {
 				Class beanClass = entityClass != null ? entityClass : page.getData().get(0).getClass();
@@ -594,5 +595,53 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		if (paginator != null)
 			paginator.firstPage();
 		
+	}
+
+	/**
+	 * @return
+	 * @see org.jdal.dao.Page#getSortName()
+	 */
+	public String getSortName() {
+		return page.getSortName();
+	}
+
+	/**
+	 * @param sortName
+	 * @see org.jdal.dao.Page#setSortName(java.lang.String)
+	 */
+	public void setSortName(String sortName) {
+		page.setSortName(sortName);
+	}
+
+	/**
+	 * @return
+	 * @see org.jdal.dao.Page#getOrder()
+	 */
+	public Order getOrder() {
+		return page.getOrder();
+	}
+
+	/**
+	 * @param order
+	 * @see org.jdal.dao.Page#setOrder(org.jdal.dao.Page.Order)
+	 */
+	public void setOrder(Order order) {
+		page.setOrder(order);
+	}
+
+	/**
+	 * @return
+	 * @see org.jdal.dao.Page#getPageSize()
+	 */
+	public int getPageSize() {
+		return page.getPageSize();
+	}
+
+	/**
+	 * @param pageSize
+	 * @see org.jdal.dao.Page#setPageSize(int)
+	 */
+	public void setPageSize(int pageSize) {
+		page.setPageSize(pageSize);
 	}
 }

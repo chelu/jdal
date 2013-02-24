@@ -15,14 +15,8 @@
  */
 package org.jdal.vaadin.ui.form;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,20 +24,21 @@ import org.jdal.vaadin.ui.Box;
 import org.springframework.context.MessageSource;
 
 import com.vaadin.terminal.Sizeable;
-import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * A FormBuilder that create form using BoxLayouts
+ * A FormBuilder that create Layouts using horizontal and vertical layouts.
  * Add components using a implicit cursor.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class SimpleBoxFormBuilder {
 	
-	public static final int SIZE_UNDEFINED = Short.MAX_VALUE;
+	public static final int SIZE_FULL = Short.MAX_VALUE;
+	public static final int SIZE_UNDEFINED = 0;
 	
 	private static final Log log = LogFactory.getLog(SimpleBoxFormBuilder.class);
 	private HorizontalLayout container = new HorizontalLayout();
@@ -52,23 +47,24 @@ public class SimpleBoxFormBuilder {
 	private List<Integer> rowsHeight = new ArrayList<Integer>();
 	private int index = 0;
 	private int rows = 0;
-	private int rowHeight = 25;
-	private int defaultRowHeight = 25;
+	private int rowHeight = 0;
+	private int defaultRowHeight = 0;
 	private int defaultSpace = 5;
-	private int charWidth = 6;
-	private boolean debug = false;
-	private boolean fixedHeight = false;
+	private int defaultWidth = SIZE_UNDEFINED;
 	private MessageSource messageSource;
+	private boolean spacing = true;
+	private boolean rowCellSpand = true;
 	
 	/** 
 	 * Default Ctor 
 	 */
 	public SimpleBoxFormBuilder() {
-		this(calculateDefaultHeight());
+		this(SIZE_UNDEFINED);
 	}
 	
 	public SimpleBoxFormBuilder(int defaultRowHeight) {
 		this.defaultRowHeight = defaultRowHeight;
+		container.setSpacing(spacing);
 	}
 	
 	/**
@@ -77,47 +73,40 @@ public class SimpleBoxFormBuilder {
 	 * @param c Component to add
 	 */
 	public void add(Component c) {
-		addBox(c);
+		add(c, defaultWidth, null);
 	}
 	
-	public void add(Component c, int maxWidth) {
-		add(c);
-		setMaxWidth(maxWidth);
+	public void add(Component c, int width) {
+		add(c, width, null);
 	}
 	
-	public void addBox(Component c) {
+	public void add(Component c, Alignment alignment) {
+		add(c, defaultWidth, alignment);
+	}
+	
+	public void add(Component c, int width, Alignment alignment) {
 		if (rows == 0 && rowsHeight.isEmpty()) {
 			log.warn("You must call row() before adding components. I will add a row with default height for you");
 			row();
 		}
+		
 		VerticalLayout column = getColumn();
-		
-		column.addComponent(c);
-		
+		HorizontalLayout wrapper = new HorizontalLayout();
+		wrapper.addComponent(c);
+		column.addComponent(wrapper);
 		index++;
 		
-	}
-	
-	/**
-	 * Gets current column pointed to cursor, create one if none.
-	 * @return a new or existent column Box.
-	 */
-	private VerticalLayout getColumn() {
-		VerticalLayout column = null;
-		if (index < columns.size()) {
-			column = (VerticalLayout) columns.get(index);
-		}
-		else {
-			if (!columns.isEmpty())
-				container.addComponent(Box.createHorizontalStrut(defaultSpace));
-			
-			column = Box.createVerticalBox();
-			columns.add(column);
-			container.addComponent(column);
-			columnsWidth.add(0);
+		setWidth(width);
+		
+		if (alignment != null) {
+			wrapper.setComponentAlignment(c, alignment);
+			column.setComponentAlignment(wrapper, alignment);
 		}
 		
-		return column;
+		if (rowCellSpand) {
+			wrapper.setWidth("100%");
+			c.setWidth("100%");
+		}
 	}
 	
 	/**
@@ -130,28 +119,59 @@ public class SimpleBoxFormBuilder {
 		add(c);
 	}
 	
+	
 	/**
-	 * @param i
+	 * Gets current column pointed to cursor, create one if none.
+	 * @return a new or existent column Box.
 	 */
-	public void setMaxWidth(int i) {
-		if (i > columnsWidth.get(index - 1)) {
-			columnsWidth.set(index - 1, i);
+	private VerticalLayout getColumn() {
+		VerticalLayout column = null;
+		if (index < columns.size()) {
+			column = (VerticalLayout) columns.get(index);
+		}
+		else {
+			column = Box.createVerticalBox();
+			column.setSpacing(spacing);
+			columns.add(column);
+			container.addComponent(column);
+			columnsWidth.add(SIZE_UNDEFINED);
+		}
+		
+		return column;
+	}
+	
+	/**
+	 * @param width
+	 */
+	public void setWidth(int width) {
+		if (width > columnsWidth.get(index - 1)) {
+			columnsWidth.set(index - 1, width);
 		}
 		
 	}
 	
 	public void row() {
-		row(defaultRowHeight);
+		row(defaultRowHeight, true);
 	}
+	
+	public void row(boolean rowCellSpand) {
+		row(defaultRowHeight, this.rowCellSpand);
+	}
+	
+	public void row(int height) {
+		row(height, true);
+	}
+	
 
 	/**
 	 * Move cursor to next row.
 	 */
-	public void row(int rowHeight) {
+	public void row(int rowHeight, boolean rowCellSpand) {
 		index = 0;
 		rows++;
 		rowsHeight.add(rowHeight);
 		this.rowHeight = rowHeight;
+		this.rowCellSpand = rowCellSpand;
 		
 	}
 	
@@ -160,30 +180,33 @@ public class SimpleBoxFormBuilder {
 	 * @return the form component
 	 */
 	public Component getForm() {
-		// set sizes;
-		int columnHeight= 0;
-		for (int h : rowsHeight)
-			columnHeight += h;
-		
-		// add space into components (fillers)
-		columnHeight += (rows) * defaultSpace;
 		
 		for (int i = 0; i < columns.size(); i++) {
 			VerticalLayout box = columns.get(i);
-			int maxWidth = columnsWidth.get(i) == 0 ? Short.MAX_VALUE : columnsWidth.get(i);
+			int width = columnsWidth.get(i);
 			
-			if (maxWidth < Short.MAX_VALUE && columnHeight < Short.MAX_VALUE) {
-				box.setWidth(maxWidth, Sizeable.UNITS_PIXELS);
-				box.setHeight(columnHeight, Sizeable.UNITS_PIXELS);
+			if (width > SIZE_UNDEFINED && width < SIZE_FULL) {
+				box.setWidth(width, Sizeable.UNITS_PIXELS);
+				// shrink container
+				container.setExpandRatio(box, 0);
+			}
+			else if (width == SIZE_FULL) {
+				box.setWidth("100%");
+			}
+			
+			for (int j = 0; j < rowsHeight.size(); j++) {
+				Component c = box.getComponent(j);
+				int height = rowsHeight.get(j);
+
+				if (height > SIZE_UNDEFINED &&  height < SIZE_FULL) {
+					c.setHeight(height, Sizeable.UNITS_PIXELS);
+				}
+				else if (height == SIZE_FULL) {
+					c.setHeight("100%");
+				}
 			}
 		}
-		
-		
-		if (isFixedHeight()) {
-			container.setHeight(columnHeight, Sizeable.UNITS_PIXELS);
-		}
-		
-		
+
 		return container;
 	}
 	
@@ -220,14 +243,6 @@ public class SimpleBoxFormBuilder {
 			rowsHeight.add(height);
 		}
 	}
-
-	public boolean isDebug() {
-		return debug;
-	}
-
-	public void setDebug(boolean debug) {
-		this.debug = debug;
-	}
 	
 	public MessageSource getMessageSource() {
 		return messageSource;
@@ -237,20 +252,6 @@ public class SimpleBoxFormBuilder {
 		this.messageSource = messageSource;
 	}
 	
-	/**
-	 * @return the fixedHeight
-	 */
-	public boolean isFixedHeight() {
-		return fixedHeight;
-	}
-
-	/**
-	 * @param fixedHeight the fixedHeight to set
-	 */
-	public void setFixedHeight(boolean fixedHeight) {
-		this.fixedHeight = fixedHeight;
-	}
-
 	/**
 	 * @return the defaultRowHeight
 	 */
@@ -280,25 +281,45 @@ public class SimpleBoxFormBuilder {
 	}
 
 	/**
-	 * @return the charWidth
+	 * @return the spacing
 	 */
-	public int getCharWidth() {
-		return charWidth;
+	public boolean isSpacing() {
+		return spacing;
 	}
 
 	/**
-	 * @param charWidth the charWidth to set
+	 * @param spacing the spacing to set
 	 */
-	public void setCharWidth(int charWidth) {
-		this.charWidth = charWidth;
-	}
-	
-	/**
-	 * @return
-	 */
-	private static int calculateDefaultHeight() {
-		Dimension d =  new JTextField().getPreferredSize();
-		return d != null ? d.height : 25;
+	public void setSpacing(boolean spacing) {
+		this.spacing = spacing;
+		container.setSpacing(spacing);
 	}
 
+	/**
+	 * @return the rowCellSpand
+	 */
+	public boolean isRowCellSpand() {
+		return rowCellSpand;
+	}
+
+	/**
+	 * @param rowCellSpand the rowCellSpand to set
+	 */
+	public void setRowCellSpand(boolean rowCellSpand) {
+		this.rowCellSpand = rowCellSpand;
+	}
+
+	/**
+	 * @return the defaultWidth
+	 */
+	public int getDefaultWidth() {
+		return defaultWidth;
+	}
+
+	/**
+	 * @param defaultWidth the defaultWidth to set
+	 */
+	public void setDefaultWidth(int defaultWidth) {
+		this.defaultWidth = defaultWidth;
+	}
 }

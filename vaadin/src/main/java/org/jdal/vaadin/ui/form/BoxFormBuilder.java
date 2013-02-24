@@ -17,6 +17,8 @@ package org.jdal.vaadin.ui.form;
 
 import java.util.Stack;
 
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 
 
@@ -44,18 +46,15 @@ public class BoxFormBuilder {
 	}
 	
 	public void startBox() {
-		boolean debug = builder.isDebug();
 		stack.push(builder);
 		builder = new SimpleBoxFormBuilder();
-		builder.setDebug(debug);
 	}
 	
 	
 	public void endBox() {
 		Component c = builder.getForm();
 		builder = stack.pop();
-		builder.addBox(c);
-		builder.setHeight((int) c.getHeight());
+		builder.add(c);
 	}
 	/**
 	 * @param c component to add
@@ -67,6 +66,8 @@ public class BoxFormBuilder {
 	public void add(Component c, int maxWidth) {
 		builder.add(c, maxWidth);
 	}
+	
+	
 	/**
 	 * @param name
 	 * @param c
@@ -74,12 +75,26 @@ public class BoxFormBuilder {
 	public void add(String name, Component c) {
 		builder.add(name, c);
 	}
+	
+	public void add(Component c, Alignment aligment) {
+		builder.add(c, aligment);
+	}
+	
+	/**
+	 * @param c
+	 * @param width
+	 * @param alignment
+	 */
+	public void add(Component c, int width, Alignment alignment) {
+		builder.add(c, width, alignment);
+		
+	}
 
 	/**
 	 * @param i
 	 */
-	public void setMaxWidth(int i) {
-		builder.setMaxWidth(i);
+	public void setWidth(int i) {
+		builder.setWidth(i);
 	}
 
 	/**
@@ -110,29 +125,6 @@ public class BoxFormBuilder {
 	public void setHeight(int height) {
 		builder.setHeight(height);
 	}
-
-	public boolean isDebug() {
-		return builder.isDebug();
-	}
-
-
-	public void setDebug(boolean debug) {
-		builder.setDebug(debug);
-	}
-
-	/**
-	 * @return true if this form has height fixed.
-	 */
-	public boolean isFixedHeight() {
-		return builder.isFixedHeight();
-	}
-
-	/**
-	 * @param fixedHeight
-	 */
-	public void setFixedHeight(boolean fixedHeight) {
-		builder.setFixedHeight(fixedHeight);
-	}	
 	
 	public void setElastic() {
 		setHeight(Short.MAX_VALUE);
@@ -171,6 +163,38 @@ public class BoxFormBuilder {
 	 */
 	public void setDefaultSpace(int defaultSpace) {
 		builder.setDefaultSpace(defaultSpace);
+	}
+
+	public void row(boolean rowCellSpand) {
+		builder.row(rowCellSpand);
+	}
+
+	public void row(int rowHeight, boolean rowCellSpand) {
+		builder.row(rowHeight, rowCellSpand);
+	}
+
+	public boolean isSpacing() {
+		return builder.isSpacing();
+	}
+
+	public void setSpacing(boolean spacing) {
+		builder.setSpacing(spacing);
+	}
+
+	public boolean isRowCellSpand() {
+		return builder.isRowCellSpand();
+	}
+
+	public void setRowCellSpand(boolean rowCellSpand) {
+		builder.setRowCellSpand(rowCellSpand);
+	}
+
+	public int getDefaultWidth() {
+		return builder.getDefaultWidth();
+	}
+
+	public void setDefaultWidth(int defaultWidth) {
+		builder.setDefaultWidth(defaultWidth);
 	}
 
 }

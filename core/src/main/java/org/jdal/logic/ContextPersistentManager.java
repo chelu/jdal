@@ -48,7 +48,7 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 	/**
 	 * {@inheritDoc}
 	 */
-	public Page<Object> getPage(Page<Object> page) {
+	public <K> Page<K> getPage(Page<K> page) {
 		throw new UnsupportedOperationException();
 	}
 

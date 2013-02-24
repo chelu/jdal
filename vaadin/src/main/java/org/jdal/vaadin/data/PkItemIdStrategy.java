@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.vaadin.data.Item;
 import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 
 /**

@@ -32,7 +32,7 @@ public interface JpaCriteriaBuilder<T> {
 	 * @param cb CriteriaBuilder
 	 * @return criteria.
 	 */
-	CriteriaQuery<T> build(CriteriaQuery<T> criteria, CriteriaBuilder cb, Filter filter);
+	CriteriaQuery<T>  build(CriteriaQuery<T> criteria, CriteriaBuilder cb, Filter filter);
 
 }
 

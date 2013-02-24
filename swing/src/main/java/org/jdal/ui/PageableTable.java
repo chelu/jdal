@@ -65,11 +65,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.beans.MessageSourceWrapper;
 import org.jdal.dao.Page;
+import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PageableDataSource;
 import org.jdal.dao.Paginator;
 import org.jdal.dao.PaginatorListener;
-import org.jdal.dao.Page.Order;
 import org.jdal.model.TableState;
 import org.jdal.service.PersistentService;
 import org.jdal.service.TableService;
@@ -302,7 +302,7 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	
 	/**
 	 * Handle paginators changes.
-	 * @see info.joseluismartin.dao.PaginatorListener#pageChanged(info.joseluismartin.dao.PageChangedEvent)
+	 * @see org.jdal.dao.PaginatorListener#pageChanged(org.jdal.dao.PageChangedEvent)
 	 */
 	public void pageChanged(PageChangedEvent event) {
 		tableModel.setList(page.getData());
@@ -822,6 +822,22 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	 */
 	public void setShowPaginator(boolean showPaginator) {
 		this.showPaginator = showPaginator;
+	}
+
+	/**
+	 * @return
+	 * @see org.jdal.dao.Page#getPageSize()
+	 */
+	public int getPageSize() {
+		return page.getPageSize();
+	}
+
+	/**
+	 * @param pageSize
+	 * @see org.jdal.dao.Page#setPageSize(int)
+	 */
+	public void setPageSize(int pageSize) {
+		page.setPageSize(pageSize);
 	}
 }
 

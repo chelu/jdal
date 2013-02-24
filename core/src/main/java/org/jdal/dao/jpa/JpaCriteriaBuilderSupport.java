@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -28,28 +29,27 @@ import org.jdal.dao.Filter;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements JpaCriteriaBuilder<T> {
+public abstract class JpaCriteriaBuilderSupport<T, K> implements JpaCriteriaBuilder<T> {
 
-	protected F filter;
-	protected Root<T> root;
+	protected Filter filter;
+	protected Root<K> root;
 	protected CriteriaBuilder cb;
-	protected Class<T> entityClass;
+	protected Class<K> entityClass;
 
 	
-	public JpaCriteriaBuilderSupport(Class<T> entityClass) {
+	public JpaCriteriaBuilderSupport(Class<K> entityClass) {
 		this.entityClass = entityClass;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	public synchronized CriteriaQuery<T> build(CriteriaQuery<T> criteria, CriteriaBuilder cb, Filter filter) {
-		this.filter = (F) filter;
+		this.filter = filter;
 		root = criteria.from(entityClass);
 		this.cb = cb;
 		
-		doBuild(criteria, cb, (F) filter);
+		doBuild(criteria, cb, filter);
 		
 		return criteria;
 	}
@@ -60,7 +60,7 @@ public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements 
 	 * @param cb
 	 * @param filter
 	 */
-	protected abstract void doBuild(CriteriaQuery<T> criteria, CriteriaBuilder cb, F filter);
+	protected abstract void doBuild(CriteriaQuery<T> criteria, CriteriaBuilder cb, Filter filter);
 	
 	/**
 	 * Add a '=' Restriction on property
@@ -108,8 +108,12 @@ public abstract class JpaCriteriaBuilderSupport<T, F extends Filter> implements 
 	 * @param cb Criteria Builder
 	 * @param predicates predicates to add
 	 */
-	protected void addAndWhere(CriteriaQuery<T> criteria, CriteriaBuilder cb, List<Predicate> predicates) {
+	protected <K> void addAndWhere(CriteriaQuery<K> criteria, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (predicates.size() > 0)
 			criteria.where(cb.and(predicates.toArray(new Predicate[] {})));
+	}
+	
+	protected <K> Path<K> getPath(Path<?> path, String name) {
+		return JpaUtils.getPath(path, name);
 	}
 }

@@ -63,6 +63,9 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String NAME = "name";
 	private static final String MESSAGE_SOURCE = "messageSource";
 	private static final String FIELD_FACTORY = "field-factory";
+	private static final String SORT_PROPERTY = "sort-property";
+	private static final String ORDER = "order";
+	private static final String PAGE_SIZE = "page-size";
 
 	
 	/**
@@ -134,6 +137,17 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(FILTER_FORM))
 			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(FILTER_FORM), 
 					element.getAttribute(FILTER_FORM));
+		
+		if (element.hasAttribute(SORT_PROPERTY))
+			bdb.addPropertyValue("sortName", element.getAttribute(SORT_PROPERTY));
+		
+		if (element.hasAttribute(ORDER))
+			bdb.addPropertyValue(ORDER, element.getAttribute(ORDER));
+		
+		if (element.hasAttribute(PAGE_SIZE))
+			bdb.addPropertyValue(Conventions.attributeNameToPropertyName(PAGE_SIZE), 
+					element.getAttribute(PAGE_SIZE));
+		
 		
 		
 		parserContext.getDelegate().parseBeanDefinitionAttributes(element, pageableTableBeanName, 

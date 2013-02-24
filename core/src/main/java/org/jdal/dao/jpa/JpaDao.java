@@ -32,6 +32,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.Attribute.PersistentAttributeType;
 import javax.persistence.metamodel.EntityType;
@@ -44,6 +45,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jdal.dao.Dao;
 import org.jdal.dao.Filter;
 import org.jdal.dao.Page;
+import org.jdal.dao.PageableDataSource;
 import org.jdal.dao.jpa.query.EntityTypeQueryFinder;
 import org.jdal.dao.jpa.query.QueryFinder;
 import org.springframework.beans.PropertyAccessor;
@@ -64,8 +66,9 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	@PersistenceContext
 	private EntityManager em;
 	private Class<T> entityClass;
-	private Map<String, JpaCriteriaBuilder<T>> criteriaBuilderMap = Collections.synchronizedMap(
-			new HashMap<String, JpaCriteriaBuilder<T>>());
+	private Map<String, JpaCriteriaBuilder<?>> criteriaBuilderMap = Collections.synchronizedMap(
+			new HashMap<String, JpaCriteriaBuilder<?>>());
+	
 	private QueryFinder queryFinder;
 	private boolean onDeleteSetNull = true;
 	
@@ -87,10 +90,11 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Page<T> getPage(Page<T> page) {
+	@SuppressWarnings("unchecked")
+	public <K> Page<K> getPage(Page<K> page) {
 		
 		// try named query first
-		TypedQuery<T> query = getNamedQuery(page);
+		TypedQuery<K> query = getNamedQuery(page);
 		
 		if (query == null) // get query from criteria
 			query = getCriteriaQuery(page);
@@ -100,7 +104,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 		query.setFirstResult(page.getStartIndex());
 		
 		page.setData(query.getResultList());
-		page.setPageableDataSource(this);
+		page.setPageableDataSource(((PageableDataSource<K>) this));
 		return page;
 	}
 	
@@ -109,19 +113,20 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * @param page
 	 * @return a CriteriaQuery from filter
 	 */
-	private CriteriaQuery<T> getCriteria(Page<T> page) {
+	@SuppressWarnings("unchecked")
+	private <K> CriteriaQuery<K> getCriteria(Page<K> page) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<T> c = cb.createQuery(getEntityClass());
+		CriteriaQuery<K> c = (CriteriaQuery<K>) cb.createQuery();
 		Filter filter = null;
 		if (page.getFilter() instanceof Filter) {
 			filter = (Filter) page.getFilter();
-			JpaCriteriaBuilder<T> jcb = 
-					(JpaCriteriaBuilder<T>) criteriaBuilderMap.get(filter.getFilterName());
+			JpaCriteriaBuilder<K> jcb = 
+					(JpaCriteriaBuilder<K>) criteriaBuilderMap.get(filter.getFilterName());
 			if (jcb != null) {
 				if (log.isDebugEnabled())
 					log.debug("Found JpaCriteriaBuilder for filter: " + filter.getFilterName());
 				// build criteria
-				jcb.build(c, cb, filter);
+				c = jcb.build(c, cb, filter);
 			}
 			else {
 				log.error("No CriteriaBuilder found for filter name [" + filter.getFilterName() + "]");
@@ -129,9 +134,9 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 			}
 		}
 		else {
-			c.select(c.from(getEntityClass()));
+			c.select((Selection<? extends K>) c.from(getEntityClass()));
 		}
-			
+		
 		return c;
 	}
 	
@@ -141,20 +146,25 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * @return new TypedQuery
 	 */
 	@SuppressWarnings("unchecked")
-	private TypedQuery<T> getCriteriaQuery(Page<T> page) {
-		CriteriaQuery<T> criteria = getCriteria(page);
+	private <K> TypedQuery<K> getCriteriaQuery(Page<K> page) {
+		CriteriaQuery<K> criteria = getCriteria(page);
 		
 		CriteriaQuery<Long> countCriteria = (CriteriaQuery<Long>) getCriteria(page);
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		
-		Root<T> countRoot = JpaUtils.findRoot(countCriteria, getEntityClass());
-		countCriteria.select(cb.count(countRoot));
+		Root<?> root = countCriteria.getRoots().iterator().next();
+		countCriteria.select(cb.count(root));
 		
 		page.setCount((em.createQuery(countCriteria).getSingleResult())
 				.intValue());
 		
 		
 		criteria.orderBy(getOrder(page, criteria));
+		
+		// Add default select to entity class if none was set.
+		if (criteria.getSelection() == null) {
+			criteria.select((Selection<? extends K>) root);
+		}
 		
 		return em.createQuery(criteria);
 	}
@@ -233,7 +243,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * @param criteria CriteriaQuery to apply Order on.
 	 * @return new Order
 	 */
-	private Order getOrder(Page<T> page, CriteriaQuery<?> criteria) {
+	private Order getOrder(Page<?> page, CriteriaQuery<?> criteria) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		Root<T> root = JpaUtils.findRoot(criteria, getEntityClass());
 		String propertyPath = page.getSortName();
@@ -251,9 +261,10 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	 * @param page request page
 	 * @return a TypedQuery from a NamedQuery
 	 */
-	protected TypedQuery<T> getNamedQuery(Page<T> page) {
+	@SuppressWarnings("unchecked")
+	protected <K> TypedQuery<K> getNamedQuery(Page<K> page) {
 		Filter filter = null;
-		TypedQuery<T> query = null;
+		TypedQuery<K> query = null;
 		
 		if (page.getFilter() instanceof Filter) {
 			filter = (Filter) page.getFilter();
@@ -268,7 +279,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 					queryString = JpaUtils.addOrder(queryString, page.getSortName(),
 						page.getOrder() == Page.Order.ASC);
 		
-				query = em.createQuery(queryString, getEntityClass());
+				query = (TypedQuery<K>) em.createQuery(queryString);
 				applyFilter(query, filter);
 			}
 		}
@@ -492,7 +503,7 @@ public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
 	/**
 	 * @return the criteriaBuilderMap
 	 */
-	public Map<String, JpaCriteriaBuilder<T>> getCriteriaBuilderMap() {
+	public Map<String, JpaCriteriaBuilder<?>> getCriteriaBuilderMap() {
 		return criteriaBuilderMap;
 	}
 

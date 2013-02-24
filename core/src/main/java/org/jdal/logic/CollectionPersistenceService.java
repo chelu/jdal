@@ -51,14 +51,15 @@ public class CollectionPersistenceService<T, PK extends Serializable> implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public Page<T> getPage(Page<T> page) {
+	@SuppressWarnings("unchecked")
+	public <K> Page<K> getPage(Page<K> page) {
 		if (collection.isEmpty()) {
 			page.setCount(0);
-			page.setData(new ArrayList<T>());
+			page.setData(new ArrayList<K>());
 			return page;
 		}
 		
-		List<T> list = new ArrayList<T>(collection);
+		List<K> list = (List<K>) new ArrayList<T>(collection);
 		
 		int startIndex = page.getStartIndex() < list.size() ? page.getStartIndex() : list.size() - 1;
 		int toIndex = (page.getStartIndex() + page.getPageSize());
