@@ -18,7 +18,7 @@
 	<xsd:complexType name="columnType">
 		<xsd:attribute name="name" type="xsd:string" use="required" />
 		<xsd:attribute name="display-name" type="xsd:string" />
-		<xsd:attribute name="sort-property-namee" type="xsd:string" />
+		<xsd:attribute name="sort-property-name" type="xsd:string" />
 		<xsd:attribute name="width" type="xsd:integer" />
 		<xsd:attribute name="expand-ratio" type="xsd:float" />
 		<xsd:attribute name="renderer" type="xsd:string" />
@@ -173,7 +173,8 @@
 		<xsd:attribute name="scope" type="xsd:string" />
 		<xsd:attribute name="order" type="xsd:string" />
 		<xsd:attribute name="sort-property" type="xsd:string" />
-		<xsd:attribute name="page-size" />	
+		<xsd:attribute name="page-size" />
+		<xsd:attribute name="selectable" type="xsd:boolean" />	
 	</xsd:complexType>
 
 </xsd:schema>

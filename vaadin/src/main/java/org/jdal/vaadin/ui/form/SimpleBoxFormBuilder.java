@@ -192,6 +192,7 @@ public class SimpleBoxFormBuilder {
 			}
 			else if (width == SIZE_FULL) {
 				box.setWidth("100%");
+				container.setExpandRatio(box, 1);
 			}
 			
 			for (int j = 0; j < rowsHeight.size(); j++) {

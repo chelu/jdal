@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.jdal.vaadin.ui.ApplicationContextGuiFactory;
 import org.jdal.vaadin.ui.table.AddAction;
+import org.jdal.vaadin.ui.table.ClearFilterAction;
 import org.jdal.vaadin.ui.table.FindAction;
 import org.jdal.vaadin.ui.table.RefreshAction;
 import org.jdal.vaadin.ui.table.RemoveAction;
@@ -126,6 +127,7 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 		actions.add(createBeanDefinition(RefreshAction.class, parserContext));
 		actions.add(createBeanDefinition(RemoveAction.class, parserContext));
 		actions.add(createBeanDefinition(FindAction.class, parserContext));
+		actions.add(createBeanDefinition(ClearFilterAction.class, parserContext));
 		
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(ListFactoryBean.class);
 		bdb.getRawBeanDefinition().setSource(parserContext.extractSource(element));

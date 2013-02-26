@@ -17,8 +17,6 @@ package org.jdal.vaadin.beans;
 
 import java.util.List;
 
-import javax.swing.text.html.parser.ParserDelegator;
-
 import org.apache.commons.lang.StringUtils;
 import org.jdal.vaadin.ui.table.ConfigurableTable;
 import org.jdal.vaadin.ui.table.PageableTable;
@@ -66,7 +64,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String SORT_PROPERTY = "sort-property";
 	private static final String ORDER = "order";
 	private static final String PAGE_SIZE = "page-size";
-
+	private static final String SELECTABLE = "selectable";
 	
 	/**
 	 * {@inheritDoc}
@@ -188,6 +186,9 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		if (element.hasAttribute(FIELD_FACTORY))
 			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(FIELD_FACTORY), 
 					element.getAttribute(FIELD_FACTORY));
+		
+		if (element.hasAttribute(SELECTABLE))
+			bdb.addPropertyValue(SELECTABLE, element.getAttribute(SELECTABLE));
 		
 		registerBeanDefinition(element, parserContext, tableBeanName, bdb);
 		
