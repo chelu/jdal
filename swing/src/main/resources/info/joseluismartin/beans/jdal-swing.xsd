@@ -129,7 +129,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 
-		<xsd:attribute name="tablePanel" type="xsd:string">
+		<xsd:attribute name="tablePanelClass" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation source="java:java.lang.Class">
 					<![CDATA[TablePanel class to use with this table]]>
