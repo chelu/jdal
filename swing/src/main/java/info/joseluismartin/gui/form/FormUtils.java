@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.gui.form;
 
+import info.joseluismartin.beans.StaticMessageSource;
 import info.joseluismartin.gui.SimpleDialog;
 
 import java.awt.Component;
@@ -150,14 +151,9 @@ public abstract class FormUtils {
 	 * Get Default OK Button from LookAndFeel (like JOptionPane)
 	 */
 	public static JButton newOKButton() {
-		String text = UIManager.getString("OptionPane.okButtonText");
-		Icon icon = UIManager.getIcon("OptionPane.okIcon");
-		
-		if (icon == null) 
-			icon = OK_ICON;
-		
+		String text = StaticMessageSource.getMessage("Accept");
 		int mnemonic = getMnemonic("OptionPane.okButtonMnemonic");
-		JButton b = new JButton(text, icon);
+		JButton b = new JButton(text, OK_ICON);
 		b.setMnemonic(mnemonic);
 		b.setAlignmentX(Container.CENTER_ALIGNMENT);
 		b.setAlignmentY(Container.CENTER_ALIGNMENT);
@@ -166,17 +162,12 @@ public abstract class FormUtils {
 	
 
 	/**
-	 * Get Default OK Button from LookAndFeel (like JOptionPane)
+	 * Get Default Cancel Button from LookAndFeel (like JOptionPane)
 	 */
 	public static JButton newCancelButton() {
-		String text = UIManager.getString("OptionPane.cancelButtonText");
-		Icon icon = UIManager.getIcon("OptionPane.cancelIcon");
-		
-		if (icon == null)
-			icon = CANCEL_ICON;
-		
+		String text = StaticMessageSource.getMessage("Cancel");
 		int mnemonic = getMnemonic("OptionPane.cancelButtonMnemonic");
-		JButton b = new JButton(text, icon);
+		JButton b = new JButton(text, CANCEL_ICON);
 		b.setMnemonic(mnemonic);
 		b.setAlignmentX(Container.CENTER_ALIGNMENT);
 		b.setAlignmentY(Container.CENTER_ALIGNMENT);

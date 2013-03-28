@@ -15,18 +15,27 @@
  */
 package info.joseluismartin.gui.bind;
 
+import info.joseluismartin.beans.PropertyUtils;
+import info.joseluismartin.beans.SimpleTypeConverter;
 import info.joseluismartin.gui.ModelHolder;
+import info.joseluismartin.text.PeriodFormatAnnotationFactory;
 
+import java.beans.PropertyDescriptor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.core.convert.ConversionException;
+import org.springframework.core.convert.Property;
+import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
@@ -52,7 +61,18 @@ public abstract class AbstractBinder implements PropertyBinder {
 	protected boolean readOnly = false;
 	private ControlBindingErrorProcessor errorProcessor = new ControlBindingErrorProcessor();
 	private BindingResult bindingResult;
+	private static DefaultFormattingConversionService conversionService = new 
+			DefaultFormattingConversionService();
+	private SimpleTypeConverter converter = new SimpleTypeConverter();
 	
+	
+	public AbstractBinder() {
+		conversionService.addFormatterForFieldAnnotation(new PeriodFormatAnnotationFactory());
+		
+		converter.setConversionService(conversionService);
+		converter.registerCustomEditor(Date.class, 
+				new CustomDateEditor(SimpleDateFormat.getDateTimeInstance(), true));
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -137,11 +157,33 @@ public abstract class AbstractBinder implements PropertyBinder {
 	
 	private BeanWrapper getBeanWrapper() {
 		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
+		wrapper.setConversionService(conversionService);
 		wrapper.registerCustomEditor(Date.class, 
 				new CustomDateEditor(SimpleDateFormat.getDateTimeInstance(), true));
-
+		
 		return wrapper;
 	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T> T convertIfNecessary(Object value, Class<T> requiredType) {
+		try {
+			return (T) conversionService.convert(value, new TypeDescriptor(getProperty()), 
+					TypeDescriptor.valueOf(requiredType));
+		}
+		catch(ConversionException ce) {
+			return converter.convertIfNecessary(value, requiredType);
+		}
+		
+	}
+	
+	/**
+	 * @return Property for property binder
+	 */
+	protected Property getProperty() {
+		PropertyDescriptor pd = getPropertyDescriptor();
+		return new Property(getModel().getClass(), pd.getReadMethod(), pd.getWriteMethod());
+	}
+	
 	// Getters and Setters
 
 	public String getPropertyName() {
@@ -191,5 +233,13 @@ public abstract class AbstractBinder implements PropertyBinder {
 	
 	public BindingResult getBindingResult() {
 		return bindingResult;
+	}
+	
+	public Class<?> getPropertyType() {
+		return getPropertyDescriptor().getPropertyType();
+	}
+	
+	public PropertyDescriptor getPropertyDescriptor() {
+		return PropertyUtils.getPropertyDescriptor(getModel().getClass(), propertyName);
 	}
 }

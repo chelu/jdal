@@ -7,7 +7,7 @@
 	<groupId>org.jdal</groupId>
 	<artifactId>jdal</artifactId>
 	<name>Java Database Application Library</name>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.3.3</version>
 	<packaging>pom</packaging>
 	<url>http://www.jdal.org</url>
 	<description>JDAL is an open source Java library that aims to help developers making database applications easily. JDAL helps you to find what you really need to code and what is already coded in a common java database application, avoiding the complexity of many common programming tasks.</description>

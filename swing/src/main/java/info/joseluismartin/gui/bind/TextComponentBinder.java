@@ -15,15 +15,7 @@
  */
 package info.joseluismartin.gui.bind;
 
-import java.beans.PropertyEditor;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.swing.text.JTextComponent;
-
-import org.springframework.beans.PropertyEditorRegistry;
-import org.springframework.beans.PropertyEditorRegistrySupport;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 
 /**
  * Binder for JComponentText
@@ -31,13 +23,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class TextComponentBinder extends AbstractBinder {
-	
-	private PropertyEditorRegistry registry = new PropertyEditorRegistrySupport();
 
-	public TextComponentBinder() {
-		registry.registerCustomEditor(Date.class,
-				new CustomDateEditor(SimpleDateFormat.getDateTimeInstance(), true));
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -49,19 +35,10 @@ public class TextComponentBinder extends AbstractBinder {
 	}
 
 	private String getAsText(Object value) {
-		String text = "";
+		if (value == null)
+			return "";
 		
-		if (value != null) {
-			PropertyEditor pe = registry.findCustomEditor(value.getClass(), null);
-			if (pe != null) {
-				pe.setValue(value);
-				text = pe.getAsText();
-			}
-			else {
-				text = value.toString();
-			}
-		}
-		return text;
+		return convertIfNecessary(value, String.class);
 	}
 
 	/**
@@ -69,7 +46,7 @@ public class TextComponentBinder extends AbstractBinder {
 	 */
 	public void doUpdate() {
 		String newValue = ((JTextComponent) component).getText();
-		setValue(newValue.trim());
+		setValue(newValue);
 		
 	}
 }

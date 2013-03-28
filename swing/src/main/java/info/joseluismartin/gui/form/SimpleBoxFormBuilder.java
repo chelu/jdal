@@ -215,7 +215,7 @@ public class SimpleBoxFormBuilder {
 			columnHeight += h;
 		
 		// add space into components (fillers)
-		columnHeight += (rows) * defaultSpace;
+		columnHeight += (rows -1) * defaultSpace;
 		
 		for (int i = 0; i < columns.size(); i++) {
 			Box box = columns.get(i);

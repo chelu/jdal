@@ -72,9 +72,11 @@ public class ViewDialog<T> extends JDialog implements View<T>, Editor<T>  {
 	}
 
 	public void init() {
+		if (view == null)
+			return;
+		
 		acceptAction.setView(view);
 		cancelAction.setView(view);
-
 		add(view.getPanel(), BorderLayout.CENTER);
 		if (view.getModel() != null && StringUtils.isEmpty(getTitle()))
 			setTitle(view.getModel().toString());
