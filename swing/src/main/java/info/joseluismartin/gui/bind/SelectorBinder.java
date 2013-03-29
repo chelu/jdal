@@ -35,7 +35,12 @@ public class SelectorBinder extends AbstractBinder implements ActionListener {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void doRefresh() {
-		List values = new ArrayList((Collection) getValue());
+		Collection c  = (Collection) getValue();
+		ArrayList values = new ArrayList();
+		
+		if (c != null)
+			values.addAll(c);
+		
 		Selector selector = (Selector) component;
 		selector.setSelected(values);
 		
