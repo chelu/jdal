@@ -15,6 +15,8 @@
  */
 package info.joseluismartin.gui.table;
 
+import info.joseluismartin.beans.StaticMessageSource;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -51,7 +53,7 @@ public class ColorTableCellEditor extends AbstractCellEditor implements TableCel
 	        //Set up the dialog that the button brings up.
 	        colorChooser = new JColorChooser();
 	        dialog = JColorChooser.createDialog(button,
-	                                        "Elija un color",
+	                                        StaticMessageSource.getMessage("ColorChooser.chooseColor"),
 	                                        true,  //modal
 	                                        colorChooser,
 	                                        this,  //OK button handler

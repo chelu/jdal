@@ -314,6 +314,9 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	 */
 	
 	public Window getEditor() {
+		if (editorName == null)
+			return null;
+		
 		Window owner = SwingUtilities.getWindowAncestor(this);
 		Window window;
 		if (owner instanceof Frame) {
@@ -345,6 +348,10 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		Window dlg = openDialogs.get(toEdit);
 		if (dlg == null) {
 			dlg = getEditor();
+			
+			if (dlg == null)
+				return null;
+				
 			openDialogs.put(toEdit, dlg);
 			((View<Object>) dlg).setModel(toEdit);
 			((View<Object>) dlg).refresh();

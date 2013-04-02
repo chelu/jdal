@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyValue;
@@ -118,7 +119,8 @@ public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 		try {
 			BeanWrapper wrapper = new BeanWrapperImpl(bean);
 			return wrapper.getPropertyValue(name);
-		} catch (PropertyAccessException pae) {
+		} catch (BeansException be) {
+			log.error(be);
 			return null;
 		}
 	}

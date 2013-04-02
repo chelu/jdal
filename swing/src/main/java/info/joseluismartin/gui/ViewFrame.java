@@ -228,7 +228,7 @@ public class ViewFrame<T> extends JFrame implements View<T>, Editor<T> {
 	 */
 	public void enableView(boolean enabled) {
 		view.enableView(enabled);
-		acceptButton.setEnabled(enabled);
+		// acceptButton.setEnabled(enabled);
 	}
 
 	/**
