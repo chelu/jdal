@@ -100,8 +100,6 @@ public class DirectionsService {
 		
 	}
 	
-	
-	
 	private LineString decodePolyline(String encoded) {
 
 		List<Coordinate> coordinates = new ArrayList<Coordinate>();

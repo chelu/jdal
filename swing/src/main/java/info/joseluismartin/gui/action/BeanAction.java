@@ -35,4 +35,12 @@ public abstract class BeanAction  extends IconAction {
 	public void setName(String name) {
 		putValue(Action.NAME, name);
 	}
+	
+	public String getToolTipText() {
+		return (String) getValue(Action.SHORT_DESCRIPTION);
+	}
+	
+	public void setToolTipText(String text) {
+		putValue(Action.SHORT_DESCRIPTION, text);
+	}
 }
