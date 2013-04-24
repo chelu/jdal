@@ -32,6 +32,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
@@ -61,7 +62,7 @@ public abstract class JpaUtils {
 	private static Pattern ALIAS_PATTERN = Pattern.compile(ALIAS_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 	private static String FROM_PATTERN_STRING = "(from.*+)";
 	private static Pattern FROM_PATTERN = Pattern.compile(FROM_PATTERN_STRING, Pattern.CASE_INSENSITIVE);
-	private static volatile long aliasCount = 0;
+	private static volatile int aliasCount = 0;
 	
 	/**
 	 * Result count from a CriteriaQuery
@@ -78,16 +79,23 @@ public abstract class JpaUtils {
 	 * Create a row count CriteriaQuery from a CriteriaQuery
 	 * @param em entity manager
 	 * @param criteria source criteria
-	 * @return row coutnt CriteriaQuery
+	 * @return row count CriteriaQuery
 	 */
 	public static <T> CriteriaQuery<Long> countCriteria(EntityManager em, CriteriaQuery<T> criteria) {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
 		copyCriteriaNoSelection(criteria, countCriteria);
-		countCriteria.select(builder.count(findRoot(countCriteria, 
-				criteria.getResultType())));
 		
-		return countCriteria;
+		Expression<Long> countExpression;
+		
+		if (criteria.isDistinct()) {
+			countExpression = builder.countDistinct(findRoot(countCriteria, criteria.getResultType()));
+		}
+		else {	
+			countExpression = builder.count(findRoot(countCriteria, criteria.getResultType()));
+		}
+		
+		return countCriteria.select(countExpression);
 	}
 	
 	/**
@@ -237,7 +245,6 @@ public abstract class JpaUtils {
 		
 		return null;
 	}
-	
 	
 	/**
 	 * Copy Criteria without Selection
