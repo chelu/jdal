@@ -28,6 +28,7 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.core.Conventions;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -42,27 +43,28 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String ENTITY = "entity";
 	private static final String ID = "id";
 	private static final String TABLE_PANEL_SUFFIX = "Table";
-	private static final String TABLE_PANEL_CLASS ="tablePanelClass";
+	private static final String TABLE_PANEL_CLASS ="table-panel-class";
 	private static final String LIST_TABLE_MODEL_SUFFIX = "TableModel";
 	private static final String PAGEABLE_TABLE_SUFFIX = "PageableTable";
 	private static final String SERVICE_SUFFIX = "Service";
 	private static final String EDITOR_SUFFIX = "Editor";
 	private static final String DATA_SOURCE = "dataSource";
+	private static final String SERVICE_ATTRIBUTE = "service";
 	private static final String PAGINATOR_VIEW = "paginatorView";
 	private static final String PAGINATOR = "paginator";
 	private static final String TABLE_MODEL = "tableModel";
 	private static final String TABLE = "table";
 	private static final String COLUMNS = "columns";
 	private static final String ACTIONS = "actions";
-	private static final String USE_ACTIONS = "useActions";
+	private static final String USE_ACTIONS = "use-actions";
 	private static final String GUI_FACTORY = "guiFactory";
 	private static final String EDITOR = "editorName";
 	private static final String PERSISTENT_SERVICE = "persistentService";
 	private static final String FILTER = "filter";
-	private static final String FILTER_VIEW = "filterView";
-	private static final String TABLE_SERVICE = "tableService";
+	private static final String FILTER_VIEW = "filter-view";
+	private static final String TABLE_SERVICE = "table-service";
 	private static final String NAME = "name";
-	private static final String SHOW_MENU = "showMenu";
+	private static final String SHOW_MENU = "show-menu";
 	private static final String MESSAGE_SOURCE = "messageSource";
 	private static final String SCOPE = "scope";
 
@@ -97,8 +99,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		String guiFactory = DefaultsBeanDefinitionParser.DEFAULT_GUI_FACTORY;
 		String scope = BeanDefinition.SCOPE_PROTOTYPE;
 		
-		if (element.hasAttribute(DATA_SOURCE))
-			dataSource = element.getAttribute(DATA_SOURCE);
+		if (element.hasAttribute(SERVICE_ATTRIBUTE))
+			dataSource = element.getAttribute(SERVICE_ATTRIBUTE);
 		
 		if (element.hasAttribute(PAGINATOR))
 			paginator = element.getAttribute(PAGINATOR);
@@ -137,13 +139,13 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.addPropertyValue(NAME, pageableTableBeanName);
 		
 		if (element.hasAttribute(TABLE_SERVICE)) 
-			bdb.addPropertyReference(TABLE_SERVICE, element.getAttribute(TABLE_SERVICE));
+			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(TABLE_SERVICE), element.getAttribute(TABLE_SERVICE));
 		
 		if (element.hasAttribute(FILTER))
 			bdb.addPropertyReference(FILTER, element.getAttribute(FILTER));
 		
 		if (element.hasAttribute(SHOW_MENU))
-			bdb.addPropertyValue(SHOW_MENU, element.getAttribute(SHOW_MENU));
+			bdb.addPropertyValue(Conventions.attributeNameToPropertyName(SHOW_MENU), element.getAttribute(SHOW_MENU));
 		
 		if (element.hasAttribute(MESSAGE_SOURCE))
 			bdb.addPropertyReference(MESSAGE_SOURCE, element.getAttribute(MESSAGE_SOURCE));
@@ -163,7 +165,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.addPropertyReference(PERSISTENT_SERVICE, dataSource);
 		
 		if (element.hasAttribute(FILTER_VIEW))
-			bdb.addPropertyReference(FILTER_VIEW, element.getAttribute(FILTER_VIEW));
+			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(FILTER_VIEW), 
+					element.getAttribute(FILTER_VIEW));
 		
 		if (!element.hasAttribute(USE_ACTIONS) || "true".equals(element.getAttribute(USE_ACTIONS)))
 			bdb.addPropertyReference(ACTIONS, actions);

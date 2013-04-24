@@ -38,7 +38,7 @@
 
 		<xsd:attribute name="paginator" type="xsd:string" />
 
-		<xsd:attribute name="dataSource" type="xsd:string">
+		<xsd:attribute name="service" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation>
 					<![CDATA[PersistentService used to retreive data.]]>
@@ -78,7 +78,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 
-		<xsd:attribute name="useActions" type="xsd:boolean">
+		<xsd:attribute name="use-actions" type="xsd:boolean">
 			<xsd:annotation>
 				<xsd:documentation>
 					<![CDATA[Set to false to avoid setting default table actions.]]>
@@ -98,7 +98,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 
-		<xsd:attribute name="filterView" type="xsd:string">
+		<xsd:attribute name="filter-view" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation>
 					<![CDATA[filter view to used to show table filter]]>
@@ -109,7 +109,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 
-		<xsd:attribute name="tableService" type="xsd:string">
+		<xsd:attribute name="table-service" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation source="java:java.lang.Class">
 					<![CDATA[TableService to use when persisting table options.]]>
@@ -122,7 +122,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 
-		<xsd:attribute name="showMenu" type="xsd:boolean">
+		<xsd:attribute name="show-menu" type="xsd:boolean">
 			<xsd:annotation>
 				<xsd:documentation>
 					<![CDATA[Show the table left menu.]]>
@@ -130,7 +130,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 
-		<xsd:attribute name="tablePanel" type="xsd:string">
+		<xsd:attribute name="table-panel-class" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation source="java:java.lang.Class">
 					<![CDATA[TablePanel class to use with this table]]>
@@ -146,9 +146,9 @@
 
 	<xsd:complexType name="columnType">
 		<xsd:attribute name="name" type="xsd:string" />
-		<xsd:attribute name="displayName" type="xsd:string" />
+		<xsd:attribute name="display-name" type="xsd:string" />
 		<xsd:attribute name="editable" type="xsd:boolean" />
-		<xsd:attribute name="sortProperty" type="xsd:string" />
+		<xsd:attribute name="sort-property" type="xsd:string" />
 		<xsd:attribute name="width" type="xsd:integer" />
 		<xsd:attribute name="renderer" type="xsd:string" />
 		<xsd:attribute name="editor" type="xsd:string" />

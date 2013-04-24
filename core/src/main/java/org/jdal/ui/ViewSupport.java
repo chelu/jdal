@@ -73,7 +73,7 @@ import org.springframework.validation.Validator;
  * <code>ErrorProcessors</code> to process errors found in validation.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.0
+ * @since 2.0
  * @see BinderFactory
  * @see ControlAccessorFactory
  * @see ErrorProcessor

@@ -67,6 +67,4 @@ public class RmiServiceExporter extends org.springframework.remoting.rmi.RmiServ
 		this.remoteServiceName = serviceName;
 		super.setServiceName(serviceName);
 	}
-
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2012 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.ui.bind;
+package org.jdal.ui;
 
 /**
- * A Factory for ControlAccessors
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.1
- * @see org.jdal.ui.bind.ControlAccessor
  */
-public interface ControlAccessorFactory {
+public class DefaultModelHolder<T> implements ModelHolder<T> {
 	
+	private T model;
+	
+	public DefaultModelHolder(T model) {
+		this.model = model;
+	}
+
 	/**
-	 * Try to find a control accessor for a Class, use super Class if none is configured.
-	 * 
-	 * @param control control for looking the control accessor
-	 * @return a ControlAccessor for that class or null if none
+	 * {@inheritDoc}
 	 */
-	ControlAccessor getControlAccessor(Object control);
+	public T getModel() {
+		return model;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setModel(T model) {
+		this.model = model;
+	}
 
 }

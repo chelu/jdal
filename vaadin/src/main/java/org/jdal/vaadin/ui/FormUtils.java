@@ -34,6 +34,7 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Select;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -189,6 +190,16 @@ public abstract class FormUtils {
 		addItemList(combo, elements);
 		
 		return combo;
+	}
+
+	/**
+	 * @return new TextField with null representation set to empty string
+	 */
+	public static TextField newTextField() {
+		TextField tf = new TextField();
+		tf.setNullRepresentation("");
+		
+		return tf;
 	}
 	
 }

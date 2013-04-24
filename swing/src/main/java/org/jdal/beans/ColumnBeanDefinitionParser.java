@@ -29,7 +29,8 @@ public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 	
 	private static final String SCOPE_ATTRIBUTE = "scope";
 	private static final String RENDERER_ATTRIBUTE = "renderer"; 
-
+	private static final String EDITOR_ATTRIBUTE = "editor";
+	
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Class getBeanClass(Element element) {
@@ -39,7 +40,8 @@ public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 	@Override
 	protected boolean isEligibleAttribute(String attributeName) {
 		return super.isEligibleAttribute(attributeName) && !SCOPE_ATTRIBUTE.equals(attributeName)
-				&& !RENDERER_ATTRIBUTE.equals(attributeName);
+				&& !RENDERER_ATTRIBUTE.equals(attributeName) 
+				&& !EDITOR_ATTRIBUTE.equals(attributeName);
 	}
 
 	/**

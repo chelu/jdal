@@ -20,7 +20,9 @@ import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.ui.DefaultModelHolder;
 import org.jdal.ui.ModelHolder;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyAccessException;
@@ -44,14 +46,13 @@ public abstract class AbstractBinder implements PropertyBinder {
 	/** last value, used to revert o detect cicles */
 	protected Object oldValue;
 	/** binded model */
-	private Object model;
+	private ModelHolder<Object> modelHolder;
 	/** component object */
 	protected Object component;
 	/** if true, binding is readOnly, ie from model to control */
 	protected boolean readOnly = false;
 	private ControlBindingErrorProcessor errorProcessor = new ControlBindingErrorProcessor();
 	private BindingResult bindingResult;
-	
 	
 	/**
 	 * {@inheritDoc}
@@ -65,7 +66,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	 */
 	public final void bind(Object component, String propertyName, Object model, boolean readOnly) {
 		this.propertyName = propertyName;
-		this.model = model;
+		setModel(model);
 		this.component = component;
 		this.readOnly = readOnly;
 		doBind();
@@ -84,7 +85,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	}
 	
 	public final void update() {
-		if (!readOnly && model != null) {
+		if (!readOnly && modelHolder != null) {
 			bindingResult = createBindingResult();
 			doUpdate();
 		}
@@ -95,6 +96,7 @@ public abstract class AbstractBinder implements PropertyBinder {
 	 * @return a new instance of BindingResult for this model
 	 */
 	protected BindingResult createBindingResult() {
+		Object model = getModel();
 		return new BeanPropertyBindingResult(model, model.getClass().getSimpleName());
 	}
 
@@ -163,15 +165,17 @@ public abstract class AbstractBinder implements PropertyBinder {
 	}
 
 	public Object getModel() {
-		if (model instanceof ModelHolder<?>) {
-			return ((ModelHolder<?>) model).getModel();
-		}
-		
-		return model;
+		return modelHolder != null ? modelHolder.getModel() : null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setModel(Object model) {
-		this.model = model;
+		if (model instanceof ModelHolder) {
+			this.modelHolder = (ModelHolder<Object>) model;
+		}
+		else {
+			model = new DefaultModelHolder<Object>(model);
+		}
 	}
 
 	/**
@@ -190,5 +194,9 @@ public abstract class AbstractBinder implements PropertyBinder {
 	
 	public BindingResult getBindingResult() {
 		return bindingResult;
+	}
+	
+	public Class<?> getPropertyType() {
+		return BeanUtils.getPropertyDescriptor(getModel().getClass(), propertyName).getPropertyType();
 	}
 }

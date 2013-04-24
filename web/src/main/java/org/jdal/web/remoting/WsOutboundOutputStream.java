@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.ui.bind;
+package org.jdal.web.remoting;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import org.apache.catalina.websocket.WsOutbound;
 
 /**
- * A Factory for ControlAccessors
+ * Tomcat WsOutbound OuputStream Adapter
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.1
- * @see org.jdal.ui.bind.ControlAccessor
+ * @since 2.0
  */
-public interface ControlAccessorFactory {
+public class WsOutboundOutputStream extends OutputStream {
+	
+	WsOutbound target;
+
+	public WsOutboundOutputStream(WsOutbound target) {
+		this.target = target;
+	}
 	
 	/**
-	 * Try to find a control accessor for a Class, use super Class if none is configured.
-	 * 
-	 * @param control control for looking the control accessor
-	 * @return a ControlAccessor for that class or null if none
+	 * {@inheritDoc}
 	 */
-	ControlAccessor getControlAccessor(Object control);
+	@Override
+	public void write(int b) throws IOException {
+		target.writeBinaryData(b);
+	}
 
 }

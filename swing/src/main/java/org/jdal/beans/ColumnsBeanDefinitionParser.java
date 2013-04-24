@@ -16,9 +16,9 @@
 package org.jdal.beans;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.jdal.ui.ColumnDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -43,7 +43,7 @@ public class ColumnsBeanDefinitionParser extends AbstractSimpleBeanDefinitionPar
 	
 		List columns = parserContext.getDelegate().parseListElement(element, builder.getRawBeanDefinition());
 		builder.addPropertyValue("sourceList", columns);
-		builder.addPropertyValue("targetListClass", ColumnDefinition.class);
+		builder.addPropertyValue("targetListClass", ArrayList.class);
 		builder.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 	}
 

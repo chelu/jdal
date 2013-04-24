@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 original author or authors.
+ * Copyright 2009-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,34 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.ui;
+package org.jdal.web.remoting;
 
-import org.springframework.validation.BindingResult;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.catalina.websocket.StreamInbound;
+import org.apache.catalina.websocket.WebSocketServlet;
+import org.jdal.remoting.websocket.WebSocketServiceExporter;
 
 /**
- * Binder interface define methods common to model based
- * representation of data like Views.
- *  
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.0
- * @param <T> model type
+ *
  */
-public interface Binder<T> extends ModelHolder<T> {
+public class TomcatWebSocketServlet extends WebSocketServlet {
 
-	/**
-	 * Update Model from Component
-	 */
-	void update();
+	private WebSocketServiceExporter serviceExporter;
 	
 	/**
-	 * Update Component from model
+	 * {@inheritDoc}
 	 */
-	void refresh();
-	
-	/**
-	 * Get binding result
-	 * @return the binding result
-	 */
-	BindingResult getBindingResult();
+	@Override
+	protected StreamInbound createWebSocketInbound(String arg0, HttpServletRequest arg1) {
+		return new RemoteInvocationStreamInbound(serviceExporter);
+	}
+
 }

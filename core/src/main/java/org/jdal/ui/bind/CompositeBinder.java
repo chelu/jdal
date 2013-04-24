@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.beans.PropertyUtils;
 import org.jdal.ui.Binder;
+import org.jdal.ui.ModelHolder;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -26,7 +27,7 @@ import org.springframework.validation.BindingResult;
  * @param <T> model 
  */
 @SuppressWarnings("unchecked")
-public class CompositeBinder<T> implements Binder<T>, BinderHolder {
+public class CompositeBinder<T> implements Binder<T>, BinderHolder, ModelHolder<T> {
 	
 	private static final Log log = LogFactory.getLog(CompositeBinder.class);
 	private BinderFactory binderFactory;
@@ -56,11 +57,11 @@ public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 	
 
 	public void bind(Object component, String propertyName, boolean readOnly) {
-		bind(component, propertyName, getModel(), readOnly);
+		bind(component, propertyName, this, readOnly);
 	}
 
 
-	public void bind(Object component, String propertyName, T model, boolean readOnly) {
+	public void bind(Object component, String propertyName, Object model, boolean readOnly) {
 		PropertyBinder binder =  binderFactory.getBinder(component.getClass());
 		if (binder != null) {
 			binder.bind(component, propertyName, model, readOnly);
@@ -133,9 +134,6 @@ public class CompositeBinder<T> implements Binder<T>, BinderHolder {
 	
 	public void setModel(T model) {
 		this.model = model;
-		for (Binder<T> b : binders.values()) {
-			b.setModel(model);
-		}
 	}
 
 	/**

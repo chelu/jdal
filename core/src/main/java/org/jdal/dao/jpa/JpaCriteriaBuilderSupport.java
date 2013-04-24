@@ -27,7 +27,9 @@ import org.jdal.dao.Filter;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * 
+ * @param <T> CriteriaQuery Type
+ * @param <K> Entity Type
  */
 public abstract class JpaCriteriaBuilderSupport<T, K> implements JpaCriteriaBuilder<T> {
 

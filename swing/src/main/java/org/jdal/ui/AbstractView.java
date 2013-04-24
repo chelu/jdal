@@ -71,8 +71,6 @@ public abstract class AbstractView<T> extends ViewSupport<T> {
 		setModel(model);
 	}
 	
-	
-	
 	/**
 	 * {@inheritDoc}
 	 */

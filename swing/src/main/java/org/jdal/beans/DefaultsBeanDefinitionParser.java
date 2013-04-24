@@ -19,11 +19,28 @@ package org.jdal.beans;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JToggleButton;
+import javax.swing.text.JTextComponent;
+
 import org.jdal.ui.ApplicationContextGuiFactory;
 import org.jdal.ui.PaginatorView;
+import org.jdal.ui.Selector;
+import org.jdal.ui.View;
 import org.jdal.ui.bind.AnnotationControlInitializer;
+import org.jdal.ui.bind.ComboAccessor;
 import org.jdal.ui.bind.ConfigurableBinderFactory;
 import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
+import org.jdal.ui.bind.ControlAccessor;
+import org.jdal.ui.bind.LabelAccessor;
+import org.jdal.ui.bind.ListAccessor;
+import org.jdal.ui.bind.SelectorAccessor;
+import org.jdal.ui.bind.TablePanelAccessor;
+import org.jdal.ui.bind.TextComponentAccessor;
+import org.jdal.ui.bind.ToggleButtonAccessor;
+import org.jdal.ui.bind.ViewAccessor;
 import org.jdal.ui.table.AddAction;
 import org.jdal.ui.table.ApplyFilterAction;
 import org.jdal.ui.table.ClearFilterAction;
@@ -32,6 +49,7 @@ import org.jdal.ui.table.DeselectAllAction;
 import org.jdal.ui.table.HideShowFilterAction;
 import org.jdal.ui.table.RemoveAllAction;
 import org.jdal.ui.table.SelectAllAction;
+import org.jdal.ui.table.TablePanel;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.config.CustomEditorConfigurer;
@@ -44,6 +62,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.beans.factory.support.ManagedList;
+import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
@@ -145,7 +164,21 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 	private ComponentDefinition registerAccessorFactory(Element element, ParserContext parserContext) {
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(
 				ConfigurableControlAccessorFactory.class);
+		
+		Map<Class<?>, Class<?extends ControlAccessor>> accessors = 
+				new ManagedMap<Class<?>,Class<?extends ControlAccessor>>();
+		accessors.put(JTextComponent.class, TextComponentAccessor.class);
+		accessors.put(JList.class, ListAccessor.class);
+		accessors.put(Selector.class, SelectorAccessor.class);
+		accessors.put(JToggleButton.class, ToggleButtonAccessor.class);
+		accessors.put(JComboBox.class, ComboAccessor.class);
+		accessors.put(View.class, ViewAccessor.class);
+		accessors.put(JLabel.class, LabelAccessor.class);
+		accessors.put(TablePanel.class, TablePanelAccessor.class);
+		bdb.addPropertyValue("accessors", accessors);
+		
 		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), ACCESSOR_FACTORY_BEAN_NAME);
+		
 		registerBeanComponentDefinition(element, parserContext, bcd);	
 		return bcd;
 	}
@@ -157,8 +190,8 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(
 				CustomEditorConfigurer.class);
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("java.awt.Image", "info.joseluismartin.beans.ImagePropertyEditor");
-		map.put("javax.swing.Icon", "info.joseluismartin.beans.IconPropertyEditor");
+		map.put("java.awt.Image", "org.jdal.beans.ImagePropertyEditor");
+		map.put("javax.swing.Icon", "org.jdal.beans.IconPropertyEditor");
 		bdb.addPropertyValue("customEditors", map);
 		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), 
 				CUSTOM_EDITOR_CONFIGURER_BEAN_NAME);

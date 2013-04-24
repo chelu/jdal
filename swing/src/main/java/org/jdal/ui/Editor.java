@@ -18,7 +18,7 @@ package org.jdal.ui;
 import org.jdal.service.PersistentServiceAware;
 
 /**
- * interface for model editors
+ * Interface for model editors
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */

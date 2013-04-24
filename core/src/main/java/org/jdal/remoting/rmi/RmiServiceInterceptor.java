@@ -61,7 +61,7 @@ public class RmiServiceInterceptor extends RemoteInvocationBasedAccessor
 	}
 
 	/**
-	 * Try to extract service Url from invationHandler.toString();
+	 * Try to extract service Url from invationHandler.toString() for exception info
 	 * @return Service Url
 	 */
 	private String extractServiceUrl() {
