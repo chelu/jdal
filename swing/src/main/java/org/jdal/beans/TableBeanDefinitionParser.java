@@ -153,7 +153,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		registerBeanDefinition(element, parserContext, pageableTableBeanName, bdb);
 		
 		// create TablePanel
-		String tablePanelClassName = "org.jdal.ui.table.TablePanel";
+		String tablePanelClassName = "org.jdal.swing.table.TablePanel";
 		if (element.hasAttribute(TABLE_PANEL_CLASS))
 			tablePanelClassName = element.getAttribute(TABLE_PANEL_CLASS);
 		

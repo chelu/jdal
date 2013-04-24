@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 
 import org.jdal.ui.Binder;
 import org.jdal.ui.bind.PropertyBinder;
+import org.jdal.ui.validation.ErrorProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;

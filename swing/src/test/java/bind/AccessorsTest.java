@@ -25,13 +25,13 @@ import javax.swing.JTextField;
 
 import junit.framework.TestCase;
 
-import org.jdal.ui.bind.ComboAccessor;
+import org.jdal.swing.bind.ComboAccessor;
+import org.jdal.swing.bind.ListAccessor;
+import org.jdal.swing.bind.TextComponentAccessor;
+import org.jdal.swing.bind.ToggleButtonAccessor;
+import org.jdal.swing.list.ListListModel;
 import org.jdal.ui.bind.ControlChangeListener;
 import org.jdal.ui.bind.ControlEvent;
-import org.jdal.ui.bind.ListAccessor;
-import org.jdal.ui.bind.TextComponentAccessor;
-import org.jdal.ui.bind.ToggleButtonAccessor;
-import org.jdal.ui.list.ListListModel;
 import org.junit.Test;
 
 
