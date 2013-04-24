@@ -23,7 +23,7 @@ import java.util.List;
 import model.Author;
 import model.Book;
 
-import org.jdal.ui.ListTableModel;
+import org.jdal.swing.ListTableModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;

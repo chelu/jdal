@@ -16,7 +16,7 @@
 package org.jdal.beans;
 
 
-import org.jdal.ui.ColumnDefinition;
+import org.jdal.swing.ColumnDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
 import org.w3c.dom.Element;

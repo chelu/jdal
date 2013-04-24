@@ -19,8 +19,8 @@ package org.jdal.beans;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.jdal.ui.ListTableModel;
-import org.jdal.ui.PageableTable;
+import org.jdal.swing.ListTableModel;
+import org.jdal.swing.PageableTable;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
 import org.springframework.beans.factory.parsing.CompositeComponentDefinition;

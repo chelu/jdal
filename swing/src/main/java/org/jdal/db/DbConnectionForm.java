@@ -29,13 +29,13 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.jdal.ui.AbstractView;
-import org.jdal.ui.ViewDialog;
+import org.jdal.swing.AbstractView;
+import org.jdal.swing.ViewDialog;
+import org.jdal.swing.form.BoxFormBuilder;
+import org.jdal.swing.form.FormUtils;
+import org.jdal.swing.form.SimpleBoxFormBuilder;
+import org.jdal.swing.list.ListComboBoxModel;
 import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
-import org.jdal.ui.form.BoxFormBuilder;
-import org.jdal.ui.form.FormUtils;
-import org.jdal.ui.form.SimpleBoxFormBuilder;
-import org.jdal.ui.list.ListComboBoxModel;
 
 /**
  * Database Connection Form

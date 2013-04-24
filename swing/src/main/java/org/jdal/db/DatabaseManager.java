@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.ui.ViewDialog;
+import org.jdal.swing.ViewDialog;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)

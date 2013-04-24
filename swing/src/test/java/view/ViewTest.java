@@ -29,7 +29,7 @@ import model.Book;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.ui.AbstractView;
+import org.jdal.swing.AbstractView;
 import org.jdal.ui.validation.BackgroundErrorProcessor;
 import org.jdal.ui.validation.ErrorProcessor;
 import org.springframework.validation.Validator;
