@@ -278,4 +278,13 @@ public class ViewFrame<T> extends JFrame implements View<T>, Editor<T> {
 			cancelAction.actionPerformed(null);
 		}
 	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void cancel() {
+		// TODO Auto-generated method stub
+		
+	}
 }

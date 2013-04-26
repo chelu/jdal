@@ -826,7 +826,7 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	}
 
 	/**
-	 * @return
+	 * @return the page size
 	 * @see org.jdal.dao.Page#getPageSize()
 	 */
 	public int getPageSize() {

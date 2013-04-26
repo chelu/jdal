@@ -27,7 +27,7 @@ import org.jdal.ui.bind.AbstractControlAccessor;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @since 1.1
- * @see org.jdal.swing.bind.AbstractControlAccessor
+ * @see org.jdal.ui.bind.AbstractControlAccessor
  */
 public class ComboAccessor extends AbstractControlAccessor implements ActionListener {
 

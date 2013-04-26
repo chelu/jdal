@@ -13,39 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.swing.table;
+package org.jdal.swing.action;
 
-import java.util.Collection;
+import java.awt.event.ActionEvent;
 
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.JOptionPane;
+
+import org.jdal.swing.Editor;
 
 /**
- * Render Collections as colon separated String list
+ * Action for cancel button on editors
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.3
  */
-public class CollectionTableCellRenderer extends DefaultTableCellRenderer {
+public class EditorCancelAction<T> extends ViewCancelAction<T> {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	protected void setValue(Object value) {
-		Collection<Object> collection = (Collection<Object>) value;
-		StringBuilder sb = new StringBuilder();
-		
-		for (Object object : collection) {
-			sb.append(",");
-			sb.append(object.toString());
+	public void actionPerformed(ActionEvent e) {
+		if (getView().isDirty()) {
+			if (JOptionPane.YES_OPTION == 
+					JOptionPane.showConfirmDialog(getView().getPanel(), 
+							getMessageWrapper().getMessage("ViewCancelAction.dirty"))) {
+			
+				getEditor().cancel();
+				getDialog().dispose();
+			}
 		}
-	
-		String stringValue = sb.toString();
-		
-		if (stringValue.length() > 0) 	// drop first ','
-			super.setValue(sb.toString().substring(1));
-		else 
-			super.setValue("");
+		else {
+			getEditor().cancel();
+			getDialog().dispose();
+		}
 	}
+
+	/**
+	 * @return editor
+	 */
+	@SuppressWarnings("unchecked")
+	private Editor<T> getEditor() {
+		return (Editor<T>) getView();
+	}
+	
+	
 }

@@ -342,4 +342,12 @@ public class ViewDialog<T> extends JDialog implements View<T>, Editor<T>  {
 		this.windowWidth = windowWidth;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public void cancel() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

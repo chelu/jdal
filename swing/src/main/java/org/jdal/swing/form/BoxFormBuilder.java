@@ -72,7 +72,6 @@ public class BoxFormBuilder {
 	}
 	/**
 	 * @param c
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#add(java.awt.Component)
 	 */
 	public void add(Component c) {
 		builder.add(c);
@@ -84,7 +83,6 @@ public class BoxFormBuilder {
 	/**
 	 * @param name
 	 * @param c
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#add(java.lang.String, java.awt.Component)
 	 */
 	public void add(String name, Component c) {
 		builder.add(name, c);
@@ -92,14 +90,12 @@ public class BoxFormBuilder {
 
 	/**
 	 * @param i
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#setMaxWidth(int)
 	 */
 	public void setMaxWidth(int i) {
 		builder.setMaxWidth(i);
 	}
 
 	/**
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#row()
 	 */
 	public void row() {
 		builder.row();
@@ -107,21 +103,18 @@ public class BoxFormBuilder {
 
 	/**
 	 * @return the form
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#getForm()
 	 */
 	public JComponent getForm() {
 		return builder.getForm();
 	}
 
 	/**
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#reset()
 	 */
 	public void reset() {
 		builder.reset();
 	}
 
 	/**
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#next()
 	 */
 	public void next() {
 		builder.next();
@@ -129,7 +122,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @return form height
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#getHeight()
 	 */
 	public int getHeight() {
 		return builder.getHeight();
@@ -137,7 +129,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @param height
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#setHeight(int)
 	 */
 	public void setHeight(int height) {
 		builder.setHeight(height);
@@ -145,7 +136,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @return true if form debug is enabled.
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#isDebug()
 	 */
 	public boolean isDebug() {
 		return builder.isDebug();
@@ -153,7 +143,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @param debug
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#setDebug(boolean)
 	 */
 	public void setDebug(boolean debug) {
 		builder.setDebug(debug);
@@ -161,7 +150,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @return true if this form has height fixed.
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#isFixedHeight()
 	 */
 	public boolean isFixedHeight() {
 		return builder.isFixedHeight();
@@ -169,7 +157,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @param fixedHeight
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#setFixedHeight(boolean)
 	 */
 	public void setFixedHeight(boolean fixedHeight) {
 		builder.setFixedHeight(fixedHeight);
@@ -188,7 +175,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @return default row height
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#getDefaultRowHeight()
 	 */
 	public int getDefaultRowHeight() {
 		return builder.getDefaultRowHeight();
@@ -196,7 +182,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @param defaultRowHeight
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#setDefaultRowHeight(int)
 	 */
 	public void setDefaultRowHeight(int defaultRowHeight) {
 		builder.setDefaultRowHeight(defaultRowHeight);
@@ -204,7 +189,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @return default space
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#getDefaultSpace()
 	 */
 	public int getDefaultSpace() {
 		return builder.getDefaultSpace();
@@ -212,7 +196,6 @@ public class BoxFormBuilder {
 
 	/**
 	 * @param defaultSpace
-	 * @see org.jdal.ui.form.SimpleBoxFormBuilder#setDefaultSpace(int)
 	 */
 	public void setDefaultSpace(int defaultSpace) {
 		builder.setDefaultSpace(defaultSpace);

@@ -41,5 +41,10 @@ public interface Editor<T> extends PersistentServiceAware<T> {
 	 * Save editing model
 	 */
 	void save();
+	
+	/**
+	 * Cancel edit
+	 */
+	void cancel();
 
 }
