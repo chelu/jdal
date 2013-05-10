@@ -20,8 +20,10 @@ import org.jdal.ui.bind.AbstractControlAccessor;
 import com.vaadin.ui.AbstractField;
 
 /**
+ * Field ControlAccessor
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 2.0
  */
 public class FieldAccessor extends AbstractControlAccessor {
 	

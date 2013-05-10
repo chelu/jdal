@@ -26,12 +26,15 @@ import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 
 /**
+ * ItemIdStrategy that use entities as item id
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @since 2.0
  */
 public class EntityItemIdStrategy implements ItemIdStrategy {
 
-	ContainerDataSource<?> containerDataSource;
+	private ContainerDataSource<?> containerDataSource;
+	
 	/**
 	 * {@inheritDoc}
 	 */
