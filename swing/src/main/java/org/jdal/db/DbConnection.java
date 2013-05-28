@@ -15,6 +15,7 @@
  */
 package org.jdal.db;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
@@ -28,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class DbConnection {
+public class DbConnection implements Serializable {
 	
 	private static Log log = LogFactory.getLog(DbConnection.class);
 	
