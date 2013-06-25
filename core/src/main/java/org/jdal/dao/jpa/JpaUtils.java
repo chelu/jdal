@@ -21,6 +21,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +31,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PersistenceUnitUtil;
+import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -37,6 +39,7 @@ import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import javax.persistence.metamodel.Attribute;
@@ -253,20 +256,29 @@ public abstract class JpaUtils {
 	 */
 	public static void  copyCriteriaNoSelection(CriteriaQuery<?> from, CriteriaQuery<?> to) {
 
-		// Copy Roots
-		for (Root<?> root : from.getRoots()) {
-			Root<?> dest = to.from(root.getJavaType());
-			dest.alias(getOrCreateAlias(root));
-			copyJoins(root, dest);
+		 if (!isEclipseLink(from)) {
+			 // Copy Roots
+			 for (Root<?> root : from.getRoots()) {
+				 Root<?> dest = to.from(root.getJavaType());
+				 dest.alias(getOrCreateAlias(root));
+				 copyJoins(root, dest);
+			 }
 		}
 		
 		to.groupBy(from.getGroupList());
 		to.distinct(from.isDistinct());
-		to.having(from.getGroupRestriction());
-		to.where(from.getRestriction());
+		
+		if (from.getGroupRestriction() != null)
+			to.having(from.getGroupRestriction());
+		
+		to.where((Predicate) from.getRestriction());
 		to.orderBy(from.getOrderList());
 	}
 	
+	private static boolean isEclipseLink(CriteriaQuery<?> from) {
+		return from.getClass().getName().contains("org.eclipse.persistence");
+	}
+
 	public static <T> void copyCriteria(CriteriaQuery<T> from, CriteriaQuery<T> to) {
 		copyCriteriaNoSelection(from, to);
 		to.select(from.getSelection());
