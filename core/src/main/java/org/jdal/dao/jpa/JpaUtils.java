@@ -19,6 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -255,8 +256,13 @@ public abstract class JpaUtils {
 	 * @param to destination Criteria
 	 */
 	public static void  copyCriteriaNoSelection(CriteriaQuery<?> from, CriteriaQuery<?> to) {
-
-		 if (!isEclipseLink(from)) {
+		
+		
+		if (isEclipseLink(from) && from.getRestriction() != null) {
+			// EclipseLink adds roots from predicate paths to critera. Skip copying 
+			// roots as workaround.
+		}
+		else {
 			 // Copy Roots
 			 for (Root<?> root : from.getRoots()) {
 				 Root<?> dest = to.from(root.getJavaType());
@@ -271,7 +277,10 @@ public abstract class JpaUtils {
 		if (from.getGroupRestriction() != null)
 			to.having(from.getGroupRestriction());
 		
-		to.where((Predicate) from.getRestriction());
+		Predicate predicate = from.getRestriction();
+		if (predicate != null)
+			to.where(predicate);
+		
 		to.orderBy(from.getOrderList());
 	}
 	
