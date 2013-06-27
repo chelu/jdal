@@ -15,6 +15,7 @@
  */
 package info.joseluismartin.db;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class Database {
+public class Database implements Serializable {
 	
 	public static List<Database> DATABASES;
 	
@@ -114,5 +115,36 @@ public class Database {
 	 */
 	public void setDefaultPort(String defaultPort) {
 		this.defaultPort = defaultPort;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((jdbcName == null) ? 0 : jdbcName.hashCode());
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Database other = (Database) obj;
+		if (jdbcName == null) {
+			if (other.jdbcName != null)
+				return false;
+		} else if (!jdbcName.equals(other.jdbcName))
+			return false;
+		return true;
 	}
 }

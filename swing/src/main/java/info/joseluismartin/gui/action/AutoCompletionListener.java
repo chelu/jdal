@@ -42,10 +42,9 @@ public abstract class AutoCompletionListener extends KeyAdapter  {
 	 * @param combo combobox to add the auto completion listener
 	 */
 	public AutoCompletionListener(JComboBox combo) {
-		this.combo = combo;
-		combo.setEditable(true);
-		combo.getEditor().getEditorComponent().addKeyListener(this);
+		listenOn(combo);
 	}
+
 
 	/**
 	 * {@inheritDoc}
@@ -63,6 +62,35 @@ public abstract class AutoCompletionListener extends KeyAdapter  {
 		combo.setPopupVisible(true);
 		((JTextField) editor.getEditorComponent()).setText(editing);
 		combo.repaint();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyTyped(KeyEvent e) {
+		char ch = e.getKeyChar();
+		if (ch == KeyEvent.CHAR_UNDEFINED || Character.isISOControl(ch))
+			return;
+		
+		if (combo.getSelectedItem() !=  null) {
+			combo.setSelectedItem(null);
+			combo.getEditor().setItem(null);
+		}
+	}
+	
+	/**
+	 * Add the AutoCompletionListener to a JComboBox
+	 * @param combo the combo to add on.
+	 */
+	public void listenOn(JComboBox combo) {
+		if (this.combo != null) {
+			this.combo.getEditor().getEditorComponent().removeKeyListener(this);
+		}
+		
+		this.combo = combo;
+		combo.setEditable(true);
+		combo.getEditor().getEditorComponent().addKeyListener(this);
 	}
 
 	/**
@@ -89,17 +117,5 @@ public abstract class AutoCompletionListener extends KeyAdapter  {
 	public void setCombo(JComboBox combo) {
 		this.combo = combo;
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		char ch = e.getKeyChar();
-		if (ch == KeyEvent.CHAR_UNDEFINED || Character.isISOControl(ch))
-			return;
-		
-		if (combo.getSelectedItem() !=  null) {
-			combo.setSelectedItem(null);
-			combo.getEditor().setItem(null);
-		}
-	}	
-
+	
 }
