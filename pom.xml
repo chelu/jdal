@@ -17,8 +17,8 @@
 	</scm>
 
 	<issueManagement>
-		<system>mantis</system>
-		<url>http://www.jdal.org/mantis</url>
+		<system>jira</system>
+		<url>http://jira.jdal.org</url>
 	</issueManagement>
 
 	<licenses>
