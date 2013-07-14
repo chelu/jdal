@@ -44,7 +44,7 @@
 				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="serviceClass" type="xsd:string">
+		<xsd:attribute name="service-class" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation source="java:java.lang.Class">
 					<![CDATA[The fully qualified name of the persistent service class.]]>
@@ -56,7 +56,7 @@
 				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="daoClass" type="xsd:string">
+		<xsd:attribute name="dao-class" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation source="java:java.lang.Class">
 					<![CDATA[The fully qualified name of the dao class.]]>
