@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	default-init-method="init"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<context:annotation-config/>
+	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:dao/jpa/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- DataSource -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<property name="acquireIncrement" value="3" />
+		<property name="minPoolSize" value="2" />
+		<property name="maxPoolSize" value="15" />
+		<property name="maxIdleTime" value="5" />
+		<property name="numHelperThreads" value="5" />
+
+		<property name="idleConnectionTestPeriod" value="10" />
+		<property name="autoCommitOnClose" value="false" />
+		<property name="preferredTestQuery" value="select 1;" />
+		<property name="testConnectionOnCheckin" value="true" />
+
+		<property name="checkoutTimeout" value="60000" />
+	</bean>
+	
+	
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+      	<property name="dataSource" ref="dataSource"/>
+    	<property name="jpaVendorAdapter">
+       		<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter" />
+        </property>
+        <property name="jpaDialect">
+       		<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect" />
+        </property>
+        <property name="jpaPropertyMap">
+        <props>
+            <prop key="eclipselink.weaving">false</prop>
+        </props>
+        </property>         
+    </bean>
+
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+      <property name="entityManagerFactory" ref="entityManagerFactory"/>
+      <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+  <!-- bean post-processor for JPA annotations -->
+  <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+
+   <!-- Daos -->
+   <bean id="daoFactory" class="org.jdal.dao.jpa.JpaDaoFactory" />
+   
+   <bean id="bookDao" class="org.jdal.dao.jpa.JpaDao">
+   		<constructor-arg value="dao.jpa.Book"/>
+   		<property name="criteriaBuilderMap">
+   			<map>
+   				<entry key="bookFilter" value-ref="bookCriteriaBuilder"/>
+   				<entry key="joinFilter" value-ref="bookJoinCriteriaBuilder"/>
+   			</map>
+   		</property>
+   </bean>
+   
+   <bean id="categoryDao" class="org.jdal.dao.jpa.JpaDao">
+   		<constructor-arg value="dao.jpa.Category"/>
+   </bean>
+   
+   	
+   <bean id="bookCriteriaBuilder" class="dao.jpa.BookCriteriaBuilder"/>
+   
+   <bean id="bookJoinCriteriaBuilder" class="dao.jpa.BookJoinCriteriaQuery" />
+   
+   <!-- Simple Dao -->
+   <bean id="simpleDao" class="org.jdal.dao.jpa.JpaDao" />
+   
+   <!-- Persistent Services -->
+   <bean id="persistentServiceFactory" class="org.jdal.service.PersistentServiceFactory" />
+   
+   <bean id="bookService" class="org.jdal.logic.PersistentManager">
+   		<property name="dao" ref="bookDao"/>
+   </bean>
+
+	<!-- Simple PersistentService -->
+	<bean id="persistentService" class="org.jdal.logic.PersistentManager">
+		<property name="dao" ref="simpleDao" />
+	</bean>   
+	
+    <bean id="categoryService" class="org.jdal.logic.PersistentManager">
+   		<property name="dao" ref="categoryDao"/>
+   </bean>
+   	
+	<!-- Message Source -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames" value="i18n/jdal" />
+	</bean>
+
+</beans>
+
