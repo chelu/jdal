@@ -44,7 +44,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 /**
  * Test JpaDao
  * 
@@ -58,7 +57,8 @@ public class TestJpaDao extends TestCase {
 	
 	@Resource
 	private JpaDao<Book, Long> bookDao;
-	@Resource JpaDao<Category, Long> categoryDao;
+	@Resource 
+	JpaDao<Category, Long> categoryDao;
 	
 	@Test
 	@Transactional
