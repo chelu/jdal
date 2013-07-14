@@ -1,4 +1,12 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
-  <persistence-unit name="jdal-core-tests" transaction-type="RESOURCE_LOCAL"/>
+  <persistence-unit name="jdal-core-tests" transaction-type="RESOURCE_LOCAL">
+ 	<properties>
+            <property name="openjpa.RuntimeUnenhancedClasses" value="supportedr"/>
+   </properties> 
+  <class>org.jdal.model.Entity</class>
+  <class>dao.jpa.Book</class>
+  <class>dao.jpa.Author</class>
+  <class>dao.jpa.Category</class>
+ </persistence-unit>
 </persistence>
 
