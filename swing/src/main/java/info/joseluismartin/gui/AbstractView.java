@@ -65,7 +65,7 @@ import org.springframework.validation.Validator;
  * <code>doUpdate</code> and <code>doRefresh</code>.
  * 
  * <p> For common binding code, you usually use autobinding facitility, that is, using 
- * the same name to the field control and model property name, and setting autobinding to true.
+ * the same name to the field control and model property name and calling to autobind() method.
  * When using autobinding, you may exclude model properties from binding using some
  * of <code>ignoreProperty</code> methods.
  * 
