@@ -258,7 +258,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		Form f = new Form();
 		f.setSizeFull();
 		f.setImmediate(true);
-		f.getLayout().setMargin(true);
 		f.getLayout().setSizeFull();
 		
 		if (formFieldFactory != null)
@@ -307,7 +306,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			fd.init();
 			fd.addListener((CloseListener) this);
 
-			getWindow().addWindow(fd);
+			getUI().addWindow(fd);
 		}
 	}
 

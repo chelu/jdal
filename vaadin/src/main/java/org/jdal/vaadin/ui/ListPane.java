@@ -91,9 +91,8 @@ public class ListPane extends CustomComponent implements ClickListener {
 			return; // nothing to do
 		
 		selected.setCaption(item.getCaption());
-		selected.removeAllComponents();
 		Component c = item.getComponent();
-		selected.addComponent(c);
+		selected.setContent(c);
 		if (c instanceof ListPaneAware) {
 			((ListPaneAware) c).show();
 		}
@@ -118,10 +117,10 @@ class MenuItem extends Panel {
 		layout.setSpacing(true);
 		setContent(layout);
 		Embedded e = new Embedded("", holder.getIcon());
-		addComponent(e);
+		layout.addComponent(e);
 		Label l = new Label(holder.getName());
 		l.setStyleName(Reindeer.LABEL_H2);
-		addComponent(l);
+		layout.addComponent(l);
 		layout.setComponentAlignment(l, Alignment.BOTTOM_LEFT);
 		layout.setComponentAlignment(e, Alignment.BOTTOM_LEFT);
 		setStyleName("menuItem");

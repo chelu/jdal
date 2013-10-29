@@ -78,7 +78,7 @@ public class FormDialog extends Window {
 	}
 	
 	public void init() {
-		addComponent(form);
+		setContent(form);
 		getContent().setSizeUndefined();
 		center();
 		

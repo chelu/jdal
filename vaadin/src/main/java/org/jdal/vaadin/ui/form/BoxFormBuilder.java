@@ -18,7 +18,6 @@ package org.jdal.vaadin.ui.form;
 import java.util.Stack;
 
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 
 

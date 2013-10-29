@@ -18,7 +18,7 @@ package org.jdal.vaadin.ui.table;
 import org.jdal.dao.Filter;
 import org.jdal.ui.View;
 
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Form;
 

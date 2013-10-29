@@ -21,7 +21,7 @@ import org.jdal.cmd.Command;
 import org.jdal.cmd.DefaultCommand;
 import org.jdal.vaadin.ui.FormUtils;
 
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 
 /**
@@ -56,6 +56,6 @@ public class RemoveAction extends TableButtonListener {
 	
 		String message = messageSource.getMessage("removeAction.confirm", new Object[] {
 				selected.size() }, null); 
-		FormUtils.showConfirmDialog(getTable().getWindow(), command, message);
+		FormUtils.showConfirmDialog(getTable().getUI(), command, message);
 	}
 }

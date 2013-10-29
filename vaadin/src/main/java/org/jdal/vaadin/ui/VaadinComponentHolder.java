@@ -17,7 +17,7 @@ package org.jdal.vaadin.ui;
 
 import java.io.Serializable;
 
-import com.vaadin.terminal.Resource;
+import com.vaadin.server.Resource;
 import com.vaadin.ui.Component;
 
 /**

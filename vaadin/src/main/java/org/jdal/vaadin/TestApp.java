@@ -15,36 +15,17 @@
  */
 package org.jdal.vaadin;
 
-import org.jdal.beans.AppCtx;
-import org.jdal.vaadin.ui.Box;
-import org.springframework.context.ApplicationContext;
-
-import com.vaadin.Application;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
-public class TestApp extends Application {
-	
-	ApplicationContext context = AppCtx.getInstance();
+public class TestApp extends UI {
+
 	@Override
-	public void init() {
-		Window mainWindow = new Window("Application");
-		Component pageableTable = (Component) context.getBean("bookPageableTable");
-		Component dataSourceTable = (Component) context.getBean("dataSourceTable");	
-		// pageableTable.setWidth("100%");
-		// dataSourceTable.setWidth("100%");
-		Panel panel = new Panel("Table with external paginator and server side paging and sorting");
-		panel.addComponent(pageableTable);
-		Panel otherPanel = new Panel("Table with paginator in datasource and server side paging and sorting ");
-		otherPanel.addComponent(dataSourceTable);
-		VerticalLayout layout = new VerticalLayout();
-		layout.addComponent(panel);
-		Box.addVerticalStruct(layout, 10);
-		layout.addComponent(otherPanel);
-		mainWindow.setContent(layout);
-		setMainWindow(mainWindow);
+	protected void init(VaadinRequest request) {
+		// TODO Auto-generated method stub
+		
 	}
+	
+
 }

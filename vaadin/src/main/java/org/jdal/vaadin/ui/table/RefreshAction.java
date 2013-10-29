@@ -15,7 +15,7 @@
  */
 package org.jdal.vaadin.ui.table;
 
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 
 /**

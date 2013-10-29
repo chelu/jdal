@@ -16,9 +16,9 @@
 	</parent>
 
 	<properties>
-		<vaadin.version>6.7.5</vaadin.version>
-		<gwt.version>2.3.0</gwt.version>
-		<gwt.plugin.version>2.2.0</gwt.plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<vaadin.version>7.0.5</vaadin.version>
+		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 	</properties>
 
 	<build>
@@ -117,7 +117,23 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin</artifactId>
+			<artifactId>vaadin-server</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiled</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client</artifactId>
+			<version>${vaadin.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-themes</artifactId>
 			<version>${vaadin.version}</version>
 		</dependency>
 		<dependency>

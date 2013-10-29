@@ -52,7 +52,6 @@ public class FormEditor extends Form implements Editor {
 		}	
 		buttonPanel.setSpacing(true);
 		setFooter(buttonPanel);
-		setWriteThrough(false);
 		
 	}
 

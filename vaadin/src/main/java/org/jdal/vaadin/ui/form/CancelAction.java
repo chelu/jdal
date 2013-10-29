@@ -16,6 +16,7 @@
 package org.jdal.vaadin.ui.form;
 
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -29,8 +30,8 @@ public class CancelAction extends FormAction {
 	@Override
 	public void buttonClick(ClickEvent event) {
 	
-		if (getForm().getWindow().getParent() != null)
-			getForm().getWindow().getParent().removeWindow(getForm().getWindow());
+		if (getForm().getParent() != null)
+			getForm().getParent().getUI().removeWindow((Window) getForm().getParent());
 		else 
 			getForm().discard();
 	}

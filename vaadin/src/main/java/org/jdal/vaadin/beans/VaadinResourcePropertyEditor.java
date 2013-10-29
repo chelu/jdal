@@ -17,7 +17,7 @@ package org.jdal.vaadin.beans;
 
 import java.beans.PropertyEditorSupport;
 
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.server.ThemeResource;
 
 public class VaadinResourcePropertyEditor extends PropertyEditorSupport {
 	

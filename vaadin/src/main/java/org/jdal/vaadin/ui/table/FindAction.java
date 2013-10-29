@@ -18,10 +18,10 @@ package org.jdal.vaadin.ui.table;
 import org.jdal.dao.Filter;
 import org.jdal.ui.View;
 
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Form;
-import com.vaadin.ui.Window.Notification;
+import com.vaadin.ui.Notification;
 
 
 /**
@@ -53,8 +53,8 @@ public class FindAction extends TableButtonListener {
 				View<Filter> view = (View<Filter>) filterForm;
 				view.update();
 				if (!view.validateView()) {
-					getTable().getApplication().getMainWindow()
-					.showNotification(view.getErrorMessage(), Notification.TYPE_ERROR_MESSAGE);
+					getTable().getUI().
+						showNotification(view.getErrorMessage(), Notification.TYPE_ERROR_MESSAGE);
 				}
 			}
 			getTable().firstPage();

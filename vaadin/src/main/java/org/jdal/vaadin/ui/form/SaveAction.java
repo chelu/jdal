@@ -25,6 +25,7 @@ import org.jdal.service.PersistentService;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Form;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Window;
 
 /**
@@ -48,13 +49,13 @@ public class SaveAction extends FormAction {
 		persistentService.save(entity.getBean());
 		doSave();
 		
-		Window parent = form.getWindow().getParent();
+		Window parent = (Window) form.getParent();
 		
 		if (parent != null) {
-			if (form.getWindow().isClosable())
-				form.getWindow().getParent().removeWindow(form.getWindow());
+			if (parent.isClosable())
+				parent.getUI().removeWindow(parent);
 			
-			parent.showNotification(StaticMessageSource.getMessage("formAction.saved_successfuly"));
+			Notification.show(StaticMessageSource.getMessage("formAction.saved_successfuly"));
 		}
 	}
 

@@ -28,8 +28,9 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.vaadin.Application;
-import com.vaadin.terminal.gwt.server.ApplicationServlet;
+import com.vaadin.server.LegacyApplication;
+import com.vaadin.server.LegacyVaadinServlet;
+import com.vaadin.server.VaadinServlet;
 
 /**
  * Vaadin Servlet.
@@ -37,7 +38,7 @@ import com.vaadin.terminal.gwt.server.ApplicationServlet;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class VaadinServlet extends ApplicationServlet {
+public class ApplicationServlet extends LegacyVaadinServlet {
 	
 	public static final String SESSION_LISTENER_NAME = "VAADIN_SCOPE_SESSION_LISTENER";
 	private static final Log log = LogFactory.getLog(VaadinServlet.class);
@@ -46,14 +47,14 @@ public class VaadinServlet extends ApplicationServlet {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Application getNewApplication(HttpServletRequest request) throws ServletException {
+	protected LegacyApplication getNewApplication(HttpServletRequest request) throws ServletException {
 		// try from context 
 		WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(request.getSession()
 				.getServletContext());
 		
 		ConfigurableListableBeanFactory beanFactory = ((AbstractApplicationContext) wac).getBeanFactory();
 		
-		Application	app = super.getNewApplication(request);
+		LegacyApplication	app = super.getNewApplication(request);
 			
 		if (app == null)
 				throw new ServletException("Can't instantiate Vaadin Application");

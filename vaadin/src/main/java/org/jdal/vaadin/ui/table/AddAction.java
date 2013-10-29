@@ -23,7 +23,7 @@ import org.jdal.vaadin.ui.form.FormDialog;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.terminal.ThemeResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.Window.CloseEvent;
@@ -72,7 +72,7 @@ public class AddAction extends TableButtonListener {
 				table.refresh();
 			}
 		});
-		table.getWindow().addWindow(dialog);
+		table.getUI().addWindow(dialog);
 	}
 
 	/**

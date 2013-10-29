@@ -27,7 +27,7 @@ import org.jdal.vaadin.VaadinUtils;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
-import com.vaadin.Application;
+import com.vaadin.ui.UI;
 
 /**
  * Spring scope for Vaadin.
@@ -45,9 +45,7 @@ public class VaadinScope implements Scope {
 	 * {@inheritDoc}
 	 */
 	public Object get(String name, ObjectFactory<?> objectFactory) {
-		if (VaadinUtils.getApplication() == null)
-			throw new IllegalStateException("No Vaadin application active when requesting bean: [" + name + "]");
-		
+	
 		String key = key(name);
 		Object bean = beans.get(key);
 		
@@ -93,21 +91,12 @@ public class VaadinScope implements Scope {
 	 * {@inheritDoc}
 	 */
 	public String getConversationId() {
-		return VaadinUtils.getSession().getId() + "_" + VaadinUtils.getApplication().getURL().toString();
+		return VaadinUtils.getSession().getId() + "_" + UI.getCurrent().toString();
 	}
 	
 	protected String key(String name) {
 		return getConversationId() + "_" + name;
 	}
-
-	public synchronized void onApplicationClose(Application app) {
-		
-		if (log.isDebugEnabled()) 
-			log.debug("Vaadin application closing, destroying scoped beans");
-		
-		removeBeans(getConversationId());
-	}
-
 
 	private void removeBeans(String prefix) {
 		for (String key : beans.keySet()) {

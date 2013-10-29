@@ -26,11 +26,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import com.vaadin.Application;
-import com.vaadin.terminal.gwt.server.WebApplicationContext;
+import com.vaadin.server.LegacyApplication;
 
 /**
  * Easy access to vaadin or servlet classes.
@@ -42,28 +42,6 @@ public abstract class VaadinUtils {
 
 	private static final Log log = LogFactory.getLog(VaadinUtils.class);
 	
-	/** 
-	 * Find current application.
-	 * @return Application
-	 */
-	public static Application getApplication() {
-		HttpServletRequest request = getRequest();
-		HttpSession session = request.getSession();
-		
-		WebApplicationContext wac = WebApplicationContext.getApplicationContext(session);
-		Collection<Application> apps = wac.getApplications();
-		
-		for (Application app : apps) {
-			String appPath = app.getURL().getPath();
-			String requestContextPath = request.getContextPath();
-			if (appPath.startsWith(requestContextPath)) {
-				return  app;
-			}
-		}
-		
-		return null;
-	}
-	
 	public static HttpServletRequest getRequest() {
 		return (HttpServletRequest) RequestContextHolder.getRequestAttributes()
 				.resolveReference(RequestAttributes.REFERENCE_REQUEST);
@@ -74,9 +52,6 @@ public abstract class VaadinUtils {
 				.resolveReference(RequestAttributes.REFERENCE_SESSION);
 	}
 	
-	public static WebApplicationContext getApplicationContext() {
-		return  WebApplicationContext.getApplicationContext(getSession());
-	}
 	
 	public static ServletContext getServletContext() {
 		return getSession().getServletContext();

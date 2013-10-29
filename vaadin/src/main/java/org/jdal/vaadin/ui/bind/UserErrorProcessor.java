@@ -19,7 +19,7 @@ import org.jdal.beans.StaticMessageSource;
 import org.jdal.ui.validation.ErrorProcessor;
 import org.springframework.validation.FieldError;
 
-import com.vaadin.terminal.UserError;
+import com.vaadin.server.UserError;
 import com.vaadin.ui.AbstractField;
 
 /**

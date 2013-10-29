@@ -35,6 +35,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -78,7 +79,7 @@ public abstract class FormUtils {
 			public void buttonClick(ClickEvent event) {
 				f.discard();
 				// what? where is window.close() ?
-				f.getWindow().getParent().removeWindow(f.getWindow());
+				// f.getUI().getParent().removeWindow(f.getUI().getW());
 			}
 		});
 		
@@ -97,7 +98,7 @@ public abstract class FormUtils {
 			public void buttonClick(ClickEvent event) {
 				f.commit();
 				// what? where is window.close() ?
-				f.getWindow().getParent().removeWindow(f.getWindow());
+				// f.getWindow().getParent().removeWindow(f.getWindow());
 			}
 		});
 		
@@ -110,7 +111,7 @@ public abstract class FormUtils {
 	 */
 	public static void closeWindow(Window window) {
 		if (window.getParent() != null) 
-			window.getParent().removeWindow(window);
+			window.getUI().removeWindow(window);
 	}
 
 	/**
@@ -130,7 +131,7 @@ public abstract class FormUtils {
 	 * @param window Window to attach the dialog
 	 * @param msg the msg
 	 */
-	public static void showConfirmDialog(Window window,  final Command command, String msg) {
+	public static void showConfirmDialog(UI ui,  final Command command, String msg) {
 	
 		final Window dlg = new Window("Please Confirm");
 		VerticalLayout vl = new VerticalLayout();
@@ -169,8 +170,8 @@ public abstract class FormUtils {
 		dlg.setContent(vl);
 		dlg.setModal(true);
 		vl.setSizeUndefined();
-		window.center();
-		window.addWindow(dlg);
+		
+		ui.addWindow(dlg);
 	}
 	
 	/**

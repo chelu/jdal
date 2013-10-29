@@ -122,7 +122,7 @@ public class ConfigurableTable extends Table {
 		
 		this.setVisibleColumns(visibleColumns);
 		this.setColumnHeaders(displayNames);
-		this.setColumnAlignments(alignments);
+		this.setColumnAlignments(convertAlignments(alignments));
 		
 		for (int i = 0; i < size; i++) {
 			if ( widths[i] != -1) {
@@ -132,6 +132,16 @@ public class ConfigurableTable extends Table {
 				this.setColumnExpandRatio(visibleColumns[i], expandRatios[i]);
 			}
 		}
+	}
+
+
+	private Align[] convertAlignments(String[] alignments) {
+		Align[] values = new Align[alignments.length];
+		for (int i = 0; i < alignments.length; i++) {
+			values[i] = Align.CENTER.convertStringToAlign(alignments[i]);
+		}
+		
+		return values;
 	}
 
 

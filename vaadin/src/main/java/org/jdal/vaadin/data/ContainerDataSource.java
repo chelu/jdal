@@ -679,4 +679,29 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	public void setSortProperty(String sortProperty) {
 		this.sortProperty = sortProperty;
 	}
+
+	public void setBuffered(boolean buffered) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isBuffered() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void addItemSetChangeListener(ItemSetChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeItemSetChangeListener(ItemSetChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<?> getItemIds(int startIndex, int numberOfItems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
