@@ -13,38 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.swing;
+package org.jdal.ui;
 
-import org.jdal.service.PersistentServiceAware;
+import java.util.EventListener;
 
 /**
- * Interface for model editors
- * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ *
  */
-public interface Editor<T> extends PersistentServiceAware<T> {
+public interface EditorListener extends EventListener {
 	
 	/**
-	 * Add an editor listener to be notified on editor events
-	 * @param listener editor listener to add
+	 * notify that model change state
+	 * @param e editor event
 	 */
-	void addEditorListener(EditorListener listener);
-	
-	/**
-	 * Remove a previusly added EditorListener
-	 * @param listener
-	 */
-	void removeEditorListener(EditorListener listener);
-	
-	
-	/**
-	 * Save editing model
-	 */
-	void save();
-	
-	/**
-	 * Cancel edit
-	 */
-	void cancel();
-
+	void modelChanged(EditorEvent e);
 }

@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.swing;
+package org.jdal.ui;
 
 import java.util.EventObject;
-
-import org.jdal.ui.ModelHolder;
 
 /**
  * Editor event, hold a reference to editing model.
