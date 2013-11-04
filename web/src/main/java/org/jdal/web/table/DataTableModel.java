@@ -1,9 +1,9 @@
 package org.jdal.web.table;
 
-import info.joseluismartin.dao.Page;
-import info.joseluismartin.dao.Page.Order;
-
 import java.util.Collection;
+
+import org.jdal.dao.Page;
+import org.jdal.dao.Page.Order;
 
 
 

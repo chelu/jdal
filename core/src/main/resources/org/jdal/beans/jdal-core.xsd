@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.jdal.org/schema/jdal"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jdal.org/schema/jdal"
+	xmlns:tool="http://www.springframework.org/schema/tool"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool-3.1.xsd"/>
+
+	<xsd:annotation>
+		<xsd:documentation>
+			<![CDATA[JDAL Core Schema, version 1.2.x Author: Jose Luis Martin]]>
+		</xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="service" type="serviceType" >
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[Declares a PersistentService for a entity class]]>
+		    </xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="criteria" type="criteriaType">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[Binds a CriteriaBuilder with a filter name]]>
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+
+	<xsd:complexType name="serviceType">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element ref="criteria" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" />
+		<xsd:attribute name="entity" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[The fully qualified name of the entity class.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="service-class" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[The fully qualified name of the persistent service class.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="dao-class" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[The fully qualified name of the dao class.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class"/>
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="criteriaType">
+		<xsd:attribute name="name" type="xsd:string" />
+		<xsd:attribute name="builder" type="xsd:string" />
+	</xsd:complexType>
+
+</xsd:schema>

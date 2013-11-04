@@ -1,12 +1,11 @@
 package dao.jpa;
 
-import info.joseluismartin.model.Entity;
-
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
+import org.jdal.model.Entity;
 
 
 @javax.persistence.Entity

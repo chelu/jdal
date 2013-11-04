@@ -15,12 +15,11 @@
  */
 package org.jdal.web.table;
 
-import info.joseluismartin.dao.Page;
-
 import java.util.List;
 
 import org.displaytag.pagination.PaginatedList;
 import org.displaytag.properties.SortOrderEnum;
+import org.jdal.dao.Page;
 
 /**
  * Page to displaytag PaginatedList adapter

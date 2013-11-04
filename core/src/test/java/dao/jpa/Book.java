@@ -1,13 +1,15 @@
 package dao.jpa;
 
-import info.joseluismartin.model.Entity;
-
 import java.util.Date;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.jdal.model.Entity;
 
 @NamedQuery(name="booksByAuthorName", query="SELECT b FROM Book b WHERE b.author.name= :authorName")
 @javax.persistence.Entity
@@ -22,6 +24,7 @@ public class Book extends Entity {
 	@JoinColumn(name="categoryid")
 	private Category category;
 	private String isbn = "";
+	@Temporal(TemporalType.DATE)
 	private Date publishedDate;
 	
 	public String toString() {

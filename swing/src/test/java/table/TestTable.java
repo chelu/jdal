@@ -16,7 +16,6 @@
 package table;
 
 import static org.junit.Assert.assertEquals;
-import info.joseluismartin.gui.ListTableModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.List;
 import model.Author;
 import model.Book;
 
+import org.jdal.swing.ListTableModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;

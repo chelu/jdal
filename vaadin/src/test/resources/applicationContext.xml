@@ -67,14 +67,14 @@
   <!-- bean post-processor for JPA annotations -->
   <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
-   <bean id="categoryDao" class="info.joseluismartin.dao.jpa.JpaDao">
+   <bean id="categoryDao" class="org.jdal.dao.jpa.JpaDao">
    		<constructor-arg value="org.jdal.samples.model.Category"/>
    </bean>
    
    <!-- Daos -->
-   <bean id="daoFactory" class="info.joseluismartin.dao.jpa.JpaDaoFactory" />
+   <bean id="daoFactory" class="org.jdal.dao.jpa.JpaDaoFactory" />
    
-   <bean id="bookDao" class="info.joseluismartin.dao.jpa.JpaDao">
+   <bean id="bookDao" class="org.jdal.dao.jpa.JpaDao">
    		<constructor-arg value="org.jdal.samples.model.Book"/>
    		<property name="criteriaBuilderMap">
    			<map>
@@ -86,34 +86,34 @@
    <bean id="bookCriteriaBuilder" class="org.jdal.samples.dao.filter.BookCriteriaBuilder"/>
    
    <!-- Simple Dao -->
-   <bean id="simpleDao" class="info.joseluismartin.dao.jpa.JpaDao" />
+   <bean id="simpleDao" class="org.jdal.dao.jpa.JpaDao" />
    
    <!-- Persistent Services -->
-   <bean id="persistentServiceFactory" class="info.joseluismartin.service.PersistentServiceFactory" />
+   <bean id="persistentServiceFactory" class="org.jdal.service.PersistentServiceFactory" />
    
-   <bean id="bookService" class="info.joseluismartin.logic.PersistentManager">
+   <bean id="bookService" class="org.jdal.logic.PersistentManager">
    		<property name="dao" ref="bookDao"/>
    </bean>
 
 	<!-- Simple PersistentService -->
-	<bean id="persistentService" class="info.joseluismartin.logic.PersistentManager">
+	<bean id="persistentService" class="org.jdal.logic.PersistentManager">
 		<property name="dao" ref="simpleDao" />
 	</bean>   
 	
-    <bean id="categoryService" class="info.joseluismartin.logic.PersistentManager">
+    <bean id="categoryService" class="org.jdal.logic.PersistentManager">
    		<property name="dao" ref="categoryDao"/>
    </bean>
    	
    <!-- UI Widgets -->
    
-   <bean id="guiFactory" class="info.joseluismartin.vaadin.ui.ApplicationContextGuiFactory" />
+   <bean id="guiFactory" class="org.jdal.vaadin.ui.ApplicationContextGuiFactory" />
    
-   <bean id="comboBoxFieldBuilder" class="info.joseluismartin.vaadin.ui.form.ComboBoxFieldBuilder">
+   <bean id="comboBoxFieldBuilder" class="org.jdal.vaadin.ui.form.ComboBoxFieldBuilder">
   		<property name="persistentServiceFactory" ref="persistentServiceFactory"/>
    </bean>
    
    <!-- Create and configure Fields by means of JPA annotations -->
-   <bean id="formFieldFactory" class="info.joseluismartin.vaadin.ui.form.AnnotationFieldFactory" >
+   <bean id="formFieldFactory" class="org.jdal.vaadin.ui.form.AnnotationFieldFactory" >
    		<property name="classBuilderMap">
 					<map>
 				    	<entry key="org.jdal.samples.model.Category" value-ref="comboBoxFieldBuilder" />
@@ -123,7 +123,7 @@
 		<property name="fieldProcessors">
 			<list>
 			<!-- size category combo to 150px width, is to large by default -->
-				<bean class="info.joseluismartin.vaadin.ui.form.SizeFieldProcessor">
+				<bean class="org.jdal.vaadin.ui.form.SizeFieldProcessor">
 					<property name="widths">
 						<map>
 							<entry key="category" value="150px"/>
@@ -134,7 +134,7 @@
 		</property>
    </bean>
    
-	<bean id="bookPageableTable" class="info.joseluismartin.vaadin.ui.table.PageableTable"
+	<bean id="bookPageableTable" class="org.jdal.vaadin.ui.table.PageableTable"
 		scope="session">
 		<property name="table" ref="table" />
 		<property name="paginator" ref="paginator" />
@@ -154,39 +154,39 @@
 
 	<!--  Action List for table buttons -->
 	<util:list id="actionList" scope="prototype">
-		<bean class="info.joseluismartin.vaadin.ui.table.AddAction"  p:icon="images/table/filenew.png"
+		<bean class="org.jdal.vaadin.ui.table.AddAction"  p:icon="images/table/filenew.png"
 			p:description="Add new item" />
-		<bean class="info.joseluismartin.vaadin.ui.table.RemoveAction" p:icon="images/table/edit-delete.png"
+		<bean class="org.jdal.vaadin.ui.table.RemoveAction" p:icon="images/table/edit-delete.png"
 			p:description="Delete selected items" />
-		<bean class="info.joseluismartin.vaadin.ui.table.FindAction" p:icon="images/table/edit-find.png"
+		<bean class="org.jdal.vaadin.ui.table.FindAction" p:icon="images/table/edit-find.png"
 			p:description="Apply filter" />
-		<bean class="info.joseluismartin.vaadin.ui.table.RefreshAction" p:icon="images/table/reload.png"
+		<bean class="org.jdal.vaadin.ui.table.RefreshAction" p:icon="images/table/reload.png"
 			p:description="Refresh current page" />
 		
 	</util:list>
 	
 	
-	<bean id="table" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable"
+	<bean id="table" class="org.jdal.vaadin.ui.table.ConfigurableTable"
 		scope="prototype">
 		
 		<property name="selectable" value="true" />
 		<property name="multiSelect" value="true" />
 
 		<property name="columns">
-			<list value-type="info.joseluismartin.vaadin.ui.table.Column">
-				<bean class="info.joseluismartin.vaadin.ui.table.Column">
+			<list value-type="org.jdal.vaadin.ui.table.Column">
+				<bean class="org.jdal.vaadin.ui.table.Column">
 					<property name="name" value="id" />
 					<property name="displayName" value="ID" />
 					<property name="width" value="60" />
 					<property name="align" value="c" />
 				</bean>
-				<bean class="info.joseluismartin.vaadin.ui.table.Column">
+				<bean class="org.jdal.vaadin.ui.table.Column">
 					<property name="name" value="name" />
 					<property name="displayName" value="Title" />
 					<property name="width" value="300" />
 					<property name="align" value="b" />
 				</bean>
-				<bean class="info.joseluismartin.vaadin.ui.table.Column">
+				<bean class="org.jdal.vaadin.ui.table.Column">
 					<property name="name" value="author" />
 					<property name="displayName" value="Author" />
 					<!-- really don't needed, HibernateDao figures them -->
@@ -194,20 +194,20 @@
 					<property name="width" value="150" />
 					<property name="align" value="b" />
 				</bean>
-				<bean class="info.joseluismartin.vaadin.ui.table.Column">
+				<bean class="org.jdal.vaadin.ui.table.Column">
 					<property name="name" value="category" />
 					<property name="displayName" value="Category" />
 					<property name="sortPropertyName" value="category.name"/>
 					<property name="width" value="200" />
 					<property name="align" value="b" />
 				</bean>
-				<bean class="info.joseluismartin.vaadin.ui.table.Column">
+				<bean class="org.jdal.vaadin.ui.table.Column">
 					<property name="name" value="isbn" />
 					<property name="displayName" value="ISBN" />
 					<property name="width" value="150" />
 					<property name="align" value="b" />
 				</bean>
-				<bean class="info.joseluismartin.vaadin.ui.table.Column">
+				<bean class="org.jdal.vaadin.ui.table.Column">
 					<property name="name" value="publishedDate" />
 					<property name="displayName" value="Published Date" />
 					<property name="width" value="150" />
@@ -227,7 +227,7 @@
 		</property>
 	</bean>
 
-	<bean id="paginator" class="info.joseluismartin.vaadin.ui.table.VaadinPaginator"
+	<bean id="paginator" class="org.jdal.vaadin.ui.table.VaadinPaginator"
 		scope="prototype">
 		<property name="first" ref="paginatorFirstButton" />
 		<property name="last" ref="paginatorLastButton" />
@@ -261,10 +261,10 @@
 		<property name="visibleItemProperties" value="#{ { 'name', 'author','category','isbn', 'publishedDate' } }" />
 		<property name="width" value="500"  />
 		<property name="formFieldFactory">
-			<bean class="info.joseluismartin.vaadin.ui.form.AnnotationFieldFactory">
+			<bean class="org.jdal.vaadin.ui.form.AnnotationFieldFactory">
 				<property name="fieldProcessors">
 					<list>
-						<bean class="info.joseluismartin.vaadin.ui.form.SizeFieldProcessor">
+						<bean class="org.jdal.vaadin.ui.form.SizeFieldProcessor">
 							<property name="defaultWidth" value="400px" />
 						</bean>
 					</list>
@@ -282,12 +282,12 @@
 		<property name="formFieldFactory" ref="formFieldFactory" />
 	</bean>
 	
-	<bean id="dataSourceTable" class="info.joseluismartin.vaadin.ui.table.ConfigurableTable" parent="table"
+	<bean id="dataSourceTable" class="org.jdal.vaadin.ui.table.ConfigurableTable" parent="table"
 		scope="prototype">
 		<property name="containerDataSource" ref="bookContainerDataSource"/>
 	</bean>
 	
-	<bean id="bookContainerDataSource" class="info.joseluismartin.vaadin.data.ContainerDataSource" scope="prototype">
+	<bean id="bookContainerDataSource" class="org.jdal.vaadin.data.ContainerDataSource" scope="prototype">
 		<constructor-arg value="org.jdal.samples.model.Book"/>
 		<property name="service" ref="bookService"/>
 	</bean>
@@ -298,7 +298,7 @@
 		<property name="customEditors">
 			<map>
 				<entry key="com.vaadin.terminal.Resource">
-					<bean class="info.joseluismartin.vaadin.beans.VaadinResourcePropertyEditor" />
+					<bean class="org.jdal.vaadin.beans.VaadinResourcePropertyEditor" />
 				</entry>
 			</map>
 		</property>
@@ -326,7 +326,7 @@
    <aop:config>
     <!-- Make all methods on package service transactional  -->
      <aop:pointcut id="serviceOperation" 
-     	expression="execution(* info.joseluismartin.service.PersistentService.*(..))"/>
+     	expression="execution(* org.jdal.service.PersistentService.*(..))"/>
      <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
   </aop:config>
 

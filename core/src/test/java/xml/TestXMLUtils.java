@@ -1,8 +1,5 @@
 package xml;
 
-import info.joseluismartin.xml.ValidationResult;
-import info.joseluismartin.xml.XMLUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,6 +12,8 @@ import javax.xml.validation.SchemaFactory;
 
 import junit.framework.TestCase;
 
+import org.jdal.xml.ValidationResult;
+import org.jdal.xml.XMLUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 

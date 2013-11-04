@@ -1,1 +1,1 @@
-http\://www.jdal.org/schema/jdal=info.joseluismartin.beans.JdalNamespaceHandler
+http\://www.jdal.org/schema/jdal=org.jdal.beans.JdalNamespaceHandler

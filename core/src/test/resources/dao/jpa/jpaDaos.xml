@@ -68,9 +68,9 @@
   <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
    <!-- Daos -->
-   <bean id="daoFactory" class="info.joseluismartin.dao.jpa.JpaDaoFactory" />
+   <bean id="daoFactory" class="org.jdal.dao.jpa.JpaDaoFactory" />
    
-   <bean id="bookDao" class="info.joseluismartin.dao.jpa.JpaDao">
+   <bean id="bookDao" class="org.jdal.dao.jpa.JpaDao">
    		<constructor-arg value="dao.jpa.Book"/>
    		<property name="criteriaBuilderMap">
    			<map>
@@ -80,7 +80,7 @@
    		</property>
    </bean>
    
-   <bean id="categoryDao" class="info.joseluismartin.dao.jpa.JpaDao">
+   <bean id="categoryDao" class="org.jdal.dao.jpa.JpaDao">
    		<constructor-arg value="dao.jpa.Category"/>
    </bean>
    
@@ -90,21 +90,21 @@
    <bean id="bookJoinCriteriaBuilder" class="dao.jpa.BookJoinCriteriaQuery" />
    
    <!-- Simple Dao -->
-   <bean id="simpleDao" class="info.joseluismartin.dao.jpa.JpaDao" />
+   <bean id="simpleDao" class="org.jdal.dao.jpa.JpaDao" />
    
    <!-- Persistent Services -->
-   <bean id="persistentServiceFactory" class="info.joseluismartin.service.PersistentServiceFactory" />
+   <bean id="persistentServiceFactory" class="org.jdal.service.PersistentServiceFactory" />
    
-   <bean id="bookService" class="info.joseluismartin.logic.PersistentManager">
+   <bean id="bookService" class="org.jdal.logic.PersistentManager">
    		<property name="dao" ref="bookDao"/>
    </bean>
 
 	<!-- Simple PersistentService -->
-	<bean id="persistentService" class="info.joseluismartin.logic.PersistentManager">
+	<bean id="persistentService" class="org.jdal.logic.PersistentManager">
 		<property name="dao" ref="simpleDao" />
 	</bean>   
 	
-    <bean id="categoryService" class="info.joseluismartin.logic.PersistentManager">
+    <bean id="categoryService" class="org.jdal.logic.PersistentManager">
    		<property name="dao" ref="categoryDao"/>
    </bean>
    	

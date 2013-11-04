@@ -15,12 +15,10 @@
  */
 package org.jdal.aspects.sample;
 
-import info.joseluismartin.beans.AppCtx;
-import info.joseluismartin.dao.Dao;
-
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.beans.AppCtx;
+import org.jdal.dao.Dao;
 
 /**
  * HibernateLazyGuard sample.

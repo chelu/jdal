@@ -15,11 +15,11 @@
  */
 package dao.jpa;
 
-import info.joseluismartin.dao.Filter;
-import info.joseluismartin.dao.jpa.JpaCriteriaBuilder;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+
+import org.jdal.dao.Filter;
+import org.jdal.dao.jpa.JpaCriteriaBuilder;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)

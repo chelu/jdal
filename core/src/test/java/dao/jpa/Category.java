@@ -1,13 +1,13 @@
 package dao.jpa;
 
-import info.joseluismartin.model.Entity;
-
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.jdal.model.Entity;
 
 @javax.persistence.Entity
 @Table(name="categories")

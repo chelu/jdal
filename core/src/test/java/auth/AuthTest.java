@@ -4,12 +4,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
-import info.joseluismartin.auth.AuthHashMD5;
-import info.joseluismartin.auth.AuthManager;
-import info.joseluismartin.auth.AuthPlain;
-import info.joseluismartin.auth.AuthStrategy;
-import info.joseluismartin.dao.UserDao;
-import info.joseluismartin.model.User;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -19,6 +13,12 @@ import junit.framework.TestCase;
 
 import org.bouncycastle.util.encoders.Base64;
 import org.easymock.EasyMock;
+import org.jdal.auth.AuthHashMD5;
+import org.jdal.auth.AuthManager;
+import org.jdal.auth.AuthPlain;
+import org.jdal.auth.AuthStrategy;
+import org.jdal.dao.UserDao;
+import org.jdal.model.User;
 
 /**
  * Test info.joseluismartin.auth package

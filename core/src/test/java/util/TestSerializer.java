@@ -1,10 +1,10 @@
 package util;
 
-import info.joseluismartin.util.Serializer;
-
 import java.io.IOException;
 
 import junit.framework.TestCase;
+
+import org.jdal.util.Serializer;
 
 /**
  * Simple test for Serializer
