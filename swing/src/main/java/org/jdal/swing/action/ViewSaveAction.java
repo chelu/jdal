@@ -23,10 +23,10 @@ import javax.swing.JOptionPane;
 
 import org.jdal.service.PersistentService;
 import org.jdal.service.PersistentServiceAware;
-import org.jdal.swing.Editor;
 import org.jdal.swing.ViewDialog;
 import org.jdal.swing.View;
 import org.jdal.swing.form.FormUtils;
+import org.jdal.ui.Editor;
 
 /**
  * Generic Save Action for ViewDialog.

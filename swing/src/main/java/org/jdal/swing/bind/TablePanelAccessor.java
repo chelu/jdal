@@ -18,9 +18,9 @@ package org.jdal.swing.bind;
 
 import java.util.List;
 
-import org.jdal.swing.EditorEvent;
-import org.jdal.swing.EditorListener;
 import org.jdal.swing.table.TablePanel;
+import org.jdal.ui.EditorEvent;
+import org.jdal.ui.EditorListener;
 import org.jdal.ui.bind.AbstractControlAccessor;
 
 /**

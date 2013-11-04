@@ -30,9 +30,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
-import org.jdal.swing.Editor;
-import org.jdal.swing.EditorEvent;
-import org.jdal.swing.EditorListener;
+import org.jdal.ui.Editor;
+import org.jdal.ui.EditorEvent;
+import org.jdal.ui.EditorListener;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)

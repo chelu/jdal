@@ -20,7 +20,7 @@ package org.jdal.swing.editor;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  * @since 1.1
- * @see org.jdal.swing.Editor
+ * @see org.jdal.ui.Editor
  */
 public interface EditorState {
 	/**

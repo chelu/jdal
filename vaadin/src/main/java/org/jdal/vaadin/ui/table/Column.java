@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Table.Align;
 
 /**
  * Holder for configurable components by colum in a vaadin table.
@@ -33,7 +34,7 @@ public class Column implements Serializable {
 	private String displayName;
 	private int width = -1;
 	private float expandRatio = 0.0f;
- 	private String align;
+ 	private Align align;
 	private Resource icon;
 	private boolean sortable = true;
 	private String sortPropertyName;
@@ -99,14 +100,14 @@ public class Column implements Serializable {
 	/**
 	 * @return the align
 	 */
-	public String getAlign() {
+	public Align getAlign() {
 		return align;
 	}
 
 	/**
 	 * @param align the align to set
 	 */
-	public void setAlign(String align) {
+	public void setAlign(Align align) {
 		this.align = align;
 	}
 

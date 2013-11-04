@@ -29,7 +29,7 @@ import com.vaadin.ui.Component;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class AbstractView<T> extends ViewSupport<T> {
+public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinView<T> {
 	
 	private Component component;
 	

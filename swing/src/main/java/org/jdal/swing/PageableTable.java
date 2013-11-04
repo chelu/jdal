@@ -77,6 +77,9 @@ import org.jdal.swing.View;
 import org.jdal.swing.form.FormUtils;
 import org.jdal.swing.table.LoadPreferencesAction;
 import org.jdal.swing.table.SavePreferencesAction;
+import org.jdal.ui.Editor;
+import org.jdal.ui.EditorEvent;
+import org.jdal.ui.EditorListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 

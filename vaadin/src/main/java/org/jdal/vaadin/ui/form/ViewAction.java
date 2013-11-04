@@ -15,28 +15,43 @@
  */
 package org.jdal.vaadin.ui.form;
 
+import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.table.ButtonListener;
 
-import com.vaadin.ui.Form;
+import com.vaadin.server.Resource;
 
 /**
- * Base class for Editor Actions
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * Base class for View Actions.
+ * 
+ * @author Jose Luis Martin
  */
-public abstract class FormAction extends ButtonListener {
-	private Form form;
+public abstract class ViewAction extends ButtonListener {
+	
+	public ViewAction() {
+		super();
+	}
+
+	public ViewAction(String caption, Resource icon) {
+		super(caption, icon);
+	}
+
+	public ViewAction(String caption) {
+		super(caption);
+	}
+
+	private VaadinView<?> view;
 
 	/**
 	 * @return the form
 	 */
-	public Form getForm() {
-		return form;
+	public VaadinView<?> getView() {
+		return view;
 	}
 
 	/**
 	 * @param form the form to set
 	 */
-	public void setForm(Form form) {
-		this.form = form;
+	public void setView(VaadinView<?> view) {
+		this.view = view;
 	}
 }

@@ -19,13 +19,12 @@ import java.io.Serializable;
 
 import org.jdal.service.PersistentService;
 import org.jdal.util.BeanUtils;
-import org.jdal.vaadin.ui.form.FormDialog;
+import org.jdal.vaadin.ui.VaadinView;
+import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Form;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
@@ -47,32 +46,26 @@ public class AddAction extends TableButtonListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void buttonClick(ClickEvent event) {
 		final PageableTable<?> table = getTable();
-		Form f = getTable().getEditorForm();
-		Object bean = BeanUtils.instantiate(table.getEntityClass());
 		
-		if (f.getVisibleItemProperties() != null) {
-			f.setItemDataSource(new BeanItem<Object>(bean), f.getVisibleItemProperties());
+		if (getTable().getEditorForm() instanceof VaadinView) {
+			VaadinView view = (VaadinView) table.getEditorForm();
+			Object bean = BeanUtils.instantiate(table.getEntityClass());
+			view.setModel(bean);
+			ViewDialog dialog = new ViewDialog(view);
+			dialog.setModal(modal);
+			dialog.init();
+			dialog.addCloseListener(new CloseListener() {
+
+				public void windowClose(CloseEvent e) {
+					table.refresh();
+				}
+			});
+			table.getUI().addWindow(dialog);
 		}
-		else {
-			f.setItemDataSource(new BeanItem<Object>(bean));
-		}
-		
-		FormDialog dialog = new FormDialog(f, "New " + table.getEntityClass().getSimpleName());
-		dialog.setPersistentService((PersistentService<Object, Serializable>) table.getService());
-		dialog.setMessageSource(messageSource);
-		dialog.setModal(modal);
-		dialog.init();
-		dialog.addListener(new CloseListener() {
-			
-			public void windowClose(CloseEvent e) {
-				table.refresh();
-			}
-		});
-		table.getUI().addWindow(dialog);
 	}
 
 	/**

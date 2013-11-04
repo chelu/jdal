@@ -30,10 +30,11 @@ import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PaginatorListener;
 import org.jdal.service.PersistentService;
-import org.jdal.ui.View;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
+import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.form.FormDialog;
+import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.MessageSource;
@@ -48,13 +49,10 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Form;
-import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
-
 
 /**
  * <p>
@@ -97,9 +95,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** Filter editor */
 	private String filterEditor;
 	/** Filter Form */
-	private Object filterForm;
-	/** FormFieldFactory used when creating editor forms */
-	private transient FormFieldFactory formFieldFactory;
+	private VaadinView<Filter> filterForm;
 	/** the entity class */
 	private Class<T> entityClass;
 	/** Message Source */
@@ -124,35 +120,17 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		
 		// filter 
 		if (filterEditor != null && filterForm == null) {
-			filterForm = (Form) guiFactory.getComponent(filterEditor);
+			filterForm = (VaadinView<Filter>) guiFactory.getComponent(filterEditor);
 		}
-		
+
 		if (filterForm != null) {
-			if (filterForm instanceof Form) {
-				if (log.isDebugEnabled())
-					log.debug("Using a Form for filter view");
-				Form ff = (Form) filterForm;
-				if (beanFilter != null) {
-					ff.setItemDataSource(new BeanItem<Filter>(beanFilter), ff.getVisibleItemProperties());
-				}
-				else {
-					BeanItem<Filter> item = (BeanItem<Filter>) ff.getItemDataSource();
-					beanFilter = item.getBean();
-				}
-				verticalLayout.addComponent(ff);
+			if (beanFilter != null) {
+				filterForm.setModel(beanFilter);
 			}
-			else if (filterForm instanceof View) {
-				if (log.isDebugEnabled())
-					log.debug("Using a View for filter view");
-				View<Filter> fv = (View<Filter>) filterForm;
-				if (beanFilter != null) {
-					fv.setModel(beanFilter);
-				}
-				else {
-					beanFilter = fv.getModel();
-				}
-				verticalLayout.addComponent((Component) fv.getPanel());
+			else {
+				beanFilter = filterForm.getModel();
 			}
+			verticalLayout.addComponent((Component) filterForm.getPanel());
 		}
 		
 		// action group
@@ -180,7 +158,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 				page.setFilter(beanFilter);
 		}
 	
-		table.addListener((ItemClickListener) this);
+		table.addItemClickListener((ItemClickListener) this);
 		this.setCompositionRoot(verticalLayout);
 		this.setSizeUndefined();
 		
@@ -212,11 +190,13 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 * {@inheritDoc}
 	 */
 	public void pageChanged(PageChangedEvent event) {
+		if (log.isDebugEnabled()) 
+			log.debug("handling page change event [" + event.toString() + "]");
+		
 		if (autoResize)
 			table.setPageLength(page.getPageSize());
 		
 		loadPage();
-		
 	}
 
 	/**
@@ -224,7 +204,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void loadPage() {
-		
 		if (page.getData() != null && page.getData().size() > 0) {
 			if (container == null) {
 				Class beanClass = entityClass != null ? entityClass : page.getData().get(0).getClass();
@@ -248,24 +227,14 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 * Get default form for edit or add models;
 	 * @return form editor
 	 */
-	public Form getEditorForm() {
+	public Component getEditorForm() {
 		// If there are a cofigured form editor return it.
 		if (editor != null) {
-			return (Form) guiFactory.getComponent(editor);
+			return guiFactory.getComponent(editor);
 		}
 		
-		// else create a default one
-		Form f = new Form();
-		f.setSizeFull();
-		f.setImmediate(true);
-		f.getLayout().setSizeFull();
+		return null;
 		
-		if (formFieldFactory != null)
-			f.setFormFieldFactory(formFieldFactory);
-		
-		FormUtils.addOKCancelButtons(f);
-		
-		return f;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -286,27 +255,16 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	@SuppressWarnings("unchecked")
 	public void itemClick(ItemClickEvent event) {
 		if (event.isDoubleClick()) {
-			BeanItem<T> bi = (BeanItem<T>) event.getItem();
-			String message = messageSource.getMessage("edit", null, null);
-			FormDialog fd = new FormDialog(message + " " + bi.getBean().getClass().getSimpleName());
-			fd.setMessageSource(messageSource);
-			fd.setPersistentService((PersistentService<Object, Serializable>) service);
-
-			Form form = getEditorForm();
-
-			if (form.getVisibleItemProperties() != null) {
-				form.setItemDataSource(bi, form.getVisibleItemProperties());
+			Component editor = getEditorForm();
+			if (editor != null) {
+				BeanItem<T> bi = (BeanItem<T>) event.getItem();
+				if (editor instanceof VaadinView) {
+					VaadinView<T> view = (VaadinView<T>) editor;
+					view.setModel(bi.getBean());
+					ViewDialog<T> dlg = new ViewDialog<T>(view);
+					this.getUI().addWindow(dlg);
+				}
 			}
-			else { 
-				form.setItemDataSource(bi);
-			}
-
-			fd.setForm(form);
-			fd.setModal(true);
-			fd.init();
-			fd.addListener((CloseListener) this);
-
-			getUI().addWindow(fd);
 		}
 	}
 
@@ -481,20 +439,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 
 	/**
-	 * @return the formFieldFactory
-	 */
-	public FormFieldFactory getFormFieldFactory() {
-		return formFieldFactory;
-	}
-
-	/**
-	 * @param formFieldFactory the formFieldFactory to set
-	 */
-	public void setFormFieldFactory(FormFieldFactory formFieldFactory) {
-		this.formFieldFactory = formFieldFactory;
-	}
-
-	/**
 	 * @return the beanFilter
 	 */
 	public Filter getBeanFilter() {
@@ -547,7 +491,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/**
 	 * @param filterForm the filterForm to set
 	 */
-	public void setFilterForm(Object filterForm) {
+	public void setFilterForm(VaadinView<Filter> filterForm) {
 		this.filterForm = filterForm;
 	}
 

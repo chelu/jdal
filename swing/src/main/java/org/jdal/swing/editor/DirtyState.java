@@ -16,7 +16,7 @@
 package org.jdal.swing.editor;
 
 
-import org.jdal.swing.Editor;
+import org.jdal.ui.Editor;
 import org.springframework.context.MessageSource;
 
 /**

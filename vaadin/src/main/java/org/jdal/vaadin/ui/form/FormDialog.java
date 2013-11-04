@@ -81,9 +81,6 @@ public class FormDialog extends Window {
 		setContent(form);
 		getContent().setSizeUndefined();
 		center();
-		
-		if (form instanceof FormEditor)
-			 return;  // already have actions
 		 
 		acceptButtonListener = new AcceptButtonListener();
 		cancelButtonListener = new CancelButtonListener();

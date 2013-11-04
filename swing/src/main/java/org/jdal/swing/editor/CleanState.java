@@ -15,7 +15,7 @@
  */
 package org.jdal.swing.editor;
 
-import org.jdal.swing.Editor;
+import org.jdal.ui.Editor;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)

@@ -21,7 +21,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
 import org.w3c.dom.Element;
 
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Table.Align;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -69,13 +69,13 @@ public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 	 * @param attribute
 	 * @return
 	 */
-	private Object getAlignValue(String align) {
+	private Align getAlignValue(String align) {
 		if ("right".equalsIgnoreCase(align))
-			return Table.ALIGN_RIGHT;
+			return Align.RIGHT;
 		else if ("center".equalsIgnoreCase(align))
-			return Table.ALIGN_CENTER;
+			return Align.CENTER;
 
-		return Table.ALIGN_LEFT;
+		return Align.LEFT;
 		
 	}
 	

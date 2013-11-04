@@ -36,7 +36,6 @@ public interface Editor<T> extends PersistentServiceAware<T> {
 	 */
 	void removeEditorListener(EditorListener listener);
 	
-	
 	/**
 	 * Save editing model
 	 */

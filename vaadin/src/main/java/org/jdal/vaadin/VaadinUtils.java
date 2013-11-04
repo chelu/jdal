@@ -26,9 +26,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.vaadin.server.LegacyApplication;
 
@@ -73,5 +75,9 @@ public abstract class VaadinUtils {
 		}
         
         return content;
+	}
+
+	public static ApplicationContext getApplicationContext() {
+		return WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 	}
 }

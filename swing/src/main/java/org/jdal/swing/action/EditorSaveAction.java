@@ -17,8 +17,8 @@ package org.jdal.swing.action;
 
 import java.awt.event.ActionEvent;
 
-import org.jdal.swing.Editor;
 import org.jdal.swing.form.FormUtils;
+import org.jdal.ui.Editor;
 
 /**
  * Action for editors save button. Delegates to editor.save 

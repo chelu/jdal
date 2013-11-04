@@ -105,7 +105,7 @@ public class ConfigurableTable extends Table {
 		int size = columns.size();
 		String[] visibleColumns = new String[size];
 		String[] displayNames = new String[size];
-		String[] alignments = new String[size];
+		Align[] alignments = new Align[size];
 		int[] widths = new int[size];
 		float[] expandRatios = new float[size];
 				
@@ -122,7 +122,7 @@ public class ConfigurableTable extends Table {
 		
 		this.setVisibleColumns(visibleColumns);
 		this.setColumnHeaders(displayNames);
-		this.setColumnAlignments(convertAlignments(alignments));
+		this.setColumnAlignments(alignments);
 		
 		for (int i = 0; i < size; i++) {
 			if ( widths[i] != -1) {
@@ -133,17 +133,6 @@ public class ConfigurableTable extends Table {
 			}
 		}
 	}
-
-
-	private Align[] convertAlignments(String[] alignments) {
-		Align[] values = new Align[alignments.length];
-		for (int i = 0; i < alignments.length; i++) {
-			values[i] = Align.CENTER.convertStringToAlign(alignments[i]);
-		}
-		
-		return values;
-	}
-
 
 	/**
 	 * Try to resolve string as i18n code, return string if none.

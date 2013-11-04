@@ -36,11 +36,11 @@ import org.apache.commons.logging.LogFactory;
 import org.jdal.dao.Page;
 import org.jdal.reporting.ReportDataProvider;
 import org.jdal.service.PersistentService;
-import org.jdal.swing.EditorListener;
 import org.jdal.swing.GuiFactory;
 import org.jdal.swing.PageableTable;
 import org.jdal.swing.report.ReportListView;
 import org.jdal.swing.View;
+import org.jdal.ui.EditorListener;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.BeanCreationException;
@@ -372,7 +372,7 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 
 	/**
 	 * @param listener
-	 * @see org.jdal.swing.PageableTable#addEditorListener(org.jdal.swing.EditorListener)
+	 * @see org.jdal.swing.PageableTable#addEditorListener(org.jdal.ui.EditorListener)
 	 */
 	public void addEditorListener(EditorListener listener) {
 		table.addEditorListener(listener);
@@ -380,7 +380,7 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 
 	/**
 	 * @param listener
-	 * @see org.jdal.swing.PageableTable#removeEditorListener(org.jdal.swing.EditorListener)
+	 * @see org.jdal.swing.PageableTable#removeEditorListener(org.jdal.ui.EditorListener)
 	 */
 	public void removeEditorListener(EditorListener listener) {
 		table.removeEditorListener(listener);

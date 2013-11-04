@@ -37,6 +37,9 @@ import org.jdal.swing.View;
 import org.jdal.swing.action.DialogAcceptAction;
 import org.jdal.swing.action.ViewAction;
 import org.jdal.swing.action.ViewCancelAction;
+import org.jdal.ui.Editor;
+import org.jdal.ui.EditorEvent;
+import org.jdal.ui.EditorListener;
 import org.jdal.ui.bind.ControlChangeListener;
 import org.springframework.validation.BindingResult;
 

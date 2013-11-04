@@ -18,11 +18,12 @@ package org.jdal.vaadin;
 import java.io.IOException;
 import java.util.Enumeration;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.jdal.beans.AppCtx;
 import org.jdal.util.Serializer;
 import org.jdal.vaadin.ui.table.PageableTable;
+import org.junit.Ignore;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -35,12 +36,13 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 @SuppressWarnings("rawtypes")
-public class TestSerialization extends TestCase {
+@Ignore
+public class TestSerialization  {
 	
 	private AbstractApplicationContext ctx = (AbstractApplicationContext) AppCtx.getInstance();
 	MockHttpServletRequest request = new MockHttpServletRequest();  
 	
-	@Override
+	
 	public void setUp() {
 		WebApplicationContextUtils.registerWebApplicationScopes(ctx.getBeanFactory());
 	    ServletRequestAttributes attributes = new ServletRequestAttributes(request);  
@@ -58,6 +60,6 @@ public class TestSerialization extends TestCase {
 		
 		byte[] ser = Serializer.serialize(table);
 		PageableTable t = (PageableTable) Serializer.deSerialize(ser);
-		assertEquals(table.getService(), t.getService());
+		Assert.assertEquals(table.getService(), t.getService());
 	}
 }

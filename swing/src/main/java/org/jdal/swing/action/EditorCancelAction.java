@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
-import org.jdal.swing.Editor;
+import org.jdal.ui.Editor;
 
 /**
  * Action for cancel button on editors
