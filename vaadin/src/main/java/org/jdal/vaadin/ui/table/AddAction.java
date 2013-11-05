@@ -48,8 +48,8 @@ public class AddAction extends TableButtonListener {
 	public void buttonClick(ClickEvent event) {
 		final PageableTable<?> table = getTable();
 		
-		if (getTable().getEditorForm() instanceof VaadinView) {
-			VaadinView view = (VaadinView) table.getEditorForm();
+		if (getTable().getEditorView() instanceof VaadinView) {
+			VaadinView view = (VaadinView) table.getEditorView();
 			Object bean = BeanUtils.instantiate(table.getEntityClass());
 			view.setModel(bean);
 			ViewDialog dialog = new ViewDialog(view);

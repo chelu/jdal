@@ -43,4 +43,11 @@ public class ApplicationContextGuiFactory implements GuiFactory, ApplicationCont
 		this.applicationContext = applicationContext;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public VaadinView<?> getView(String name) {
+		return (VaadinView<?>) applicationContext.getBean(name);
+	}
+
 }

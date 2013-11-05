@@ -120,7 +120,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		
 		// filter 
 		if (filterEditor != null && filterForm == null) {
-			filterForm = (VaadinView<Filter>) guiFactory.getComponent(filterEditor);
+			filterForm = (VaadinView<Filter>) guiFactory.getView(filterEditor);
 		}
 
 		if (filterForm != null) {
@@ -227,14 +227,14 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 * Get default form for edit or add models;
 	 * @return form editor
 	 */
-	public Component getEditorForm() {
+	@SuppressWarnings("unchecked")
+	public VaadinView<T> getEditorView() {
 		// If there are a cofigured form editor return it.
 		if (editor != null) {
-			return guiFactory.getComponent(editor);
+			return (VaadinView<T>) guiFactory.getView(editor);
 		}
 		
 		return null;
-		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -255,15 +255,12 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	@SuppressWarnings("unchecked")
 	public void itemClick(ItemClickEvent event) {
 		if (event.isDoubleClick()) {
-			Component editor = getEditorForm();
+			VaadinView<T> editor = getEditorView();
 			if (editor != null) {
 				BeanItem<T> bi = (BeanItem<T>) event.getItem();
-				if (editor instanceof VaadinView) {
-					VaadinView<T> view = (VaadinView<T>) editor;
-					view.setModel(bi.getBean());
-					ViewDialog<T> dlg = new ViewDialog<T>(view);
-					this.getUI().addWindow(dlg);
-				}
+				editor.setModel(bi.getBean());
+				ViewDialog<T> dlg = new ViewDialog<T>(editor);
+				this.getUI().addWindow(dlg);
 			}
 		}
 	}

@@ -18,10 +18,23 @@ package org.jdal.vaadin.ui;
 import com.vaadin.ui.Component;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * Interface to create Vaadin Components.
+ * 
+ * @author Jose Luis Martin
  */
 public interface GuiFactory {
 	
+	/**
+	 * Gets vaadin Component by name
+	 * @param name component name
+	 * @return Component
+	 */
 	Component getComponent(String name);
+	
+	/**
+	 * Gets vaadin view by name
+	 * @param name view name
+	 * @return VaadinView
+	 */
+	VaadinView<?> getView(String name);
 }
