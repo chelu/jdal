@@ -23,8 +23,9 @@ import org.jdal.ui.bind.ControlAccessor;
 import com.vaadin.ui.AbstractField;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * Register Vaadin control accessors
+ * 
+ * @author Jose Luis Martin
  */
 public abstract class VaadinBindingUtils {
 

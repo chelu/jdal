@@ -15,6 +15,7 @@
  */
 package org.jdal.vaadin.ui;
 
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
@@ -87,7 +88,7 @@ public abstract class Box {
 	 */
 	public static Component createHorizontalStrut(int defaultSpace) {
 		Label label = new Label(" ");
-		label.setWidth(defaultSpace, AbstractComponent.UNITS_PIXELS);
+		label.setWidth(defaultSpace, Unit.PIXELS);
 		return label;
 	}
 
