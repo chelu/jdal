@@ -260,6 +260,8 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 				BeanItem<T> bi = (BeanItem<T>) event.getItem();
 				editor.setModel(bi.getBean());
 				ViewDialog<T> dlg = new ViewDialog<T>(editor);
+				dlg.init();
+				dlg.center();
 				this.getUI().addWindow(dlg);
 			}
 		}
@@ -481,7 +483,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/**
 	 * @return the filterForm
 	 */
-	public Object getFilterForm() {
+	public VaadinView<Filter> getFilterForm() {
 		return filterForm;
 	}
 
@@ -583,5 +585,13 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	public void setPageSize(int pageSize) {
 		page.setPageSize(pageSize);
+	}
+	
+	public boolean isSelectable() {
+		return table.isSelectable();
+	}
+
+	public void setSelectable(boolean selectable) {
+		table.setSelectable(selectable);
 	}
 }

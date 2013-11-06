@@ -21,7 +21,9 @@ import org.jdal.dao.Page;
 import org.jdal.dao.Paginator;
 import org.jdal.dao.PaginatorListener;
 import org.jdal.vaadin.ui.AbstractView;
-import org.jdal.vaadin.ui.Box;
+import org.jdal.vaadin.ui.FormUtils;
+import org.jdal.vaadin.ui.form.BoxFormBuilder;
+import org.jdal.vaadin.ui.form.SimpleBoxFormBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.MessageSource;
@@ -29,14 +31,12 @@ import org.springframework.context.MessageSource;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Select;
 
 /**
  * Paginator implementation for Vaadin framework
@@ -63,9 +63,9 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	/** goto last page button */
 	private Button last;
 	/** select with page sizes */
-	private Select pgs = new Select();
+	private ComboBox pgs = new ComboBox();
 	/** select with all pages for jump to page number */
-	private Select goTo = new Select();
+	private ComboBox goTo = new ComboBox();
 	/** Listen buttons clicks */
 	private ButtonClickListener buttonClickListener = new ButtonClickListener();
 	@Autowired
@@ -122,54 +122,17 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Component buildPanel() {
-		
-		// wrap status in a horizontal layout
-		HorizontalLayout statusLayout = new HorizontalLayout();
-		statusLayout.setSpacing(true);
-		status.setSizeUndefined();
-		statusLayout.setWidth("8em");
-		statusLayout.addComponent(status);
-		statusLayout.setComponentAlignment(status, Alignment.MIDDLE_CENTER);
-		status.setStyleName(PAGINATOR);
-		
-		HorizontalLayout hbox = new HorizontalLayout();
-		hbox.setSpacing(true);
-		resultCount.setSizeUndefined();
-		hbox.addComponent(resultCount);
-		hbox.setComponentAlignment(resultCount, Alignment.MIDDLE_CENTER);
-		resultCount.setStyleName(PAGINATOR);
-		
-		Box.addHorizontalGlue(hbox);
-		
-		// buttons and status
-		hbox.addComponent(first);
-		hbox.addComponent(previous);
-		hbox.addComponent(statusLayout);
-		hbox.setComponentAlignment(statusLayout, Alignment.MIDDLE_CENTER);
-		hbox.addComponent(next);
-		hbox.addComponent(last);
-		Box.addHorizontalStruct(hbox, 10);
-		
+	protected Component buildPanel() {		
 		// goto page select
 		Label goToLabel = new Label(messageSource.getMessage("vaadinPaginator.goto", null, null));
 		goToLabel.setSizeUndefined();
 		goToLabel.setStyleName(PAGINATOR);
-		hbox.addComponent(goToLabel);
-		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
-		goTo.setWidth("5em");
-		goTo.setImmediate(true);
-		hbox.addComponent(goTo);
-		Box.addHorizontalGlue(hbox);
-	
+		goTo.addValueChangeListener(new GoToValueChangeListener());
 		// records by page select
 		Label showRecords = new Label(messageSource.getMessage("vaadinPaginator.pageSize",
 				null, null));
 		showRecords.setSizeUndefined();
-		hbox.addComponent(showRecords);
-		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_CENTER);
-		showRecords.setStyleName(PAGINATOR);
-		
+		// page size combo
 		for (String size : pageSizes) {
 			pgs.addItem(size);
 		}
@@ -178,12 +141,89 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		pgs.setValue(String.valueOf(getModel().getPageSize()));
 		pgs.setWidth("6em");
 		pgs.setImmediate(true);
-		hbox.addComponent(pgs);
-	
-		pgs.addListener(new PgsValueChangeListener());
-		goTo.addListener(new GoToValueChangeListener());
 		
-		return hbox;
+		pgs.addValueChangeListener(new PgsValueChangeListener());
+
+		BoxFormBuilder fb = new BoxFormBuilder();
+	
+		fb.row();
+		fb.add(resultCount);
+		fb.addGlue();
+		fb.add(first);
+		fb.add(previous);
+		fb.add(status);
+		fb.add(next);
+		fb.add(last);
+		fb.add(new Label(), SimpleBoxFormBuilder.SIZE_FULL);
+		fb.add(goToLabel);
+		fb.add(goTo, 100);
+		fb.add(showRecords);
+		fb.add(pgs, 100);
+		
+		return fb.getForm();
+		
+//		// wrap status in a horizontal layout
+//		HorizontalLayout statusLayout = new HorizontalLayout();
+//		statusLayout.setSpacing(true);
+//		status.setSizeUndefined();
+//		statusLayout.setWidth("15em");
+//		statusLayout.addComponent(status);
+//		statusLayout.setComponentAlignment(status, Alignment.MIDDLE_CENTER);
+//		status.setStyleName(PAGINATOR);
+//		
+//		HorizontalLayout hbox = new HorizontalLayout();
+//		hbox.setSpacing(true);
+//		resultCount.setSizeUndefined();
+//		hbox.addComponent(resultCount);
+//		hbox.setComponentAlignment(resultCount, Alignment.MIDDLE_CENTER);
+//		resultCount.setStyleName(PAGINATOR);
+//		
+//		Box.addHorizontalGlue(hbox);
+//		
+//		// buttons and status
+//		hbox.addComponent(first);
+//		hbox.addComponent(previous);
+//		Box.addHorizontalStruct(hbox, 10);
+//		hbox.addComponent(statusLayout);
+//		Box.addHorizontalStruct(hbox, 10);
+//		hbox.setComponentAlignment(statusLayout, Alignment.MIDDLE_CENTER);
+//		hbox.addComponent(next);
+//		hbox.addComponent(last);
+//		Box.addHorizontalStruct(hbox, 10);
+//		
+//		// goto page select
+//		Label goToLabel = new Label(messageSource.getMessage("vaadinPaginator.goto", null, null));
+//		goToLabel.setSizeUndefined();
+//		goToLabel.setStyleName(PAGINATOR);
+//		hbox.addComponent(goToLabel);
+//		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
+//		goTo.setWidth("5em");
+//		goTo.setImmediate(true);
+//		hbox.addComponent(goTo);
+//		Box.addHorizontalGlue(hbox);
+//	
+//		// records by page select
+//		Label showRecords = new Label(messageSource.getMessage("vaadinPaginator.pageSize",
+//				null, null));
+//		showRecords.setSizeUndefined();
+//		hbox.addComponent(showRecords);
+//		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_CENTER);
+//		showRecords.setStyleName(PAGINATOR);
+//		
+//		for (String size : pageSizes) {
+//			pgs.addItem(size);
+//		}
+//
+//		pgs.setNullSelectionAllowed(false);
+//		pgs.setValue(String.valueOf(getModel().getPageSize()));
+//		pgs.setWidth("6em");
+//		pgs.setImmediate(true);
+//		hbox.addComponent(pgs);
+//	
+//		pgs.addValueChangeListener(new PgsValueChangeListener());
+//		goTo.addValueChangeListener(new GoToValueChangeListener());
+//		
+//		return hbox;
 	}
 
 	// Paginator Interface Implementation //
@@ -353,7 +393,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 
 	public void setNext(Button next) {
 		this.next = next;
-		next.addListener(buttonClickListener);
+		next.addClickListener(buttonClickListener);
 	}
 
 	public Button getPrevious() {
@@ -362,7 +402,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 
 	public void setPrevious(Button previous) {
 		this.previous = previous;
-		previous.addListener(buttonClickListener);
+		previous.addClickListener(buttonClickListener);
 	}
 
 	public Button getFirst() {
@@ -371,7 +411,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 
 	public void setFirst(Button first) {
 		this.first = first;
-		first.addListener(buttonClickListener);
+		first.addClickListener(buttonClickListener);
 	}
 
 	public Button getLast() {
@@ -380,7 +420,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 
 	public void setLast(Button last) {
 		this.last = last;
-		last.addListener(buttonClickListener);
+		last.addClickListener(buttonClickListener);
 	}
 	
 	// Listeners

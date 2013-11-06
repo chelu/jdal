@@ -23,10 +23,11 @@ import org.apache.commons.logging.LogFactory;
 import org.jdal.vaadin.ui.Box;
 import org.springframework.context.MessageSource;
 
-import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -77,7 +78,7 @@ public class SimpleBoxFormBuilder {
 	}
 	
 	public void add(Component c, int width) {
-		add(c, width, null);
+		add(c, width, Alignment.MIDDLE_CENTER);
 	}
 	
 	public void add(Component c, Alignment alignment) {
@@ -186,7 +187,7 @@ public class SimpleBoxFormBuilder {
 			int width = columnsWidth.get(i);
 			
 			if (width > SIZE_UNDEFINED && width < SIZE_FULL) {
-				box.setWidth(width, Sizeable.UNITS_PIXELS);
+				box.setWidth(width, Unit.PIXELS);
 				// shrink container
 				container.setExpandRatio(box, 0);
 			}
@@ -200,7 +201,7 @@ public class SimpleBoxFormBuilder {
 				int height = rowsHeight.get(j);
 
 				if (height > SIZE_UNDEFINED &&  height < SIZE_FULL) {
-					c.setHeight(height, Sizeable.UNITS_PIXELS);
+					c.setHeight(height, Unit.PIXELS);
 				}
 				else if (height == SIZE_FULL) {
 					c.setHeight("100%");
@@ -322,5 +323,11 @@ public class SimpleBoxFormBuilder {
 	 */
 	public void setDefaultWidth(int defaultWidth) {
 		this.defaultWidth = defaultWidth;
+	}
+
+	public void addGlue() {
+		Label label = new Label();
+		label.setSizeFull();
+		add(label, SIZE_FULL);	
 	}
 }

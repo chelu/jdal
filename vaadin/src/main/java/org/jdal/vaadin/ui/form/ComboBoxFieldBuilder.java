@@ -25,9 +25,9 @@ import org.jdal.vaadin.data.ContainerDataSource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
-import com.vaadin.ui.Select;
 
 /**
  * FieldBuilder that creates ComboBox and fill its with items from persistent service
@@ -56,10 +56,10 @@ public class ComboBoxFieldBuilder implements FieldBuilder, Serializable {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Field build(Class<?> clazz, String name) {
+	public Field<?> build(Class<?> clazz, String name) {
 		ComboBox combo = new ComboBox();
 		fillComboBox(combo, clazz, name);
-		combo.setItemCaptionMode(Select.ITEM_CAPTION_MODE_ID);
+		combo.setItemCaptionMode(ItemCaptionMode.ID);
 		
 		return combo;
 	}	

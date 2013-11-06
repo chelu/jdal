@@ -66,7 +66,6 @@ public class BoxFormBuilder {
 		builder.add(c, maxWidth);
 	}
 	
-	
 	/**
 	 * @param name
 	 * @param c
@@ -194,6 +193,10 @@ public class BoxFormBuilder {
 
 	public void setDefaultWidth(int defaultWidth) {
 		builder.setDefaultWidth(defaultWidth);
+	}
+
+	public void addGlue() {
+		builder.addGlue();
 	}
 
 }
