@@ -19,6 +19,7 @@ import java.util.Stack;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 
 
 /**
@@ -28,11 +29,23 @@ import com.vaadin.ui.Component;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class BoxFormBuilder {
+	
+	static public int SIZE_FULL = SimpleBoxFormBuilder.SIZE_FULL;
 	/** hold form builders */
 	private Stack<SimpleBoxFormBuilder> stack = new Stack<SimpleBoxFormBuilder>();
 	/** current form builder */
-	SimpleBoxFormBuilder builder;
+	private SimpleBoxFormBuilder builder;
+	/** use margins */
+	private boolean margin = true;
 	
+	public boolean isMargin() {
+		return margin;
+	}
+
+	public void setMargin(boolean margin) {
+		this.margin = margin;
+	}
+
 	/** 
 	 * Default Ctor 
 	 */
@@ -105,7 +118,10 @@ public class BoxFormBuilder {
 	 * @return the form
 	 */
 	public Component getForm() {
-		return builder.getForm();
+		HorizontalLayout form = (HorizontalLayout) builder.getForm();
+		form.setMargin(margin);
+		
+		return form;
 	}
 
 	public void reset() {
@@ -197,6 +213,19 @@ public class BoxFormBuilder {
 
 	public void addGlue() {
 		builder.addGlue();
+	}
+
+	public void addVerticalGlue() {
+		builder.addVerticalGlue();
+		
+	}
+	
+	public void addHorizontalGlue() {
+		builder.addHorizontalGlue();
+	}
+	
+	public void setFixedHeight() {
+		builder.setFixedHeight(true);
 	}
 
 }

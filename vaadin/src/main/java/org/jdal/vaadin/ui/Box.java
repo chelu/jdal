@@ -79,7 +79,10 @@ public abstract class Box {
 	 * @return new VerticalLayout
 	 */
 	public static VerticalLayout createVerticalBox() {
-		return new VerticalLayout();
+		 VerticalLayout vl = new VerticalLayout();
+		 vl.setHeight(100, Unit.PERCENTAGE);
+		
+		 return vl;
 	}
 
 	/**

@@ -16,6 +16,7 @@
 package org.jdal.vaadin.ui.form;
 
 import org.jdal.ui.Editor;
+import org.jdal.vaadin.VaadinUtils;
 
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window;
@@ -32,8 +33,10 @@ public class CancelAction extends ViewAction {
 	@Override
 	public void buttonClick(ClickEvent event) {
 	
-		if (getView().getPanel().getParent() != null)
-			getView().getPanel().getUI().removeWindow((Window) getView().getPanel().getParent());
+		Window window = VaadinUtils.getWindow(getView().getPanel());
+		
+		if (window != null)
+			getView().getPanel().getUI().removeWindow(window);
 		
 		if (getView() instanceof Editor) {
 			((Editor<?>) getView()).cancel();

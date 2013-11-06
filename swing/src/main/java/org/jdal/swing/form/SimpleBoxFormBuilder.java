@@ -105,8 +105,6 @@ public class SimpleBoxFormBuilder {
 			if (!c.isMaximumSizeSet() || c.getMaximumSize().getHeight() > rowHeight) {
 				c.setMaximumSize(new Dimension(Short.MAX_VALUE, rowHeight));
 			}
-			
-			
 		}
 		
 	}

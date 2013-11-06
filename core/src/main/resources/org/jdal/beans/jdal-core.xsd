@@ -8,7 +8,7 @@
 
 	<xsd:annotation>
 		<xsd:documentation>
-			<![CDATA[JDAL Core Schema, version 1.2.x Author: Jose Luis Martin]]>
+			<![CDATA[JDAL Core Schema, version 2.0 Author: Jose Luis Martin]]>
 		</xsd:documentation>
 	</xsd:annotation>
 

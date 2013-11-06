@@ -60,14 +60,16 @@ public class ViewDialog<T> extends Window {
 		cancelAction.setView(view);
 		
 		BoxFormBuilder fb = new BoxFormBuilder();
-		fb.row();
-		fb.setElastic();
 		
-		if (view != null)
-			fb.add(view.getPanel());
+		if (view != null) {
+			fb.row();
+			fb.add(view.getPanel(), SimpleBoxFormBuilder.SIZE_FULL);
+			fb.setElastic();
+		}
+		
 		fb.row();
 		fb.add(createButtonBox());
-		
+
 		this.setContent(fb.getForm());
 	}
 
@@ -79,6 +81,7 @@ public class ViewDialog<T> extends Window {
 		acceptButton = FormUtils.newButton(acceptAction);
 		cancelButton = FormUtils.newButton(cancelAction);
 		HorizontalLayout hl = new HorizontalLayout();
+		hl.setSizeUndefined();
 		Box.addHorizontalGlue(hl);
 		hl.addComponent(acceptButton);
 		hl.addComponent(Box.createHorizontalStrut(5));

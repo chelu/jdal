@@ -43,6 +43,7 @@ import org.jdal.util.BeanUtils;
 public class AnnotationControlInitializer extends ControlInitializerSupport {
 	
 	private static final Log log = LogFactory.getLog(AnnotationControlInitializer.class);
+	
 	/**
 	 * {@inheritDoc}
 	 */

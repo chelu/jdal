@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jdal.vaadin.ui.Box;
 import org.springframework.context.MessageSource;
 
+import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
@@ -49,12 +50,14 @@ public class SimpleBoxFormBuilder {
 	private int index = 0;
 	private int rows = 0;
 	private int rowHeight = 0;
-	private int defaultRowHeight = 0;
+	private int defaultRowHeight = 30;
 	private int defaultSpace = 5;
 	private int defaultWidth = SIZE_UNDEFINED;
 	private MessageSource messageSource;
 	private boolean spacing = true;
 	private boolean rowCellSpand = true;
+	private boolean fixedHeight = false;
+	private boolean fixedWidth = false;
 	
 	/** 
 	 * Default Ctor 
@@ -74,7 +77,7 @@ public class SimpleBoxFormBuilder {
 	 * @param c Component to add
 	 */
 	public void add(Component c) {
-		add(c, defaultWidth, null);
+		add(c, defaultWidth, Alignment.MIDDLE_CENTER);
 	}
 	
 	public void add(Component c, int width) {
@@ -92,21 +95,17 @@ public class SimpleBoxFormBuilder {
 		}
 		
 		VerticalLayout column = getColumn();
-		HorizontalLayout wrapper = new HorizontalLayout();
-		wrapper.addComponent(c);
-		column.addComponent(wrapper);
+		column.addComponent(c);
 		index++;
 		
 		setWidth(width);
 		
 		if (alignment != null) {
-			wrapper.setComponentAlignment(c, alignment);
-			column.setComponentAlignment(wrapper, alignment);
+			column.setComponentAlignment(c, alignment);
 		}
 		
 		if (rowCellSpand) {
-			wrapper.setWidth("100%");
-			c.setWidth("100%");
+			c.setWidth(100, Unit.PERCENTAGE);
 		}
 	}
 	
@@ -195,6 +194,10 @@ public class SimpleBoxFormBuilder {
 				box.setWidth("100%");
 				container.setExpandRatio(box, 1);
 			}
+			else {
+				container.setExpandRatio(box, 0);
+				box.setWidth(Sizeable.SIZE_UNDEFINED, Unit.PIXELS);
+			}
 			
 			for (int j = 0; j < rowsHeight.size(); j++) {
 				Component c = box.getComponent(j);
@@ -202,11 +205,30 @@ public class SimpleBoxFormBuilder {
 
 				if (height > SIZE_UNDEFINED &&  height < SIZE_FULL) {
 					c.setHeight(height, Unit.PIXELS);
+					box.setExpandRatio(c, 0);
 				}
 				else if (height == SIZE_FULL) {
 					c.setHeight("100%");
+					box.setExpandRatio(c, 1);
+				}
+				else {
+					box.setExpandRatio(c, 0);
 				}
 			}
+		}
+		
+		if (fixedHeight) {
+			int height = 0;
+			for (int h : rowsHeight)
+				height += h;
+			
+			height += (rows - 1) * 10;
+			
+			container.setHeight(height, Unit.PIXELS);
+			container.setWidth(100, Unit.PERCENTAGE);
+		}
+		else {
+			container.setSizeFull();
 		}
 
 		return container;
@@ -328,6 +350,37 @@ public class SimpleBoxFormBuilder {
 	public void addGlue() {
 		Label label = new Label();
 		label.setSizeFull();
-		add(label, SIZE_FULL);	
+		add(label, SIZE_FULL);
+		setHeight(SIZE_FULL);
 	}
+
+	public void addVerticalGlue() {
+		Label label = new Label();
+		add(label);
+		setHeight(SIZE_FULL);
+		
+	}
+	
+	public void addHorizontalGlue() {
+		Label label = new Label();
+		label.setHeight("0px");
+		add(label, SIZE_FULL);
+	}
+	
+	public boolean isFixedHeight() {
+		return fixedHeight;
+	}
+
+	public void setFixedHeight(boolean fixedHeight) {
+		this.fixedHeight = fixedHeight;
+	}
+
+	public boolean isFixedWidth() {
+		return fixedWidth;
+	}
+
+	public void setFixedWidth(boolean fixedWidth) {
+		this.fixedWidth = fixedWidth;
+	}
+
 }

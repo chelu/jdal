@@ -17,7 +17,6 @@ package org.jdal.vaadin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +26,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.vaadin.server.LegacyApplication;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Window;
 
 /**
  * Easy access to vaadin or servlet classes.
@@ -79,5 +78,21 @@ public abstract class VaadinUtils {
 
 	public static ApplicationContext getApplicationContext() {
 		return WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+	}
+	
+	/**
+	 * Return the window where a component is attached
+	 * @param component
+	 * @return the window or null if none
+	 */
+	public static Window getWindow(Component component) {
+		while (component.getParent() != null) {
+			if (component.getParent() instanceof Window)
+				return (Window) component.getParent();
+			
+			component = component.getParent();
+		}
+		
+		return null;
 	}
 }

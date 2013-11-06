@@ -58,8 +58,8 @@ public abstract class ControlInitializerSupport implements ControlInitializer {
 	 * @param entities
 	 * @return
 	 */
-	protected List getValueList(List entities, String propertyName) {
-		List values = new ArrayList(entities.size());
+	protected List<Object> getValueList(List entities, String propertyName) {
+		List<Object> values = new ArrayList<Object>(entities.size());
 		Iterator iter = entities.iterator();
 	
 		while (iter.hasNext()) {

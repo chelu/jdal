@@ -187,8 +187,13 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(FIELD_FACTORY), 
 					element.getAttribute(FIELD_FACTORY));
 		
-		if (element.hasAttribute(SELECTABLE))
+		if (element.hasAttribute(SELECTABLE)) {
 			bdb.addPropertyValue(SELECTABLE, element.getAttribute(SELECTABLE));
+		}
+		else {
+			// set selectable by default
+			bdb.addPropertyValue(SELECTABLE, true);
+		}
 		
 		registerBeanDefinition(element, parserContext, tableBeanName, bdb);
 		

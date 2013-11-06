@@ -131,7 +131,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		// records by page select
 		Label showRecords = new Label(messageSource.getMessage("vaadinPaginator.pageSize",
 				null, null));
-		showRecords.setSizeUndefined();
+		// showRecords.setSizeUndefined();
 		// page size combo
 		for (String size : pageSizes) {
 			pgs.addItem(size);
@@ -144,21 +144,22 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		
 		pgs.addValueChangeListener(new PgsValueChangeListener());
 
-		BoxFormBuilder fb = new BoxFormBuilder();
-	
+		BoxFormBuilder fb = new BoxFormBuilder(30);
+		fb.setMargin(false);
+		fb.setFixedHeight();
 		fb.row();
 		fb.add(resultCount);
-		fb.addGlue();
+		fb.addHorizontalGlue();
 		fb.add(first);
 		fb.add(previous);
 		fb.add(status);
 		fb.add(next);
 		fb.add(last);
-		fb.add(new Label(), SimpleBoxFormBuilder.SIZE_FULL);
+		fb.addHorizontalGlue();
 		fb.add(goToLabel);
-		fb.add(goTo, 100);
+		fb.add(goTo, 60);
 		fb.add(showRecords);
-		fb.add(pgs, 100);
+		fb.add(pgs, 60);
 		
 		return fb.getForm();
 		
