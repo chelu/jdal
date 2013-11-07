@@ -65,6 +65,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String ORDER = "order";
 	private static final String PAGE_SIZE = "page-size";
 	private static final String SELECTABLE = "selectable";
+	private static final String ENTITY_CLASS="entityClass";
 	
 	/**
 	 * {@inheritDoc}
@@ -108,7 +109,6 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		if (element.hasAttribute(EDITOR))
 			editor = element.getAttribute(EDITOR);
-		
 
 		// create PageableTable
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(PageableTable.class);
@@ -119,6 +119,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.addPropertyReference(TABLE, tableBeanName);
 		bdb.addPropertyReference(GUI_FACTORY, guiFactory);
 		bdb.addPropertyValue(EDITOR, editor);
+		bdb.addPropertyValue(ENTITY_CLASS, entity);
 		
 		if (element.hasAttribute(TABLE_SERVICE)) 
 			bdb.addPropertyReference(TABLE_SERVICE, element.getAttribute(TABLE_SERVICE));

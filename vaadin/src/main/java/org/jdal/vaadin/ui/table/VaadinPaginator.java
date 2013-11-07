@@ -30,6 +30,7 @@ import org.springframework.context.MessageSource;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -128,23 +129,25 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		goToLabel.setSizeUndefined();
 		goToLabel.setStyleName(PAGINATOR);
 		goTo.addValueChangeListener(new GoToValueChangeListener());
+		goTo.setImmediate(true);
 		// records by page select
 		Label showRecords = new Label(messageSource.getMessage("vaadinPaginator.pageSize",
 				null, null));
-		// showRecords.setSizeUndefined();
+		showRecords.setSizeUndefined();
 		// page size combo
 		for (String size : pageSizes) {
 			pgs.addItem(size);
 		}
-
+		
 		pgs.setNullSelectionAllowed(false);
 		pgs.setValue(String.valueOf(getModel().getPageSize()));
 		pgs.setWidth("6em");
 		pgs.setImmediate(true);
 		
 		pgs.addValueChangeListener(new PgsValueChangeListener());
+		
 
-		BoxFormBuilder fb = new BoxFormBuilder(30);
+		BoxFormBuilder fb = new BoxFormBuilder();
 		fb.setMargin(false);
 		fb.setFixedHeight();
 		fb.row();

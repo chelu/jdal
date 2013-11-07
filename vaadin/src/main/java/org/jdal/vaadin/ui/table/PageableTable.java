@@ -260,7 +260,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 				BeanItem<T> bi = (BeanItem<T>) event.getItem();
 				editor.setModel(bi.getBean());
 				editor.refresh();
-				ViewDialog<T> dlg = new ViewDialog<T>(editor);
+				ViewDialog<T> dlg = (ViewDialog<T>) this.guiFactory.newViewDialog(editor);
 				dlg.init();
 				dlg.center();
 				this.getUI().addWindow(dlg);

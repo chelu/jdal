@@ -95,4 +95,8 @@ public abstract class VaadinUtils {
 		
 		return null;
 	}
+
+	public static void closeWindow(Component panel) {
+		panel.getUI().removeWindow(getWindow(panel));
+	}
 }

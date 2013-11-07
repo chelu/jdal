@@ -34,7 +34,7 @@ import com.vaadin.ui.Window.CloseListener;
 public class AddAction extends TableButtonListener {
 	
 
-	private boolean modal = true;
+	private boolean modal = false;
 	
 	public AddAction() {
 		setIcon(new ThemeResource("images/table/filenew.png"));
@@ -48,13 +48,12 @@ public class AddAction extends TableButtonListener {
 	public void buttonClick(ClickEvent event) {
 		final PageableTable<?> table = getTable();
 		
-		if (getTable().getEditorView() instanceof VaadinView) {
+		if (table.getEditorView() instanceof VaadinView) {
 			VaadinView view = (VaadinView) table.getEditorView();
 			Object bean = BeanUtils.instantiate(table.getEntityClass());
 			view.setModel(bean);
-			ViewDialog dialog = new ViewDialog(view);
+			ViewDialog dialog = table.getGuiFactory().newViewDialog(view);
 			dialog.setModal(modal);
-			dialog.init();
 			dialog.addCloseListener(new CloseListener() {
 
 				public void windowClose(CloseEvent e) {

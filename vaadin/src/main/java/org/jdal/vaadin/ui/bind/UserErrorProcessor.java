@@ -15,6 +15,9 @@
  */
 package org.jdal.vaadin.ui.bind;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jdal.beans.StaticMessageSource;
 import org.jdal.ui.validation.ErrorProcessor;
 import org.springframework.validation.FieldError;
@@ -28,14 +31,15 @@ import com.vaadin.ui.AbstractField;
  */
 public class UserErrorProcessor implements ErrorProcessor {
 
+	private Set<AbstractField<?>> fieldSet = new HashSet<AbstractField<?>>();
 	/**
 	 * {@inheritDoc}
 	 */
 	public void processError(Object control, FieldError error) {
 		if (control instanceof AbstractField) {
-			AbstractField f = (AbstractField) control;
+			AbstractField<?> f = (AbstractField<?>) control;
 			f.setComponentError(new UserError(StaticMessageSource.getMessage(error)));
-			
+			fieldSet.add(f);
 		}
 	}
 
@@ -43,7 +47,10 @@ public class UserErrorProcessor implements ErrorProcessor {
 	 * {@inheritDoc}
 	 */
 	public void reset() {
+		for (AbstractField<?> f : fieldSet)
+			f.setComponentError(null);
 		
+		fieldSet.clear();
 	}
 
 }

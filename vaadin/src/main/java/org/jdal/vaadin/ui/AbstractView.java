@@ -15,6 +15,13 @@
  */
 package org.jdal.vaadin.ui;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jdal.service.PersistentService;
+import org.jdal.ui.EditorEvent;
+import org.jdal.ui.EditorListener;
 import org.jdal.ui.ViewSupport;
 import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
 import org.jdal.ui.bind.ControlAccessorBinderFactory;
@@ -32,7 +39,10 @@ import com.vaadin.ui.Component;
 public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinView<T> {
 	
 	private Component component;
+	private List<EditorListener> editorListeners = new ArrayList<EditorListener>();
+	private PersistentService<T, ?extends Serializable> persistentService;
 	
+
 	public AbstractView() {
 		super();
 	}
@@ -42,6 +52,8 @@ public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinVi
 	 */
 	public AbstractView(T model) {
 		super(model);
+		setWidth(800);
+		setHeight(400);
 	}
 
 	/**
@@ -75,6 +87,39 @@ public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinVi
 		if (getBinderFactory() == null) {
 			setBinderFactory(new ControlAccessorBinderFactory(getControlAccessorFactory()));
 		}
+	}
+
+	public void addEditorListener(EditorListener listener) {
+		if (!editorListeners.contains(listener))
+			editorListeners.add(listener);	
+	}
+
+	public void removeEditorListener(EditorListener listener) {
+		editorListeners.remove(listener);
+	}
+
+	public void save() {
+		this.persistentService.save(getModel());
+		fireEditorEvent();
+	}
+	
+	protected void fireEditorEvent() {
+		for (EditorListener el : editorListeners) {
+			el.modelChanged(new EditorEvent(this, getModel()));
+		}
+	}
+
+	public void cancel() {
+		// do nothing
+	}
+
+	public void setPersistentService(
+			PersistentService<T, ? extends Serializable> persistentService) {
+		this.persistentService = persistentService;
+	}
+	
+	public PersistentService<T, ? extends Serializable> getPersistentService() {
+		return this.persistentService;
 	}
 
 }

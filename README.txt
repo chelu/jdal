@@ -1,4 +1,4 @@
-JDAL Library 1.3.1 (December 2012)
+JDAL Library 2.0 (November 2013)
 -------------------------------------------------------------------------------
 http://www.jdal.org
 
@@ -36,7 +36,7 @@ COMPILE
 
 mvn package or mvn package -Dmaven.skip.test=true  (to avoid test)
 
-Test need sample database, install from jdal-samples in library/db/library.sql
+Test need sample database, install from jdal-samples in db/library.sql
 
 
 INSTALL

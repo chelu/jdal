@@ -15,12 +15,13 @@
  */
 package org.jdal.vaadin.ui.form;
 
-import org.jdal.beans.StaticMessageSource;
 import org.jdal.service.PersistentService;
 import org.jdal.ui.Editor;
 import org.jdal.ui.View;
+import org.jdal.vaadin.VaadinUtils;
 import org.jdal.vaadin.ui.VaadinView;
 
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification;
 /**
@@ -31,6 +32,10 @@ import com.vaadin.ui.Notification;
  */
 @SuppressWarnings("rawtypes")
 public class ViewSaveAction extends ViewAction {
+	
+	private static final String DEFAULT_ICON="images/ok.png";
+	
+	private boolean showError = true;
 	
 	private PersistentService persistentService;
 	
@@ -47,9 +52,9 @@ public class ViewSaveAction extends ViewAction {
 	 * @param view
 	 */
 	public ViewSaveAction(VaadinView view, PersistentService persistentService) {
-		super(StaticMessageSource.getMessage("ViewSaveAction.text"));
 		this.persistentService = persistentService;
 		setView(view);
+		setIcon(new ThemeResource(DEFAULT_ICON));
 	}
 	
 	/**
@@ -58,7 +63,11 @@ public class ViewSaveAction extends ViewAction {
 	@Override
 	public void buttonClick(ClickEvent event) {
 		beforeSave();
-		afterSave(save());
+		boolean valid = save();
+		afterSave(valid);
+		
+		if (valid)
+			VaadinUtils.closeWindow(getView().getPanel());
 	}
 
 	/** 
@@ -121,6 +130,14 @@ public class ViewSaveAction extends ViewAction {
 
 	public void setPersistentService(PersistentService persistentService) {
 		this.persistentService = persistentService;
+	}
+
+	public boolean isShowError() {
+		return showError;
+	}
+
+	public void setShowError(boolean showError) {
+		this.showError = showError;
 	}
 
 }

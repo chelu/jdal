@@ -18,6 +18,7 @@ package org.jdal.vaadin.ui.form;
 import org.jdal.ui.Editor;
 import org.jdal.vaadin.VaadinUtils;
 
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window;
 
@@ -26,6 +27,12 @@ import com.vaadin.ui.Window;
  *
  */
 public class CancelAction extends ViewAction {
+	
+	private static final String DEFAULT_ICON = "images/cancel.png";
+	
+	public CancelAction() {
+		setIcon(new ThemeResource(DEFAULT_ICON));
+	}
 
 	/**
 	 * {@inheritDoc}

@@ -41,6 +41,7 @@ public class SimpleBoxFormBuilder {
 	
 	public static final int SIZE_FULL = Short.MAX_VALUE;
 	public static final int SIZE_UNDEFINED = 0;
+	private static final int DEFAULT_HEIGHT = 50;
 	
 	private static final Log log = LogFactory.getLog(SimpleBoxFormBuilder.class);
 	private HorizontalLayout container = new HorizontalLayout();
@@ -50,7 +51,7 @@ public class SimpleBoxFormBuilder {
 	private int index = 0;
 	private int rows = 0;
 	private int rowHeight = 0;
-	private int defaultRowHeight = 30;
+	private int defaultRowHeight = DEFAULT_HEIGHT;
 	private int defaultSpace = 5;
 	private int defaultWidth = SIZE_UNDEFINED;
 	private MessageSource messageSource;
@@ -218,17 +219,17 @@ public class SimpleBoxFormBuilder {
 		}
 		
 		if (fixedHeight) {
-			int height = 0;
-			for (int h : rowsHeight)
-				height += h;
-			
-			height += (rows - 1) * 10;
-			
-			container.setHeight(height, Unit.PIXELS);
-			container.setWidth(100, Unit.PERCENTAGE);
+			container.setHeight(getFormHeight(), Unit.PIXELS);
 		}
 		else {
-			container.setSizeFull();
+			container.setHeight(100, Unit.PERCENTAGE);
+		}
+		
+		if (fixedWidth) {
+			container.setWidth(Sizeable.SIZE_UNDEFINED, Unit.PIXELS);
+		}
+		else {
+			container.setWidth(100, Unit.PERCENTAGE);
 		}
 
 		return container;
@@ -253,6 +254,15 @@ public class SimpleBoxFormBuilder {
 		index++;
 	}
 	
+	public int getFormHeight() {
+		int height = 0;
+		for (int h : rowsHeight)
+			height += h == SIZE_UNDEFINED ? DEFAULT_HEIGHT : h;
+		
+		height += (rows - 1) * 10;
+	
+		return height;
+	}
 
 	// Getters & Setters
 	
@@ -261,12 +271,14 @@ public class SimpleBoxFormBuilder {
 	}
 
 	public void setHeight(int height) {
-		this.rowHeight = height;
+		this.rowHeight = height < SIZE_FULL ? height : SIZE_FULL;
+		
 		if (rowsHeight.size() > 0 && rows > 0) {
 			rowsHeight.remove(rows -1);
 			rowsHeight.add(height);
 		}
 	}
+
 	
 	public MessageSource getMessageSource() {
 		return messageSource;

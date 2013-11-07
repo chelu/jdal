@@ -74,7 +74,7 @@ public abstract class FormUtils {
 	 */
 	private static Button newCancelButton(final Form f) {
 		Button cancel = new Button(StaticMessageSource.getMessage("cancel"));
-		cancel.addListener(new ClickListener() {
+		cancel.addClickListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
 				f.discard();
@@ -93,7 +93,7 @@ public abstract class FormUtils {
 	 */
 	private static Button newOKButton(final Form f) {
 		Button ok = new Button(StaticMessageSource.getMessage("ok"));
-		ok.addListener(new ClickListener() {
+		ok.addClickListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
 				f.commit();
@@ -110,7 +110,6 @@ public abstract class FormUtils {
 	 * @param window Window to close
 	 */
 	public static void closeWindow(Window window) {
-		if (window.getParent() != null) 
 			window.getUI().removeWindow(window);
 	}
 
@@ -153,7 +152,7 @@ public abstract class FormUtils {
 			}
 		});
 		Button cancel = new Button(StaticMessageSource.getMessage("no"));
-		cancel.addListener(new ClickListener() {
+		cancel.addClickListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
 				closeWindow(dlg);

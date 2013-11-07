@@ -15,6 +15,7 @@
  */
 package org.jdal.vaadin.ui;
 
+import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -26,6 +27,8 @@ import com.vaadin.ui.Component;
  *
  */
 public class ApplicationContextGuiFactory implements GuiFactory, ApplicationContextAware {
+	
+	public static final String VIEW_DIALOG = "viewDialog";
 	
 	protected ApplicationContext applicationContext;
 
@@ -49,5 +52,32 @@ public class ApplicationContextGuiFactory implements GuiFactory, ApplicationCont
 	public VaadinView<?> getView(String name) {
 		return (VaadinView<?>) applicationContext.getBean(name);
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public ViewDialog<?> newViewDialog() {
+		ViewDialog<?> dlg = null;
+		try {
+			dlg = applicationContext.getBean(VIEW_DIALOG, ViewDialog.class);
+		}
+		catch(BeansException be)  {
+			
+		}
+		
+		if (dlg == null) {
+			dlg = new ViewDialog();
+		}
+		
+		return dlg;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ViewDialog<?> newViewDialog(VaadinView<?> view) {
+		ViewDialog dlg =  newViewDialog();
+		dlg.setView(view);
+		dlg.init();
+		
+		return dlg;
+	}
+	
 
 }

@@ -37,6 +37,7 @@ public class BoxFormBuilder {
 	private SimpleBoxFormBuilder builder;
 	/** use margins */
 	private boolean margin = true;
+	private int defaultWidth;
 	
 	public boolean isMargin() {
 		return margin;
@@ -60,13 +61,16 @@ public class BoxFormBuilder {
 	public void startBox() {
 		stack.push(builder);
 		builder = new SimpleBoxFormBuilder();
+		builder.setDefaultWidth(this.defaultWidth);
 	}
 	
 	
 	public void endBox() {
 		Component c = builder.getForm();
+		int height = builder.getFormHeight();
 		builder = stack.pop();
 		builder.add(c);
+		builder.setHeight(height);
 	}
 	/**
 	 * @param c component to add
@@ -204,10 +208,11 @@ public class BoxFormBuilder {
 	}
 
 	public int getDefaultWidth() {
-		return builder.getDefaultWidth();
+		return this.defaultWidth;
 	}
 
 	public void setDefaultWidth(int defaultWidth) {
+		this.defaultWidth = defaultWidth;
 		builder.setDefaultWidth(defaultWidth);
 	}
 

@@ -15,6 +15,8 @@
  */
 package org.jdal.vaadin.ui;
 
+import org.jdal.vaadin.ui.form.ViewDialog;
+
 import com.vaadin.ui.Component;
 
 /**
@@ -37,4 +39,6 @@ public interface GuiFactory {
 	 * @return VaadinView
 	 */
 	VaadinView<?> getView(String name);
+	
+	ViewDialog<?> newViewDialog(VaadinView<?> view);
 }
