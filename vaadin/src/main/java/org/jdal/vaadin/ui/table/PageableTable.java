@@ -478,7 +478,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 * 
 	 */
 	public void refresh() {
-		loadPage();
+		paginator.setPage(page.getPage());
 	}
 
 	/**

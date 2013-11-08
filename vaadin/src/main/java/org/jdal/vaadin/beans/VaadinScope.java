@@ -17,6 +17,7 @@ package org.jdal.vaadin.beans;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -130,9 +131,13 @@ public class VaadinScope implements Scope, DetachListener {
 	}
 
 	private void removeBeans(UI ui) {
-		for (String key : beans.keySet()) {
+		Set<String> keys = beans.keySet();
+		Iterator<String> iter = keys.iterator();
+		
+		while (iter.hasNext()) {
+			String key = iter.next();
 			if (key.startsWith(String.valueOf(ui.getUIId()))) {
-				beans.remove(key);
+				iter.remove();
 				if (log.isDebugEnabled())
 					log.debug("Removed bean [" + key + "]");
 				Runnable callback = callbacks.remove(key);

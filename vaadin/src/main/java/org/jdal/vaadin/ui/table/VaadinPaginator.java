@@ -165,69 +165,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		fb.add(pgs, 60);
 		
 		return fb.getForm();
-		
-//		// wrap status in a horizontal layout
-//		HorizontalLayout statusLayout = new HorizontalLayout();
-//		statusLayout.setSpacing(true);
-//		status.setSizeUndefined();
-//		statusLayout.setWidth("15em");
-//		statusLayout.addComponent(status);
-//		statusLayout.setComponentAlignment(status, Alignment.MIDDLE_CENTER);
-//		status.setStyleName(PAGINATOR);
-//		
-//		HorizontalLayout hbox = new HorizontalLayout();
-//		hbox.setSpacing(true);
-//		resultCount.setSizeUndefined();
-//		hbox.addComponent(resultCount);
-//		hbox.setComponentAlignment(resultCount, Alignment.MIDDLE_CENTER);
-//		resultCount.setStyleName(PAGINATOR);
-//		
-//		Box.addHorizontalGlue(hbox);
-//		
-//		// buttons and status
-//		hbox.addComponent(first);
-//		hbox.addComponent(previous);
-//		Box.addHorizontalStruct(hbox, 10);
-//		hbox.addComponent(statusLayout);
-//		Box.addHorizontalStruct(hbox, 10);
-//		hbox.setComponentAlignment(statusLayout, Alignment.MIDDLE_CENTER);
-//		hbox.addComponent(next);
-//		hbox.addComponent(last);
-//		Box.addHorizontalStruct(hbox, 10);
-//		
-//		// goto page select
-//		Label goToLabel = new Label(messageSource.getMessage("vaadinPaginator.goto", null, null));
-//		goToLabel.setSizeUndefined();
-//		goToLabel.setStyleName(PAGINATOR);
-//		hbox.addComponent(goToLabel);
-//		hbox.setComponentAlignment(goToLabel, Alignment.MIDDLE_CENTER);
-//		goTo.setWidth("5em");
-//		goTo.setImmediate(true);
-//		hbox.addComponent(goTo);
-//		Box.addHorizontalGlue(hbox);
-//	
-//		// records by page select
-//		Label showRecords = new Label(messageSource.getMessage("vaadinPaginator.pageSize",
-//				null, null));
-//		showRecords.setSizeUndefined();
-//		hbox.addComponent(showRecords);
-//		hbox.setComponentAlignment(showRecords, Alignment.MIDDLE_CENTER);
-//		showRecords.setStyleName(PAGINATOR);
-//		
-//		for (String size : pageSizes) {
-//			pgs.addItem(size);
-//		}
-//
-//		pgs.setNullSelectionAllowed(false);
-//		pgs.setValue(String.valueOf(getModel().getPageSize()));
-//		pgs.setWidth("6em");
-//		pgs.setImmediate(true);
-//		hbox.addComponent(pgs);
-//	
-//		pgs.addValueChangeListener(new PgsValueChangeListener());
-//		goTo.addValueChangeListener(new GoToValueChangeListener());
-//		
-//		return hbox;
 	}
 
 	// Paginator Interface Implementation //
