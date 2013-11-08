@@ -54,13 +54,6 @@
 		</extensions>
 	</build>
 
-	<distributionManagement>
-		<repository>
-			<id>jdal</id>
-			<name>jdal</name>
-			<url>scpexe://jdal.org/var/www/jdal/repo</url>
-		</repository>
-	</distributionManagement>
 
 	<profiles>
 		<profile>

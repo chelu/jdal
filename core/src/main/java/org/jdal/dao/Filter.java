@@ -18,8 +18,9 @@ package org.jdal.dao;
 import java.util.Map;
 
 /**
+ * Filter to use with PageableDatasource
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public interface Filter {
 	

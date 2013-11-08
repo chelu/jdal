@@ -17,16 +17,17 @@ package org.jdal.vaadin.beans;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.vaadin.VaadinUtils;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
+import com.vaadin.server.ClientConnector.DetachEvent;
+import com.vaadin.server.ClientConnector.DetachListener;
 import com.vaadin.ui.UI;
 
 /**
@@ -34,12 +35,13 @@ import com.vaadin.ui.UI;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class VaadinScope implements Scope {
+public class VaadinScope implements Scope, DetachListener {
 	
 	public static final String SCOPE_NAME = "vaadin";
 	private static final Log log = LogFactory.getLog(VaadinScope.class);
 	private Map<String, Object> beans = Collections.synchronizedMap(new HashMap<String, Object>());
 	private Map<String, Runnable> callbacks = Collections.synchronizedMap(new HashMap<String, Runnable>());
+	private Set<UI> uis = Collections.synchronizedSet(new LinkedHashSet<UI>());
 	
 	/**
 	 * {@inheritDoc}
@@ -47,22 +49,41 @@ public class VaadinScope implements Scope {
 	public Object get(String name, ObjectFactory<?> objectFactory) {
 	
 		String key = key(name);
-		Object bean = beans.get(key);
-		
-		if (bean == null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Bean not found in scope: [" + key + "]. Creating new one");
-			}
-			bean = objectFactory.getObject();
-			beans.put(key, bean);
-		}
-		else {
-			if (log.isDebugEnabled()) {
-				log.debug("Bean found in scope: [" + key + "]");
-			}
-		}
+		if (key != null) {
+			Object bean = beans.get(key);
 
-		return bean;
+			if (bean == null) {
+				if (log.isDebugEnabled()) {
+					log.debug("Bean not found in scope: [" + key + "]. Creating new one");
+				}
+				bean = objectFactory.getObject();
+				beans.put(key, bean);
+			}
+			else {
+				if (log.isDebugEnabled()) {
+					log.debug("Bean found in scope: [" + key + "]");
+				}
+			}
+
+			return bean;
+		}
+		
+		// No current UI, it's closing
+		UI closing = null;
+		for (UI ui : uis) {
+			if (ui.isClosing()) {
+				closing = ui;
+				break;
+			}
+		}
+		
+		if (closing != null) {
+			return beans.get(String.valueOf(closing.getUIId() + "_" + name));
+		}
+		
+		log.error("Unknown request for bean [" + name + "] without current UI" );
+		
+		return null;
 	}
 
 
@@ -91,34 +112,45 @@ public class VaadinScope implements Scope {
 	 * {@inheritDoc}
 	 */
 	public String getConversationId() {
-		return VaadinUtils.getSession().getId() + "_" + UI.getCurrent().toString();
+		UI ui =  UI.getCurrent();
+		if (ui != null) {
+			if (uis.add(ui))
+				ui.addDetachListener(this);
+			
+			return String.valueOf(ui.getUIId());
+		}
+		
+		return null;
 	}
 	
 	protected String key(String name) {
-		return getConversationId() + "_" + name;
+		String id = getConversationId();
+		
+		return id != null ? id + "_" + name : null;
 	}
 
-	private void removeBeans(String prefix) {
+	private void removeBeans(UI ui) {
 		for (String key : beans.keySet()) {
-			if (key.startsWith(prefix)) {
+			if (key.startsWith(String.valueOf(ui.getUIId()))) {
 				beans.remove(key);
 				if (log.isDebugEnabled())
 					log.debug("Removed bean [" + key + "]");
 				Runnable callback = callbacks.remove(key);
-				if (callback != null)
+				if (callback != null) {
 					callback.run();
+				}
 			}
 		}
+		
 	}
 
-
-	/**
-	 * @param session
-	 */
-	public synchronized void onSessionClose(HttpSession session) {
-		if (log.isDebugEnabled()) 
-			log.debug("Sesssion closing, destroying scoped beans");
-			
-		removeBeans(session.getId());
+	public synchronized void detach(DetachEvent event) {
+		UI ui = (UI) event.getConnector();
+		if (log.isDebugEnabled())
+			log.debug("UI [" + ui.getUIId() + "] detached, destroying scoped beans");
+		
+		removeBeans(ui);
+		uis.remove(ui);
+		
 	}
 }

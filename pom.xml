@@ -126,9 +126,9 @@
 
 	<distributionManagement>
 		<repository>
-			<id>jdal</id>
-			<name>jdal</name>
-			<url>scpexe://jdal.org/var/www/jdal/repo</url>
+			<id>jdal-releases</id>
+			<name>JDAL Releases</name>
+			<url>http://www.jdal.org/artifactory/libs-release-local</url>
 		</repository>
 	</distributionManagement>
 
@@ -170,6 +170,7 @@
 				</repository>
 			</distributionManagement>
 		</profile>
+		
 	</profiles>
 
 </project>
