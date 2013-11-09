@@ -15,6 +15,7 @@
  */
 package org.jdal.vaadin.beans;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.config.Scope;
 
 import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.server.ClientConnector.DetachListener;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 
 /**
@@ -69,15 +71,18 @@ public class VaadinScope implements Scope, DetachListener {
 			return bean;
 		}
 		
-		// No current UI, it's closing
+		// No current UI, it's closing?
 		UI closing = null;
-		for (UI ui : uis) {
-			if (ui.isClosing()) {
+		VaadinSession session = VaadinSession.getCurrent();
+
+		if (session != null) {
+			Collection<UI> sessionUis = session.getUIs();
+			for (UI ui : sessionUis) {
 				closing = ui;
 				break;
 			}
 		}
-		
+	
 		if (closing != null) {
 			return beans.get(String.valueOf(closing.getUIId() + "_" + name));
 		}
