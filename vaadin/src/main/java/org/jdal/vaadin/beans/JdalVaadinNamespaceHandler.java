@@ -32,6 +32,8 @@ public class JdalVaadinNamespaceHandler extends NamespaceHandlerSupport {
 		registerBeanDefinitionParser("column", new ColumnBeanDefinitionParser());
 		registerBeanDefinitionParser("editor", new EditorBeanDefinitionParser());
 		registerBeanDefinitionParser("columns", new ColumnsBeanDefinitionParser());
+		// serializable proxies
+		registerBeanDefinitionDecorator("proxy", new VaadinProxyBeanDefinitionDecorator());
 	}
 
 }

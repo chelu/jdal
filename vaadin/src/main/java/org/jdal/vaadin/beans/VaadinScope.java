@@ -15,6 +15,8 @@
  */
 package org.jdal.vaadin.beans;
 
+import groovy.util.Factory;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import org.springframework.beans.factory.config.Scope;
 
 import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.server.ClientConnector.DetachListener;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 
@@ -71,25 +74,34 @@ public class VaadinScope implements Scope, DetachListener {
 			return bean;
 		}
 		
-		// No current UI, it's closing?
+		// No current UI, have session?
 		UI closing = null;
 		VaadinSession session = VaadinSession.getCurrent();
+		Collection<UI> uisToSearch = null;
 
 		if (session != null) {
-			Collection<UI> sessionUis = session.getUIs();
-			for (UI ui : sessionUis) {
+			uisToSearch = session.getUIs();
+		}
+	
+		else {
+			// Session expired, try with global uis.
+			uisToSearch = uis;
+		}
+		
+		for (UI ui : uisToSearch) {
+			if (ui.isClosing()) {
 				closing = ui;
 				break;
 			}
-		}
-	
+		}	
+
 		if (closing != null) {
 			return beans.get(String.valueOf(closing.getUIId() + "_" + name));
 		}
 		
-		log.error("Unknown request for bean [" + name + "] without current UI" );
+		log.error("Unknown request for bean [" + name + "] without current UI. Returning a new Object" );
 		
-		return null;
+		return objectFactory.getObject();
 	}
 
 

@@ -14,6 +14,7 @@
 	<xsd:element name="table" type="tableType" />
 	<xsd:element name="columns" type="columnSequenceType" />
 	<xsd:element name="column" type="columnType" />
+	<xsd:element name="proxy" type="proxyType" />
 
 	<xsd:complexType name="columnType">
 		<xsd:attribute name="name" type="xsd:string" use="required" />
@@ -69,8 +70,10 @@
 	<xsd:complexType name="tableType" >
 		<xsd:sequence>
 			<xsd:element ref="columns"></xsd:element>
+			<xsd:element ref="proxy" minOccurs="0" maxOccurs="1"/>
 			<xsd:any namespace="##other" processContents="strict" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
+		
 		
 		<xsd:attribute name="entity" type="xsd:string" use="required">
 			<xsd:annotation>
@@ -175,6 +178,10 @@
 		<xsd:attribute name="sort-property" type="xsd:string" />
 		<xsd:attribute name="page-size" />
 		<xsd:attribute name="selectable" type="xsd:boolean" />	
+	</xsd:complexType>
+	
+	<xsd:complexType name="proxyType">
+			<xsd:attribute name="proxy-target-class" type="xsd:boolean" />
 	</xsd:complexType>
 
 </xsd:schema>

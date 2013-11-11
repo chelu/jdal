@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdal="http://www.jdal.org/schema/jdal"
+	xmlns:vaadin="http://www.jdal.org/schema/vaadin"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.jdal.org/schema/jdal http://www.jdal.org/schema/jdal/jdal-core.xsd
+		http://www.jdal.org/schema/vaadin http://www.jdal.org/schema/jdal/jdal-vaadin.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+
+	<context:component-scan base-package="org.jdal.samples"/>
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	 
+	<!-- DataSource -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<property name="acquireIncrement" value="3" />
+		<property name="minPoolSize" value="2" />
+		<property name="maxPoolSize" value="15" />
+		<property name="maxIdleTime" value="5" />
+		<property name="numHelperThreads" value="5" />
+
+		<property name="idleConnectionTestPeriod" value="10" />
+		<property name="autoCommitOnClose" value="false" />
+		<property name="preferredTestQuery" value="select 1;" />
+		<property name="testConnectionOnCheckin" value="true" />
+
+		<property name="checkoutTimeout" value="60000" />
+	</bean>
+	
+     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+      <property name="dataSource" ref="dataSource"/>
+      <property name="packagesToScan" value="org.jdal.samples.model" />
+
+	  <property name="jpaDialect">
+        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+     </property>
+     <property name="jpaVendorAdapter">
+       <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+         <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>
+       </bean>
+     </property>
+    </bean>
+
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+      <property name="entityManagerFactory" ref="entityManagerFactory"/>
+      <property name="dataSource" ref="dataSource"/>
+    </bean>
+	
+   	<!-- Persistent Services -->
+   	
+  	<!-- DAOs -->
+	<jdal:service entity="org.jdal.test.model.Category" />
+	
+	<jdal:service entity="org.jdal.test.model.Author" />
+	
+    
+    <bean id="contextPersistentService" class="org.jdal.logic.ContextPersistentManager" />
+   
+    
+   <!-- UI Widgets -->
+	<vaadin:defaults />
+	
+	<vaadin:table entity="org.jdal.test.model.Author" scope="singleton">
+		<vaadin:columns>
+			<vaadin:column name="id" />
+		</vaadin:columns>
+		<vaadin:proxy />
+	</vaadin:table>
+
+</beans>
