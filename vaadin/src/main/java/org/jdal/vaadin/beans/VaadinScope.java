@@ -15,8 +15,6 @@
  */
 package org.jdal.vaadin.beans;
 
-import groovy.util.Factory;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,7 +30,6 @@ import org.springframework.beans.factory.config.Scope;
 
 import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.server.ClientConnector.DetachListener;
-import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 

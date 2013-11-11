@@ -30,6 +30,8 @@ import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PaginatorListener;
 import org.jdal.service.PersistentService;
+import org.jdal.ui.EditorEvent;
+import org.jdal.ui.EditorListener;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.VaadinView;
@@ -260,6 +262,14 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 				BeanItem<T> bi = (BeanItem<T>) event.getItem();
 				editor.setModel(bi.getBean());
 				editor.refresh();
+				
+				editor.addEditorListener(new EditorListener() {
+					
+					public void modelChanged(EditorEvent e) {
+						refresh();
+					}
+				});
+				
 				ViewDialog<T> dlg = (ViewDialog<T>) this.guiFactory.newViewDialog(editor);
 				dlg.init();
 				dlg.center();

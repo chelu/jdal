@@ -158,9 +158,9 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		fb.add(status);
 		fb.add(next);
 		fb.add(last);
-		fb.addHorizontalGlue();
 		fb.add(goToLabel);
 		fb.add(goTo, 60);
+		fb.addHorizontalGlue();
 		fb.add(showRecords);
 		fb.add(pgs, 60);
 		
