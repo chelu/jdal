@@ -94,10 +94,13 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	public boolean isSingleton() {
 		return singleton;
 	}
+<<<<<<< HEAD
 	
 	public void setSingleton(boolean singleton) {
 		this.singleton = singleton;
 	}
+=======
+>>>>>>> 3969362864a314d0df8b5b68509fe30a500e6411
 
 	/**
 	 * {@inheritDoc}
@@ -114,7 +117,10 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	public void setTargetBeanName(String targetBeanName) {
 		this.targetBeanName = targetBeanName;
 	}
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 3969362864a314d0df8b5b68509fe30a500e6411
 }
 
