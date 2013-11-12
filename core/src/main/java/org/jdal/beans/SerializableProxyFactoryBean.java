@@ -114,7 +114,5 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	public void setTargetBeanName(String targetBeanName) {
 		this.targetBeanName = targetBeanName;
 	}
-
-
 }
 
