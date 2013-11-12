@@ -71,7 +71,7 @@ public class VaadinScope implements Scope, DetachListener {
 			return bean;
 		}
 		
-		// No current UI, have session?
+		// No current UI, have a session?
 		UI closing = null;
 		VaadinSession session = VaadinSession.getCurrent();
 		Collection<UI> uisToSearch = null;

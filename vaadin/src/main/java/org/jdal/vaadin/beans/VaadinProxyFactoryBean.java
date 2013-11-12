@@ -26,7 +26,6 @@ import org.springframework.aop.support.DelegatingIntroductionInterceptor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.FactoryBeanNotInitializedException;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.util.ClassUtils;
 
@@ -43,17 +42,12 @@ public class VaadinProxyFactoryBean extends ProxyConfig implements FactoryBean<O
 	/** The name of the target bean */
 	private String targetBeanName;
 
-	/** The cached singleton proxy */
-	private Object proxy;
-
-
 	/**
 	 * Create a new ScopedProxyFactoryBean instance.
 	 */
 	public VaadinProxyFactoryBean() {
 		setProxyTargetClass(true);
 	}
-
 
 	/**
 	 * Set the name of the bean that is to be scoped.
@@ -67,13 +61,16 @@ public class VaadinProxyFactoryBean extends ProxyConfig implements FactoryBean<O
 		if (!(beanFactory instanceof ConfigurableBeanFactory)) {
 			throw new IllegalStateException("Not running in a ConfigurableBeanFactory: " + beanFactory);
 		}
-		ConfigurableBeanFactory cbf = (ConfigurableBeanFactory) beanFactory;
 
 		this.targetSource.setBeanFactory(beanFactory);
+	}
 
+
+	public Object getObject() {
 		ProxyFactory pf = new ProxyFactory();
 		pf.copyFrom(this);
 		pf.setTargetSource(this.targetSource);
+		ConfigurableBeanFactory beanFactory = (ConfigurableBeanFactory) targetSource.getBeanFactory();
 
 		Class<?> beanType = beanFactory.getType(this.targetBeanName);
 		if (beanType == null) {
@@ -81,40 +78,25 @@ public class VaadinProxyFactoryBean extends ProxyConfig implements FactoryBean<O
 					"': Target type could not be determined at the time of proxy creation.");
 		}
 		if (!isProxyTargetClass() || beanType.isInterface() || Modifier.isPrivate(beanType.getModifiers())) {
-			pf.setInterfaces(ClassUtils.getAllInterfacesForClass(beanType, cbf.getBeanClassLoader()));
+			pf.setInterfaces(ClassUtils.getAllInterfacesForClass(beanType, beanFactory.getBeanClassLoader()));
 		}
 
 		// Add an introduction that implements only the methods on ScopedObject.
-		ScopedObject scopedObject = new DefaultScopedObject(cbf, this.targetSource.getTargetBeanName());
+		ScopedObject scopedObject = new DefaultScopedObject(beanFactory, this.targetSource.getTargetBeanName());
 		pf.addAdvice(new DelegatingIntroductionInterceptor(scopedObject));
 
 		// Add the AopInfrastructureBean marker to indicate that the scoped proxy
 		// itself is not subject to auto-proxying! Only its target bean is.
 		pf.addInterface(AopInfrastructureBean.class);
 
-		this.proxy = pf.getProxy(cbf.getBeanClassLoader());
-	}
-
-
-	public Object getObject() {
-		if (this.proxy == null) {
-			throw new FactoryBeanNotInitializedException();
-		}
-		return this.proxy;
+		return pf.getProxy(beanFactory.getBeanClassLoader());
 	}
 
 	public Class<?> getObjectType() {
-		if (this.proxy != null) {
-			return this.proxy.getClass();
-		}
-		if (this.targetSource != null) {
-			return this.targetSource.getTargetClass();
-		}
-		return null;
+		return targetSource.getTargetClass();
 	}
 
 	public boolean isSingleton() {
-		return true;
+		return false;
 	}
-
 }

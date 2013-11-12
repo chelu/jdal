@@ -26,6 +26,13 @@
 			</xsd:documentation>
 		</xsd:annotation>
 	</xsd:element>
+	<xsd:element name="serializable-proxy" type="serializableProxyType">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[Make a serializable proxy of a bean]]>
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
 
 	<xsd:complexType name="serviceType">
 		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
@@ -73,6 +80,10 @@
 	<xsd:complexType name="criteriaType">
 		<xsd:attribute name="name" type="xsd:string" />
 		<xsd:attribute name="builder" type="xsd:string" />
+	</xsd:complexType>
+	
+	<xsd:complexType name="serializableProxyType">
+		<xsd:attribute name="proxy-target-class" type="xsd:boolean" />
 	</xsd:complexType>
 
 </xsd:schema>

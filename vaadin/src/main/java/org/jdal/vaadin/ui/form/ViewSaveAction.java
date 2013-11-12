@@ -66,8 +66,9 @@ public class ViewSaveAction extends ViewAction {
 		boolean valid = save();
 		afterSave(valid);
 		
-		if (valid)
+		if (valid) {
 			VaadinUtils.closeWindow(getView().getPanel());
+		}
 	}
 
 	/** 

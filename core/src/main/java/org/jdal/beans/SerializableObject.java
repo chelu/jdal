@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 the original author or authors.
+ * Copyright 2009-2012 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,15 @@
  */
 package org.jdal.beans;
 
-import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 
 /**
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
-public class JdalNamespaceHandler extends NamespaceHandlerSupport {
+public interface SerializableObject extends Serializable {
+	
+	Object writeReplace() throws ObjectStreamException;
 
-	
-	public void init() {
-		registerBeanDefinitionParser("service", new ServiceBeanDefinitionParser());
-		registerBeanDefinitionDecorator("serializable-proxy", new SerializableProxyBeanDefinitionDecorator());
-	}
-	
 }
