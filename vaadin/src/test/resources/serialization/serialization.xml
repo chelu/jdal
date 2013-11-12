@@ -68,11 +68,11 @@
    <!-- UI Widgets -->
 	<vaadin:defaults />
 	
-	<vaadin:table entity="org.jdal.test.model.Author" scope="singleton">
+	<vaadin:table entity="org.jdal.test.model.Author" scope="prototype">
 		<vaadin:columns>
 			<vaadin:column name="id" />
 		</vaadin:columns>
-		<vaadin:proxy />
+		<jdal:serializable-proxy />
 	</vaadin:table>
 
 </beans>

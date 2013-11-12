@@ -1,15 +1,5 @@
-package org.jdal.vaadin.beans;
-
-import org.springframework.aop.scope.ScopedProxyUtils;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.parsing.BeanComponentDefinition;
-import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
-import org.springframework.beans.factory.xml.ParserContext;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2012 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +13,23 @@ import org.w3c.dom.Node;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.jdal.beans;
+
+import org.springframework.aop.scope.ScopedProxyUtils;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.parsing.BeanComponentDefinition;
+import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
+import org.springframework.beans.factory.xml.ParserContext;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
- * Bean Definition Decorator for vaadin serializable proxies.
+ * Decorates bean definitions with serializable proxies.
  * 
- * The only diference with a Spring Scoped proxy is that we use 
- * a BeanTargetSource that cache de target bean.
- * 
- * @author Jose Luis Martin
+ * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class VaadinProxyBeanDefinitionDecorator implements BeanDefinitionDecorator {
+public class SerializableProxyBeanDefinitionDecorator implements
+		BeanDefinitionDecorator {
 
 	private static final String PROXY_TARGET_CLASS = "proxy-target-class";
 
@@ -49,12 +46,11 @@ public class VaadinProxyBeanDefinitionDecorator implements BeanDefinitionDecorat
 		// Register the original bean definition as it will be referenced by the scoped proxy
 		// and is relevant for tooling (validation, navigation).
 		BeanDefinitionHolder holder =
-				ProxyUtils.createProxy(definition, parserContext.getRegistry(), proxyTargetClass);
-		String targetBeanName = ScopedProxyUtils.getTargetBeanName(definition.getBeanName());
+				ProxyUtils.createSerializableProxy(definition, parserContext.getRegistry(), proxyTargetClass);
+		String targetBeanName = ProxyUtils.getTargetBeanName(definition.getBeanName());
 		parserContext.getReaderContext().fireComponentRegistered(
 				new BeanComponentDefinition(definition.getBeanDefinition(), targetBeanName));
 		return holder;
 	}
-
 
 }

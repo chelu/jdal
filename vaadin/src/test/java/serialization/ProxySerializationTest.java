@@ -15,16 +15,15 @@
  */
 package serialization;
 
-import org.jdal.vaadin.beans.CachedBeanTargetSource;
 import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.table.PageableTable;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.Assert;
 import org.springframework.util.SerializationUtils;
 
 /**
@@ -42,20 +41,12 @@ public class ProxySerializationTest {
 	@Autowired
 	private BeanFactory beanFactory;
 	
-	@SuppressWarnings("unused")
 	@Test
 	public void testProxySerialization() {
 		byte[] ser = SerializationUtils.serialize(table);
 		PageableTable deserialized = (PageableTable) SerializationUtils.deserialize(ser);
+		Assert.assertEquals(table.getClass(), deserialized.getClass());
 		GuiFactory factory = deserialized.getGuiFactory();
-		Assert.notNull(factory);	
-		
-		CachedBeanTargetSource targetSource = new CachedBeanTargetSource();
-		targetSource.setTargetBeanName("scopedProxy.authorTable");
-		targetSource.setBeanFactory(beanFactory);
-		byte[] bytes = SerializationUtils.serialize(targetSource);
-		
-		byte[] bfbytes = SerializationUtils.serialize(beanFactory);
-		
+		Assert.assertNotNull(factory);	
 	}
 }

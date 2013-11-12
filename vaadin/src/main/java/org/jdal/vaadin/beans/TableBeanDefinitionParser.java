@@ -175,11 +175,9 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		parserContext.registerBeanComponent(new BeanComponentDefinition(holder));
 		
-		// registerBeanDefinition(element, parserContext, pageableTableBeanName, bdb);
-		
 		// create ConfigurableTable
 		bdb = BeanDefinitionBuilder.genericBeanDefinition(ConfigurableTable.class);
-		bdb.setScope(scope);
+		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 	
 		NodeList nl = element.getElementsByTagNameNS(element.getNamespaceURI(), COLUMNS);
 		
