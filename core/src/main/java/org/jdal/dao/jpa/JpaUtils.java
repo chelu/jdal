@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +30,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PersistenceUnitUtil;
-import javax.persistence.criteria.CompoundSelection;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -88,7 +85,7 @@ public abstract class JpaUtils {
 	public static <T> CriteriaQuery<Long> countCriteria(EntityManager em, CriteriaQuery<T> criteria) {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-		copyCriteriaNoSelection(criteria, countCriteria);
+		copyCriteriaWithoutSelectionAndOrder(criteria, countCriteria);
 		
 		Expression<Long> countExpression;
 		
@@ -251,13 +248,22 @@ public abstract class JpaUtils {
 	}
 	
 	/**
-	 * Copy Criteria without Selection
-	 * @param from source Criteria
-	 * @param to destination Criteria
+	 * Copy Criteria without Selection.
+	 * @param from source Criteria.
+	 * @param to destination Criteria.
 	 */
 	public static void  copyCriteriaNoSelection(CriteriaQuery<?> from, CriteriaQuery<?> to) {
-		
-		
+		copyCriteriaWithoutSelectionAndOrder(from, to);
+		to.orderBy(from.getOrderList());
+	}
+
+	/**
+	 * Copy criteria without selection and order.
+	 * @param from source Criteria.
+	 * @param to destination Criteria.
+	 */
+	private static void copyCriteriaWithoutSelectionAndOrder(
+			CriteriaQuery<?> from, CriteriaQuery<?> to) {
 		if (isEclipseLink(from) && from.getRestriction() != null) {
 			// EclipseLink adds roots from predicate paths to critera. Skip copying 
 			// roots as workaround.
@@ -280,8 +286,6 @@ public abstract class JpaUtils {
 		Predicate predicate = from.getRestriction();
 		if (predicate != null)
 			to.where(predicate);
-		
-		to.orderBy(from.getOrderList());
 	}
 	
 	private static boolean isEclipseLink(CriteriaQuery<?> from) {
