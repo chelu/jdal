@@ -381,7 +381,6 @@ public abstract class JpaUtils {
 		}
 	}
 	
-
 	/** 
 	 * Initialize entity attribute
 	 * @param em
@@ -463,7 +462,6 @@ public abstract class JpaUtils {
 		
 		return clazz.isAssignableFrom(attribute.getJavaType());
 	}
-	
 	
 	/**
 	 * Gets the mappedBy value from an attribute

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Jose Luis Martin.
+ * Copyright 2009-2013 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package org.jdal.beans;
 
-import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
@@ -27,6 +26,7 @@ import org.w3c.dom.Node;
  * Decorates bean definitions with serializable proxies.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @since 2.0
  */
 public class SerializableProxyBeanDefinitionDecorator implements
 		BeanDefinitionDecorator {

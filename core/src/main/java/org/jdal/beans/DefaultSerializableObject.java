@@ -35,6 +35,10 @@ public class DefaultSerializableObject implements SerializableObject {
 	private Object serializedObject;
 	
 
+	public DefaultSerializableObject() {
+		
+	}
+	
 	public DefaultSerializableObject(Object serializedObject) {
 		this.serializedObject = serializedObject;
 	}

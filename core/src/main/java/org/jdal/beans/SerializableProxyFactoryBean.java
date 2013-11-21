@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Jose Luis Martin.
+ * Copyright 2009-2013 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import org.springframework.util.ClassUtils;
  * ProxyFactoryBean to make serializable non serializable objects.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @since 2.0
  */
 public class SerializableProxyFactoryBean  extends ProxyConfig implements FactoryBean<Object>,
 	BeanFactoryAware {
@@ -63,7 +64,7 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 			pf.setInterfaces(ClassUtils.getAllInterfacesForClass(beanType, beanFactory.getBeanClassLoader()));
 		}
 		
-		DefaultSerializableObject  dso = new DefaultSerializableObject(targetSource.getTarget());
+		DefaultSerializableObject  dso = new DefaultSerializableObject();
 		pf.addAdvice(new DelegatingIntroductionInterceptor(dso));
 
 		pf.addInterface(AopInfrastructureBean.class);

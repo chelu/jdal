@@ -30,14 +30,9 @@ import org.springframework.util.ObjectUtils;
  */
 public class SerializableTargetSource implements TargetSource, Serializable {
 	
-	/** Target cached and invoked using reflection */
 	private final DefaultSerializableObject target;
 
-
-	/**
-	 * Create a new SingletonTargetSource for the given target.
-	 * @param target the target object
-	 */
+	
 	public SerializableTargetSource(Object target) {
 		Assert.notNull(target, "Target object must not be null");
 		this.target = new DefaultSerializableObject(target);
@@ -87,7 +82,7 @@ public class SerializableTargetSource implements TargetSource, Serializable {
 
 	@Override
 	public String toString() {
-		return "SingletonTargetSource for target object [" + ObjectUtils.identityToString(this.target.getSerializedObject()) + "]";
+		return "SerializableTargetSource for target object [" + ObjectUtils.identityToString(this.target.getSerializedObject()) + "]";
 	}
 
 
