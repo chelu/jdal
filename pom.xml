@@ -130,6 +130,11 @@
 			<name>JDAL Releases</name>
 			<url>http://www.jdal.org/artifactory/libs-release-local</url>
 		</repository>
+		<snapshotRepository>
+			<id>jdal-snapshots</id>
+			<name>JDAL SNAPSHOT</name>
+			<url>http://www.jdal.org/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 	<profiles>

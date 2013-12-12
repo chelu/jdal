@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.ui.View;
 
 /**
  * Implementation of ControlAccessorFactory using an asociative Map&lt;Class, ControlAccessor&gt;
@@ -112,10 +113,21 @@ public class ConfigurableControlAccessorFactory implements ControlAccessorFactor
 	public static synchronized ConfigurableControlAccessorFactory getDefaultFactory() {
 		if (defaultFactory == null)
 			defaultFactory = new ConfigurableControlAccessorFactory();
+			configureDefaultAccessors(defaultFactory);
 		
 		return defaultFactory;
 	}
 	
+	/**
+	 * 
+	 */
+	private static void configureDefaultAccessors(ConfigurableControlAccessorFactory factory) {
+		Map<Class<?>, Class<?extends ControlAccessor>> accessors = factory.getAccessors();
+		
+		accessors.put(View.class, ViewAccessor.class);
+		
+	}
+
 	public Map<Class<?>, Class<?extends ControlAccessor>> getAccessors() {
 		return accessors;
 	}

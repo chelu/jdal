@@ -44,7 +44,6 @@ public abstract class SwingBindingUtils {
 		accessors.put(Selector.class, SelectorAccessor.class);
 		accessors.put(JToggleButton.class, ToggleButtonAccessor.class);
 		accessors.put(JComboBox.class, ComboAccessor.class);
-		accessors.put(View.class, ViewAccessor.class);
 		accessors.put(JLabel.class, LabelAccessor.class);
 		accessors.put(TablePanel.class, TablePanelAccessor.class);
 	}
