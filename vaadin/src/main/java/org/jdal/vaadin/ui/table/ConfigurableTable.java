@@ -16,6 +16,7 @@
 package org.jdal.vaadin.ui.table;
 
 import java.beans.PropertyEditor;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -70,6 +71,7 @@ public class ConfigurableTable extends Table {
 	private Map<String, Column> columnMap = new HashMap<String, Column>();
 	@Autowired
 	private transient MessageSource messageSource;
+	private List<String> properties = new ArrayList<String>();
 	
 	
 	/**
@@ -80,23 +82,31 @@ public class ConfigurableTable extends Table {
 	public void setColumns(List<Column> columns) {
 		this.columns = columns;
 		columnMap.clear();
-		for (Column c : columns)
+		properties.clear();
+		
+		for (Column c : columns) {
 			columnMap.put(c.getName(), c);
-	}
-	
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setContainerDataSource(Container newDataSource) {
-		super.setContainerDataSource(newDataSource);
+			properties.add(c.getName());
+		}
+		
 		configure();
 	}
 	
+	public void setContainerDataSource(Container newDataSource,
+            Collection<?> visibleIds) {
+		if (visibleIds != null && visibleIds.size() > 0) {
+			for (String id : properties) {
+				if (!visibleIds.contains(id)) {
+					throw new IllegalStateException("Unknown property [" + id + "]");
+				}
+			}
+		}
+		super.setContainerDataSource(newDataSource, properties);
+	}
+
+	
 	/**
-	 * Vaadin Table throw an exception when set this properties 
-	 * with an empty Container datasource. 
+	 * Configure table
 	 */
 	protected void configure() {
 		if (columns == null)
@@ -120,6 +130,8 @@ public class ConfigurableTable extends Table {
 			widths[i] = columns.get(i).getWidth();
 		}
 		
+		// Vaadin Table throw an exception when set this properties 
+		// with an empty Container datasource. 
 		this.setVisibleColumns(visibleColumns);
 		this.setColumnHeaders(displayNames);
 		this.setColumnAlignments(alignments);
@@ -257,6 +269,14 @@ public class ConfigurableTable extends Table {
 			((Property.Viewer) editor).setPropertyDataSource(property);
 		}
 		return editor;
+	}
+	
+	/**
+	 * Override to allow setting visible columns with a empty data source
+	 */
+	@Override
+	public Collection<?> getContainerPropertyIds() {
+		return properties;
 	}
 	
 	public Column getColumn(String name) {

@@ -45,7 +45,7 @@ public class TextFieldAccessor extends AbstractControlAccessor {
 	 * {@inheritDoc}
 	 */
 	public void setControlValue(Object value) {
-		getControl().setValue(value.toString());
+		getControl().setValue(value != null ? value.toString() : "");
 		
 	}
 	

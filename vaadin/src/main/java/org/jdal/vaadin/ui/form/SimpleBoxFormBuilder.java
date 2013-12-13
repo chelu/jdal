@@ -78,22 +78,42 @@ public class SimpleBoxFormBuilder {
 	 * @param c Component to add
 	 */
 	public void add(Component c) {
-		add(c, defaultWidth, Alignment.MIDDLE_CENTER);
+		add(c, null, defaultWidth, Alignment.MIDDLE_CENTER);
 	}
 	
+	public void add(Component c, String label) {
+		add(c, label, defaultWidth, Alignment.MIDDLE_CENTER);
+	}
+	
+	
 	public void add(Component c, int width) {
-		add(c, width, Alignment.MIDDLE_CENTER);
+		add(c, null, width, Alignment.MIDDLE_CENTER);
+	}
+	
+	public void add(Component c, String label, int width) {
+		add(c, null, width, Alignment.MIDDLE_CENTER);
 	}
 	
 	public void add(Component c, Alignment alignment) {
-		add(c, defaultWidth, alignment);
+		add(c, null, defaultWidth, alignment);
 	}
 	
-	public void add(Component c, int width, Alignment alignment) {
+	public void add(Component c, String label,  Alignment alignment) {
+		add(c, label, defaultWidth, alignment);
+	}
+	
+	public void add(Component c, int width,  Alignment alignment) {
+		add(c, null, width, alignment);
+	}
+	
+	public void add(Component c, String label, int width, Alignment alignment) {
 		if (rows == 0 && rowsHeight.isEmpty()) {
 			log.warn("You must call row() before adding components. I will add a row with default height for you");
 			row();
 		}
+		
+		if (label != null)
+			c.setCaption(label);
 		
 		VerticalLayout column = getColumn();
 		column.addComponent(c);

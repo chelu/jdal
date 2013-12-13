@@ -104,6 +104,23 @@ public class BoxFormBuilder {
 		builder.add(c, width, alignment);
 		
 	}
+	
+	public void add(Component c, String label) {
+		builder.add(c, label);
+	}
+
+	public void add(Component c, String label, int width) {
+		builder.add(c, label, width);
+	}
+
+	public void add(Component c, String label, Alignment alignment) {
+		builder.add(c, label, alignment);
+	}
+
+	public void add(Component c, String label, int width, Alignment alignment) {
+		builder.add(c, label, width, alignment);
+	}
+
 
 	/**
 	 * @param i

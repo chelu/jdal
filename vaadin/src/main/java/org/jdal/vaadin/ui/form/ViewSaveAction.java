@@ -36,8 +36,8 @@ public class ViewSaveAction extends ViewAction {
 	private static final String DEFAULT_ICON="images/ok.png";
 	
 	private boolean showError = true;
-	
 	private PersistentService persistentService;
+	private boolean closeWindow = true;
 	
 	public ViewSaveAction() {
 		this(null, null);
@@ -66,7 +66,7 @@ public class ViewSaveAction extends ViewAction {
 		boolean valid = save();
 		afterSave(valid);
 		
-		if (valid) {
+		if (valid && closeWindow) {
 			VaadinUtils.closeWindow(getView().getPanel());
 		}
 	}
@@ -139,6 +139,14 @@ public class ViewSaveAction extends ViewAction {
 
 	public void setShowError(boolean showError) {
 		this.showError = showError;
+	}
+
+	public boolean isCloseWindow() {
+		return closeWindow;
+	}
+
+	public void setCloseWindow(boolean closeWindow) {
+		this.closeWindow = closeWindow;
 	}
 
 }

@@ -160,7 +160,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 				page.setFilter(beanFilter);
 		}
 	
-		table.addItemClickListener((ItemClickListener) this);
+		table.addItemClickListener(this);
 		this.setCompositionRoot(verticalLayout);
 		this.setSizeUndefined();
 		
@@ -276,6 +276,26 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 				this.getUI().addWindow(dlg);
 			}
 		}
+	}
+	
+	/**
+	 * By default, pageable table handle item clicks to edit items.
+	 * This method disable it.
+	 */
+	public void disableEditorListener() {
+		table.removeItemClickListener(this);
+	}
+	
+	public void enableEditorListener() {
+		table.addItemClickListener(this);
+	}
+	
+	public void addItemClickListener(ItemClickListener listener) {
+		table.addItemClickListener(listener);
+	}
+	
+	public void removeItemClickListener(ItemClickListener listener) {
+		table.removeItemClickListener(listener);
 	}
 
 	/**
