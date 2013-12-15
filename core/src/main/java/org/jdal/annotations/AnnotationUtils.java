@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.util.BeanUtils;
@@ -29,7 +30,6 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 import org.springframework.util.ReflectionUtils.MethodCallback;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 
 /**
  * Utility class for dealing with annotations
@@ -106,7 +106,7 @@ public abstract class AnnotationUtils {
 			Method method = (Method) element;
 			String name = method.getName();
 			if (name.startsWith("set")) {
-				String property = StringUtils.decapitalize(name.substring(3));
+				String property = StringUtils.uncapitalize(name.substring(3));
 				return BeanUtils.getProperty(target, property);
 			}
 		}
