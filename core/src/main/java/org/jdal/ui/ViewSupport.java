@@ -438,41 +438,43 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	public void autobind() {
 		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
 		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(this);
+		
+		// Parse Property annotations
 		List<AnnotatedElement> elements = AnnotationUtils.findAnnotatedElements(Property.class, getClass());
-
-		Map<String, Object> controls = new HashMap<String, Object>(elements.size());
 
 		for (AnnotatedElement ae : elements) {
 			Property p = ae.getAnnotation(Property.class);
-			controls.put(p.value(), ae);
+			bindAndInitializeControl(p.value(), ae);
+			this.ignoredProperties.add(p.value());
 		}
 		
-		// iterate on model properties
+		// Iterate on model properties
 		for (PropertyDescriptor pd : bw.getPropertyDescriptors()) {
 			String propertyName = pd.getName();
-			if ( !ignoredProperties.contains(propertyName)) {
-				Object control = null;
-				// lookup property annotations
-				if (controls.containsKey(propertyName)) {
-					control = controls.get(propertyName);
-				}
-				// lookup by property name
-				else if (viewPropertyAccessor.isReadableProperty(propertyName)) {
-					control = viewPropertyAccessor.getPropertyValue(propertyName);
-				}
-				
+			if ( !ignoredProperties.contains(propertyName) && viewPropertyAccessor.isReadableProperty(propertyName)) {
+				Object control = viewPropertyAccessor.getPropertyValue(propertyName);
+
 				if (control != null) {
 					if (log.isDebugEnabled()) 
 						log.debug("Found control: " + control.getClass().getSimpleName() + 
-								" for property: " + propertyName);
+									" for property: " + propertyName);
 					// do bind
-					bind(control, propertyName);
-					// initialize control
-					if (isInitializeControls() && controlInitializer != null)
-						controlInitializer.initialize(control, propertyName, getModel().getClass());
+					bindAndInitializeControl(propertyName, control);
 				}
 			}
 		}
+	}
+
+	/**
+	 * Bind and initialize a control with property name.
+	 * @param propertyName property name
+	 * @param control control
+	 */
+	private void bindAndInitializeControl(String propertyName, Object control) {
+		bind(control, propertyName);
+		// initialize control
+		if (isInitializeControls() && controlInitializer != null)
+				controlInitializer.initialize(control, propertyName, getModel().getClass());
 	}
 	
 	/** 
