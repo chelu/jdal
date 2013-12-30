@@ -47,7 +47,7 @@ public abstract class AnnotationUtils {
 	 * @param clazz class to search on.
 	 * @return List with annotated elements
 	 */
-	public static List<AnnotatedElement> findAnnotations(final Class<? extends Annotation> annotationType, Class<?> clazz) {
+	public static List<AnnotatedElement> findAnnotatedElements(final Class<? extends Annotation> annotationType, Class<?> clazz) {
 		final ArrayList<AnnotatedElement> elements = new ArrayList<AnnotatedElement>();
 		// Lookup fields
 		ReflectionUtils.doWithFields(clazz, new FieldCallback() {

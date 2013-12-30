@@ -50,7 +50,7 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
 			throws BeansException {
 
-		List<AnnotatedElement> elements = AnnotationUtils.findAnnotations(SerializableObject.class, bean.getClass());
+		List<AnnotatedElement> elements = AnnotationUtils.findAnnotatedElements(SerializableObject.class, bean.getClass());
 		
 		for (AnnotatedElement element : elements) {
 			Object value = AnnotationUtils.getValue(element, bean);

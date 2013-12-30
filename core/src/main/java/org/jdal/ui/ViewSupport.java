@@ -17,16 +17,20 @@ package org.jdal.ui;
 
 import java.awt.Component;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.annotations.AnnotationUtils;
 import org.jdal.ui.bind.BinderFactory;
 import org.jdal.ui.bind.BinderHolder;
 import org.jdal.ui.bind.CompositeBinder;
@@ -37,6 +41,7 @@ import org.jdal.ui.bind.ControlError;
 import org.jdal.ui.bind.ControlEvent;
 import org.jdal.ui.bind.ControlInitializer;
 import org.jdal.ui.bind.DirectFieldAccessor;
+import org.jdal.ui.bind.Property;
 import org.jdal.ui.bind.PropertyBinder;
 import org.jdal.ui.validation.ErrorProcessor;
 import org.springframework.beans.BeanWrapper;
@@ -428,17 +433,34 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	}
 	
 	/**
-	 * Bind Controls with the same name that a property in the model.
+	 * Bind controls following the same name convention or annotated with Property annotation.
 	 */
-	// TODO: This code has been moved to CompositeBinder, drop it.
 	public void autobind() {
 		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
 		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(this);
+		List<AnnotatedElement> elements = AnnotationUtils.findAnnotatedElements(Property.class, getClass());
+
+		Map<String, Object> controls = new HashMap<String, Object>(elements.size());
+
+		for (AnnotatedElement ae : elements) {
+			Property p = ae.getAnnotation(Property.class);
+			controls.put(p.value(), ae);
+		}
+		
 		// iterate on model properties
 		for (PropertyDescriptor pd : bw.getPropertyDescriptors()) {
 			String propertyName = pd.getName();
-			if ( !ignoredProperties.contains(propertyName) && viewPropertyAccessor.isReadableProperty(propertyName)) {
-				Object control = viewPropertyAccessor.getPropertyValue(propertyName);
+			if ( !ignoredProperties.contains(propertyName)) {
+				Object control = null;
+				// lookup property annotations
+				if (controls.containsKey(propertyName)) {
+					control = controls.get(propertyName);
+				}
+				// lookup by property name
+				else if (viewPropertyAccessor.isReadableProperty(propertyName)) {
+					control = viewPropertyAccessor.getPropertyValue(propertyName);
+				}
+				
 				if (control != null) {
 					if (log.isDebugEnabled()) 
 						log.debug("Found control: " + control.getClass().getSimpleName() + 
