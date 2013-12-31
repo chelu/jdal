@@ -91,6 +91,8 @@ public class PeriodFormatter implements Formatter<Number> {
 		
 		while(scanner.hasNext()) 
 			value += parse(scanner.nextLong(), scanner.next("[dhms]"));
+		
+		scanner.close();
 	
 		return value;
 		

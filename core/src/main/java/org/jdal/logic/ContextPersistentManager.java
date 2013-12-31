@@ -162,4 +162,21 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 		return serviceMap.get(clazz);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean exists(Serializable id) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Object> findByNamedQuery(String queryName,
+			Map<String, Object> queryParams) {
+		throw new UnsupportedOperationException();
+	}
+
 }

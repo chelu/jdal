@@ -17,9 +17,8 @@ package org.jdal.service;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
-import org.jdal.dao.PageableDataSource;
+import org.jdal.dao.Dao;
 
 
 /**
@@ -28,19 +27,7 @@ import org.jdal.dao.PageableDataSource;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public interface PersistentService<T, PK extends Serializable> extends PageableDataSource<T> {
-	
-	T initialize(T entity, int depth);
-	
-	T initialize(T entity);
-	
-	T save (T entity);
-	
-	void delete(T entity);
-	
-	void deleteById(PK id);
-	
-	List<T> getAll();
+public interface PersistentService<T, PK extends Serializable> extends Dao<T, PK> {
 	
 	// Collections
 	Collection<T> save(Collection<T> collection);
@@ -48,17 +35,4 @@ public interface PersistentService<T, PK extends Serializable> extends PageableD
 	void delete(Collection<T> collection);
 	
 	void deleteById(Collection<PK> ids);
-
-	/**
-	 * @param id
-	 * @return entity
-	 */
-	T get(PK id);
-	
-	<E> E get(PK id, Class<E> clazz);
-	
-	<E> List<E> getAll(Class<E> clazz);
-	
-	Class<T> getEntityClass();
-	
 }

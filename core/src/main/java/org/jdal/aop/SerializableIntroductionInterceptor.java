@@ -15,8 +15,6 @@
  */
 package org.jdal.aop;
 
-import java.lang.reflect.Method;
-
 import org.aopalliance.intercept.MethodInvocation;
 import org.jdal.beans.DefaultSerializableObject;
 import org.jdal.beans.SerializableObject;

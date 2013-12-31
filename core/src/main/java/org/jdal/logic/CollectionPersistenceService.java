@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.jdal.dao.Page;
@@ -230,5 +231,22 @@ public class CollectionPersistenceService<T, PK extends Serializable> implements
 	 */
 	public void setPropertyKey(String propertyKey) {
 		this.propertyKey = propertyKey;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean exists(PK id) {
+		return get(id) != null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<T> findByNamedQuery(String queryName,
+			Map<String, Object> queryParams) {
+		throw new UnsupportedOperationException();
 	}
 }

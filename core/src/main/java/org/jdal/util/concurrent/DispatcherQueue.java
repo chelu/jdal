@@ -22,7 +22,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.task.SyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
 
 /**
  * Wrapper for a BlockingQueue that dispatchs incoming objets to a Task Executor.

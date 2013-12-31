@@ -15,19 +15,14 @@
  */
 package org.jdal.logic;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * 
  * DbmsAdminService implementation for MySql.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  *
  */
 public class MysqlAdminManager extends DbAdminManagerSupport {
-	
-	private static final Log log = LogFactory.getLog(MysqlAdminManager.class);
 	
 	public boolean password(String newPassword) {
 		return execute("SET PASSWORD = PASSWORD('" + newPassword + "')");

@@ -19,9 +19,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
 import org.jdal.service.PersistentService;
@@ -32,8 +31,6 @@ import org.jdal.service.PersistentService;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class PersistentManager<T, PK extends Serializable> implements PersistentService<T, PK> {
-
-	private final static Log log = LogFactory.getLog(PersistentManager.class);
 
 	public static final int DEFAULT_DEPTH = 2;
 	protected Dao<T, PK> dao;
@@ -165,5 +162,22 @@ public class PersistentManager<T, PK extends Serializable> implements Persistent
 			return dao.getEntityClass();
 		
 		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean exists(PK id) {
+		return dao.exists(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<T> findByNamedQuery(String queryName,
+			Map<String, Object> queryParams) {
+		return dao.findByNamedQuery(queryName, queryParams);
 	}
 }

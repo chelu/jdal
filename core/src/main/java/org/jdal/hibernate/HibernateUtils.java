@@ -28,15 +28,15 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.EntityMode;
 import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.criterion.Example;
 import org.hibernate.engine.PersistenceContext;
 import org.hibernate.impl.CriteriaImpl;
-import org.hibernate.impl.SessionImpl;
 import org.hibernate.impl.CriteriaImpl.Subcriteria;
+import org.hibernate.impl.SessionImpl;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.collection.CollectionPersister;
 
@@ -103,7 +103,7 @@ public abstract class HibernateUtils {
 				return;
 			}
 			
-			sessionFactory.getCurrentSession().lock(obj, LockMode.NONE);
+			sessionFactory.getCurrentSession().buildLockRequest(LockOptions.NONE).lock(obj);
 			Hibernate.initialize(obj);
 		}
 	
@@ -170,16 +170,6 @@ public abstract class HibernateUtils {
 			}
 		}
 	}
-
-	/**
-	 * @param session
-	 * @param o
-	 */
-	public static void initialize(Session session, Object o) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 	/**
 	 * Get ClassMetadata for persistent object

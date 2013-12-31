@@ -30,7 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
@@ -159,7 +159,6 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	 * @param filter the filter
 	 * @return a new Criteria 
 	 */
-	// FIXME: Remove complexity - jlm
 	private Criteria getCriteria(Page<?> page) {
 		Criteria executableCriteria = getSession().createCriteria(
 				getEntityClass());
@@ -351,13 +350,13 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	}
 	
 	public  T initialize(T entity) {
-		getSession().lock(entity, LockMode.NONE);
+		getSession().buildLockRequest(LockOptions.NONE).lock(entity);
 		HibernateUtils.initialize(getSessionFactory(), entity);
 		return entity;
 	}
 	
 	public T initialize(T entity, int depth) {
-		getSession().lock(entity, LockMode.NONE);
+		getSession().buildLockRequest(LockOptions.NONE).lock(entity);
 		HibernateUtils.initialize(getSessionFactory(), entity, depth);
 
 		return entity;

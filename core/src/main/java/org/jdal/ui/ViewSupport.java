@@ -20,12 +20,10 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -103,8 +101,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	/** data model */
 	private T model;
 	/** subviews list */
-	@SuppressWarnings("rawtypes")
-	private List<View> subViews = new ArrayList<View>();
+	private List<View<T>> subViews = new ArrayList<View<T>>();
 	/** validator to check binding and model values */
 	private Validator validator;
 	/** message source for internationalization */
@@ -188,7 +185,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 		binder.setModel(model);
 		
 		// refresh subviews
-		for (View<Object> v : subViews)
+		for (View<T> v : subViews)
 			v.setModel(model);
 		
 		onSetModel(model);
@@ -226,7 +223,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 			errors.addAllErrors(binder.getBindingResult());
 		
 		// update subviews
-		for (View<Object>  v : subViews) {
+		for (View<T>  v : subViews) {
 			v.update();
 			if (errors != null && v.getBindingResult() != null &&
 					errors.getObjectName().equals(v.getBindingResult().getObjectName()))
@@ -282,7 +279,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 		binder.refresh();
 
 		// refresh subviews
-		for (View<Object> v : subViews)
+		for (View<T> v : subViews)
 			v.refresh();
 		
 		setDirty(false);
@@ -647,7 +644,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	 */
 	public boolean isDirty() {
 		boolean d = dirty;
-		for (View<Object> v : subViews) {
+		for (View<T> v : subViews) {
 			d = d || v.isDirty();
 		}
 		

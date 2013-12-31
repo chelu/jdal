@@ -18,16 +18,10 @@ package org.jdal.beans;
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jdal.annotations.AnnotationUtils;
 import org.jdal.annotations.SerializableObject;
 import org.jdal.aop.SerializableIntroductionInterceptor;
-import org.springframework.aop.TargetSource;
-import org.springframework.aop.framework.Advised;
 import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.support.DelegatingIntroductionInterceptor;
-import org.springframework.aop.target.SingletonTargetSource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;

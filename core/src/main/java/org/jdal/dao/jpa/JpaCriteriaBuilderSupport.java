@@ -110,12 +110,12 @@ public abstract class JpaCriteriaBuilderSupport<T, K> implements JpaCriteriaBuil
 	 * @param cb Criteria Builder
 	 * @param predicates predicates to add
 	 */
-	protected <K> void addAndWhere(CriteriaQuery<K> criteria, CriteriaBuilder cb, List<Predicate> predicates) {
+	protected <Y> void addAndWhere(CriteriaQuery<Y> criteria, CriteriaBuilder cb, List<Predicate> predicates) {
 		if (predicates.size() > 0)
 			criteria.where(cb.and(predicates.toArray(new Predicate[] {})));
 	}
 	
-	protected <K> Path<K> getPath(Path<?> path, String name) {
+	protected <Y> Path<Y> getPath(Path<?> path, String name) {
 		return JpaUtils.getPath(path, name);
 	}
 }
