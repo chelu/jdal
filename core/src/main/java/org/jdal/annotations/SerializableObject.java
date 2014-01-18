@@ -15,12 +15,21 @@
  */
 package org.jdal.annotations;
 
+import static java.lang.annotation.ElementType.FIELD;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * Used to keep in memory a copy of a non serializable object
+ * until deserialization. Useful to avoid {@link java.io.NoSerializableException}
+ * when storing in a container sessions objects that references non serializable 
+ * objects.
+ * 
  * @author Jose Luis Martin 
  */
+@Target(FIELD) 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SerializableObject {
 

@@ -92,11 +92,16 @@ public class ConfigurableTable extends Table {
 		configure();
 	}
 	
+	@Override
 	public void setContainerDataSource(Container newDataSource,
             Collection<?> visibleIds) {
 		if (visibleIds != null && visibleIds.size() > 0) {
 			for (String id : properties) {
-				if (!visibleIds.contains(id)) {
+				if (PropertyUtils.isNested(id)) {
+					addNestedPropertyIfPossible(newDataSource, id);
+				}
+				
+				if (!visibleIds.contains(id) && !PropertyUtils.isNested(id)) {
 					throw new IllegalStateException("Unknown property [" + id + "]");
 				}
 			}
@@ -121,10 +126,6 @@ public class ConfigurableTable extends Table {
 				
 		for (int i = 0; i < size; i++) {
 			visibleColumns[i] = columns.get(i).getName();
-			
-			if (visibleColumns[i].contains(PropertyUtils.PROPERTY_SEPARATOR))
-				addNestedPropertyIfPossible(visibleColumns[i]);
-			
 			displayNames[i] = intenacionalize(columns.get(i).getDisplayName());
 			alignments[i] = columns.get(i).getAlign();
 			widths[i] = columns.get(i).getWidth();
@@ -168,8 +169,7 @@ public class ConfigurableTable extends Table {
 	 * Add nested property to datasource if is possilbe. 
 	 * @param name of nested property 
 	 */
-	private void addNestedPropertyIfPossible(String name) {
-		Container cds = getContainerDataSource();
+	private void addNestedPropertyIfPossible(Container cds, String name) {
 		if (cds instanceof AbstractBeanContainer<?,?>) {
 			((AbstractBeanContainer<?,?>) cds).addNestedContainerProperty(name);
 		}

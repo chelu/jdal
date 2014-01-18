@@ -15,22 +15,26 @@
  */
 package org.jdal.ui.bind;
 
+import static java.lang.annotation.ElementType.FIELD;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.FIELD;
-
 
 /**
- * Used to bind a control to a model property
+ * Used to hint {@link org.jdal.ui.bind.ControlInitialzer}
  * 
- * @author Jose Luis Martin
- * @since 2.0
+ * @author Jose Luis Martin 
  */
 @Target({FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Property {
-	String value();
+public @interface Initializer {
+
+	/**
+	 * Set the property name to use when sorting collections.
+	 * @return property name
+	 */
+	String orderBy() default "";
 }

@@ -16,11 +16,24 @@
 package org.jdal.ui.bind;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * Interface for control initializers.
+ * 
+ * @author Jose Luis Martin 
  */
 public interface ControlInitializer {
 	
+	
+	/**
+	 * Initalize control
+	 * @param control control to initialize
+	 * @param property property name
+	 * @param clazz backing object class, ie model
+	 */
 	void initialize(Object control, String property, Class<?> clazz);
+	
+	/**
+	 * Sets if initialize object, ie drop ORM  proxies.
+	 * @param initializeEntities
+	 */
 	void setInitializeEntities(boolean initializeEntities);
 }

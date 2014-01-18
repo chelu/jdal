@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.jdal.dao.Page;
 import org.jdal.service.PersistentService;
@@ -182,6 +183,25 @@ public class ContainerPersistentServiceAdapter<T, PK extends Serializable>
 	 * {@inheritDoc}
 	 */
 	public Class<T> getEntityClass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jdal.dao.Dao#exists(java.io.Serializable)
+	 */
+	@Override
+	public boolean exists(PK id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jdal.dao.Dao#findByNamedQuery(java.lang.String, java.util.Map)
+	 */
+	@Override
+	public List<T> findByNamedQuery(String queryName,
+			Map<String, Object> queryParams) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -406,7 +406,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
             params[index] = key;
             values[index++] = queryParams.get(key);
         }
-        return getHibernateTemplate().findByNamedQueryAndNamedParam(
+        return (List<T>) getHibernateTemplate().findByNamedQueryAndNamedParam(
             queryName, 
             params, 
             values);

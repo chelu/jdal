@@ -13,24 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.ui.bind;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.FIELD;
-
+package aop;
 
 /**
- * Used to bind a control to a model property
- * 
+ * Target aware interface for testing DeclareMixing annotation
  * @author Jose Luis Martin
+ * 
  * @since 2.0
  */
-@Target({FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface Property {
-	String value();
+public interface TargetAware {
+	
+	Object getTarget();
 }

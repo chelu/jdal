@@ -29,7 +29,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jdal.annotations.Reference;
 import org.jdal.swing.list.ListComboBoxModel;
 import org.jdal.swing.list.ListListModel;
-import org.jdal.ui.bind.ControlInitializer;
 import org.jdal.ui.bind.ControlInitializerSupport;
 import org.jdal.util.BeanUtils;
 
@@ -57,6 +56,7 @@ public class AnnotationControlInitializer extends ControlInitializerSupport {
 		for (Annotation a : annotations) {
 			if (ManyToOne.class.equals(a.annotationType())) {
 				List<Object> entities = getEntityList(propertyType);
+				sort(entities, control);
 				if (control instanceof JComboBox) {
 					((JComboBox) control).setModel(new ListComboBoxModel(entities));
 				}
@@ -78,6 +78,10 @@ public class AnnotationControlInitializer extends ControlInitializerSupport {
 			}
 			
 		}
+	}
+
+	private void sort(List<Object> entities, Object control) {
+		
 	}
 
 }

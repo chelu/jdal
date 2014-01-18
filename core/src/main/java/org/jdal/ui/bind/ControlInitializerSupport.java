@@ -29,9 +29,9 @@ import org.jdal.util.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * Support class for ControlInitializers
+ * Support class for ControlInitializers.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @see ControlIntializer
  * @since 2.0
  */
@@ -83,9 +83,11 @@ public abstract class ControlInitializerSupport implements ControlInitializer {
 	protected Annotation[] getAnnotations(String property, Class<?> clazz) {
 		Field field = ReflectionUtils.findField(clazz, property);
 		Annotation[] fa = new Annotation[] {};
+		
 		if (field != null) {
 			fa = field.getAnnotations();
 		}
+		
 		Method method = BeanUtils.getPropertyDescriptor(clazz, property).getReadMethod();
 		if (method != null) {
 			Annotation[] ma = method.getAnnotations();
