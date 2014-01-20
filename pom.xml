@@ -51,6 +51,7 @@
 
 	<modules>
 		<module>core</module>
+		<module>aop</module>
 		<module>swing</module>
 		<module>aspects</module>
 		<module>vaadin</module>

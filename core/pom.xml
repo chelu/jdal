@@ -73,12 +73,6 @@
 						<configuration>
 							<encoding>UTF-8</encoding>
 							<detectLinks>true</detectLinks>
-							<excludePackageNames>
-								info.joseluismartin.displaytag;
-								info.joseluismartin.dm;
-								info.joseluismartin.gis;
-								info.joseluismartin.jdbc;
-							</excludePackageNames>
 						</configuration>
 						<executions>
 							<execution>
