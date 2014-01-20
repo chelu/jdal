@@ -15,6 +15,9 @@
  */
 package org.jdal.aop;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.IntroductionInterceptor;
 import org.springframework.aop.ProxyMethodInvocation;
@@ -23,7 +26,7 @@ import org.springframework.aop.support.IntroductionInfoSupport;
 
 /**
  * DelegatingIntroductionInterceptor that use a Factory to create delegates.
- * Based on {@link org.springframework.aop.support.DelegatingIntroductionInterceptor}
+ * Based on {@link org.springframework.aop.support.DelegatePerTargetObjectIntroductionInterceptor}
  * 
  * @author Jose Luis Martin
  * @since 2.0
@@ -34,57 +37,65 @@ public class DelegateFactoryIntroductionInterceptor extends IntroductionInfoSupp
 	
 	private DelegateFactory delegateFactory;
 	private Class<?> interfaceType;
-	private Object delegate;
+
+	/** 
+	 * Hold weak references to keys as we don't want to interfere with garbage collection..
+	 */
+	private final Map<Object, Object> delegateMap = new WeakHashMap<Object, Object>();
+
 
 	public DelegateFactoryIntroductionInterceptor(DelegateFactory delegateFactory, Class<?> interfaceType) {
 		this.delegateFactory = delegateFactory;
+		this.interfaceType = interfaceType;
 		this.publishedInterfaces.add(interfaceType);
 	}
 
-	/**
-	 * Subclasses may need to override this if they want to  perform custom
-	 * behaviour in around advice. However, subclasses should invoke this
-	 * method, which handles introduced interfaces and forwarding to the target.
-	 */
+
 	public Object invoke(MethodInvocation mi) throws Throwable {
-		if (this.delegate == null)
-			this.delegate = createNewDelegate(mi.getThis());
-
-
 		if (isMethodOnIntroducedInterface(mi)) {
-			// Using the following method rather than direct reflection, we
-			// get correct handling of InvocationTargetException
-			// if the introduced method throws an exception.
-			Object retVal = AopUtils.invokeJoinpointUsingReflection(this.delegate, mi.getMethod(), mi.getArguments());
+			Object delegate = getIntroductionDelegateFor(mi.getThis());
+			Object retVal = AopUtils.invokeJoinpointUsingReflection(delegate, mi.getMethod(), mi.getArguments());
 
-			// Massage return value if possible: if the delegate returned itself,
-			// we really want to return the proxy.
-			if (retVal == this.delegate && mi instanceof ProxyMethodInvocation) {
-				Object proxy = ((ProxyMethodInvocation) mi).getProxy();
-				if (mi.getMethod().getReturnType().isInstance(proxy)) {
-					retVal = proxy;
-				}
+			if (retVal == delegate && mi instanceof ProxyMethodInvocation) {
+				retVal = ((ProxyMethodInvocation) mi).getProxy();
 			}
 			return retVal;
 		}
 
+		return doProceed(mi);
+	}
+
+
+	protected Object doProceed(MethodInvocation mi) throws Throwable {
 		return mi.proceed();
 	}
 
-	protected Object createNewDelegate(Object target) {
-		try {
-			return delegateFactory.createNewDelegate(target);
-		} catch (Exception e) {
-			throw new IllegalStateException("Can't create delegate instace of type: [" + 
-					interfaceType.getName() + "] : " + e.getMessage());
+	private Object getIntroductionDelegateFor(Object targetObject) {
+		synchronized (this.delegateMap) {
+			if (this.delegateMap.containsKey(targetObject)) {
+				return this.delegateMap.get(targetObject);
+			}
+			else {
+				Object delegate = createNewDelegate(targetObject);
+				this.delegateMap.put(targetObject, delegate);
+				return delegate;
+			}
 		}
 	}
 
-
+	protected Object createNewDelegate(Object targetObject) {
+		try {
+			return delegateFactory.createNewDelegate(targetObject);
+		}
+		catch(Exception e) {
+			throw new IllegalStateException("Cant create delegate instance of type ["  + this.interfaceType.getName() + 
+					"] : " + e.getMessage());
+		}
+	}
+	
 	public interface DelegateFactory {
 
 		Object createNewDelegate(Object target) throws Exception;
 	}
-
 }
 
