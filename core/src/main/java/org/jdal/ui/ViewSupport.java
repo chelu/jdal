@@ -18,6 +18,7 @@ package org.jdal.ui;
 import java.awt.Component;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -441,7 +442,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 
 		for (AnnotatedElement ae : elements) {
 			Property p = ae.getAnnotation(Property.class);
-			bindAndInitializeControl(p.value(), ae);
+			bindAndInitializeControl(p.value(), viewPropertyAccessor.getPropertyValue(((Field) ae).getName()));
 			this.ignoredProperties.add(p.value());
 		}
 		
