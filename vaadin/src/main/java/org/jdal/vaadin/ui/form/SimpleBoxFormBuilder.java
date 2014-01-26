@@ -91,7 +91,7 @@ public class SimpleBoxFormBuilder {
 	}
 	
 	public void add(Component c, String label, int width) {
-		add(c, null, width, Alignment.MIDDLE_CENTER);
+		add(c, label, width, Alignment.MIDDLE_CENTER);
 	}
 	
 	public void add(Component c, Alignment alignment) {
