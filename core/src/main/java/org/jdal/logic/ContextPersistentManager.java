@@ -17,10 +17,9 @@ package org.jdal.logic;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jdal.dao.Page;
 import org.jdal.service.PersistentService;
@@ -34,10 +33,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ContextPersistentManager implements PersistentService<Object, Serializable> {
 
 	@Autowired
-	private List<PersistentService<Object, Serializable>> services;
+	@SuppressWarnings("rawtypes")
+	private List<PersistentService> services;
 	private Map<Class<?>, PersistentService<Object, Serializable>> serviceMap = 
-			Collections.synchronizedMap(new HashMap<Class<?>, PersistentService<Object, Serializable>>());
+			new ConcurrentHashMap<Class<?>, PersistentService<Object, Serializable>>();
+	
 
+	@SuppressWarnings("unchecked")
 	public void init() {
 		for (PersistentService<Object, Serializable> ps : services) {
 			if (ps.getEntityClass() != null)

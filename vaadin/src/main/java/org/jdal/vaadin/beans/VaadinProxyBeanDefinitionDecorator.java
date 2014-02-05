@@ -1,15 +1,5 @@
-package org.jdal.vaadin.beans;
-
-import org.springframework.aop.scope.ScopedProxyUtils;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.parsing.BeanComponentDefinition;
-import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
-import org.springframework.beans.factory.xml.ParserContext;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2014 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +14,16 @@ import org.w3c.dom.Node;
  * limitations under the License.
  */
 
+package org.jdal.vaadin.beans;
+
+import org.springframework.aop.scope.ScopedProxyUtils;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.parsing.BeanComponentDefinition;
+import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
+import org.springframework.beans.factory.xml.ParserContext;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 /**
  * Bean Definition Decorator for vaadin serializable proxies.
  * 
@@ -31,11 +31,11 @@ import org.w3c.dom.Node;
  * a BeanTargetSource that cache de target bean.
  * 
  * @author Jose Luis Martin
+ * @since 2.0
  */
 public class VaadinProxyBeanDefinitionDecorator implements BeanDefinitionDecorator {
 
 	private static final String PROXY_TARGET_CLASS = "proxy-target-class";
-
 
 	public BeanDefinitionHolder decorate(Node node, BeanDefinitionHolder definition, ParserContext parserContext) {
 		boolean proxyTargetClass = true;
@@ -55,6 +55,5 @@ public class VaadinProxyBeanDefinitionDecorator implements BeanDefinitionDecorat
 				new BeanComponentDefinition(definition.getBeanDefinition(), targetBeanName));
 		return holder;
 	}
-
 
 }

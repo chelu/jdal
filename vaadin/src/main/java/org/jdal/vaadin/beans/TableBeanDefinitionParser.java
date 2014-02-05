@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 the original author or authors.
+ * Copyright 2009-2014 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.jdal.vaadin.beans;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.jdal.beans.BeanDefinitionUtils;
 import org.jdal.vaadin.ui.table.ConfigurableTable;
 import org.jdal.vaadin.ui.table.PageableTable;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -29,14 +30,15 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandler;
 import org.springframework.beans.factory.xml.ParserContext;
-import org.springframework.core.Conventions;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * Parse &ltvaadin:table&gt element.
+ * 
+ * @author Jose Luis Martin
+ * @since 2.0
  */
 public class TableBeanDefinitionParser implements BeanDefinitionParser {
 
@@ -65,6 +67,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String ORDER = "order";
 	private static final String PAGE_SIZE = "page-size";
 	private static final String SELECTABLE = "selectable";
+	private static final String MULTISELECT = "multi-select";
 	private static final String ENTITY_CLASS="entityClass";
 	private static final String SCOPE = "scope";
 	
@@ -126,32 +129,17 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.addPropertyValue(EDITOR, editor);
 		bdb.addPropertyValue(ENTITY_CLASS, entity);
 		
-		if (element.hasAttribute(TABLE_SERVICE)) 
-			bdb.addPropertyReference(TABLE_SERVICE, element.getAttribute(TABLE_SERVICE));
+		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, TABLE_SERVICE);
+		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, FILTER);
+		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, MESSAGE_SOURCE);
+		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, FILTER_FORM);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, SORT_PROPERTY);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, ORDER);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, PAGE_SIZE);
 		
-		if (element.hasAttribute(FILTER))
-			bdb.addPropertyReference(FILTER, element.getAttribute(FILTER));
-
-		if (element.hasAttribute(MESSAGE_SOURCE))
-			bdb.addPropertyReference(MESSAGE_SOURCE, element.getAttribute(MESSAGE_SOURCE));
 		
 		if (!element.hasAttribute(USE_ACTIONS) || "true".equals(element.getAttribute(USE_ACTIONS)))
 			bdb.addPropertyReference(ACTIONS, actions);
-		
-		if (element.hasAttribute(FILTER_FORM))
-			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(FILTER_FORM), 
-					element.getAttribute(FILTER_FORM));
-		
-		if (element.hasAttribute(SORT_PROPERTY))
-			bdb.addPropertyValue("sortName", element.getAttribute(SORT_PROPERTY));
-		
-		if (element.hasAttribute(ORDER))
-			bdb.addPropertyValue(ORDER, element.getAttribute(ORDER));
-		
-		if (element.hasAttribute(PAGE_SIZE))
-			bdb.addPropertyValue(Conventions.attributeNameToPropertyName(PAGE_SIZE), 
-					element.getAttribute(PAGE_SIZE));
-		
 		
 		
 		parserContext.getDelegate().parseBeanDefinitionAttributes(element, pageableTableBeanName, 
@@ -178,18 +166,10 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		// create ConfigurableTable
 		bdb = BeanDefinitionBuilder.genericBeanDefinition(ConfigurableTable.class);
 		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
-	
-		NodeList nl = element.getElementsByTagNameNS(element.getNamespaceURI(), COLUMNS);
 		
-		if (nl.getLength() > 0) {
-			List columns = parserContext.getDelegate().parseListElement(
-					(Element) nl.item(0), bdb.getRawBeanDefinition());
-			bdb.addPropertyValue(COLUMNS, columns);
-		}
 		
-		if (element.hasAttribute(FIELD_FACTORY))
-			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(FIELD_FACTORY), 
-					element.getAttribute(FIELD_FACTORY));
+		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, FIELD_FACTORY);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, MULTISELECT);
 		
 		if (element.hasAttribute(SELECTABLE)) {
 			bdb.addPropertyValue(SELECTABLE, element.getAttribute(SELECTABLE));
@@ -198,7 +178,16 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 			// set selectable by default
 			bdb.addPropertyValue(SELECTABLE, true);
 		}
+	
+		// parse columns
+		NodeList nl = element.getElementsByTagNameNS(element.getNamespaceURI(), COLUMNS);
 		
+		if (nl.getLength() > 0) {
+			List columns = parserContext.getDelegate().parseListElement(
+					(Element) nl.item(0), bdb.getRawBeanDefinition());
+			bdb.addPropertyValue(COLUMNS, columns);
+		}
+	
 		registerBeanDefinition(element, parserContext, tableBeanName, bdb);
 		
 		parserContext.popAndRegisterContainingComponent();
@@ -220,4 +209,5 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), beanName);
 		parserContext.registerBeanComponent(bcd);
 	}
+
 }

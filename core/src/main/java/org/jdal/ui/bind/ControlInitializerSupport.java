@@ -32,7 +32,7 @@ import org.springframework.util.ReflectionUtils;
  * Support class for ControlInitializers.
  * 
  * @author Jose Luis Martin
- * @see ControlIntializer
+ * @see ControlInitializer
  * @since 2.0
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
