@@ -178,7 +178,7 @@
 		<xsd:attribute name="sort-property" type="xsd:string" />
 		<xsd:attribute name="page-size" type="xsd:int" />
 		<xsd:attribute name="selectable" type="xsd:boolean" />
-		<xsd:attribute name="multiselect" type="xsd:boolean" />	
+		<xsd:attribute name="multi-select" type="xsd:boolean" />	
 	</xsd:complexType>
 	
 	<xsd:complexType name="proxyType">
