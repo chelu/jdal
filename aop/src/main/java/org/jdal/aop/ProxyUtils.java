@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Jose Luis Martin.
+ * Copyright 2009-2014 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.beans;
+package org.jdal.aop;
 
+import org.jdal.aop.config.SerializableProxyFactoryBean;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -23,9 +24,10 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 
 /**
- * Utility class to create serializble proxy bean definitions.
- * Based on ScopedProxyUtils.
- * 
+ * Utility class for creating proxy bean definitions.
+ * <p>
+ * Note: This class includes code from {@link org.springframework.aop.scope.ScopedProxyUtils}
+ * </p>
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public class ProxyUtils {

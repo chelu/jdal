@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Jose Luis Martin.
+ * Copyright 2009-2014 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package org.jdal.aop;
 
 import org.aopalliance.intercept.MethodInvocation;
-import org.jdal.beans.DefaultSerializableObject;
-import org.jdal.beans.SerializableObject;
 import org.springframework.aop.IntroductionInterceptor;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.aop.support.IntroductionInfoSupport;

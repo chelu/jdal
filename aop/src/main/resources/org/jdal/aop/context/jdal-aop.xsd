@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.jdal.org/schema/jdal-aop"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jdal.org/schema/jdal-aop"
+	xmlns:tool="http://www.springframework.org/schema/tool"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool-3.1.xsd"/>
+
+	<xsd:annotation>
+		<xsd:documentation>
+			<![CDATA[JDAL AOP Schema, version 2.0 Author: Jose Luis Martin]]>
+		</xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="declare-mixin-configurer">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[Declares a PersistentService for a entity class]]>
+		    </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType />
+	</xsd:element>
+	
+	<xsd:element name="serializable-proxy" type="proxyType">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[Replace bean with a serializable proxy]]>
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	
+	<xsd:complexType name="proxyType">
+		<xsd:attribute name="proxy-target-class" type="xsd:boolean" />
+	</xsd:complexType>
+
+</xsd:schema>

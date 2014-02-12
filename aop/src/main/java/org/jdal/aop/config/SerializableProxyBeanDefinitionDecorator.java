@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.beans;
+package org.jdal.aop.config;
 
+import org.jdal.aop.ProxyUtils;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
@@ -25,7 +26,7 @@ import org.w3c.dom.Node;
 /**
  * Decorates bean definitions with serializable proxies.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 2.0
  */
 public class SerializableProxyBeanDefinitionDecorator implements
@@ -43,8 +44,7 @@ public class SerializableProxyBeanDefinitionDecorator implements
 			}
 		}
 
-		// Register the original bean definition as it will be referenced by the scoped proxy
-		// and is relevant for tooling (validation, navigation).
+		// Register the original bean definition
 		BeanDefinitionHolder holder =
 				ProxyUtils.createSerializableProxy(definition, parserContext.getRegistry(), proxyTargetClass);
 		String targetBeanName = ProxyUtils.getTargetBeanName(definition.getBeanName());

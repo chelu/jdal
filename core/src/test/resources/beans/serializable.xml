@@ -10,7 +10,7 @@
 	<context:annotation-config />
 	<tx:annotation-driven/>
 	
-	<bean class="org.jdal.beans.SerializableAnnotationBeanPostProcessor" />
+	<bean class="org.jdal.aop.config.SerializableAnnotationBeanPostProcessor" /> 
 	
 	<bean class="beans.SerializableBean" />
 	<bean class="beans.TransactionalBean" />

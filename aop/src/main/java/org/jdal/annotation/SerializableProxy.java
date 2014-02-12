@@ -1,3 +1,4 @@
+package org.jdal.annotation;
 /*
  * Copyright 2009-2013 Jose Luis Martin.
  *
@@ -13,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.annotations;
+
 
 import static java.lang.annotation.ElementType.FIELD;
 
@@ -31,6 +32,6 @@ import java.lang.annotation.Target;
  */
 @Target(FIELD) 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SerializableObject {
+public @interface SerializableProxy {
 
 }

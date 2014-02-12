@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.beans;
+package org.jdal.aop;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -26,7 +26,7 @@ import org.springframework.util.ObjectUtils;
 /**
  * Default serializable object implementation.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 2.0
  */
 public class DefaultSerializableObject implements SerializableObject {

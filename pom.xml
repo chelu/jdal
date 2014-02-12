@@ -13,7 +13,7 @@
 	<description>JDAL is an open source Java library that aims to help developers making database applications easily. JDAL helps you to find what you really need to code and what is already coded in a common java database application, avoiding the complexity of many common programming tasks.</description>
 
 	<scm>
-		<url>git://jdal.git.sourceforge.net/gitroot/jdal/jdal </url>
+		<url>https://github.com/chelu/jdal.git</url>
 	</scm>
 
 	<issueManagement>
@@ -46,7 +46,7 @@
 	<properties>
 		<file.encoding>UTF-8</file.encoding>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.springframework.version>4.0.0.RELEASE</org.springframework.version>
+		<org.springframework.version>4.0.1.RELEASE</org.springframework.version>
 	</properties>
 
 	<modules>

@@ -17,6 +17,7 @@ package beans;
 
 import java.io.Serializable;
 
+import org.jdal.annotation.SerializableProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -24,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SerializableBean implements Serializable {
 
-	@org.jdal.annotations.SerializableObject
+	@SerializableProxy
 	@Autowired
 	private TransactionalBean transactional;
 

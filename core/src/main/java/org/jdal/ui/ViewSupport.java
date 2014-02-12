@@ -29,7 +29,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.annotations.AnnotationUtils;
+import org.jdal.annotation.AnnotationUtils;
 import org.jdal.ui.bind.BinderFactory;
 import org.jdal.ui.bind.BinderHolder;
 import org.jdal.ui.bind.CompositeBinder;

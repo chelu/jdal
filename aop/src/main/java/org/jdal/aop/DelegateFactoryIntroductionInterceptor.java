@@ -26,8 +26,9 @@ import org.springframework.aop.support.IntroductionInfoSupport;
 
 /**
  * DelegatingIntroductionInterceptor that use a Factory to create delegates.
- * Based on {@link org.springframework.aop.support.DelegatePerTargetObjectIntroductionInterceptor}
- * 
+ * <p>
+ * Note: this class include code from {@link org.springframework.aop.support.DelegatePerTargetObjectIntroductionInterceptor}
+ * </p>
  * @author Jose Luis Martin
  * @since 2.0
  */

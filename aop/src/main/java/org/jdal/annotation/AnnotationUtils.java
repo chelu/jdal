@@ -1,3 +1,4 @@
+package org.jdal.annotation;
 /*
  * Copyright 2009-2013 Jose Luis Martin.
  *
@@ -13,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.annotations;
+
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -22,10 +23,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.util.BeanUtils;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 import org.springframework.util.ReflectionUtils.MethodCallback;
@@ -77,7 +77,7 @@ public abstract class AnnotationUtils {
 	}
 	
 	/**
-	 * Tray to set a value on AnnotatedElement.
+	 * Try to set a value on AnnotatedElement.
 	 * @param element the annotated element.
 	 * @param value value to set.
 	 */
@@ -105,12 +105,16 @@ public abstract class AnnotationUtils {
 		else if (element instanceof Method) {
 			Method method = (Method) element;
 			String name = method.getName();
+			
 			if (name.startsWith("set")) {
-				String property = StringUtils.uncapitalize(name.substring(3));
-				return BeanUtils.getProperty(target, property);
+				return PropertyAccessorFactory.forBeanPropertyAccess(target).getPropertyValue(getPropertyName(name));
 			}
 		}
 		
 		return null;
+	}
+
+	private static String getPropertyName(String name) {
+		return name.charAt(0) + name.substring(1);
 	}
  }

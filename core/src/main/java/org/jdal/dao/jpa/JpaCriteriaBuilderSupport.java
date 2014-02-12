@@ -70,6 +70,9 @@ public abstract class JpaCriteriaBuilderSupport<T, K> implements JpaCriteriaBuil
 	 * @param value restriction value
 	 */
 	protected Predicate equal(String propertyName, Object value) { 
+		if (value == null)
+			return null;
+		
 		return cb.equal(JpaUtils.getPath(root, propertyName), value);
 	}
 	
@@ -79,6 +82,9 @@ public abstract class JpaCriteriaBuilderSupport<T, K> implements JpaCriteriaBuil
 	 * @param value restriction value
 	 */
 	protected <Y extends Comparable<? super Y>> Predicate lessThanOrEqualTo(String propertyName, Y value) {
+		if (value == null)
+			return null;
+		
 		return cb.lessThanOrEqualTo(JpaUtils.<Y>getPath(root, propertyName), value);
 	}
 	
@@ -88,6 +94,9 @@ public abstract class JpaCriteriaBuilderSupport<T, K> implements JpaCriteriaBuil
 	 * @param value restriction value
 	 */
 	protected <Y extends Comparable<? super Y>> Predicate greatThanOrEqualTo(String propertyName,  Y value) {
+		if (value == null)
+			return null;
+		
 		return cb.greaterThanOrEqualTo(JpaUtils.<Y>getPath(root, propertyName), value);
 	}
 	
@@ -98,7 +107,10 @@ public abstract class JpaCriteriaBuilderSupport<T, K> implements JpaCriteriaBuil
 	 * @param value text for the ilike restriction
 	 */
 	protected Predicate like(String propertyName, String value) {
-		String toMatch = ((String) value).trim();
+		if (value == null)
+			return null;
+		
+		String toMatch = value.trim();
 		toMatch = toMatch.replace('*', '%');
 		toMatch = "%" + toMatch + "%";
 		return cb.like(JpaUtils.<String>getPath(root, propertyName), toMatch);
@@ -115,7 +127,18 @@ public abstract class JpaCriteriaBuilderSupport<T, K> implements JpaCriteriaBuil
 			criteria.where(cb.and(predicates.toArray(new Predicate[] {})));
 	}
 	
+	/**
+	 * return property path
+	 * @param path root path
+	 * @param name property name
+	 * @return the path for property
+	 */
 	protected <Y> Path<Y> getPath(Path<?> path, String name) {
 		return JpaUtils.getPath(path, name);
+	}
+	
+	protected void addPredicateIfNotNull(List<Predicate> predicates, Predicate predicate) {
+		if (predicate != null)
+			predicates.add(predicate);
 	}
 }

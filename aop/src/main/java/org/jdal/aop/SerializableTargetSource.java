@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.beans;
+package org.jdal.aop;
 
 import java.io.Serializable;
 
@@ -24,8 +24,11 @@ import org.springframework.util.ObjectUtils;
 /**
  * SingletonTargetSource that use a SerializableObject to wrap the target
  * to avoid serialization issues in a container.
+ * <p>
+ * Note: This class includes code from {@link org.springframework.aop.target.SingletonTargetSource}
+ * </p>
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 2.0
  */
 public class SerializableTargetSource implements TargetSource, Serializable {

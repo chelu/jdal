@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.beans;
+package org.jdal.aop.config;
 
 import java.lang.reflect.Modifier;
 
+import org.jdal.aop.DefaultSerializableObject;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.aop.framework.ProxyConfig;
@@ -31,9 +32,12 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.util.ClassUtils;
 
 /**
- * ProxyFactoryBean to make serializable non serializable objects.
+ * ProxyFactoryBean to make serializable proxy for non serializable objects.
+ * <p>
+ * Note: This class includes code from {@link org.springframework.aop.scope.ScopedProxyFactoryBean}
+ * </p>
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 2.0
  */
 public class SerializableProxyFactoryBean  extends ProxyConfig implements FactoryBean<Object>,

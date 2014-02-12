@@ -26,6 +26,11 @@ import org.springframework.util.ClassUtils;
  *
  */
 public class SimpleTypeConverter extends org.springframework.beans.SimpleTypeConverter {
+	
+	@Override
+	public <T> T convertIfNecessary(Object value, Class<T> requiredType) throws TypeMismatchException {
+		return convertIfNecessary(value, requiredType, (MethodParameter) null);
+	}
 
 	/**
 	 * {@inheritDoc}
