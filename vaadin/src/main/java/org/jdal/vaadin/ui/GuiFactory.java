@@ -40,5 +40,5 @@ public interface GuiFactory {
 	 */
 	VaadinView<?> getView(String name);
 	
-	ViewDialog<?> newViewDialog(VaadinView<?> view);
+	ViewDialog newViewDialog(VaadinView<?> view);
 }

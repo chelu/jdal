@@ -270,7 +270,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 					}
 				});
 				
-				ViewDialog<T> dlg = (ViewDialog<T>) this.guiFactory.newViewDialog(editor);
+				ViewDialog dlg =  this.guiFactory.newViewDialog(editor);
 				dlg.init();
 				dlg.center();
 				this.getUI().addWindow(dlg);

@@ -54,8 +54,8 @@ public class ApplicationContextGuiFactory implements GuiFactory, ApplicationCont
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public ViewDialog<?> newViewDialog() {
-		ViewDialog<?> dlg = null;
+	public ViewDialog newViewDialog() {
+		ViewDialog dlg = null;
 		try {
 			dlg = applicationContext.getBean(VIEW_DIALOG, ViewDialog.class);
 		}
@@ -70,8 +70,7 @@ public class ApplicationContextGuiFactory implements GuiFactory, ApplicationCont
 		return dlg;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ViewDialog<?> newViewDialog(VaadinView<?> view) {
+	public ViewDialog newViewDialog(VaadinView<?> view) {
 		ViewDialog dlg =  newViewDialog();
 		dlg.setView(view);
 		dlg.init();

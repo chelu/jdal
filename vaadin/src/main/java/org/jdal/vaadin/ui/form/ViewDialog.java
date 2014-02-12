@@ -32,13 +32,13 @@ import com.vaadin.ui.Window;
  * 
  * @author Jose Luis Martin 
  */
-public class ViewDialog<T> extends Window {
+public class ViewDialog extends Window {
 
 	public static final int OK = 0;
 	public static final int CANCEL= 1;
 
 	private static final long serialVersionUID = 1L;
-	private VaadinView<T> view;
+	private VaadinView<?> view;
 	private ViewAction acceptAction = new ViewSaveAction();
 	private ViewAction cancelAction = new CancelAction(); 
 	private Button acceptButton;
@@ -46,12 +46,14 @@ public class ViewDialog<T> extends Window {
 	private int windowWidth = 750;
 	private int windowHeight = 750;
 	private int value = CANCEL;
+	private boolean showAcceptButton = true;
+	private boolean showCancelButton = true;
 
 	public ViewDialog() {
 
 	}
 
-	public ViewDialog(VaadinView<T> view) {
+	public ViewDialog(VaadinView<?> view) {
 		setView(view);
 	}
 
@@ -87,24 +89,38 @@ public class ViewDialog<T> extends Window {
 	 * @return new button box
 	 */
 	protected Component createButtonBox() {
-		acceptButton = FormUtils.newButton(acceptAction);
-		cancelButton = FormUtils.newButton(cancelAction);
 		HorizontalLayout hl = new HorizontalLayout();
 		hl.setSizeUndefined();
 		Box.addHorizontalGlue(hl);
-		hl.addComponent(acceptButton);
-		hl.addComponent(Box.createHorizontalStrut(5));
-		hl.addComponent(cancelButton);
+		
+		if (showAcceptButton) {
+			acceptButton = FormUtils.newButton(acceptAction);
+			hl.addComponent(acceptButton);
+			hl.addComponent(Box.createHorizontalStrut(5));
+		}
+		if (showCancelButton) {
+			cancelButton = FormUtils.newButton(cancelAction);
+			hl.addComponent(cancelButton);
+		}
 		Box.addHorizontalGlue(hl);
 
 		return hl;
 	}
+	
+	public static ViewDialog createAcceptDialog(VaadinView<?> view) {
+		ViewDialog dlg = new ViewDialog(view);
+		dlg.setAcceptAction(new CancelAction());
+		dlg.setShowCancelButton(false);
+		dlg.init();
+		
+		return dlg;
+	}
 
-	public VaadinView<T> getView() {
+	public VaadinView<?> getView() {
 		return view;
 	}
 
-	public void setView(VaadinView<T> view) {
+	public void setView(VaadinView<?> view) {
 		this.view = view;
 		this.acceptAction.setView(view);
 		this.cancelAction.setView(view);
@@ -186,6 +202,30 @@ public class ViewDialog<T> extends Window {
 	 */
 	public void setWindowWidth(int windowWidth) {
 		this.windowWidth = windowWidth;
+	}
+
+	public Button getAcceptButton() {
+		return acceptButton;
+	}
+
+	public void setAcceptButton(Button acceptButton) {
+		this.acceptButton = acceptButton;
+	}
+
+	public boolean isShowAcceptButton() {
+		return showAcceptButton;
+	}
+
+	public void setShowAcceptButton(boolean showAcceptButton) {
+		this.showAcceptButton = showAcceptButton;
+	}
+
+	public boolean isShowCancelButton() {
+		return showCancelButton;
+	}
+
+	public void setShowCancelButton(boolean showCancelButton) {
+		this.showCancelButton = showCancelButton;
 	}
 
 }

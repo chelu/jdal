@@ -82,6 +82,12 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		this(entityClass, null);
 	}
 	
+	public ContainerDataSource(PersistentService<T, ?extends Serializable> service) {
+		this.service = service;
+		this.entityClass = service.getEntityClass();
+		setItemIdStrategy(new IndexedItemIdStrategy());
+	}
+	
 	public ContainerDataSource(Class<T> entityClass, PersistentService<T, ?extends Serializable> service) {
 		this.service = service;
 		this.entityClass = entityClass;
