@@ -59,31 +59,6 @@
 				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="pageable-table-class" type="xsd:string">
-			<xsd:annotation>
-				<xsd:documentation source="java:java.lang.Class">
-					<![CDATA[PageableTable class name]]>
-				</xsd:documentation>
-				<xsd:appinfo>
-					<tool:annotation>
-						<tool:expected-type type="java.lang.Class" />
-					</tool:annotation>
-				</xsd:appinfo>
-			</xsd:annotation>
-		</xsd:attribute>
-		<xsd:attribute name="table-class" type="xsd:string">
-			<xsd:annotation>
-				<xsd:documentation source="java:java.lang.Class">
-					<![CDATA[Table class name]]>
-				</xsd:documentation>
-				<xsd:appinfo>
-					<tool:annotation>
-						<tool:expected-type type="java.lang.Class" />
-					</tool:annotation>
-				</xsd:appinfo>
-			</xsd:annotation>
-		</xsd:attribute>
-		
 	</xsd:complexType>
 
 	<xsd:complexType name="columnSequenceType">
@@ -194,6 +169,30 @@
 				<xsd:appinfo>
 					<tool:annotation kind="ref">
 						<tool:expected-type type="com.vaadin.ui.TableFieldFactory" />
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="pageable-table-class" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[PageableTable class name]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class" />
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="table-class" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[Table class name]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation>
+						<tool:expected-type type="java.lang.Class" />
 					</tool:annotation>
 				</xsd:appinfo>
 			</xsd:annotation>
