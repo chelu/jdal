@@ -70,6 +70,10 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String MULTISELECT = "multi-select";
 	private static final String ENTITY_CLASS="entityClass";
 	private static final String SCOPE = "scope";
+	private static final String PAGEABLE_TABLE_CLASS = "pageable-table-class";
+	private static final String TABLE_CLASS = "table-class";
+	private static final String DEFAULT_TABLE_CLASS = "org.jdal.vaadin.ui.table.ConfigurableTable";
+	private static final String DEFAULT_PAGEABLE_TABLE_CLASS = "org.jdal.vaadin.ui.table.PageableTable";
 	
 	/**
 	 * {@inheritDoc}
@@ -99,6 +103,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		String actions = DefaultsBeanDefinitionParser.DEFAULT_TABLE_ACTIONS;
 		String guiFactory = DefaultsBeanDefinitionParser.DEFAULT_GUI_FACTORY;
 		String scope = BeanDefinition.SCOPE_PROTOTYPE;
+		String pageableTableClass = DEFAULT_PAGEABLE_TABLE_CLASS;
+		String tableClass = DEFAULT_TABLE_CLASS;
 		
 		if (element.hasAttribute(DATA_SOURCE))
 			dataSource = element.getAttribute(DATA_SOURCE);
@@ -117,9 +123,15 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		if (element.hasAttribute(SCOPE))
 			scope = element.getAttribute(SCOPE);
+		
+		if (element.hasAttribute(PAGEABLE_TABLE_CLASS))
+			pageableTableClass = element.getAttribute(PAGEABLE_TABLE_CLASS);
+		
+		if (element.hasAttribute(TABLE_CLASS))
+			tableClass = element.getAttribute(TABLE_CLASS);
 
 		// create PageableTable
-		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(PageableTable.class);
+		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(pageableTableClass);
 		bdb.setScope(scope);
 		bdb.addPropertyReference(DATA_SOURCE, dataSource);
 		bdb.addPropertyReference(PAGINATOR_VIEW, paginator);
@@ -164,7 +176,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		parserContext.registerBeanComponent(new BeanComponentDefinition(holder));
 		
 		// create ConfigurableTable
-		bdb = BeanDefinitionBuilder.genericBeanDefinition(ConfigurableTable.class);
+		bdb = BeanDefinitionBuilder.genericBeanDefinition(tableClass);
 		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		
 		
