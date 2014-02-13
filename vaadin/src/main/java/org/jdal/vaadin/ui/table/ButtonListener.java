@@ -22,7 +22,7 @@ import com.vaadin.ui.Button.ClickListener;
 /**
  * A Swing like Action. Holds caption, icon and handler
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 public abstract class ButtonListener implements ClickListener {
 
