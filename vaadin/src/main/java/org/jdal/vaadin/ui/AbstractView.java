@@ -26,6 +26,7 @@ import org.jdal.ui.ViewSupport;
 import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
 import org.jdal.ui.bind.ControlAccessorBinderFactory;
 import org.jdal.vaadin.ui.bind.VaadinBindingUtils;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.vaadin.ui.Component;
 
@@ -120,6 +121,11 @@ public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinVi
 	
 	public PersistentService<T, ? extends Serializable> getPersistentService() {
 		return this.persistentService;
+	}
+
+	@Override
+	protected String getMessage(String code) {
+		return getMessage(code, LocaleContextHolder.getLocale());
 	}
 
 }

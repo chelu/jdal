@@ -481,6 +481,15 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	 * @return message or code if none defined
 	 */
 	protected String getMessage(String code) {
+		return getMessage(code, Locale.getDefault());
+	}
+	
+	/**
+	 * I18n Support, get messae from given locale
+	 * @param code
+	 * @return
+	 */
+	protected String getMessage(String code, Locale locale) {
 		try {
 			return messageSource == null ?
 				code : messageSource.getMessage(code, null, Locale.getDefault());

@@ -96,7 +96,7 @@ public class Dialog extends Window {
 	}
 	
 	private class CloseAction extends ButtonListener {
-		private static final String DEFAULT_ICON = "images/cancel.png";
+		private static final String DEFAULT_ICON = "images/ok.png";
 		
 		public CloseAction() {
 			setIcon(new ThemeResource(DEFAULT_ICON));

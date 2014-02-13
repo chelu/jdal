@@ -33,7 +33,7 @@ public class Column implements Serializable {
 	private String name;
 	private String displayName;
 	private int width = -1;
-	private float expandRatio = 0.0f;
+	private Float expandRatio;
  	private Align align;
 	private Resource icon;
 	private boolean sortable = true;
