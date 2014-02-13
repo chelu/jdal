@@ -16,6 +16,7 @@
 package org.jdal.vaadin.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -132,5 +133,16 @@ public class PkItemIdStrategy implements ItemIdStrategy {
 	 */
 	public boolean containsId(Object itemId) {
 		return indexes.containsKey(itemId);
+	}
+
+	@Override
+	public List<?> getItemIds(int startIndex, int numberOfItems) {
+	List<Object> ids = new ArrayList<Object>(numberOfItems);
+		
+		for (int i = 0; i < numberOfItems; i++)
+			ids.add(getIdByIndex((startIndex + i)));
+		
+		return ids;
+		
 	}
 }

@@ -16,9 +16,10 @@
 package org.jdal.vaadin.data;
 
 import java.util.Collection;
+import java.util.List;
 
-import com.vaadin.data.Item;
 import com.vaadin.data.Container.ItemSetChangeListener;
+import com.vaadin.data.Item;
 
 
 /**
@@ -72,6 +73,12 @@ public interface ItemIdStrategy extends ItemSetChangeListener {
 	public Item getItem(Object itemId);
 	
 	public boolean containsId(Object itemId);
+
+	/**
+	 * @param startIndex
+	 * @param numberOfItems
+	 */
+	List<?> getItemIds(int startIndex, int numberOfItems);
 	
 
 }

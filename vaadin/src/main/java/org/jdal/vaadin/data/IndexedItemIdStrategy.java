@@ -15,12 +15,14 @@
  */
 package org.jdal.vaadin.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
-import com.vaadin.data.Item;
 import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.Item;
 
 /**
  * Indexed ItemIdStragy use the index on the item in container as itemId.
@@ -159,5 +161,16 @@ public class IndexedItemIdStrategy implements ItemIdStrategy {
 	public boolean containsId(Object itemId) {
 		int index = indexOfId(itemId);
 		return index >= 0 && index < containerDataSource.size();
+	}
+
+	@Override
+	public List<?> getItemIds(int startIndex, int numberOfItems) {
+		List<Integer> ids = new ArrayList<Integer>(numberOfItems);
+		
+		for (int i = 0; i <= numberOfItems; i++)
+			ids.add(startIndex + i);
+		
+		return ids;
+		
 	}
 }

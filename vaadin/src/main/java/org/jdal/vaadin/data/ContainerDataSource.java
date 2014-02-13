@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.beans.PropertyUtils;
 import org.jdal.dao.Page;
 import org.jdal.service.PersistentService;
 import org.springframework.beans.BeanInstantiationException;
@@ -272,7 +273,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	 */
 	public Class<?> getType(Object propertyId) {
 		if (entityClass != null) {
-			return BeanUtils.getPropertyDescriptor(entityClass, (String)propertyId)
+			return PropertyUtils.getPropertyDescriptor(entityClass, (String)propertyId)
 				.getPropertyType();
 		}
 		
@@ -707,7 +708,6 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 	}
 
 	public List<?> getItemIds(int startIndex, int numberOfItems) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.itemIdStrategy.getItemIds(startIndex, numberOfItems);
 	}
 }

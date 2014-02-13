@@ -16,7 +16,9 @@
 package org.jdal.vaadin.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.jdal.dao.Page;
 import org.jdal.service.PersistentService;
@@ -116,6 +118,17 @@ public class EntityItemIdStrategy implements ItemIdStrategy {
 	 */
 	public boolean containsId(Object itemId) {
 		return true;
+	}
+
+	@Override
+	public List<?> getItemIds(int startIndex, int numberOfItems) {
+		List<Object> ids = new ArrayList<Object>(numberOfItems);
+		
+		for (int i = 0; i < numberOfItems; i++)
+			ids.add(getIdByIndex((startIndex + i)));
+		
+		return ids;
+		
 	}
 
 }
