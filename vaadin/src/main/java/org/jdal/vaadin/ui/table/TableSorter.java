@@ -18,7 +18,7 @@ package org.jdal.vaadin.ui.table;
 /**
  * Table Sorter interface for use in server side sorting
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin 
  */
 public interface TableSorter {
 

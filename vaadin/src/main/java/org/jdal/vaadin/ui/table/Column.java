@@ -21,6 +21,7 @@ import java.io.Serializable;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Table.Align;
+import com.vaadin.ui.Table.ColumnGenerator;
 
 /**
  * Holder for configurable components by colum in a vaadin table.
@@ -38,9 +39,11 @@ public class Column implements Serializable {
 	private Resource icon;
 	private boolean sortable = true;
 	private String sortPropertyName;
-	private Class<?extends Component> cellComponent;
-	private Class<?extends Component> cellEditor;
+	private Class<? extends Component> cellComponent;
+	private Class<? extends Component> cellEditor;
 	private PropertyEditor propertyEditor;
+	private ColumnGenerator columnGenerator;
+
 	/**
 	 * @return the name
 	 */
@@ -86,7 +89,7 @@ public class Column implements Serializable {
 	/**
 	 * @return the icon
 	 */
-	public Resource getIcon() {// TODO Auto-generated method stub
+	public Resource getIcon() {
 		return icon;
 	}
 	
@@ -184,14 +187,22 @@ public class Column implements Serializable {
 	/**
 	 * @return the expandRatio
 	 */
-	public float getExpandRatio() {
+	public Float getExpandRatio() {
 		return expandRatio;
 	}
 
 	/**
 	 * @param expandRatio the expandRatio to set
 	 */
-	public void setExpandRatio(float expandRatio) {
+	public void setExpandRatio(Float expandRatio) {
 		this.expandRatio = expandRatio;
+	}
+
+	public ColumnGenerator getColumnGenerator() {
+		return columnGenerator;
+	}
+
+	public void setColumnGenerator(ColumnGenerator columnGenerator) {
+		this.columnGenerator = columnGenerator;
 	}
 }

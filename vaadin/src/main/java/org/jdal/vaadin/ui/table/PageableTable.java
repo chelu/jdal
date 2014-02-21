@@ -57,12 +57,12 @@ import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
 /**
- * <p>
- * Vaadin Table with paginator. Use a BeanItemContainer as 
- * table datasource.
- * </p>
+ * Vaadin Table with paginator. 
+ * <p>Use a BeanItemContainer as 
+ * table datasource and request pages using a {@link PersistentService}. </p>
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @see org.jdal.service.PersistentService
  */
 @Configurable
 public class PageableTable<T> extends CustomComponent implements PaginatorListener, 

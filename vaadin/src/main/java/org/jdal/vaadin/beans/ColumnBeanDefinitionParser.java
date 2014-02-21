@@ -16,6 +16,7 @@
 package org.jdal.vaadin.beans;
 
 
+import org.jdal.beans.BeanDefinitionUtils;
 import org.jdal.vaadin.ui.table.Column;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
@@ -32,6 +33,7 @@ public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 	private static final String PROPERTY_EDITOR_ATTRIBUTE = "property-editor";
 	private static final String ALIGN_ATTRIBUTE = "align";
 	private static final String RENDERER_ATTRIBUTE = "renderer";
+	private static final String COLUMN_GENERATOR_ATTRIBUTE = "column-generator";
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -41,9 +43,10 @@ public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 
 	@Override
 	protected boolean isEligibleAttribute(String attributeName) {
-		return super.isEligibleAttribute(attributeName) && !SCOPE_ATTRIBUTE.equals(attributeName)
-				&& !PROPERTY_EDITOR_ATTRIBUTE.equals(attributeName) 
-				&& !ALIGN_ATTRIBUTE.equals(attributeName);
+		return super.isEligibleAttribute(attributeName) && !SCOPE_ATTRIBUTE.equals(attributeName) &&
+				!PROPERTY_EDITOR_ATTRIBUTE.equals(attributeName) && 
+				!ALIGN_ATTRIBUTE.equals(attributeName) && 
+				!COLUMN_GENERATOR_ATTRIBUTE.equals(attributeName);
 	}
 
 	/**
@@ -53,12 +56,10 @@ public class ColumnBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 	protected void postProcess(BeanDefinitionBuilder beanDefinition, Element element) {
 		beanDefinition.setScope("prototype");
 		
-		if (element.hasAttribute(RENDERER_ATTRIBUTE))
-			beanDefinition.addPropertyReference(RENDERER_ATTRIBUTE, element.getAttribute(RENDERER_ATTRIBUTE));
-	
-		if (element.hasAttribute(PROPERTY_EDITOR_ATTRIBUTE))
-			beanDefinition.addPropertyReference(this.extractPropertyName(PROPERTY_EDITOR_ATTRIBUTE), 
-					element.getAttribute(PROPERTY_EDITOR_ATTRIBUTE));
+		
+		BeanDefinitionUtils.addPropertyReferenceIfNeeded(beanDefinition, element, COLUMN_GENERATOR_ATTRIBUTE);
+		BeanDefinitionUtils.addPropertyReferenceIfNeeded(beanDefinition, element, RENDERER_ATTRIBUTE);
+		BeanDefinitionUtils.addPropertyReferenceIfNeeded(beanDefinition, element, PROPERTY_EDITOR_ATTRIBUTE);
 		
 		if (element.hasAttribute(ALIGN_ATTRIBUTE))
 			beanDefinition.addPropertyValue(ALIGN_ATTRIBUTE, getAlignValue(element.getAttribute(ALIGN_ATTRIBUTE)));

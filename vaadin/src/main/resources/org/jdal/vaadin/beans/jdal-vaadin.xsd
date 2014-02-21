@@ -26,6 +26,7 @@
 		<xsd:attribute name="editor" type="xsd:string" />
 		<xsd:attribute name="cell-editor" type="xsd:string" />
 		<xsd:attribute name="cell-component" type="xsd:string" />
+		<xsd:attribute name="sortable" type="xsd:boolean" />
 		<xsd:attribute name="align">
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:string">
@@ -50,7 +51,7 @@
 		<xsd:attribute name="column-generator" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation>
-					<![CDATA[ColumnGeneratr to use with this column.]]>
+					<![CDATA[ColumnGenerator to use with this column.]]>
 				</xsd:documentation>
 				<xsd:appinfo>
 					<tool:annotation kind="ref">

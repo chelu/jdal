@@ -121,29 +121,28 @@ public class ConfigurableTable extends Table {
 		String[] visibleColumns = new String[size];
 		String[] displayNames = new String[size];
 		Align[] alignments = new Align[size];
-		int[] widths = new int[size];
-		float[] expandRatios = new float[size];
 				
 		for (int i = 0; i < size; i++) {
 			visibleColumns[i] = columns.get(i).getName();
 			displayNames[i] = intenacionalize(columns.get(i).getDisplayName());
 			alignments[i] = columns.get(i).getAlign();
-			widths[i] = columns.get(i).getWidth();
 		}
 		
-		// Vaadin Table throw an exception when set this properties 
+		// Vaadin Table throw an exception when seting this properties 
 		// with an empty Container datasource. 
 		this.setVisibleColumns(visibleColumns);
 		this.setColumnHeaders(displayNames);
 		this.setColumnAlignments(alignments);
 		
-		for (int i = 0; i < size; i++) {
-			if ( widths[i] != -1) {
-				this.setColumnWidth(visibleColumns[i], widths[i]);
-			}
-			else if (expandRatios[i] != 0) {
-				this.setColumnExpandRatio(visibleColumns[i], expandRatios[i]);
-			}
+		for (Column c : columns) {
+			if ( c.getWidth() != -1)
+				setColumnWidth(c.getName(), c.getWidth());
+			
+			if (c.getExpandRatio() != null)
+				setColumnExpandRatio(c.getName(), c.getExpandRatio());
+			
+			if (c.getColumnGenerator() != null)
+				addGeneratedColumn(c.getName(), c.getColumnGenerator());
 		}
 	}
 
