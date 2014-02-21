@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
-import org.jdal.service.PersistentService;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.Filter;
@@ -36,7 +36,7 @@ import com.vaadin.data.Container.Sortable;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ContainerPersistentServiceAdapter<T, PK extends Serializable> 
-	implements PersistentService<T, PK> {
+	implements Dao<T, PK> {
 	
 	private Container container;
 

@@ -5,6 +5,7 @@ package org.jdal.service;
 
 import java.util.List;
 
+import org.jdal.dao.Dao;
 import org.jdal.reporting.Report;
 import org.jdal.reporting.ReportType;
 
@@ -13,7 +14,7 @@ import org.jdal.reporting.ReportType;
  * @author Jose A. Corbacho
  *
  */
-public interface ReportService extends PersistentService<Report, Long> {
+public interface ReportService extends Dao<Report, Long> {
 
 	/**
 	 * Get a list of reports matching the type

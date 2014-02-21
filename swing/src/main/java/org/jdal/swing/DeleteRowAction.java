@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import javax.swing.JOptionPane;
 
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -31,7 +31,7 @@ import org.jdal.service.PersistentService;
 public class DeleteRowAction extends TableRowAction {
 	
 	private static final long serialVersionUID = 1L;
-	private PersistentService<Object, Serializable> service;
+	private Dao<Object, Serializable> service;
 
 	/* (non-Javadoc)
 	 * @see info.joseluismartin.gui.TableRowAction#actionPerformed(java.awt.event.ActionEvent)
@@ -47,11 +47,11 @@ public class DeleteRowAction extends TableRowAction {
 		
 	}
 
-	public PersistentService<Object, Serializable> getService() {
+	public Dao<Object, Serializable> getService() {
 		return service;
 	}
 
-	public void setService(PersistentService<Object, Serializable> service) {
+	public void setService(Dao<Object, Serializable> service) {
 		this.service = service;
 	}
 }

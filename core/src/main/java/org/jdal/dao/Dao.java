@@ -16,6 +16,7 @@
 package org.jdal.dao;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -90,11 +91,36 @@ public interface Dao<T, PK extends Serializable> extends PageableDataSource<T> {
      */
 	T initialize(T entity, int depth);
 	
+	// Utility methods for collectins
+	
+	/**
+	 * Save a collection entity
+	 * @param collection collectin to save
+	 * @return the persisted collection.
+	 */
+	Collection<T> save(Collection<T> collection);
+		
+	/**
+	 * Delete a collection of entities
+	 * @param collection collectin to delete
+	 */
+	void delete(Collection<T> collection);
+		
+	/**
+	 * Delete a collection of Ids.
+	 * @param ids ids to delete
+	 */
+	void deleteById(Collection<PK> ids);
+	
 	// Non generic get and getAll methods
 	
 	<E> E get(PK id, Class<E> clazz );
 	
 	<E> List<E> getAll(Class<E> clazz);
 	
+	/**
+	 * Return the entity class
+	 * @return the entity class handled for this DAO, Maybe Object.class 
+	 */
 	Class<T> getEntityClass();
 }

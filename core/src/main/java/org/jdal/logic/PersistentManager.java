@@ -28,8 +28,9 @@ import org.jdal.service.PersistentService;
 /**
  * Base class for Services that wrappers persistent operations to DAO.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
+@SuppressWarnings("deprecation")
 public class PersistentManager<T, PK extends Serializable> implements PersistentService<T, PK> {
 
 	public static final int DEFAULT_DEPTH = 2;

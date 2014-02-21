@@ -42,7 +42,7 @@ import javax.persistence.metamodel.Type;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.dao.Dao;
+import org.jdal.dao.DaoSupport;
 import org.jdal.dao.Filter;
 import org.jdal.dao.Page;
 import org.jdal.dao.PageableDataSource;
@@ -59,7 +59,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
  * @see org.jdal.dao.Dao
  * @since 1.1
  */
-public class JpaDao<T, PK extends Serializable> implements Dao<T, PK> {
+public class JpaDao<T, PK extends Serializable> extends DaoSupport<T, PK> {
 	
 	private static final int DEFAULT_DEPTH = 2;
 	private static final Log log = LogFactory.getLog(JpaDao.class);

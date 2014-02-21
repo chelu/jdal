@@ -23,7 +23,7 @@ import org.jdal.reporting.ReportType;
 import org.jdal.service.ReportService;
 
 /**
- * Report Serivice Implementation
+ * Report Service Implementation
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */

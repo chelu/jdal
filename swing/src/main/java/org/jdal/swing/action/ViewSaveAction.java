@@ -21,10 +21,10 @@ import java.io.Serializable;
 
 import javax.swing.JOptionPane;
 
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.service.PersistentServiceAware;
-import org.jdal.swing.ViewDialog;
 import org.jdal.swing.View;
+import org.jdal.swing.ViewDialog;
 import org.jdal.swing.form.FormUtils;
 import org.jdal.ui.Editor;
 
@@ -37,7 +37,7 @@ public class ViewSaveAction<T> extends ViewAction<T> implements PersistentServic
 
 	private static final String DEFAULT_ICON = 	"/images/16x16/dialog-ok.png";
 	private static final String DEFAULT_NAME = "Accept";
-	private PersistentService<T, ?extends Serializable> service;
+	private Dao<T, ?extends Serializable> service;
 
 	public ViewSaveAction() {
 		setIcon(FormUtils.getIcon(DEFAULT_ICON));
@@ -114,19 +114,19 @@ public class ViewSaveAction<T> extends ViewAction<T> implements PersistentServic
 	}
 
 	@Deprecated
-	public PersistentService<T, ?extends Serializable> getService() {
+	public Dao<T, ?extends Serializable> getService() {
 		return service;
 	}
 
 	@Deprecated
-	public void setService(PersistentService<T, ?extends Serializable> service) {
-		this.service = (PersistentService<T, ? extends Serializable>) service;
+	public void setService(Dao<T, ?extends Serializable> service) {
+		this.service = (Dao<T, ? extends Serializable>) service;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setPersistentService(PersistentService<T, ? extends Serializable> persistentService) {
+	public void setPersistentService(Dao<T, ? extends Serializable> persistentService) {
 		this.service = persistentService;
 	}
 }

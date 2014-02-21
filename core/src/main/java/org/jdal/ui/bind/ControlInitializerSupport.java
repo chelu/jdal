@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.util.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -38,15 +38,15 @@ import org.springframework.util.ReflectionUtils;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class ControlInitializerSupport implements ControlInitializer {
 
-	protected PersistentService<Object, ?extends Serializable> persistentService;
+	protected Dao<Object, ?extends Serializable> dao;
 	private boolean initializeEntities = false;
 	private boolean firstNull = false;
 
 	protected List<Object> getEntityList(Class<?> propertyType) {
-		List entities =  persistentService.getAll(propertyType);
+		List entities =  dao.getAll(propertyType);
 		if (isInitializeEntities()) {
 			for (Object entity : entities)
-				persistentService.initialize(entity);
+				dao.initialize(entity);
 		}
 		if (isFirstNull())
 			entities.add(0, null);
@@ -99,17 +99,17 @@ public abstract class ControlInitializerSupport implements ControlInitializer {
 	}
 
 	/**
-	 * @return the persistentService
+	 * @return the Dao
 	 */
-	public PersistentService<Object, ? extends Serializable> getPersistentService() {
-		return persistentService;
+	public Dao<Object, ? extends Serializable> getDao() {
+		return dao;
 	}
 
 	/**
-	 * @param persistentService the persistentService to set
+	 * @param Dao the Dao to set
 	 */
-	public void setPersistentService(PersistentService<Object, ? extends Serializable> persistentService) {
-		this.persistentService = persistentService;
+	public void setDao(Dao<Object, ? extends Serializable> Dao) {
+		this.dao = Dao;
 	}
 
 	/**

@@ -19,9 +19,9 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
 import org.jdal.dao.filter.PatternFilter;
-import org.jdal.service.PersistentService;
 
 /**
  * AutoComletionListener based on PersistentService and PatternFilter
@@ -32,7 +32,7 @@ import org.jdal.service.PersistentService;
 public class FilterAutoCompletionListener extends AutoCompletionListener  {
 
 	public static final String DEFAULT_SORT_PROPERTY = "name";
-	private PersistentService persistentService;
+	private Dao persistentService;
 	private int maxResults = Short.MAX_VALUE;
 	private String sortProperty;
 	
@@ -84,7 +84,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 	/**
 	 * @return the persistentService
 	 */
-	public PersistentService getPersistentService() {
+	public Dao getPersistentService() {
 		return persistentService;
 	}
 	
@@ -92,7 +92,7 @@ public class FilterAutoCompletionListener extends AutoCompletionListener  {
 	 * @param persistentService the persistentService to set
 	 */
 
-	public void setPersistentService(PersistentService persistentService) {
+	public void setPersistentService(Dao persistentService) {
 		this.persistentService = persistentService;
 	}
 

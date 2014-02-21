@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jose Luis Martin.
+ * Copyright 2009-2014 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -40,30 +42,32 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.type.Type;
 import org.jdal.beans.PropertyUtils;
-import org.jdal.dao.Dao;
+import org.jdal.dao.DaoSupport;
 import org.jdal.dao.Filter;
 import org.jdal.dao.Page;
 import org.jdal.hibernate.HibernateUtils;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.orm.ObjectRetrievalFailureException;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.util.ClassUtils;
 
 
 /**
  * Hibernate generic DAO implementation. Support pagination of results with filters
- * using getPage(Page page) method.
+ * using the getPage(Page page) method.
  * 
  *
- * @author Jose Luis Martin - (jlm@joseluismartin.info).
+ * @author Jose Luis Martin
  * @see org.jdal.dao.Dao
+ * @since 1.0
  */
-public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSupport implements Dao<T, PK>  {
+public class HibernateDao<T, PK extends Serializable> extends DaoSupport<T, PK>{
 
 	private static final Log log = LogFactory.getLog(HibernateDao.class);
 	
 	private Class<T> entityClass;
 	private boolean cachePageQueries = false;
+	private HibernateTemplate hibernateTemplate;
 	
 	/** 
 	 * Synchronized map with CriteriaBuilders by name
@@ -416,7 +420,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
      * {@inheritDoc}
      */
     public T get(PK id) {
-        T entity = (T) super.getHibernateTemplate().get(this.entityClass, id);
+        T entity = (T) getHibernateTemplate().get(this.entityClass, id);
 
         if (entity == null) {
             log.warn("'" + this.entityClass.getSimpleName() + "' object with id '" + id + "' not found...");
@@ -430,7 +434,7 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
      * {@inheritDoc}
      */
     public boolean exists(PK id) {
-      return super.getHibernateTemplate().get(this.entityClass, id) != null;
+      return getHibernateTemplate().get(this.entityClass, id) != null;
     }
 
     /**
@@ -472,5 +476,34 @@ public class HibernateDao<T, PK extends Serializable> extends HibernateDaoSuppor
 	public <E> List<E> getAll(Class<E> clazz) {
 		return getSession().createCriteria(clazz).list();
 	}
+	
+	
+	public HibernateTemplate getHibernateTemplate() {
+		return hibernateTemplate;
+	}
+	
+	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+		this.hibernateTemplate = hibernateTemplate;
+	}
 
+	public final void setSessionFactory(SessionFactory sessionFactory) {
+		if (this.hibernateTemplate == null || sessionFactory != this.hibernateTemplate.getSessionFactory()) {
+			this.hibernateTemplate = new HibernateTemplate(sessionFactory);
+		}
+	}
+	
+	/**
+	 * Return the Hibernate SessionFactory
+	 */
+	public final SessionFactory getSessionFactory() {
+		return (this.hibernateTemplate != null ? this.hibernateTemplate.getSessionFactory() : null);
+	}
+	
+	/**
+	 * Return current hibernate Session from Hibernate template
+	 * @return curren hibernate Session
+	 */
+	public Session getSession() {
+		return hibernateTemplate.getSessionFactory().getCurrentSession();
+	}
 }

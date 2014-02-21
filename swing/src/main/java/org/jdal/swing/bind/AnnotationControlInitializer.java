@@ -47,7 +47,7 @@ public class AnnotationControlInitializer extends ControlInitializerSupport {
 	 * {@inheritDoc}
 	 */
 	public void initialize(Object control, String property, Class<?> clazz) {
-		if (persistentService == null) {
+		if (this.dao == null) {
 			log.warn("Nothing to do without persistent service");
 			return;
 		}

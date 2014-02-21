@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 the original author or authors.
+ * Copyright 2009-2014 Jose Luis Martin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ import org.w3c.dom.NodeList;
  * to uncapitalized entity SimpleClassName. For example, for a entity class
  * "com.example.Entity" will create entityDao and entityService beans.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.2
  */
 public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 	
@@ -62,12 +63,15 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 		String daoClassName = JPA_DAO_CLASS_NAME;
 		String serviceClassName = PERSISTENT_SERVICE_CLASS_NAME;
 		String name = null;
+		boolean declareService = false;
 		
 		if (element.hasAttribute(DAO_CLASS)) 
 			daoClassName = element.getAttribute(DAO_CLASS);
 		
-		if (element.hasAttribute(SERVICE_CLASS))
+		if (element.hasAttribute(SERVICE_CLASS)) {
 			serviceClassName = element.getAttribute(SERVICE_CLASS);
+			declareService = true;
+		}
 		
 		if (element.hasAttribute(NAME))
 			name = element.getAttribute(NAME);
@@ -95,15 +99,18 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 			
 			daoBuilder.addConstructorArgValue(ClassUtils.resolveClassName(className, null));
 			daoBuilder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
-			String daoBeanName = name  + DAO_SUFFIX;
+			String daoBeanName = name  + SERVICE_SUFFIX;
+		
+			if (declareService) {
+				daoBeanName = name + DAO_SUFFIX;
+				// SERVICE
+				BeanDefinitionBuilder serviceBuilder = BeanDefinitionBuilder.genericBeanDefinition(serviceClassName);
+				serviceBuilder.addPropertyReference("dao", daoBeanName);
+				String serviceBeanName = name + SERVICE_SUFFIX;
+				registerBeanDefinition(parserContext, serviceBuilder, serviceBeanName); 
+			}
+			
 			registerBeanDefinition(parserContext, daoBuilder, daoBeanName); 
-			
-			// SERVICE
-			BeanDefinitionBuilder serviceBuilder = BeanDefinitionBuilder.genericBeanDefinition(serviceClassName);
-			serviceBuilder.addPropertyReference("dao", daoBeanName);
-			String serviceBeanName = name + SERVICE_SUFFIX;
-			registerBeanDefinition(parserContext, serviceBuilder, serviceBeanName); 
-			
 			parserContext.popAndRegisterContainingComponent();
 					
 		}

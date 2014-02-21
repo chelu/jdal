@@ -43,7 +43,7 @@ public class PersistentServiceFactory {
 	 * Creates a PersistentService with default transaction attributes
 	 * @param clazz entity class
 	 */
-	public <T> PersistentService<T, Serializable> createPersistentService(Class<T> clazz) {	
+	public <T> PersistentManager<T, Serializable> createPersistentService(Class<T> clazz) {	
 		Dao<T, Serializable> dao = daoFactory.createDao(clazz);
 		PersistentManager<T, Serializable> manager = new PersistentManager<T, Serializable>();
 		manager.setDao(dao);
@@ -58,13 +58,13 @@ public class PersistentServiceFactory {
 	 * @return a Tx Proxy for service with default tx attributes
 	 */
 	@SuppressWarnings("unchecked")
-	public <T>  PersistentService<T, Serializable> makeTransactionalProxy(PersistentService<T, Serializable> service) {
+	public <T>  PersistentManager<T, Serializable> makeTransactionalProxy(PersistentManager<T, Serializable> service) {
 		ProxyFactory factory = new ProxyFactory(service);
-		factory.setInterfaces(new Class[] {PersistentService.class});
+		factory.setInterfaces(new Class[] {Dao.class});
 		TransactionInterceptor interceptor = new TransactionInterceptor(transactionManager, 
 				new MatchAlwaysTransactionAttributeSource()); 
 		factory.addAdvice(interceptor);
 		factory.setTarget(service);
-		return (PersistentService<T, Serializable>) factory.getProxy();
+		return (PersistentManager<T, Serializable>) factory.getProxy();
 	}
 }

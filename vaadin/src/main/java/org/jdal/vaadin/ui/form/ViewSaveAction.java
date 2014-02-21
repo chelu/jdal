@@ -15,7 +15,7 @@
  */
 package org.jdal.vaadin.ui.form;
 
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.ui.Editor;
 import org.jdal.ui.View;
 import org.jdal.vaadin.VaadinUtils;
@@ -36,7 +36,7 @@ public class ViewSaveAction extends ViewAction {
 	private static final String DEFAULT_ICON="images/ok.png";
 	
 	private boolean showError = true;
-	private PersistentService persistentService;
+	private Dao persistentService;
 	private boolean closeWindow = true;
 	
 	public ViewSaveAction() {
@@ -51,7 +51,7 @@ public class ViewSaveAction extends ViewAction {
 	 * @param persistentService
 	 * @param view
 	 */
-	public ViewSaveAction(VaadinView view, PersistentService persistentService) {
+	public ViewSaveAction(VaadinView view, Dao persistentService) {
 		this.persistentService = persistentService;
 		setView(view);
 		setIcon(new ThemeResource(DEFAULT_ICON));
@@ -125,11 +125,11 @@ public class ViewSaveAction extends ViewAction {
 		
 	}
 	
-	public PersistentService getPersistentService() {
+	public Dao getPersistentService() {
 		return persistentService;
 	}
 
-	public void setPersistentService(PersistentService persistentService) {
+	public void setPersistentService(Dao persistentService) {
 		this.persistentService = persistentService;
 	}
 

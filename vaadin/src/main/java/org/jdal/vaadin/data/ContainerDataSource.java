@@ -27,8 +27,8 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.beans.PropertyUtils;
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
-import org.jdal.service.PersistentService;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataAccessException;
@@ -61,7 +61,7 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 
 	private Page<T> page = new Page<T>();
 	
-	private PersistentService<T, ?extends Serializable> service; 
+	private Dao<T, ?extends Serializable> service; 
 	private List<String> sortableProperties;
 	private List<BeanItem<T> > items = new ArrayList<BeanItem<T>>();
 	private Class<T> entityClass;
@@ -83,13 +83,13 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		this(entityClass, null);
 	}
 	
-	public ContainerDataSource(PersistentService<T, ?extends Serializable> service) {
+	public ContainerDataSource(Dao<T, ?extends Serializable> service) {
 		this.service = service;
 		this.entityClass = service.getEntityClass();
 		setItemIdStrategy(new IndexedItemIdStrategy());
 	}
 	
-	public ContainerDataSource(Class<T> entityClass, PersistentService<T, ?extends Serializable> service) {
+	public ContainerDataSource(Class<T> entityClass, Dao<T, ?extends Serializable> service) {
 		this.service = service;
 		this.entityClass = entityClass;
 		setItemIdStrategy(new IndexedItemIdStrategy());
@@ -437,11 +437,11 @@ public class ContainerDataSource<T> implements Container, Sortable, Indexed,
 		return globalToPage(index) >= 0 && globalToPage(index) < page.getPageSize();
 	}
 	
-	public PersistentService<T, ?extends Serializable> getService() {
+	public Dao<T, ?extends Serializable> getService() {
 		return service;
 	}
 
-	public void setService(PersistentService<T, Serializable> service) {
+	public void setService(Dao<T, Serializable> service) {
 		this.service = service;
 	}
 	

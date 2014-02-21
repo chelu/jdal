@@ -17,8 +17,8 @@ package org.jdal.reporting;
 
 import java.io.Serializable;
 
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
-import org.jdal.service.PersistentService;
 
 /**
  * This interface must be implemented by those classes that require working with reports
@@ -32,7 +32,7 @@ public interface ReportDataProvider<T, PK extends Serializable> {
 	 * Returns the data source used by this object
 	 * @return the data source in use
 	 */
-	PersistentService<T, PK> getDataSource();
+	Dao<T, PK> getDataSource();
 	
 	public Object getFilter();
 	

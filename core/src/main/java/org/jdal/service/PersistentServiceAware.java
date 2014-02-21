@@ -17,6 +17,8 @@ package org.jdal.service;
 
 import java.io.Serializable;
 
+import org.jdal.dao.Dao;
+
 /**
  * Interface for classes that hold a persistent service.
  * 
@@ -28,6 +30,6 @@ public interface PersistentServiceAware<T> {
 	 * Set PersistentService to use
 	 * @param persistentService 
 	 */
-	void setPersistentService(PersistentService<T, ?extends Serializable> persistentService);
+	void setPersistentService(Dao<T, ?extends Serializable> persistentService);
 	
 }

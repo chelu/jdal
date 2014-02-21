@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
-import org.jdal.service.PersistentService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -30,18 +30,18 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ContextPersistentManager implements PersistentService<Object, Serializable> {
+public class ContextPersistentManager implements Dao<Object, Serializable> {
 
 	@Autowired
 	@SuppressWarnings("rawtypes")
-	private List<PersistentService> services;
-	private Map<Class<?>, PersistentService<Object, Serializable>> serviceMap = 
-			new ConcurrentHashMap<Class<?>, PersistentService<Object, Serializable>>();
+	private List<Dao> services;
+	private Map<Class<?>, Dao<Object, Serializable>> serviceMap = 
+			new ConcurrentHashMap<Class<?>, Dao<Object, Serializable>>();
 	
 
 	@SuppressWarnings("unchecked")
 	public void init() {
-		for (PersistentService<Object, Serializable> ps : services) {
+		for (Dao<Object, Serializable> ps : services) {
 			if (ps.getEntityClass() != null)
 				serviceMap.put(ps.getEntityClass(), ps);
 		}
@@ -65,28 +65,28 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 	 * {@inheritDoc}
 	 */
 	public Object initialize(Object entity, int depth) {
-		return getService(entity.getClass()).initialize(entity);
+		return getDao(entity.getClass()).initialize(entity);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object initialize(Object entity) {
-		return getService(entity.getClass()).initialize(entity);
+		return getDao(entity.getClass()).initialize(entity);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object save(Object entity) {
-		return getService(entity.getClass()).save(entity);
+		return getDao(entity.getClass()).save(entity);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void delete(Object entity) {
-		getService(entity.getClass()).delete(entity);
+		getDao(entity.getClass()).delete(entity);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 		if (collection.isEmpty()) 
 			return collection;
 		
-		return getService(collection.iterator().next().getClass()).save(collection);
+		return getDao(collection.iterator().next().getClass()).save(collection);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 	 */
 	public void delete(Collection<Object> collection) {
 		if (!collection.isEmpty())
-			getService(collection.iterator().next().getClass()).delete(collection);
+			getDao(collection.iterator().next().getClass()).delete(collection);
 	}
 
 	/**
@@ -139,14 +139,14 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 	 * {@inheritDoc}
 	 */
 	public <E> E get(Serializable id, Class<E> clazz) {
-		return getService(clazz).get(id, clazz);
+		return getDao(clazz).get(id, clazz);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public <E> List<E> getAll(Class<E> clazz) {
-		return getService(clazz).getAll(clazz);
+		return getDao(clazz).getAll(clazz);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class ContextPersistentManager implements PersistentService<Object, Seria
 	 * @param entity
 	 * @return
 	 */
-	private PersistentService<Object, Serializable> getService(Class<?> clazz) {
+	private Dao<Object, Serializable> getDao(Class<?> clazz) {
 		return serviceMap.get(clazz);
 	}
 

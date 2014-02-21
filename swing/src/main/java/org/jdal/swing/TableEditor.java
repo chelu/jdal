@@ -39,7 +39,7 @@ import javax.swing.event.TableModelListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.beans.MessageSourceWrapper;
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.swing.action.BeanAction;
 import org.jdal.swing.form.FormUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +78,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	private String name;
 	
 	/** Persistent Service to use */
-	private PersistentService<T, Serializable> service;
+	private Dao<T, Serializable> service;
 	
 	/** MessageSource */
 	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
@@ -239,11 +239,11 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	}
 
 
-	public PersistentService<T, Serializable> getService() {
+	public Dao<T, Serializable> getService() {
 		return service;
 	}
 
-	public void setService(PersistentService<T, Serializable> service) {
+	public void setService(Dao<T, Serializable> service) {
 		this.service = service;
 	}
 	

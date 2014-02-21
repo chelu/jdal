@@ -17,7 +17,7 @@ package org.jdal.vaadin.ui.form;
 
 import java.io.Serializable;
 
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.table.ButtonListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ import com.vaadin.ui.Window;
 public class FormDialog extends Window {
 
 	@Autowired
-	private PersistentService<Object, Serializable> persistentService;
+	private Dao<Object, Serializable> persistentService;
 	private Form form;
 	private ButtonListener acceptButtonListener;	
 	private ButtonListener cancelButtonListener;
@@ -118,14 +118,14 @@ public class FormDialog extends Window {
 	/**
 	 * @return the persistentService
 	 */
-	public PersistentService<Object, Serializable> getPersistentService() {
+	public Dao<Object, Serializable> getPersistentService() {
 		return persistentService;
 	}
 	
 	/**
 	 * @param persistentService the persistentService to set
 	 */
-	public void setPersistentService(PersistentService<Object, Serializable> persistentService) {
+	public void setPersistentService(Dao<Object, Serializable> persistentService) {
 		this.persistentService = persistentService;
 	}
 

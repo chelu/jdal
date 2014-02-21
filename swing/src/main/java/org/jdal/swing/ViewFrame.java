@@ -31,9 +31,8 @@ import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
 import org.apache.commons.lang.StringUtils;
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.service.PersistentServiceAware;
-import org.jdal.swing.View;
 import org.jdal.swing.action.DialogAcceptAction;
 import org.jdal.swing.action.ViewAction;
 import org.jdal.swing.action.ViewCancelAction;
@@ -60,7 +59,7 @@ public class ViewFrame<T> extends JFrame implements View<T>, Editor<T> {
 	private int windowWidth;
 	private int windowHeight;
 	private EventListenerList listenerList = new EventListenerList();
-	private PersistentService<T, ?extends Serializable> persistentService;
+	private Dao<T, ?extends Serializable> persistentService;
 
 	/**
 	 * Default Ctor
@@ -265,7 +264,7 @@ public class ViewFrame<T> extends JFrame implements View<T>, Editor<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setPersistentService(PersistentService<T, ?extends Serializable> persistentService) {
+	public void setPersistentService(Dao<T, ?extends Serializable> persistentService) {
 		this.persistentService = persistentService;
 		
 		if (this.acceptAction instanceof PersistentServiceAware)

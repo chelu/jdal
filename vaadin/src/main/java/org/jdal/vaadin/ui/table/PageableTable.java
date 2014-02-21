@@ -24,12 +24,12 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.dao.Dao;
 import org.jdal.dao.Filter;
 import org.jdal.dao.Page;
 import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PaginatorListener;
-import org.jdal.service.PersistentService;
 import org.jdal.ui.EditorEvent;
 import org.jdal.ui.EditorListener;
 import org.jdal.vaadin.ui.FormUtils;
@@ -76,7 +76,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	/** the external paginator */
 	private VaadinPaginator<T> paginator;
 	/** persistentService */
-	private transient PersistentService<T, Serializable>  service;
+	private transient Dao<T, Serializable>  service;
 	/** page */
 	private transient Page<T> page = new Page<T>();
 	/** Filter */
@@ -321,11 +321,11 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		this.paginator = paginator;
 	}
 
-	public PersistentService<T, Serializable> getService() {
+	public Dao<T, Serializable> getService() {
 		return service;
 	}
 
-	public void setService(PersistentService<T, Serializable> service) {
+	public void setService(Dao<T, Serializable> service) {
 		this.service = service;
 	}
 	

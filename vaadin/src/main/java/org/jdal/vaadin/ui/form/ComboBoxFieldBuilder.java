@@ -19,7 +19,7 @@ import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.service.PersistentServiceFactory;
 import org.jdal.vaadin.data.ContainerDataSource;
 import org.springframework.beans.BeanUtils;
@@ -72,7 +72,7 @@ public class ComboBoxFieldBuilder implements FieldBuilder, Serializable {
 	 */
 	protected void fillComboBox(ComboBox combo, Class<?> clazz, String name) {
 		PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(clazz, name);
-		PersistentService<?, Serializable> service = 
+		Dao<?, Serializable> service = 
 			persistentServiceFactory.createPersistentService(pd.getPropertyType());
 		// fill combo
 		Iterator<?>  iter = service.getAll().iterator();

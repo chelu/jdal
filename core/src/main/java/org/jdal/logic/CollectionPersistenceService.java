@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
-import org.jdal.service.PersistentService;
 import org.jdal.util.BeanUtils;
 import org.jdal.util.comparator.PropertyComparator;
 
@@ -33,7 +33,7 @@ import org.jdal.util.comparator.PropertyComparator;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class CollectionPersistenceService<T, PK extends Serializable> implements PersistentService<T, PK> {
+public class CollectionPersistenceService<T, PK extends Serializable> implements Dao<T, PK> {
 
 	private Collection<T> collection;
 	private String propertyKey = "id";

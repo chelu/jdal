@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Jose Luis Martin.
+ * Copyright 2009-2014 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,39 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.dao.jpa;
+package org.jdal.dao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jdal.dao.Dao;
-
 /**
- * Support class for JpaDaos that implements PersistentService.
- *
- * In next versions may be Dao interface will extend PersistentService directly, 
- * for now, this class can be used for the same purpose.
+ * Support class for {@link Dao} implementation.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @deprecated use {@link JpaDao} instead
+ * @author Jose Luis Martin
+ * @since 2.0
+ *
  */
-public class PersistentServiceJpaDao<T,PK extends Serializable> extends JpaDao<T, PK> 
-	implements Dao<T,PK> {
-
+public abstract class DaoSupport<T, PK extends Serializable> implements Dao<T, PK>  {
 	
-	public PersistentServiceJpaDao() {
-	
-	}
-	
-	/**
-	 * @param entityClass the entity class
-	 */
-	public PersistentServiceJpaDao(Class<T> entityClass) {
-		super(entityClass);
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -76,5 +59,5 @@ public class PersistentServiceJpaDao<T,PK extends Serializable> extends JpaDao<T
 			deleteById(id);
 
 	}
-	
+
 }

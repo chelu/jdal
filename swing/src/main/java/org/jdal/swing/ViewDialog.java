@@ -28,12 +28,11 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import org.apache.commons.lang.StringUtils;
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.service.PersistentServiceAware;
 import org.jdal.swing.action.DialogAcceptAction;
 import org.jdal.swing.action.ViewAction;
 import org.jdal.swing.action.ViewCancelAction;
-import org.jdal.swing.View;
 import org.jdal.ui.Editor;
 import org.jdal.ui.EditorEvent;
 import org.jdal.ui.EditorListener;
@@ -59,7 +58,7 @@ public class ViewDialog<T> extends JDialog implements View<T>, Editor<T>  {
 	private int windowWidth = 750;
 	private int windowHeight = 750;
 	private int value = CANCEL;
-	private PersistentService<T, ?extends Serializable> persistentService;
+	private Dao<T, ?extends Serializable> persistentService;
 	private ArrayList<EditorListener> editorListeners = new ArrayList<EditorListener>();
 	
 	public ViewDialog() {
@@ -263,7 +262,7 @@ public class ViewDialog<T> extends JDialog implements View<T>, Editor<T>  {
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public void setPersistentService(PersistentService<T, ? extends Serializable> persistentService) {
+	public void setPersistentService(Dao<T, ? extends Serializable> persistentService) {
 		if (this.acceptAction instanceof PersistentServiceAware)
 			((PersistentServiceAware<T>) acceptAction).setPersistentService(persistentService);
 		

@@ -64,6 +64,7 @@ import javax.swing.table.TableCellRenderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.beans.MessageSourceWrapper;
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
 import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
@@ -71,9 +72,7 @@ import org.jdal.dao.PageableDataSource;
 import org.jdal.dao.Paginator;
 import org.jdal.dao.PaginatorListener;
 import org.jdal.model.TableState;
-import org.jdal.service.PersistentService;
 import org.jdal.service.TableService;
-import org.jdal.swing.View;
 import org.jdal.swing.form.FormUtils;
 import org.jdal.swing.table.LoadPreferencesAction;
 import org.jdal.swing.table.SavePreferencesAction;
@@ -332,8 +331,8 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		
 		if (window instanceof Editor) {
 			Editor<T> editor = (Editor<T>) window;
-			if (dataSource instanceof PersistentService && configureEditors) {
-				editor.setPersistentService((PersistentService<T,?extends Serializable>) dataSource);
+			if (dataSource instanceof Dao && configureEditors) {
+				editor.setPersistentService((Dao<T,?extends Serializable>) dataSource);
 			}
 			// add editor listeners
 			for (EditorListener listener : editorListeners) {

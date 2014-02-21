@@ -33,13 +33,13 @@ import javax.swing.KeyStroke;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
 import org.jdal.reporting.ReportDataProvider;
-import org.jdal.service.PersistentService;
 import org.jdal.swing.GuiFactory;
 import org.jdal.swing.PageableTable;
-import org.jdal.swing.report.ReportListView;
 import org.jdal.swing.View;
+import org.jdal.swing.report.ReportListView;
 import org.jdal.ui.EditorListener;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.PropertyValues;
@@ -229,11 +229,11 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 		this.name = name;
 	}
 
-	public PersistentService<T, Serializable> getPersistentService() {
+	public Dao<T, Serializable> getPersistentService() {
 		return getDataSource();
 	}
 
-	public void setPersistentService(PersistentService<T, ?extends Serializable> ps) {
+	public void setPersistentService(Dao<T, ?extends Serializable> ps) {
 		table.setDataSource(ps);
 	}
 	
@@ -285,8 +285,8 @@ public class TablePanel<T> extends JPanel implements ReportDataProvider {
 		this.reportListView = reportListView;
 	}
 
-	public PersistentService<T, Serializable> getDataSource() {
-		return (PersistentService<T, Serializable>) table.getDataSource(); 
+	public Dao<T, Serializable> getDataSource() {
+		return (Dao<T, Serializable>) table.getDataSource(); 
 	}
 
 	public Object getFilter() {

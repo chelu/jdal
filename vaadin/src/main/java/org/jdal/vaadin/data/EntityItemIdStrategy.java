@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
-import org.jdal.service.PersistentService;
 
 import com.vaadin.data.Container.ItemSetChangeEvent;
 import com.vaadin.data.Item;
@@ -58,7 +58,7 @@ public class EntityItemIdStrategy implements ItemIdStrategy {
 	public Collection<?> getItemIds() {
 		Page<Object> p = (Page<Object>) containerDataSource.getPage().clone();
 		p.setPageSize(Integer.MAX_VALUE);
-		((PersistentService<Object, Serializable>) containerDataSource.getService()).getPage(p);
+		((Dao<Object, Serializable>) containerDataSource.getService()).getPage(p);
 		return p.getData();
 	}
 

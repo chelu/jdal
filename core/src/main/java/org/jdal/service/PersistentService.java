@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2009-2014 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,16 @@
 package org.jdal.service;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.jdal.dao.Dao;
 
-
 /**
- * Base interface for persistent services.
- * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * Interface for persistence services
+ * @author Jose Luis Martin
+ * @since 1.0
+ * @deprecated Use {@link Dao} instead.
  *
  */
-public interface PersistentService<T, PK extends Serializable> extends Dao<T, PK> {
-	
-	// Collections
-	Collection<T> save(Collection<T> collection);
-	
-	void delete(Collection<T> collection);
-	
-	void deleteById(Collection<PK> ids);
+public interface PersistentService<T, PK extends Serializable> extends Dao<T, PK>{
+
 }

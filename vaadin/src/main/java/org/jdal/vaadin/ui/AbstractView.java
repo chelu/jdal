@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jdal.service.PersistentService;
+import org.jdal.dao.Dao;
 import org.jdal.ui.EditorEvent;
 import org.jdal.ui.EditorListener;
 import org.jdal.ui.ViewSupport;
@@ -41,7 +41,7 @@ public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinVi
 	
 	private Component component;
 	private List<EditorListener> editorListeners = new ArrayList<EditorListener>();
-	private PersistentService<T, ?extends Serializable> persistentService;
+	private Dao<T, ?extends Serializable> persistentService;
 	
 
 	public AbstractView() {
@@ -115,11 +115,11 @@ public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinVi
 	}
 
 	public void setPersistentService(
-			PersistentService<T, ? extends Serializable> persistentService) {
+			Dao<T, ? extends Serializable> persistentService) {
 		this.persistentService = persistentService;
 	}
 	
-	public PersistentService<T, ? extends Serializable> getPersistentService() {
+	public Dao<T, ? extends Serializable> getPersistentService() {
 		return this.persistentService;
 	}
 

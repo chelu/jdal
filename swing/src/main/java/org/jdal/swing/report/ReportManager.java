@@ -23,11 +23,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.dao.Dao;
 import org.jdal.dao.Page;
 import org.jdal.reporting.Report;
 import org.jdal.reporting.ReportingException;
 import org.jdal.reporting.datasource.PageJRDatasourceAdapter;
-import org.jdal.service.PersistentService;
 import org.jdal.util.ZipFileUtils;
 import org.jdal.util.processor.FileProcessor;
 import org.jdal.util.processor.JasperReportFileProcessor;
@@ -62,7 +62,7 @@ public abstract class ReportManager {
 	 * @param service persistent service to use
 	 * @param outputType report output type (pdf, xml)
 	 */
-	public void showReport(Report report, PersistentService<Object, Serializable> service, Object filter, String sortPropertyName, Page.Order sortOrder, String outputType) throws Exception{
+	public void showReport(Report report, Dao<Object, Serializable> service, Object filter, String sortPropertyName, Page.Order sortOrder, String outputType) throws Exception{
 		PageJRDatasourceAdapter dataSource = new PageJRDatasourceAdapter(true);
 		Page<Object> page = new Page<Object>(10, 0, sortPropertyName, sortOrder);
 		page.setFilter(filter);
