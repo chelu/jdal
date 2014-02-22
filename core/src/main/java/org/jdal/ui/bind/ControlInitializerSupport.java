@@ -101,14 +101,14 @@ public abstract class ControlInitializerSupport implements ControlInitializer {
 	/**
 	 * @return the Dao
 	 */
-	public Dao<Object, ? extends Serializable> getDao() {
+	public Dao<Object, ? extends Serializable> getPersistentService() {
 		return dao;
 	}
 
 	/**
 	 * @param Dao the Dao to set
 	 */
-	public void setDao(Dao<Object, ? extends Serializable> Dao) {
+	public void setPersistentService(Dao<Object, ? extends Serializable> Dao) {
 		this.dao = Dao;
 	}
 

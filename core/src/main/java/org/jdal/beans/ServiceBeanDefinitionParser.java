@@ -85,7 +85,7 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 			parserContext.pushContainingComponent(
 					new CompositeComponentDefinition(name, parserContext.extractSource(element)));
 		
-			// DAO
+			// Dao
 			BeanDefinitionBuilder daoBuilder  = BeanDefinitionBuilder.genericBeanDefinition(daoClassName);
 			NodeList nl = element.getElementsByTagNameNS(element.getNamespaceURI(), CRITERIA);
 			if (nl.getLength() > 0) {
@@ -99,20 +99,24 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 			
 			daoBuilder.addConstructorArgValue(ClassUtils.resolveClassName(className, null));
 			daoBuilder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
-			String daoBeanName = name  + SERVICE_SUFFIX;
+			String daoBeanName; 
 		
 			if (declareService) {
+				// use dao suffix
 				daoBeanName = name + DAO_SUFFIX;
-				// SERVICE
+				// Service
+				String serviceBeanName = name + SERVICE_SUFFIX;
 				BeanDefinitionBuilder serviceBuilder = BeanDefinitionBuilder.genericBeanDefinition(serviceClassName);
 				serviceBuilder.addPropertyReference("dao", daoBeanName);
-				String serviceBeanName = name + SERVICE_SUFFIX;
 				registerBeanDefinition(parserContext, serviceBuilder, serviceBeanName); 
 			}
-			
+			else {
+				// use service suffix for dao
+				daoBeanName = name  + SERVICE_SUFFIX;
+			}
+
 			registerBeanDefinition(parserContext, daoBuilder, daoBeanName); 
 			parserContext.popAndRegisterContainingComponent();
-					
 		}
 		
 		return null;

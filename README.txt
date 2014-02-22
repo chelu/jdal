@@ -34,7 +34,7 @@ web:               JDAL Web Library           Web Library
 COMPILE
 -------------------------------------------------------------------------------
 
-mvn package or mvn package -Dmaven.skip.test=true  (to avoid test)
+mvn package or mvn package -Dmaven.test.skip=true  (to avoid test)
 
 Test need sample database, install from jdal-samples in db/library.sql
 
