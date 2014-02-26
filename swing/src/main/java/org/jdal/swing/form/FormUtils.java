@@ -67,7 +67,7 @@ public abstract class FormUtils {
 	
 	private static final Log log = LogFactory.getLog(FormUtils.class);
 	
-	public static void link(final JComboBox primary, final JComboBox dependent, final String propertyName) {
+	public static void link(final JComboBox<?> primary, final JComboBox<?> dependent, final String propertyName) {
 		link(primary, dependent, propertyName, false);
 	}
 	
@@ -109,7 +109,7 @@ public abstract class FormUtils {
 	 * @param model ComboBoxModel
 	 * @return a list of Objects with ComboBoxModel items
 	 */
-	public static List<Object> getComboModelList(ComboBoxModel model) {
+	public static List<Object> getComboModelList(ComboBoxModel<?> model) {
 		ArrayList<Object> list = new ArrayList<Object>();
 		for (int i = 0; i < model.getSize(); i++) {
 			list.add(model.getElementAt(i));
@@ -117,10 +117,14 @@ public abstract class FormUtils {
 		return list;
 	}
 	
-	public static JComboBox newCombo(int chars) {
+	public static <T> JComboBox<T> newCombo(Class<T> clazz, int chars) {
+		return (JComboBox<T>) newCombo(chars);
+	}
+	
+	public static JComboBox<?> newCombo(int chars) {
 		StringBuilder sb = new StringBuilder(chars);
 		while (chars-- > 0) sb.append("X");
-		JComboBox combo = new JComboBox();
+		JComboBox<String> combo = new JComboBox<String>();
 		combo.setPrototypeDisplayValue(sb.toString());
 		return combo;
 	}

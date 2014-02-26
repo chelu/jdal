@@ -17,7 +17,6 @@ package org.jdal.swing.list;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.Box;
@@ -30,17 +29,17 @@ import javax.swing.ListCellRenderer;
 
 import org.jdal.swing.AbstractView;
 import org.jdal.swing.GuiFactory;
+import org.jdal.swing.View;
 import org.jdal.swing.ViewDialog;
 import org.jdal.swing.action.BeanAction;
 import org.jdal.swing.form.BoxFormBuilder;
 import org.jdal.swing.form.FormUtils;
-import org.jdal.swing.View;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * View for Lists
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 2.0
  */
 public class ListView<T> extends AbstractView<List<T>> 	{
@@ -51,8 +50,8 @@ public class ListView<T> extends AbstractView<List<T>> 	{
 	private GuiFactory guiFactory;
 	private Icon addIcon;
 	private Icon removeIcon;
-	private JList list = new JList(new ListListModel());
-	private ListCellRenderer listCellRenderer;
+	private JList<T> list = new JList<T>(new ListListModel<T>());
+	private ListCellRenderer<T> listCellRenderer;
 	private String editor;
 
 
@@ -108,7 +107,7 @@ public class ListView<T> extends AbstractView<List<T>> 	{
 			dlg.setVisible(true);
 
 			if (dlg.isAccepted()) {
-				ListListModel listModel = (ListListModel) list.getModel();
+				ListListModel<T> listModel = (ListListModel<T>) list.getModel();
 				listModel.add(view.getModel());
 			}
 		}
@@ -121,11 +120,10 @@ public class ListView<T> extends AbstractView<List<T>> 	{
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			ListListModel listModel = (ListListModel) list.getModel();
-			listModel.removeAll(Arrays.asList(list.getSelectedValues()));
+			ListListModel<T> listModel = (ListListModel<T>) list.getModel();
+			listModel.removeAll(list.getSelectedValuesList());
 		}
 	}
-
 	
 }
 

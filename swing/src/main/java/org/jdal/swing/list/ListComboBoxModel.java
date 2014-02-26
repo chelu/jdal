@@ -1,3 +1,18 @@
+/*
+ * Copyright 2008-2014 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.jdal.swing.list;
 
 import java.util.ArrayList;
@@ -7,28 +22,26 @@ import javax.swing.MutableComboBoxModel;
 
 import org.apache.commons.lang.ObjectUtils;
 
-
 /**
- * A ComboBoxModel that use a List as Container
+ * A {@link MutableComboBoxModel} that use a List as Container
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
-public class ListComboBoxModel extends ListListModel implements MutableComboBoxModel {
+public class ListComboBoxModel<T> extends ListListModel<T> implements MutableComboBoxModel<T> {
 
 	private static final long serialVersionUID = 1L;
 	private Object selectedItem;
 	private boolean allowNullSelection = true;
 	
 	public ListComboBoxModel() {
-		this(new ArrayList());
+		this(new ArrayList<T>());
 	}
 	
-	public ListComboBoxModel(List list) {
+	public ListComboBoxModel(List<T> list) {
 		this(list, true);
 	}
 
-	public ListComboBoxModel(List list, boolean allowNullSelection) {
+	public ListComboBoxModel(List<T> list, boolean allowNullSelection) {
 		super(list);
 		if (list != null && list.size() > 0)
 			setSelectedItem(list.get(0));
@@ -36,19 +49,22 @@ public class ListComboBoxModel extends ListListModel implements MutableComboBoxM
 		
 	}
 	
-	public void addElement(Object obj) {
-		getList().add(obj);
-		int index = getList().indexOf(obj);
+	@Override
+	public void addElement(T element) {
+		getList().add(element);
+		int index = getList().indexOf(element);
 		fireIntervalAdded(this, index, index);
 		
 	}
 
-	public void insertElementAt(Object obj, int index) {
-		getList().add(index, obj);
+	@Override
+	public void insertElementAt(T element, int index) {
+		getList().add(index, element);
 		fireIntervalAdded(this, index, index);
 		
 	}
 
+	@Override
 	public void removeElement(Object obj) {
 		int index = getList().indexOf(obj);
 		if (getList().remove(obj)) {
@@ -59,15 +75,18 @@ public class ListComboBoxModel extends ListListModel implements MutableComboBoxM
 		}
 	}
 
+	@Override
 	public void removeElementAt(int index) {
 		getList().remove(index);
 		
 	}
-
+	
+	@Override
 	public Object getSelectedItem() {
 		return selectedItem;
 	}
 
+	@Override
 	public void setSelectedItem(Object item) {
 		if (item == null) {
 			selectNullItem();

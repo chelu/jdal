@@ -34,7 +34,7 @@ public class ViewCancelAction<T> extends ViewAction<T> {
 	private static final String ICON = "/images/16x16/dialog-cancel.png";
 	
 	public ViewCancelAction() {
-		this.setName("Cancelar");
+		this.setName("Cancel");
 	}
 	
 	public void init() {

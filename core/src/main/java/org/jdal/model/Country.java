@@ -16,9 +16,9 @@
 package org.jdal.model;
 
 /** 
- * A Country
+ * A Country model
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 public class Country {
 

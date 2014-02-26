@@ -29,7 +29,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
  * A BeanFactoryPostProcessor that replaces configured interfaces with 
  * EasyMock Proxys for Testing.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  *
  */
 public class EasyMockReplacer implements BeanFactoryPostProcessor {

@@ -38,7 +38,7 @@ public class FieldAccessor extends AbstractControlAccessor {
 	 * {@inheritDoc}
 	 */
 	public Object getControlValue() {
-		AbstractField field = (AbstractField) getControl();
+		AbstractField<?> field = (AbstractField<?>) getControl();
 		
 		return field.getValue();
 	}
@@ -46,8 +46,9 @@ public class FieldAccessor extends AbstractControlAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	public void setControlValue(Object value) {
-		AbstractField field = (AbstractField) getControl();
+		AbstractField<Object> field = (AbstractField<Object>) getControl();
 		
 		field.setValue(value);
 		

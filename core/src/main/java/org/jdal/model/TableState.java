@@ -24,7 +24,7 @@ import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 /**
  * Hold State info for UI Tables
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 1.1
  */
 public class TableState extends Entity {

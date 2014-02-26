@@ -567,7 +567,7 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		private static final long serialVersionUID = 1L;
 
 		public OkVisibilityAction() {
-			super("Aceptar", okIcon);
+			super(messageSource.getMessage("Accept"), okIcon);
 		}
 		
 		/**
@@ -590,7 +590,7 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 		private static final long serialVersionUID = 1L;
 
 		public CancelVisibilityAction() {
-			super("Cancelar", cancelIcon);
+			super(messageSource.getMessage("Cancel"), cancelIcon);
 		}
 
 		/**

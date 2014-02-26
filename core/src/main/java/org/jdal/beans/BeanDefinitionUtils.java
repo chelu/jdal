@@ -21,7 +21,7 @@ import org.springframework.core.Conventions;
 import org.w3c.dom.Element;
 
 /**
- * Utility class for dealing with {@link BeanDefinition}
+ * Utility class for dealing with {@link BeanDefinition}s
  * 
  * @author Jose Luis Martin
  * @since 2.0

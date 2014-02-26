@@ -150,20 +150,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-catalina</artifactId>
-			<version>7.0.39</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-coyote</artifactId>
-			<version>7.0.39</version>
-		</dependency>
-		
 
 		<!-- Test dependencies -->
 		<dependency>

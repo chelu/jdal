@@ -104,18 +104,23 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 			if (declareService) {
 				// use dao suffix
 				daoBeanName = name + DAO_SUFFIX;
-				// Service
+				registerBeanDefinition(parserContext, daoBuilder, daoBeanName); 
+				
+				// register service wrapper
 				String serviceBeanName = name + SERVICE_SUFFIX;
 				BeanDefinitionBuilder serviceBuilder = BeanDefinitionBuilder.genericBeanDefinition(serviceClassName);
 				serviceBuilder.addPropertyReference("dao", daoBeanName);
 				registerBeanDefinition(parserContext, serviceBuilder, serviceBeanName); 
 			}
 			else {
-				// use service suffix for dao
+				// use service suffix for dao and declare an alias with dao suffix for compatibility with older api.
 				daoBeanName = name  + SERVICE_SUFFIX;
+				String[] aliases = new String[] { name + DAO_SUFFIX };
+				BeanComponentDefinition bcd = new BeanComponentDefinition(daoBuilder.getBeanDefinition(), 
+						daoBeanName, aliases);
+				parserContext.registerBeanComponent(bcd);
 			}
-
-			registerBeanDefinition(parserContext, daoBuilder, daoBeanName); 
+		
 			parserContext.popAndRegisterContainingComponent();
 		}
 		
@@ -128,5 +133,4 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 		parserContext.registerBeanComponent(bcd);
 	}
 }
-
 

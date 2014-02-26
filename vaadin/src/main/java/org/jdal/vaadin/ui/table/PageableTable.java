@@ -62,7 +62,7 @@ import com.vaadin.ui.Window.CloseListener;
  * table datasource and request pages using a {@link PersistentService}. </p>
  * 
  * @author Jose Luis Martin
- * @see org.jdal.service.PersistentService
+ * @see org.jdal.dao.Dao
  */
 @Configurable
 public class PageableTable<T> extends CustomComponent implements PaginatorListener, 

@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Bulk all generics in one object to avoid excesive parametrization.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin 
  */
 public class ContextPersistentManager implements Dao<Object, Serializable> {
 

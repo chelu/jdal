@@ -25,7 +25,7 @@ import javax.persistence.MappedSuperclass;
 /**
  * Base User model
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 @MappedSuperclass
 public class User {

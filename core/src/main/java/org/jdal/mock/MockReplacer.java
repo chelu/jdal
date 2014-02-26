@@ -29,7 +29,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
  * Replace singletons in configurableListableBeanFactory  
  * with mocks
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 public class MockReplacer implements BeanFactoryPostProcessor {
 	
@@ -45,10 +45,7 @@ public class MockReplacer implements BeanFactoryPostProcessor {
 	 */
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory factory)
 			throws BeansException {
-			// FIXME: Read Bean Definition and make sure 
-			// that the bean can be replaced.
-			// TODO: Is better replace the bean definition,
-			// no simply register the bean.
+
 			for (String name : replacedBeans.keySet()) {
 				Object bean = replacedBeans.get(name);
 				log.debug("Replacing Bean "
