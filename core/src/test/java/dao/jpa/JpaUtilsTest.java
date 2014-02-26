@@ -27,17 +27,16 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import org.jdal.dao.jpa.JpaUtils;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * Base test for JpaUtils
+ *  
+ * @author Jose Luis Martin
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("jpaDaos.xml")
+@Ignore
 public class JpaUtilsTest {
 
 	@PersistenceContext
