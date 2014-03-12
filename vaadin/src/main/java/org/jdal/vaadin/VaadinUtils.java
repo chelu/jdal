@@ -33,6 +33,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Window;
 
@@ -99,8 +100,19 @@ public abstract class VaadinUtils {
 		return null;
 	}
 
+	/**
+	 * Close current window.
+	 * @param panel a component in window to close.
+	 */
 	public static void closeWindow(Component panel) {
 		panel.getUI().removeWindow(getWindow(panel));
+	}
+
+	/**
+	 * Exit application
+	 */
+	public static void exit() {
+		VaadinSession.getCurrent().close();
 	}
 
 }

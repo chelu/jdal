@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2009-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.dao;
+package org.jdal.vaadin.beans;
 
-import org.jdal.model.User;
+import org.jdal.beans.SimpleBeanDefinitionParser;
+import org.jdal.vaadin.ui.action.NavigatorAction;
 
 /**
- * Interface for User DAOs
+ * BeanDefinitionParser for naviagator-action elements.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 2.0
  */
-public interface UserDao {
-	
-	/**
-	 * Find a User by username
-	 * @param username the user name
-	 * @return the User that match username
-	 */
-	User findByUsername(String username);
+public class NavigatorActionBeanDefinitionParser extends SimpleBeanDefinitionParser {
 
+	public NavigatorActionBeanDefinitionParser() {
+		super(NavigatorAction.class);
+	}
+	
 }

@@ -38,10 +38,8 @@ public class ColumnsBeanDefinitionParser extends AbstractSimpleBeanDefinitionPar
 	 * {@inheritDoc}
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
-	
-		List columns = parserContext.getDelegate().parseListElement(element, builder.getRawBeanDefinition());
+		List<Object> columns = parserContext.getDelegate().parseListElement(element, builder.getRawBeanDefinition());
 		builder.addPropertyValue("sourceList", columns);
 		builder.addPropertyValue("targetListClass", ArrayList.class);
 		builder.setScope(BeanDefinition.SCOPE_PROTOTYPE);

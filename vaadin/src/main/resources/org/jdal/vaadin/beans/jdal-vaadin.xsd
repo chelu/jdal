@@ -15,6 +15,9 @@
 	<xsd:element name="columns" type="columnSequenceType" />
 	<xsd:element name="column" type="columnType" />
 	<xsd:element name="proxy" type="proxyType" />
+	<xsd:element name="button-bar" type="buttonBarType" />
+	<xsd:element name="action" type="actionType" />
+	<xsd:element name="navigator-action" type="navigatorActionType" />
 
 	<xsd:complexType name="columnType">
 		<xsd:attribute name="name" type="xsd:string" use="required" />
@@ -208,6 +211,37 @@
 	
 	<xsd:complexType name="proxyType">
 			<xsd:attribute name="proxy-target-class" type="xsd:boolean" />
+	</xsd:complexType>
+	
+	
+	<xsd:complexType name="buttonBarType">
+		<xsd:sequence>
+			<xsd:element name="actions">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+						<xsd:any />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="native-buttons" type="xsd:boolean" />
+		<xsd:attribute name="id" type="xsd:string" />
+		<xsd:attribute name="scope" type="xsd:string" />
+	</xsd:complexType>
+	
+	<xsd:complexType name="actionType">
+		<xsd:attribute name="id" type="xsd:string" />
+		<xsd:attribute name="caption" type="xsd:string" />
+		<xsd:attribute name="icon" type="xsd:string" />
+		<xsd:attribute name="description" type="xsd:string" />
+	</xsd:complexType>
+	
+	<xsd:complexType name="navigatorActionType">
+		<xsd:complexContent>
+			<xsd:extension base="actionType">
+				<xsd:attribute name="view-name" type="xsd:string" />
+			</xsd:extension>
+		</xsd:complexContent>
 	</xsd:complexType>
 
 </xsd:schema>

@@ -18,6 +18,7 @@ package org.jdal.vaadin.ui;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;
@@ -33,6 +34,7 @@ public class SpringViewProvider implements ViewProvider {
 	
 	@Autowired
 	private BeanFactory beanFactory;
+	private String defaultView = "mainView";
 
 	@Override
 	public String getViewName(String viewAndParameters) {
@@ -42,6 +44,10 @@ public class SpringViewProvider implements ViewProvider {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public View getView(String viewName) {
+		
+		if (StringUtils.isEmpty(viewName))
+			viewName = defaultView;
+		
 		Object view  =  beanFactory.getBean(viewName);
 		
 		Component c = null;
@@ -68,6 +74,14 @@ public class SpringViewProvider implements ViewProvider {
 	 */
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
+	}
+
+	public String getDefaultView() {
+		return defaultView;
+	}
+
+	public void setDefaultView(String defaultView) {
+		this.defaultView = defaultView;
 	}
 
 

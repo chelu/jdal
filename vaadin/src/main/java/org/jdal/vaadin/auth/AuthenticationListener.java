@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2009-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.dao;
-
-import org.jdal.model.User;
+package org.jdal.vaadin.auth;
 
 /**
- * Interface for User DAOs
- * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ *
  */
-public interface UserDao {
+public interface AuthenticationListener {
 	
-	/**
-	 * Find a User by username
-	 * @param username the user name
-	 * @return the User that match username
-	 */
-	User findByUsername(String username);
-
+	void handleAuthentication(AuthenticationEvent event);
 }

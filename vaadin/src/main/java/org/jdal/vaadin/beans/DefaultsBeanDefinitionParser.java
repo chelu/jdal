@@ -99,15 +99,14 @@ public class DefaultsBeanDefinitionParser implements BeanDefinitionParser {
 
 
 	/**
-	 * Register s default CustomEditorConfigurer
+	 * Register default CustomEditorConfigurer
 	 * @return default CustomEditorComfigurer ComponentDefinition
 	 */
 	private ComponentDefinition registerPropertyEditors(Element element, ParserContext parserContext) {
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(
 				CustomEditorConfigurer.class);
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("java.awt.Image", "org.jdal.beans.ImagePropertyEditor");
-		map.put("javax.swing.Icon", "org.jdal.beans.IconPropertyEditor");
+		map.put("com.vaadin.server.Resource", "org.jdal.vaadin.beans.VaadinResourcePropertyEditor");
 		bdb.addPropertyValue("customEditors", map);
 		BeanComponentDefinition bcd = new BeanComponentDefinition(bdb.getBeanDefinition(), 
 				CUSTOM_EDITOR_CONFIGURER_BEAN_NAME);

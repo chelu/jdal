@@ -33,6 +33,8 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -42,7 +44,7 @@ import com.vaadin.ui.Window;
 /**
  * Form Utility Library
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 public abstract class FormUtils {
 	
@@ -78,8 +80,6 @@ public abstract class FormUtils {
 			
 			public void buttonClick(ClickEvent event) {
 				f.discard();
-				// what? where is window.close() ?
-				// f.getUI().getParent().removeWindow(f.getUI().getW());
 			}
 		});
 		
@@ -97,8 +97,6 @@ public abstract class FormUtils {
 			
 			public void buttonClick(ClickEvent event) {
 				f.commit();
-				// what? where is window.close() ?
-				// f.getWindow().getParent().removeWindow(f.getWindow());
 			}
 		});
 		
@@ -193,6 +191,7 @@ public abstract class FormUtils {
 	}
 
 	/**
+	 * Create a new {@link TextField}
 	 * @return new TextField with null representation set to empty string
 	 */
 	public static TextField newTextField() {
@@ -202,4 +201,28 @@ public abstract class FormUtils {
 		return tf;
 	}
 	
+	/**
+	 * Create a new {@link PasswordField}
+	 * @return new PasswordField with null representation set to emptry string.
+	 */
+	public static PasswordField newPasswordField() {
+		PasswordField pf = new PasswordField();
+		pf.setNullRepresentation("");
+		
+		return pf;
+	}
+
+	/**
+	 * Create a new {@link NativeButton} from an {@link ButtonListener}
+	 * @param action button listener
+	 * @return a new native button.
+	 */
+	public static NativeButton newNativeButton(ButtonListener action) {
+		NativeButton b = new NativeButton(action.getCaption(), action);
+		b.setIcon(action.getIcon());
+		b.setDescription(action.getDescription());
+		
+		return b;
+	}
+
 }

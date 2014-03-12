@@ -20,7 +20,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
 /**
- * A Swing like Action. Holds caption, icon and handler
+ * A Swing like Action. Holds caption and icon
  * 
  * @author Jose Luis Martin
  */

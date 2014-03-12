@@ -15,6 +15,11 @@
  */
 package org.jdal.vaadin.beans;
 
+import org.jdal.beans.ListBeanDefinitionParser;
+import org.jdal.beans.SimpleBeanDefinitionParser;
+import org.jdal.vaadin.ui.action.ExitAction;
+import org.jdal.vaadin.ui.action.NavigatorAction;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
@@ -31,7 +36,11 @@ public class JdalVaadinNamespaceHandler extends NamespaceHandlerSupport {
 		registerBeanDefinitionParser("table", new TableBeanDefinitionParser());
 		registerBeanDefinitionParser("column", new ColumnBeanDefinitionParser());
 		registerBeanDefinitionParser("editor", new EditorBeanDefinitionParser());
-		registerBeanDefinitionParser("columns", new ColumnsBeanDefinitionParser());
+		registerBeanDefinitionParser("columns", new ListBeanDefinitionParser(BeanDefinition.SCOPE_PROTOTYPE));
+		registerBeanDefinitionParser("actions", new ListBeanDefinitionParser(BeanDefinition.SCOPE_PROTOTYPE));
+		registerBeanDefinitionParser("button-bar", new ButtonBarBeanDefinitionParser());
+		registerBeanDefinitionParser("navigator-action", new SimpleBeanDefinitionParser(NavigatorAction.class));
+		registerBeanDefinitionParser("exit-action", new SimpleBeanDefinitionParser(ExitAction.class));
 		// serializable proxies
 		registerBeanDefinitionDecorator("proxy", new VaadinProxyBeanDefinitionDecorator());
 	}

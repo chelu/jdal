@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 the original author or authors.
+ * Copyright 2009-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.vaadin.ui;
+package org.jdal.vaadin.ui.action;
 
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
+import org.jdal.vaadin.VaadinUtils;
+import org.jdal.vaadin.ui.table.ButtonListener;
+
+import com.vaadin.ui.Button.ClickEvent;
 
 /**
- * A Compoenent with menu to change the main panel.
+ * Exit Action.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 2.0
  */
-public class MenuPanel extends CustomComponent {
-	
-	public static final int VERTICAL = 0;
-	public static final int HORIZONTAL = 1;
-	
-	private int layoutType = VERTICAL;
-	private Component menu;
-	private AbstractOrderedLayout main;
-	
-	
+public class ExitAction extends ButtonListener {
+
+	@Override
+	public void buttonClick(ClickEvent event) {
+		VaadinUtils.exit();
+	}
+
 }

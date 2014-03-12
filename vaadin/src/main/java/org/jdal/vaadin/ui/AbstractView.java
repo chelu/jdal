@@ -35,7 +35,8 @@ import com.vaadin.ui.Component;
  * Base class for Vaadin Views. Subclases must implements buildPanel()  method
  * to create the Vaadin component.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 2.0
  */
 public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinView<T> {
 	
