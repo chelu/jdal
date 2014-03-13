@@ -15,6 +15,8 @@
  */
 package org.jdal.vaadin.ui.table;
 
+import java.io.Serializable;
+
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -24,7 +26,7 @@ import com.vaadin.ui.Button.ClickListener;
  * 
  * @author Jose Luis Martin
  */
-public abstract class ButtonListener implements ClickListener {
+public abstract class ButtonListener implements ClickListener, Serializable {
 
 	private String caption;
 	private String description;

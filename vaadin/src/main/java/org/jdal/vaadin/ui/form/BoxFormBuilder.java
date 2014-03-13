@@ -250,4 +250,12 @@ public class BoxFormBuilder {
 		builder.setFixedHeight(true);
 	}
 
+	public boolean isDebug() {
+		return builder.isDebug();
+	}
+
+	public void setDebug(boolean debug) {
+		builder.setDebug(debug);
+	}
+
 }

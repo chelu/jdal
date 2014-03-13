@@ -59,6 +59,7 @@ public class SimpleBoxFormBuilder {
 	private boolean rowCellSpand = true;
 	private boolean fixedHeight = false;
 	private boolean fixedWidth = false;
+	private boolean debug;
 	
 	/** 
 	 * Default Ctor 
@@ -153,6 +154,11 @@ public class SimpleBoxFormBuilder {
 		else {
 			column = Box.createVerticalBox();
 			column.setSpacing(spacing);
+			column.addStyleName("jd-box-column");
+			
+			if (debug)
+				column.addStyleName("jd-box-debug");
+			
 			columns.add(column);
 			container.addComponent(column);
 			columnsWidth.add(SIZE_UNDEFINED);
@@ -252,6 +258,11 @@ public class SimpleBoxFormBuilder {
 			container.setWidth(100, Unit.PERCENTAGE);
 		}
 
+		container.addStyleName("jd-box");
+		
+		if (debug)
+			container.addStyleName("jd-box-debug");
+		
 		return container;
 	}
 	
@@ -413,6 +424,14 @@ public class SimpleBoxFormBuilder {
 
 	public void setFixedWidth(boolean fixedWidth) {
 		this.fixedWidth = fixedWidth;
+	}
+
+	public boolean isDebug() {
+		return debug;
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
 	}
 
 }

@@ -66,13 +66,11 @@ public class ViewDialog extends Window {
 		cancelAction.setCaption(StaticMessageSource.getMessage("Cancel"));
 		
 		if (view != null) {
-			HorizontalLayout wrapper = new HorizontalLayout();
-			wrapper.addComponent(view.getPanel());
 
 			BoxFormBuilder fb = new BoxFormBuilder();
 			fb.row();
 			fb.setElastic();
-			fb.add(wrapper, SimpleBoxFormBuilder.SIZE_FULL);
+			fb.add(view.getPanel(), SimpleBoxFormBuilder.SIZE_FULL);
 			fb.row();
 			fb.add(createButtonBox());
 

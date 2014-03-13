@@ -15,6 +15,7 @@
  */
 package org.jdal.vaadin.ui;
 
+import org.jdal.annotation.SerializableProxy;
 import org.jdal.auth.AuthService;
 import org.jdal.vaadin.auth.AuthenticationEvent;
 import org.jdal.vaadin.auth.AuthenticationListener;
@@ -49,6 +50,7 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 	private VerticalLayout loginLayout = new VerticalLayout();
 	private Panel mainView = new Panel();
 	@Autowired
+	@SerializableProxy
 	private AuthService authService;
 	@Autowired(required=false)
 	private ViewProvider viewProvider;
