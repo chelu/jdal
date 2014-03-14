@@ -157,7 +157,7 @@ public class SimpleBoxFormBuilder {
 			column.addStyleName("jd-box-column");
 			
 			if (debug)
-				column.addStyleName("jd-box-debug");
+				column.addStyleName("jd-box-column-debug");
 			
 			columns.add(column);
 			container.addComponent(column);

@@ -59,9 +59,12 @@ public class BoxFormBuilder {
 	}
 	
 	public void startBox() {
+		SimpleBoxFormBuilder old = builder;
 		stack.push(builder);
 		builder = new SimpleBoxFormBuilder();
 		builder.setDefaultWidth(this.defaultWidth);
+		builder.setDebug(old.isDebug());
+		builder.setDefaultRowHeight(old.getDefaultRowHeight());
 	}
 	
 	
