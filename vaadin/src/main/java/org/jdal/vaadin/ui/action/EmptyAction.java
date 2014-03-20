@@ -17,54 +17,19 @@ package org.jdal.vaadin.ui.action;
 
 import org.jdal.vaadin.ui.table.ButtonListener;
 
-import com.vaadin.navigator.Navigator;
-import com.vaadin.server.Resource;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.Button.ClickEvent;
 
 /**
- * Action that fire a navigation page change.
+ * A do nothing action.
  * 
  * @author Jose Luis Martin
  * @since 2.0
  */
-public class NavigatorAction extends ButtonListener {
-
-	/** View name to navigate to on clicks */
-	private String viewName;
-
-	
-	public NavigatorAction() {
-		super();
-	}
-
-	public NavigatorAction(String caption, Resource icon) {
-		super(caption, icon);
-	}
-
-	public NavigatorAction(String caption) {
-		super(caption);
-	}
-	
-	public NavigatorAction(String caption, Resource icon, String viewName) {
-		super(caption, icon);
-		this.viewName = viewName;
-	}
+public class EmptyAction extends ButtonListener {
 
 	@Override
 	public void buttonClick(ClickEvent event) {
-		Navigator navigator = UI.getCurrent().getNavigator();
-		
-		if (navigator != null)
-			navigator.navigateTo(viewName);
-	}
-
-	public String getViewName() {
-		return viewName;
-	}
-
-	public void setViewName(String viewName) {
-		this.viewName = viewName;
+		// do nothing
 	}
 	
 }

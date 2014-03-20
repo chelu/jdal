@@ -20,10 +20,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.jdal.vaadin.ui.action.NavigatorAction;
 import org.jdal.vaadin.ui.table.ButtonListener;
 
-import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -49,7 +47,6 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 	private List<ButtonListener> actions = new LinkedList<ButtonListener>();
 	private List<Button> buttons = new LinkedList<Button>();
 	private boolean useNativeButtons = true;
-	private Navigator navigator;
 	
 	public ButtonBar() {
 		addStyleName("jd-button-bar");
@@ -77,12 +74,7 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 	 */
 	protected void addAction(ButtonListener action) {
 		Button button = createButton(action);
-		
-		if (action instanceof NavigatorAction)
-			((NavigatorAction) action).setNavigator(this.navigator);
-		
 		button.addClickListener(this);
-		
 		this.menu.addComponent(button);
 		this.buttons.add(button);
 	}
@@ -136,18 +128,6 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 
 	public void setMain(Component main) {
 		this.main = main;
-	}
-
-	public Navigator getNavigator() {
-		return navigator;
-	}
-
-	public void setNavigator(Navigator navigator) {
-		this.navigator = navigator;
-		
-		for (ButtonListener action : this.actions)
-			if (action instanceof NavigatorAction)
-				((NavigatorAction) action).setNavigator(navigator);
 	}
 
 	public List<ButtonListener> getActions() {

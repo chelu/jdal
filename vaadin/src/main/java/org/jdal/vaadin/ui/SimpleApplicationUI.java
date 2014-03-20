@@ -62,7 +62,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 		loginView.addAuthenticationListener(this);
 		Navigator navigator = new Navigator(this, mainView);
 		navigator.addProvider(viewProvider);
-		buttonBar.setNavigator(navigator);
 		buildLogin();
 		setContent(root);
 		mainView.setStyleName(Reindeer.PANEL_LIGHT);
