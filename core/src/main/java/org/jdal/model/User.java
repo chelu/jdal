@@ -15,6 +15,7 @@
  */
 package org.jdal.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ import javax.persistence.MappedSuperclass;
  * @author Jose Luis Martin
  */
 @MappedSuperclass
-public class User {
+public class User implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -41,7 +42,7 @@ public class User {
 	/** Surname */
 	private String surname;
 	/** Register date */
-	private Date registerDate;
+	private Date registerDate = new Date();
 	/** user email */
 	private String email;
 	

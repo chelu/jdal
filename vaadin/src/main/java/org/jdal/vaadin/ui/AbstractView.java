@@ -32,7 +32,7 @@ import com.vaadin.ui.Component;
 
 /**
  * <p>
- * Base class for Vaadin Views. Subclases must implements buildPanel()  method
+ * Base class for Vaadin Views. Subclasses must implements buildPanel()  method
  * to create the Vaadin component.
  * 
  * @author Jose Luis Martin

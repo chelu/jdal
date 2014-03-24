@@ -31,6 +31,8 @@ import com.vaadin.ui.HorizontalLayout;
 public class BoxFormBuilder {
 	
 	static public int SIZE_FULL = SimpleBoxFormBuilder.SIZE_FULL;
+	static public int SIZE_UNDEFINED = SimpleBoxFormBuilder.SIZE_UNDEFINED;
+	
 	/** hold form builders */
 	private Stack<SimpleBoxFormBuilder> stack = new Stack<SimpleBoxFormBuilder>();
 	/** current form builder */
@@ -259,6 +261,22 @@ public class BoxFormBuilder {
 
 	public void setDebug(boolean debug) {
 		builder.setDebug(debug);
+	}
+	
+	public void setTabIndex(int tabIndex) {
+		builder.setTabIndex(tabIndex);
+	}
+	
+	public int getTabIndex() {
+		return builder.getTabIndex();
+	}
+
+	public boolean isUseTabIndex() {
+		return builder.isUseTabIndex();
+	}
+
+	public void setUseTabIndex(boolean useTabIndex) {
+		builder.setUseTabIndex(useTabIndex);
 	}
 
 }

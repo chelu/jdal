@@ -16,13 +16,17 @@
 package org.jdal.vaadin.ui;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.jdal.beans.StaticMessageSource;
 import org.jdal.cmd.Command;
 import org.jdal.util.comparator.PropertyComparator;
 import org.jdal.vaadin.ui.table.ButtonListener;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Alignment;
@@ -30,6 +34,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -223,6 +228,33 @@ public abstract class FormUtils {
 		b.setDescription(action.getDescription());
 		
 		return b;
+	}
+	
+	/**
+	 * Create a new DateField with format for current locale and {@link DateFormat#SHORT} style
+	 * @return a new DateField
+	 */
+	public static DateField newDateField() {
+		return newDateField(DateFormat.SHORT);
+	}
+
+	/**
+	 * Create a new DateField with format for current locale and given style.
+	 * @param style DateFormat style
+	 * @return a new DateField
+	 */
+	public static DateField newDateField(int style) {
+		DateField df = new DateField();
+		Locale locale = LocaleContextHolder.getLocale();
+		df.setLocale(locale);
+		DateFormat dateFormat = DateFormat.getDateInstance(style);
+		
+		if (dateFormat instanceof SimpleDateFormat) {
+			SimpleDateFormat sdf = (SimpleDateFormat) dateFormat;
+			df.setDateFormat(sdf.toPattern());
+		}
+		
+		return df;
 	}
 
 }

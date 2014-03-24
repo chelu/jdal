@@ -21,12 +21,15 @@ import java.util.List;
 import org.jdal.annotation.AnnotationUtils;
 import org.jdal.annotation.SerializableProxy;
 import org.jdal.aop.SerializableIntroductionInterceptor;
+import org.jdal.aop.SerializableObject;
+import org.springframework.aop.framework.Advised;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.util.ClassUtils;
 
 
 /**
@@ -50,7 +53,7 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		for (AnnotatedElement element : elements) {
 			Object value = AnnotationUtils.getValue(element, bean);
 			if (value != null) {
-				Object proxy = getProxy(value);
+				Object proxy = getProxy(value, shouldProxyTargetClass(element));
 				if (proxy != null)
 					AnnotationUtils.setValue(element, bean, proxy);
 			}
@@ -60,16 +63,20 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		return bean;
 	}
 
+	private boolean shouldProxyTargetClass(AnnotatedElement element) {
+		SerializableProxy ann = org.springframework.core.annotation.AnnotationUtils.getAnnotation(element, SerializableProxy.class);
+		return ann.proxyTargetClass();
+	}
+
 	/**
 	 * Create a serializable proxy from given object.
 	 * @param value object to proxy
 	 * @return a new serializable proxy
 	 */
-	protected Object getProxy(Object value) {
-		ProxyFactory pf = new ProxyFactory();
-		pf.setProxyTargetClass(true);
+	protected Object getProxy(Object target, boolean proxyTargetClass) {
+		ProxyFactory pf = new ProxyFactory(target);
 		pf.setExposeProxy(true);
-		pf.setTarget(value);
+		pf.setProxyTargetClass(proxyTargetClass);
 		pf.addAdvice(new SerializableIntroductionInterceptor());
 		Object proxy = pf.getProxy(beanFactory.getBeanClassLoader());
 		

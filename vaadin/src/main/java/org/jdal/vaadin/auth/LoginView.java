@@ -17,9 +17,12 @@ package org.jdal.vaadin.auth;
 
 import java.util.LinkedList;
 
+import org.jdal.annotation.SerializableProxy;
+import org.jdal.auth.AuthService;
 import org.jdal.vaadin.ui.AbstractView;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.form.BoxFormBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
@@ -29,12 +32,13 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.Reindeer;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.themes.Reindeer;
 
 /**
  * Default login window.
@@ -49,6 +53,10 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 	private Button loginButton = new Button();
 	private String applicationName = "";
 	private Resource applicationIcon;
+	@SerializableProxy
+	@Autowired
+	private AuthService authService;
+	private Label errorLabel = new Label();
 	
 	private LinkedList<AuthenticationListener> authenticationListeners = new LinkedList<AuthenticationListener>();
 	
@@ -56,6 +64,9 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		super(new Credentials());
 		setHeight(200);
 		setWidth(500);
+		errorLabel.setImmediate(true);
+		errorLabel.setSizeUndefined();
+		errorLabel.setStyleName("jd-login-error");
 		autobind();
 	}
 
@@ -86,17 +97,41 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 			}
 		});
 		
+		Image image = null;
+		HorizontalLayout imageWrapper = null;
+		
+		if (applicationIcon != null) {
+			image = new Image(null, applicationIcon);
+			image.setSizeUndefined();
+			image.setStyleName("jd-login-icon");
+			imageWrapper = new HorizontalLayout();
+			imageWrapper.setMargin(false);
+			imageWrapper.addComponent(image);
+			imageWrapper.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+		}
+		
 		BoxFormBuilder fb = new BoxFormBuilder();
 		fb.setDefaultWidth(BoxFormBuilder.SIZE_FULL);
-		
 		fb.row();
 		fb.startBox();
+		fb.setFixedHeight();
 		fb.row();
 		fb.add(greeting, Alignment.TOP_LEFT);
 		fb.add(applicationNameLabel, Alignment.TOP_RIGHT);
 		fb.endBox();
+		// add application icon
+		if (image != null) {
+			fb.row(BoxFormBuilder.SIZE_FULL);
+			fb.add(imageWrapper, BoxFormBuilder.SIZE_FULL, Alignment.MIDDLE_CENTER);
+		}
 		fb.row();
 		fb.startBox();
+		fb.row(50);
+		fb.add(errorLabel, BoxFormBuilder.SIZE_FULL, Alignment.MIDDLE_CENTER);
+		fb.endBox();
+		fb.row();
+		fb.startBox();
+		fb.setFixedHeight();
 		fb.row();
 		fb.add(username, getMessage("loginView.username"), Alignment.BOTTOM_CENTER);
 		fb.add(password, getMessage("loginView.password"), Alignment.BOTTOM_CENTER);
@@ -118,9 +153,20 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 	
 	protected void login() {
 		update();
+		errorLabel.setValue("");
+		Credentials model = getModel();
 		
-		for (AuthenticationListener al : authenticationListeners)
-			al.handleAuthentication(new AuthenticationEvent(getPanel(), getModel()));
+		if (authService.validate(model.getUsername(), model.getPassword())) {
+			for (AuthenticationListener al : authenticationListeners)
+				al.handleAuthentication(new AuthenticationEvent(getPanel(), getModel()));
+		}
+		else {
+			showErrorMessage();
+		}
+	}
+
+	protected void showErrorMessage() {
+		errorLabel.setValue(getMessage("loginFailure"));
 	}
 
 	/**

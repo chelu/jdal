@@ -28,7 +28,7 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
  * <p>
  * Note: This class includes code from {@link org.springframework.aop.scope.ScopedProxyUtils}
  * </p>
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 public class ProxyUtils {
 

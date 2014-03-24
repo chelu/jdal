@@ -27,6 +27,7 @@ import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -56,10 +57,12 @@ public class SimpleBoxFormBuilder {
 	private int defaultWidth = SIZE_UNDEFINED;
 	private MessageSource messageSource;
 	private boolean spacing = true;
-	private boolean rowCellSpand = true;
-	private boolean fixedHeight = false;
-	private boolean fixedWidth = false;
+	private boolean rowCellSpand;
+	private boolean fixedHeight;
+	private boolean fixedWidth;
 	private boolean debug;
+	private boolean useTabIndex;
+	private int tabIndex = 1;
 	
 	/** 
 	 * Default Ctor 
@@ -71,6 +74,16 @@ public class SimpleBoxFormBuilder {
 	public SimpleBoxFormBuilder(int defaultRowHeight) {
 		this.defaultRowHeight = defaultRowHeight;
 		container.setSpacing(spacing);
+	}
+	
+	public SimpleBoxFormBuilder(SimpleBoxFormBuilder other) {
+		this.defaultRowHeight = other.defaultRowHeight;
+		this.defaultWidth = other.defaultWidth;
+		this.spacing = other.spacing;
+		this.rowCellSpand = other.rowCellSpand;
+		this.debug = other.debug;
+		this.tabIndex = other.tabIndex;
+		
 	}
 	
 	/**
@@ -128,6 +141,10 @@ public class SimpleBoxFormBuilder {
 		
 		if (rowCellSpand) {
 			c.setWidth(100, Unit.PERCENTAGE);
+		}
+		
+		if (useTabIndex && c instanceof Field) {
+			((Field<?>) c).setTabIndex(tabIndex++);
 		}
 	}
 	
@@ -432,6 +449,22 @@ public class SimpleBoxFormBuilder {
 
 	public void setDebug(boolean debug) {
 		this.debug = debug;
+	}
+
+	public int getTabIndex() {
+		return tabIndex;
+	}
+
+	public void setTabIndex(int tabIndex) {
+		this.tabIndex = tabIndex;
+	}
+
+	public boolean isUseTabIndex() {
+		return useTabIndex;
+	}
+
+	public void setUseTabIndex(boolean useTabIndex) {
+		this.useTabIndex = useTabIndex;
 	}
 
 }

@@ -17,20 +17,18 @@ package org.jdal.vaadin.ui.table;
 
 import java.io.Serializable;
 
+import org.jdal.beans.MessageSourceWrapper;
 import org.jdal.dao.Page;
 import org.jdal.dao.Paginator;
 import org.jdal.dao.PaginatorListener;
 import org.jdal.vaadin.ui.AbstractView;
-import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.form.BoxFormBuilder;
-import org.jdal.vaadin.ui.form.SimpleBoxFormBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.MessageSource;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -69,8 +67,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	private ComboBox goTo = new ComboBox();
 	/** Listen buttons clicks */
 	private ButtonClickListener buttonClickListener = new ButtonClickListener();
-	@Autowired
-	private transient MessageSource messageSource;
+	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
 	
 	private String nextIconUrl = "images/table/go-next.png";
 	private String previousIconUrl = "images/table/go-previous.png";
@@ -125,14 +122,13 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	@Override
 	protected Component buildPanel() {		
 		// goto page select
-		Label goToLabel = new Label(messageSource.getMessage("vaadinPaginator.goto", null, null));
+		Label goToLabel = new Label(messageSource.getMessage("vaadinPaginator.goto"));
 		goToLabel.setSizeUndefined();
 		goToLabel.setStyleName(PAGINATOR);
 		goTo.addValueChangeListener(new GoToValueChangeListener());
 		goTo.setImmediate(true);
 		// records by page select
-		Label showRecords = new Label(messageSource.getMessage("vaadinPaginator.pageSize",
-				null, null));
+		Label showRecords = new Label(messageSource.getMessage("vaadinPaginator.pageSize"));
 		showRecords.setSizeUndefined();
 		// page size combo
 		for (String size : pageSizes) {
@@ -302,7 +298,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		// update status
 		int currentPage = getTotalPages() == 0 ? 0 : getPage();
 		status.setValue(currentPage + " / " + getTotalPages());
-		resultCount.setValue(messageSource.getMessage("vaadinPaginator.records", null, null) 
+		resultCount.setValue(messageSource.getMessage("vaadinPaginator.records") 
 				+ getModel().getCount());
 
 		// fill goto page select
@@ -482,5 +478,14 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	 */
 	public void setFirstIconUrl(String firstIconUrl) {
 		this.firstIconUrl = firstIconUrl;
+	}
+	
+	public MessageSource getMessageSource() {
+		return messageSource.getMessageSource();
+	}
+	
+	@Autowired
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource.setMessageSource(messageSource);
 	}
 }

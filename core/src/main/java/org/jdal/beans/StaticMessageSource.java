@@ -15,21 +15,20 @@
  */
 package org.jdal.beans;
 
-import java.util.Locale;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
+ * Static access to message source bean, used to avoid excessive configuration.
+ * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
  */
 public class StaticMessageSource {
 	
 	private static MessageSource messageSource = null;
-	private static Locale locale = Locale.getDefault();
 	private static final Log log = LogFactory.getLog(StaticMessageSource.class);
 	
 	private StaticMessageSource(MessageSource messageSource) {
@@ -58,7 +57,7 @@ public class StaticMessageSource {
 	public static String getMessage(String code) {
 		try {
 			return messageSource == null ?
-				code : messageSource.getMessage(code, null, locale);
+				code : messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
 		}
 		catch (Exception e) {
 			log.error(e);
@@ -73,11 +72,11 @@ public class StaticMessageSource {
 	 */
 	 public static String getMessage(MessageSourceResolvable msr) {
 		return messageSource == null ?
-				msr.getDefaultMessage() : messageSource.getMessage(msr, Locale.getDefault());
+				msr.getDefaultMessage() : messageSource.getMessage(msr, LocaleContextHolder.getLocale());
 	}
 	 
 	 
 	 public static String getMessage(String code, Object[] args) {
-		 return messageSource.getMessage(code, args, Locale.getDefault());
+		 return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
 	 }
 } 

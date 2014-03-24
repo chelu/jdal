@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
@@ -55,7 +56,7 @@ public class MessageSourceWrapper implements MessageSource {
 	public String getMessage(String code) {
 		try {
 			return messageSource == null ?
-				code : messageSource.getMessage(code, null, Locale.getDefault());
+				code : messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
 		} 
 		catch (NoSuchMessageException nsme) {
 			log.error(nsme);
@@ -71,7 +72,7 @@ public class MessageSourceWrapper implements MessageSource {
 	 */
 	public String getMessage(MessageSourceResolvable msr) {
 		return messageSource == null ?
-				msr.getDefaultMessage() : messageSource.getMessage(msr, Locale.getDefault());
+				msr.getDefaultMessage() : messageSource.getMessage(msr, LocaleContextHolder.getLocale());
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class MessageSourceWrapper implements MessageSource {
 	 * @param args
 	 */
 	public String getMessage(String code, Object[] args) {
-		return getMessage(code, args, "", Locale.getDefault());
+		return getMessage(code, args, "", LocaleContextHolder.getLocale());
 	}
 
 
@@ -142,7 +143,7 @@ public class MessageSourceWrapper implements MessageSource {
 			return false;
 		
 		try {
-			messageSource.getMessage(code, null, Locale.getDefault());
+			messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
 			return true;
 		} 
 		catch (NoSuchMessageException nsme) {

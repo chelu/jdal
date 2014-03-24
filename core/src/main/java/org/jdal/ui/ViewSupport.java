@@ -50,6 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -95,8 +96,6 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	private ControlAccessorFactory controlAccessorFactory;
 	/** hold binders */
 	private CompositeBinder<T> binder = new CompositeBinder<T>();
-	/** if true, do an automatic binding using property names */
-	private boolean autobinding = false;
 	/** Set with property names to ingnore on binding commands */
 	private Set<String> ignoredProperties = new HashSet<String>();
 	/** data model */
@@ -396,6 +395,17 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	}
 	
 	/**
+	 * Add a binding error 
+	 * @param error error to add
+	 */
+	public void addError(ObjectError error) {
+		if (errors == null)
+			createBindingResult();
+		
+		errors.addError(error);
+	}
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
@@ -492,7 +502,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	protected String getMessage(String code, Locale locale) {
 		try {
 			return messageSource == null ?
-				code : messageSource.getMessage(code, null, Locale.getDefault());
+				code : messageSource.getMessage(code, null, locale);
 		} 
 		catch (NoSuchMessageException nsme) {
 			log.error(nsme);
@@ -508,7 +518,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	 */
 	protected String getMessage(MessageSourceResolvable msr) {
 		return messageSource == null ?
-				msr.getDefaultMessage() : messageSource.getMessage(msr, Locale.getDefault());
+				msr.getDefaultMessage() : messageSource.getMessage(msr, LocaleContextHolder.getLocale());
 	}
 	
 	
@@ -680,20 +690,6 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	 */
 	public void setControlAccessorFactory(ControlAccessorFactory controlAccessorFactory) {
 		this.controlAccessorFactory = controlAccessorFactory;
-	}
-
-	/**
-	 * @return the autobinding
-	 */
-	public boolean isAutobinding() {
-		return autobinding;
-	}
-
-	/**
-	 * @param autobinding the autobinding to set
-	 */
-	public void setAutobinding(boolean autobinding) {
-		this.autobinding = autobinding;
 	}
 	
 	/**

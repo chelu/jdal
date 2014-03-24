@@ -50,9 +50,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 	private VerticalLayout loginLayout = new VerticalLayout();
 	private Panel mainView = new Panel();
 	@Autowired
-	@SerializableProxy
-	private AuthService authService;
-	@Autowired(required=false)
 	private ViewProvider viewProvider;
 
 	@Override
@@ -103,14 +100,12 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 	
 	protected void addStyleNames() {
 		root.addStyleName("jd-app-root");
+		top.addStyleName("jd-app-top");
 	}
 
 	@Override
 	public void handleAuthentication(AuthenticationEvent event) {
-		Credentials c = event.getCredentials();
-		
-		if (authService != null && authService.validate(c.getUsername(), c.getPassword()))
-			buildMain();
+		buildMain();
 	}
 
 	public ButtonBar getButtonBar() {
@@ -135,14 +130,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 
 	public void setMainView(Panel mainView) {
 		this.mainView = mainView;
-	}
-
-	public AuthService getAuthService() {
-		return authService;
-	}
-
-	public void setAuthService(AuthService authService) {
-		this.authService = authService;
 	}
 
 	public ViewProvider getViewProvider() {
