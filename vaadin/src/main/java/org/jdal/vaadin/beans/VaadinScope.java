@@ -36,7 +36,7 @@ import com.vaadin.ui.UI;
 /**
  * Spring scope for Vaadin.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 public class VaadinScope implements Scope, DetachListener {
 	

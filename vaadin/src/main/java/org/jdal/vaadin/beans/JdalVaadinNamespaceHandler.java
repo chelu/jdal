@@ -41,8 +41,6 @@ public class JdalVaadinNamespaceHandler extends NamespaceHandlerSupport {
 		registerBeanDefinitionParser("button-bar", new ButtonBarBeanDefinitionParser());
 		registerBeanDefinitionParser("navigator-action", new SimpleBeanDefinitionParser(NavigatorAction.class));
 		registerBeanDefinitionParser("exit-action", new SimpleBeanDefinitionParser(ExitAction.class));
-		// serializable proxies
-		registerBeanDefinitionDecorator("proxy", new VaadinProxyBeanDefinitionDecorator());
 	}
 
 }
