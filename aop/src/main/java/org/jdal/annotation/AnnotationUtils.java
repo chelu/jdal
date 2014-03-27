@@ -32,12 +32,13 @@ import org.springframework.util.ReflectionUtils.MethodCallback;
 
 
 /**
- * Utility class for dealing with annotations
+ * Utility class for dealing with annotations, add some methods
+ * to spring core utility class.
  * 
  * @author Jose Luis Martin.
  * @since 2.0
  */
-public abstract class AnnotationUtils {
+public abstract class AnnotationUtils extends org.springframework.core.annotation.AnnotationUtils {
 	
 	private static final Log log = LogFactory.getLog(AnnotationUtils.class);
 

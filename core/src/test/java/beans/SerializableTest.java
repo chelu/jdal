@@ -49,4 +49,5 @@ public class SerializableTest {
 		 SerializableBean deserialized = (SerializableBean) Serializer.deSerialize(bytes);
 		 Assert.assertEquals("", sbean.getTransactionalBean(), deserialized.getTransactionalBean());
 	 }
+	 
 }

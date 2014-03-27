@@ -15,11 +15,8 @@
  */
 package org.jdal.vaadin.ui;
 
-import org.jdal.annotation.SerializableProxy;
-import org.jdal.auth.AuthService;
 import org.jdal.vaadin.auth.AuthenticationEvent;
 import org.jdal.vaadin.auth.AuthenticationListener;
-import org.jdal.vaadin.auth.Credentials;
 import org.jdal.vaadin.auth.LoginView;
 import org.springframework.beans.factory.annotation.Autowired;
 

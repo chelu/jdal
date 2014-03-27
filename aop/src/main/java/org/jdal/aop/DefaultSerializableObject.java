@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.util.ObjectUtils;
 
 
@@ -31,6 +33,7 @@ import org.springframework.util.ObjectUtils;
  */
 public class DefaultSerializableObject implements SerializableObject {
 	
+	private static final Log log = LogFactory.getLog(DefaultSerializableObject.class);
 	private static final Map<String, Object> serializedObjects = new ConcurrentHashMap<String, Object>();
 	private Object serializedObject;
 	
@@ -55,10 +58,18 @@ public class DefaultSerializableObject implements SerializableObject {
 		public SerializedReference(Object obj) {
 			this.id = ObjectUtils.identityToString(obj);
 			serializedObjects.put(id, obj);
+			
+			if (log.isDebugEnabled())
+				log.debug("Added new serialized reference. serialized objects size [" + serializedObjects.size() + "]");
 		}
 		
 		private Object readResolve() {
-			return serializedObjects.remove(this.id);
+			Object ret = serializedObjects.remove(this.id);
+			
+			if (log.isDebugEnabled())
+				log.debug("Removed a serialized reference. serialized objects size [" + serializedObjects.size() + "]");
+	
+			return ret;
 		}
 	}
 

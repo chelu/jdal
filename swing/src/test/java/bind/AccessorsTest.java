@@ -60,7 +60,7 @@ public class AccessorsTest extends TestCase implements ControlChangeListener {
 	
 	@Test
 	public void testComboAccessor() {
-		JComboBox combo = new JComboBox(TEST_LIST);
+		JComboBox<Object> combo = new JComboBox<Object>(TEST_LIST);
 		ComboAccessor accessor = new ComboAccessor(combo);
 		accessor.addControlChangeListener(this);
 		combo.setSelectedItem(2);
@@ -72,10 +72,10 @@ public class AccessorsTest extends TestCase implements ControlChangeListener {
 	
 	@Test
 	public void testListAccessor() {
-		JList list = new JList();
+		JList<Object> list = new JList<Object>();
 		ListAccessor accessor = new ListAccessor(list);
 		accessor.addControlChangeListener(this);
-		list.setModel(new ListListModel(Arrays.asList(TEST_LIST)));
+		list.setModel(new ListListModel<Object>(Arrays.asList(TEST_LIST)));
 		assertEquals(Arrays.asList(TEST_LIST), accessor.getControlValue());
 		assertTrue(listened);
 		listened = false;

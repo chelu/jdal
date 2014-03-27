@@ -53,13 +53,16 @@ public abstract class VaadinUtils {
 	}
 	
 	public static HttpSession getSession() {
-		return (HttpSession) RequestContextHolder.getRequestAttributes()
-				.resolveReference(RequestAttributes.REFERENCE_SESSION);
+		RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+		
+		return (HttpSession) (ra != null ? ra.resolveReference(RequestAttributes.REFERENCE_SESSION) : null);
 	}
 	
 	
 	public static ServletContext getServletContext() {
-		return getSession().getServletContext();
+		HttpSession session = getSession();
+		
+		return session != null ? session.getServletContext() : null;
 	}
 	
 	public static String getResourceAsString(String relativePath) {

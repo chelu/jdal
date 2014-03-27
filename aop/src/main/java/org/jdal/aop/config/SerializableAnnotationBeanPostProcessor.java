@@ -15,21 +15,23 @@
  */
 package org.jdal.aop.config;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.jdal.annotation.AnnotationUtils;
 import org.jdal.annotation.SerializableProxy;
-import org.jdal.aop.SerializableIntroductionInterceptor;
+import org.jdal.aop.ProxyUtils;
 import org.jdal.aop.SerializableObject;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
-import org.springframework.util.ClassUtils;
 
 
 /**
@@ -47,13 +49,27 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
 			throws BeansException {
+		
+		if (bean instanceof AopInfrastructureBean)
+			return bean;
+		
+		SerializableProxy ann = AnnotationUtils.findAnnotation(bean.getClass(), SerializableProxy.class);
+		
+		if (ann != null) {
+			boolean proxyTargetClass = !beanFactory.getType(beanName).isInterface() || ann.proxyTargetClass();
+			return getProxy(bean, proxyTargetClass, ann.useCache(), null, beanName);
+		}
 
 		List<AnnotatedElement> elements = AnnotationUtils.findAnnotatedElements(SerializableProxy.class, bean.getClass());
 		
 		for (AnnotatedElement element : elements) {
+			Field f = (Field) element;
 			Object value = AnnotationUtils.getValue(element, bean);
-			if (value != null) {
-				Object proxy = getProxy(value, shouldProxyTargetClass(element));
+			if (value != null && !(value instanceof SerializableObject)) {
+				ann = org.springframework.core.annotation.AnnotationUtils.getAnnotation(element, SerializableProxy.class);
+				boolean proxyTargetClass = !f.getType().isInterface() || ann.proxyTargetClass();
+				Object proxy = getProxy(value, proxyTargetClass, ann.useCache(), 
+						getDependencyDescriptor(element), beanName);
 				if (proxy != null)
 					AnnotationUtils.setValue(element, bean, proxy);
 			}
@@ -62,32 +78,41 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		
 		return bean;
 	}
-
-	private boolean shouldProxyTargetClass(AnnotatedElement element) {
-		SerializableProxy ann = org.springframework.core.annotation.AnnotationUtils.getAnnotation(element, SerializableProxy.class);
-		return ann.proxyTargetClass();
-	}
-
+	
 	/**
 	 * Create a serializable proxy from given object.
 	 * @param value object to proxy
 	 * @return a new serializable proxy
 	 */
-	protected Object getProxy(Object target, boolean proxyTargetClass) {
-		ProxyFactory pf = new ProxyFactory(target);
-		pf.setExposeProxy(true);
-		pf.setProxyTargetClass(proxyTargetClass);
-		pf.addAdvice(new SerializableIntroductionInterceptor());
-		Object proxy = pf.getProxy(beanFactory.getBeanClassLoader());
-		
-		return proxy;
+	protected Object getProxy(Object target, boolean proxyTargetClass, boolean useCache,
+			DependencyDescriptor descriptor, String beanName) {
+		return ProxyUtils.createSerializableProxy(target, proxyTargetClass, useCache, 
+				beanFactory, descriptor, beanName);
 	}
 
+	public BeanFactory getBeanFactory() {
+		return this.beanFactory;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
+	}
+
+
+
+	@Override
+	public PropertyValues postProcessPropertyValues(PropertyValues pvs,
+			PropertyDescriptor[] pds, Object bean, String beanName)
+			throws BeansException {
+
+		return super.postProcessPropertyValues(pvs, pds, bean, beanName);
+	}
+	
+	protected DependencyDescriptor getDependencyDescriptor(AnnotatedElement ae) {
+		return new DependencyDescriptor((Field) ae, false);
 	}
 }

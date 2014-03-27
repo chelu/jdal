@@ -17,19 +17,27 @@ package org.jdal.aop;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.IntroductionInterceptor;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.aop.support.IntroductionInfoSupport;
 
 /**
  * Introducction interceptor for serializable objects.
  * 
- * @author Jose Luis Martin 
+ * @author Jose Luis Martin
+ * @since 2.0
  */
 public class SerializableIntroductionInterceptor extends IntroductionInfoSupport 
 	implements IntroductionInterceptor {
 	
+	private SerializableReference reference;
+	
 	public SerializableIntroductionInterceptor() {
-		this.publishedInterfaces.add(SerializableObject.class);
+		this(null);
+		
+	}
+
+	public SerializableIntroductionInterceptor(SerializableReference reference) {
+		this.reference = reference;
+		this.publishedInterfaces.add(SerializableObject.class);;
 	}
 
 	/**
@@ -38,8 +46,8 @@ public class SerializableIntroductionInterceptor extends IntroductionInfoSupport
 	@Override
 	public Object invoke(MethodInvocation mi) throws Throwable {
 		if (isMethodOnIntroducedInterface(mi)) {
-			SerializableObject so = new DefaultSerializableObject(AopContext.currentProxy());
-			return so.writeReplace();
+			reference.serialize();
+			return reference;
 		}
 		
 		return mi.proceed();

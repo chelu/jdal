@@ -15,24 +15,24 @@
  */
 package org.jdal.aop.config;
 
+import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
-import org.jdal.aop.DefaultSerializableObject;
+import org.jdal.aop.SerializableTargetSource;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.aop.framework.ProxyConfig;
 import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.support.DelegatingIntroductionInterceptor;
-import org.springframework.aop.target.SingletonTargetSource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.util.ClassUtils;
 
 /**
- * ProxyFactoryBean to make serializable proxy for non serializable objects.
+ * ProxyFactoryBean to make serializable proxy for non serializable beans, including
+ * prototypes.
  * <p>
  * Note: This class includes code from {@link org.springframework.aop.scope.ScopedProxyFactoryBean}
  * </p>
@@ -43,17 +43,16 @@ import org.springframework.util.ClassUtils;
 public class SerializableProxyFactoryBean  extends ProxyConfig implements FactoryBean<Object>,
 	BeanFactoryAware {
 
-	private ConfigurableBeanFactory beanFactory;
-	private boolean singleton = false;
+	private ConfigurableListableBeanFactory beanFactory;
+	private boolean singleton;
 	private String targetBeanName;
 	private TargetSource targetSource;
-	
+
 	public SerializableProxyFactoryBean() {
 		setProxyTargetClass(true);
 	}
 
 	public Object getObject() throws Exception {
-
 		targetSource = createTargetSource();
 		ProxyFactory pf = new ProxyFactory();
 		pf.copyFrom(this);
@@ -67,39 +66,31 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 		if (!isProxyTargetClass() || beanType.isInterface() || Modifier.isPrivate(beanType.getModifiers())) {
 			pf.setInterfaces(ClassUtils.getAllInterfacesForClass(beanType, beanFactory.getBeanClassLoader()));
 		}
-		
-		DefaultSerializableObject  dso = new DefaultSerializableObject();
-		pf.addAdvice(new DelegatingIntroductionInterceptor(dso));
 
+		pf.addInterface(Serializable.class);
 		pf.addInterface(AopInfrastructureBean.class);
 
-		Object proxy =  pf.getProxy(beanFactory.getBeanClassLoader());
-		dso.setSerializedObject(proxy);
-		
-		return proxy;
+		return  pf.getProxy(beanFactory.getBeanClassLoader());
 	}
 
-	/**
-	 * @return
-	 */
 	protected TargetSource createTargetSource() {
-		return new SingletonTargetSource(beanFactory.getBean(targetBeanName));
+		return new SerializableTargetSource(this.beanFactory, this.targetBeanName);
 	}
 
 	public Class<?> getObjectType() {
 		if (targetSource != null)
 			return targetSource.getTargetClass();
-		
+
 		if (beanFactory != null) 
 			return beanFactory.getType(targetBeanName);
-		
+
 		return null;
 	}
 
 	public boolean isSingleton() {
 		return singleton;
 	}
-	
+
 	public void setSingleton(boolean singleton) {
 		this.singleton = singleton;
 	}
@@ -109,7 +100,7 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	 */
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		this.beanFactory = (ConfigurableBeanFactory) beanFactory;
+		this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
 	}
 
 	public String getTargetBeanName() {
@@ -119,5 +110,6 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	public void setTargetBeanName(String targetBeanName) {
 		this.targetBeanName = targetBeanName;
 	}
+
 }
 

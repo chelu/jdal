@@ -15,78 +15,31 @@
  */
 package org.jdal.aop;
 
-import java.io.Serializable;
-
-import org.springframework.aop.TargetSource;
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
+import org.springframework.aop.target.AbstractBeanFactoryBasedTargetSource;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
- * SingletonTargetSource that use a SerializableObject to wrap the target
- * to avoid serialization issues in a container.
- * <p>
- * Note: This class includes code from {@link org.springframework.aop.target.SingletonTargetSource}
- * </p>
+ * SimpleBeanTargetSource that use a transient target to avoid serialization issues 
+ * in a container with prototypes beans.
  * 
  * @author Jose Luis Martin
  * @since 2.0
  */
-public class SerializableTargetSource implements TargetSource, Serializable {
+public class SerializableTargetSource extends AbstractBeanFactoryBasedTargetSource  {
 	
-	private final DefaultSerializableObject target;
+	private transient Object target;
 
-	
-	public SerializableTargetSource(Object target) {
-		Assert.notNull(target, "Target object must not be null");
-		this.target = new DefaultSerializableObject(target);
-	}
-
-
-	public Class<?> getTargetClass() {
-		return this.target.getSerializedObject().getClass();
+	public SerializableTargetSource(BeanFactory beanFactory, String targetBeanName) {
+		setTargetBeanName(targetBeanName);
+		setBeanFactory(beanFactory);
 	}
 	
-	public Object getTarget() {
-		return this.target.getSerializedObject();
-	}
-	
-	public void releaseTarget(Object target) {
-		// nothing to do
-	}
-
-	public boolean isStatic() {
-		return true;
-	}
-
-
-	/**
-	 * Two invoker interceptors are equal if they have the same target or if the
-	 * targets or the targets are equal.
-	 */
 	@Override
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof SerializableTargetSource)) {
-			return false;
-		}
-		SerializableTargetSource otherTargetSource = (SerializableTargetSource) other;
-		return this.target.getSerializedObject().equals(otherTargetSource.target.getSerializedObject());
+	public Object getTarget() throws Exception {
+		if (target == null)
+			target = this.getBeanFactory().getBean(getTargetBeanName());
+		
+		return target;
 	}
-
-	/**
-	 * SerializableTargetSource uses the hash code of the target object.
-	 */
-	@Override
-	public int hashCode() {
-		return this.target.getSerializedObject().hashCode();
-	}
-
-	@Override
-	public String toString() {
-		return "SerializableTargetSource for target object [" + ObjectUtils.identityToString(this.target.getSerializedObject()) + "]";
-	}
-
 
 }

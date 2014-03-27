@@ -15,13 +15,21 @@
  */
 package org.jdal.aop;
 
+import java.lang.reflect.Modifier;
+
 import org.jdal.aop.config.SerializableProxyFactoryBean;
+import org.springframework.aop.framework.AopInfrastructureBean;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.util.ClassUtils;
 
 /**
  * Utility class for creating proxy bean definitions.
@@ -82,5 +90,40 @@ public class ProxyUtils {
 	public static String getTargetBeanName(String originalBeanName) {
 		return TARGET_NAME_PREFIX + originalBeanName;
 	}
-
+	
+	
+	/**
+	 * Create a new Serializable proxy for the given target
+	 * @param target target to proxy
+	 * @param proxyTargetClass true to force CGLIB proxies
+	 * @param classLoader ClassLoader to use
+	 * @return a new serializable proxy
+	 */
+	public static Object createSerializableProxy(Object target, boolean proxyTargetClass, boolean useMemoryCache,
+			ConfigurableListableBeanFactory beanFactory, DependencyDescriptor descriptor, String beanName) 
+	{
+		ProxyFactory pf = new ProxyFactory(target);
+		pf.setExposeProxy(true);
+		SerializableReference reference = new SerializableReference(target, proxyTargetClass, useMemoryCache, 
+				beanFactory, descriptor,  beanName);
+		pf.addAdvice(new SerializableIntroductionInterceptor(reference));
+		pf.setProxyTargetClass(proxyTargetClass);
+		Object proxy = pf.getProxy(beanFactory.getBeanClassLoader());
+		
+		return proxy;
+	}
+	
+	public static Object createSerializableProxy(Object target, boolean proxyTargetClass, 
+			boolean useMemoryCache, ConfigurableListableBeanFactory beanFactory, String targetBeanName) {
+		
+		ProxyFactory pf = new ProxyFactory(target);
+		pf.setExposeProxy(true);
+		SerializableReference reference = new SerializableReference(target, proxyTargetClass, useMemoryCache, 
+				beanFactory, targetBeanName);
+		pf.addAdvice(new SerializableIntroductionInterceptor(reference));
+		pf.setProxyTargetClass(proxyTargetClass);
+		Object proxy = pf.getProxy(beanFactory.getBeanClassLoader());
+		
+		return proxy;
+	}
 }

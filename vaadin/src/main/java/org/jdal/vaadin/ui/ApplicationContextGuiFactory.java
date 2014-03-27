@@ -17,6 +17,8 @@ package org.jdal.vaadin.ui;
 
 import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -26,38 +28,38 @@ import com.vaadin.ui.Component;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class ApplicationContextGuiFactory implements GuiFactory, ApplicationContextAware {
+public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAware {
 	
 	public static final String VIEW_DIALOG = "viewDialog";
 	
-	protected ApplicationContext applicationContext;
+	protected BeanFactory beanFactory;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Component getComponent(String name) {
-		return (Component) applicationContext.getBean(name);
+		return (Component) beanFactory.getBean(name);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
+	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+		this.beanFactory = beanFactory;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public VaadinView<?> getView(String name) {
-		return (VaadinView<?>) applicationContext.getBean(name);
+		return (VaadinView<?>) beanFactory.getBean(name);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public ViewDialog newViewDialog() {
 		ViewDialog dlg = null;
 		try {
-			dlg = applicationContext.getBean(VIEW_DIALOG, ViewDialog.class);
+			dlg = beanFactory.getBean(VIEW_DIALOG, ViewDialog.class);
 		}
 		catch(BeansException be)  {
 			
@@ -77,6 +79,5 @@ public class ApplicationContextGuiFactory implements GuiFactory, ApplicationCont
 		
 		return dlg;
 	}
-	
 
 }
