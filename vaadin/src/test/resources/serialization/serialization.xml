@@ -90,9 +90,7 @@
 		<jdal:serializable-proxy/>
 	</bean>
 	
-	<bean id="b2" class="serialization.Bean">
-		<jdal:serializable-proxy/>
-	</bean>
+	<bean id="b2" class="serialization.Bean" />
 	
 
 </beans>

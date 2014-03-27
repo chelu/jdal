@@ -28,18 +28,25 @@ import org.springframework.beans.factory.BeanFactory;
 public class SerializableTargetSource extends AbstractBeanFactoryBasedTargetSource  {
 	
 	private transient Object target;
+	private boolean cacheTargetObject;
 
-	public SerializableTargetSource(BeanFactory beanFactory, String targetBeanName) {
+	public SerializableTargetSource(BeanFactory beanFactory, String targetBeanName, 
+			boolean cacheTargetObject ) {
 		setTargetBeanName(targetBeanName);
 		setBeanFactory(beanFactory);
+		this.cacheTargetObject = cacheTargetObject;
 	}
 	
 	@Override
 	public Object getTarget() throws Exception {
-		if (target == null)
-			target = this.getBeanFactory().getBean(getTargetBeanName());
+		if (cacheTargetObject) {
+			if (target == null)
+				target = getBeanFactory().getBean(getTargetBeanName());
 		
-		return target;
+			return target;
+		}
+		
+		return getBeanFactory().getBean(getTargetBeanName());
 	}
 
 }

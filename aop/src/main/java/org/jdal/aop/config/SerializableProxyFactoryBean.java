@@ -47,12 +47,27 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	private boolean singleton;
 	private String targetBeanName;
 	private TargetSource targetSource;
+	private Object proxy;
 
 	public SerializableProxyFactoryBean() {
 		setProxyTargetClass(true);
 	}
 
 	public Object getObject() throws Exception {
+		if (isSingleton()) {
+			if (proxy == null)
+				proxy = createProxy();
+			
+			return proxy;
+		}
+		
+		return createProxy();
+	}
+
+	/**
+	 * @return
+	 */
+	private Object createProxy() {
 		targetSource = createTargetSource();
 		ProxyFactory pf = new ProxyFactory();
 		pf.copyFrom(this);
@@ -74,7 +89,7 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	}
 
 	protected TargetSource createTargetSource() {
-		return new SerializableTargetSource(this.beanFactory, this.targetBeanName);
+		return new SerializableTargetSource(this.beanFactory, this.targetBeanName, !isSingleton());
 	}
 
 	public Class<?> getObjectType() {

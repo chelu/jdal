@@ -50,14 +50,16 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
 			throws BeansException {
 		
-		if (bean instanceof AopInfrastructureBean)
+		if (bean instanceof SerializableObject || 
+				bean instanceof AopInfrastructureBean || 
+				beanName.startsWith(ProxyUtils.TARGET_NAME_PREFIX))
 			return bean;
 		
 		SerializableProxy ann = AnnotationUtils.findAnnotation(bean.getClass(), SerializableProxy.class);
 		
 		if (ann != null) {
 			boolean proxyTargetClass = !beanFactory.getType(beanName).isInterface() || ann.proxyTargetClass();
-			return getProxy(bean, proxyTargetClass, ann.useCache(), null, beanName);
+			return ProxyUtils.createSerializableProxy(bean, proxyTargetClass, ann.useCache(), beanFactory, beanName);
 		}
 
 		List<AnnotatedElement> elements = AnnotationUtils.findAnnotatedElements(SerializableProxy.class, bean.getClass());

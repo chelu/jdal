@@ -15,21 +15,16 @@
  */
 package org.jdal.aop;
 
-import java.lang.reflect.Modifier;
-
 import org.jdal.aop.config.SerializableProxyFactoryBean;
-import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.util.ClassUtils;
 
 /**
  * Utility class for creating proxy bean definitions.
@@ -40,7 +35,7 @@ import org.springframework.util.ClassUtils;
  */
 public class ProxyUtils {
 
-	private static final String TARGET_NAME_PREFIX = "serializableProxy.";
+	public static final String TARGET_NAME_PREFIX = "jdalSerializableProxy.";
 
 	public static  BeanDefinitionHolder createSerializableProxy(BeanDefinitionHolder definition,
 			BeanDefinitionRegistry registry, boolean proxyTargetClass) {
@@ -73,7 +68,7 @@ public class ProxyUtils {
 		}
 		
 		// Set singleton property of FactoryBean
-		proxyDefinition.getPropertyValues().add("singleton", targetDefinition.isSingleton());
+		proxyDefinition.getPropertyValues().add("singleton", !targetDefinition.isPrototype());
 
 		// The target bean should be ignored in favor of the scoped proxy.
 		targetDefinition.setAutowireCandidate(false);
@@ -102,6 +97,9 @@ public class ProxyUtils {
 	public static Object createSerializableProxy(Object target, boolean proxyTargetClass, boolean useMemoryCache,
 			ConfigurableListableBeanFactory beanFactory, DependencyDescriptor descriptor, String beanName) 
 	{
+		if (target instanceof SerializableObject)
+			return target;
+		
 		ProxyFactory pf = new ProxyFactory(target);
 		pf.setExposeProxy(true);
 		SerializableReference reference = new SerializableReference(target, proxyTargetClass, useMemoryCache, 
@@ -115,6 +113,9 @@ public class ProxyUtils {
 	
 	public static Object createSerializableProxy(Object target, boolean proxyTargetClass, 
 			boolean useMemoryCache, ConfigurableListableBeanFactory beanFactory, String targetBeanName) {
+		
+		if (target instanceof SerializableObject)
+			return target;
 		
 		ProxyFactory pf = new ProxyFactory(target);
 		pf.setExposeProxy(true);

@@ -47,7 +47,6 @@ public class ProxySerializationTest {
 	private Bean b1;
 	@Resource 
 	private Bean b2;
-	
 	@Autowired
 	private TestUI testUI;
 	@Autowired
@@ -57,8 +56,10 @@ public class ProxySerializationTest {
 	public void testProxySerialization() {
 		Bean ser = (Bean) serialize(b1);
 		assertNotNull(ser.getAuthorPageableTable());
-		Bean other = (Bean) serialize(b2);
+		Bean other = (Bean) serialize(ser);
 		assertNotNull(other.getAuthorPageableTable());
+		Bean another = (Bean) serialize(b2);
+		assertNotNull(another.getAuthorPageableTable());
 	}
 	
 	private Object serialize(Object obj) {
@@ -77,11 +78,10 @@ public class ProxySerializationTest {
 	@Test
 	public void testScopedProxy() {
 		ProxyFactory pf = new ProxyFactory();
-		pf.setTargetSource(new SerializableTargetSource(beanFactory, "bean"));
+		pf.setTargetSource(new SerializableTargetSource(beanFactory, "b2", true));
 		pf.setProxyTargetClass(true);
 		pf.addInterface(Serializable.class);
-		Bean ser = (Bean) serialize(pf.getProxy());
-		System.out.println(ser.getAuthorPageableTable());
+		serialize(pf.getProxy());
 	}
 
 }
