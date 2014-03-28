@@ -26,14 +26,14 @@
 	
      <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
       <property name="dataSource" ref="dataSource"/>
-      <property name="packagesToScan" value="org.jdal.samples.model" />
+      <property name="packagesToScan" value="org.jdal.test.model" />
 
 	  <property name="jpaDialect">
         <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
      </property>
      <property name="jpaVendorAdapter">
        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-         <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>
+         <property name="databasePlatform" value="org.hibernate.dialect.H2Dialect"/>
        </bean>
      </property>
     </bean>
@@ -59,7 +59,7 @@
 	<vaadin:defaults />
 	
 	<bean class="org.jdal.aop.config.SerializableAnnotationBeanPostProcessor" />
-	
+	<bean id="serializableProxyAdvisor" class="org.jdal.aop.SerializableProxyAdvisor" scope="prototype" />
 	<bean id="testUI" class="serialization.TestUI" scope="prototype" />
 	
 	<bean id="viewProvider" class="org.jdal.vaadin.ui.SpringViewProvider" scope="prototype" />
@@ -87,10 +87,11 @@
 	</vaadin:table>
 	
 	<bean id="b1" class="serialization.Bean">
-		<jdal:serializable-proxy/>
+		<jdal:serializable-proxy />
 	</bean>
 	
 	<bean id="b2" class="serialization.Bean" />
 	
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
 
 </beans>

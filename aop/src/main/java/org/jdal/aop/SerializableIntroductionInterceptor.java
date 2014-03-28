@@ -25,31 +25,41 @@ import org.springframework.aop.support.IntroductionInfoSupport;
  * @author Jose Luis Martin
  * @since 2.0
  */
-public class SerializableIntroductionInterceptor extends IntroductionInfoSupport 
+public class SerializableIntroductionInterceptor extends IntroductionInfoSupport
 	implements IntroductionInterceptor {
 	
 	private SerializableReference reference;
 	
 	public SerializableIntroductionInterceptor() {
-		this(null);
+		this(new SerializableReference());
 		
 	}
 
 	public SerializableIntroductionInterceptor(SerializableReference reference) {
 		this.reference = reference;
-		this.publishedInterfaces.add(SerializableObject.class);;
+		this.publishedInterfaces.add(SerializableObject.class);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Object invoke(MethodInvocation mi) throws Throwable {
 		if (isMethodOnIntroducedInterface(mi)) {
-			reference.serialize();
-			return reference;
+				reference.setTarget(mi.getThis());
+				reference.serialize();
+				return reference;
 		}
 		
 		return mi.proceed();
 	}
+
+	public SerializableReference getReference() {
+		return reference;
+	}
+
+	public void setReference(SerializableReference reference) {
+		this.reference = reference;
+	}
+
 }

@@ -18,6 +18,7 @@ package org.jdal.aop.config;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
+import org.jdal.aop.SerializableAopProxy;
 import org.jdal.aop.SerializableTargetSource;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.AopInfrastructureBean;
@@ -83,6 +84,7 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 		}
 
 		pf.addInterface(Serializable.class);
+		pf.addInterface(SerializableAopProxy.class);
 		pf.addInterface(AopInfrastructureBean.class);
 
 		return  pf.getProxy(beanFactory.getBeanClassLoader());

@@ -23,6 +23,7 @@ import java.util.List;
 import org.jdal.annotation.AnnotationUtils;
 import org.jdal.annotation.SerializableProxy;
 import org.jdal.aop.ProxyUtils;
+import org.jdal.aop.SerializableAopProxy;
 import org.jdal.aop.SerializableObject;
 import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.beans.BeansException;
@@ -32,7 +33,6 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
-
 
 /**
  * BeanPostProcessor that process {@link org.jdal.annotation.SerializableProxy} annotation 
@@ -50,7 +50,8 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
 			throws BeansException {
 		
-		if (bean instanceof SerializableObject || 
+		// Check for already serializable, infraestructure or serializable proxy targets.
+		if (bean instanceof SerializableAopProxy || 
 				bean instanceof AopInfrastructureBean || 
 				beanName.startsWith(ProxyUtils.TARGET_NAME_PREFIX))
 			return bean;
@@ -58,7 +59,7 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		SerializableProxy ann = AnnotationUtils.findAnnotation(bean.getClass(), SerializableProxy.class);
 		
 		if (ann != null) {
-			boolean proxyTargetClass = !beanFactory.getType(beanName).isInterface() || ann.proxyTargetClass();
+		boolean proxyTargetClass = !beanFactory.getType(beanName).isInterface() || ann.proxyTargetClass();
 			return ProxyUtils.createSerializableProxy(bean, proxyTargetClass, ann.useCache(), beanFactory, beanName);
 		}
 
@@ -67,8 +68,8 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		for (AnnotatedElement element : elements) {
 			Field f = (Field) element;
 			Object value = AnnotationUtils.getValue(element, bean);
-			if (value != null && !(value instanceof SerializableObject)) {
-				ann = org.springframework.core.annotation.AnnotationUtils.getAnnotation(element, SerializableProxy.class);
+			if (value != null && !(value instanceof SerializableAopProxy)) {
+				ann = AnnotationUtils.getAnnotation(element, SerializableProxy.class);
 				boolean proxyTargetClass = !f.getType().isInterface() || ann.proxyTargetClass();
 				Object proxy = getProxy(value, proxyTargetClass, ann.useCache(), 
 						getDependencyDescriptor(element), beanName);

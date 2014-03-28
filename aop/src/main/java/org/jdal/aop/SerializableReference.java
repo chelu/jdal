@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.PropertyValues;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanReference;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -64,6 +65,10 @@ public class SerializableReference implements Serializable {
 	private transient Object target;
 	/** target bean name */
 	private String targetBeanName;
+	
+	public SerializableReference() {
+		
+	}
 	
 	public SerializableReference(Object target, boolean proxyTargetClass, 
 			boolean useMemoryCache, ConfigurableListableBeanFactory beanFactory,
@@ -172,6 +177,50 @@ public class SerializableReference implements Serializable {
 	protected Object getSerializableProxy(Object targetObject) {
 		return ProxyUtils.createSerializableProxy(targetObject, proxyTargetClass, useMemoryCache,
 				beanFactory, descriptor,  beanName);
+	}
+	
+	public void setBeanFactory(BeanFactory beanFactory) {
+		this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
+	}
+	
+	public void setTargetBeanName(String name) {
+		this.targetBeanName = name;
+	}
+
+	public boolean isProxyTargetClass() {
+		return proxyTargetClass;
+	}
+
+	public void setProxyTargetClass(boolean proxyTargetClass) {
+		this.proxyTargetClass = proxyTargetClass;
+	}
+
+	public boolean isUseMemoryCache() {
+		return useMemoryCache;
+	}
+
+	public void setUseMemoryCache(boolean useMemoryCache) {
+		this.useMemoryCache = useMemoryCache;
+	}
+
+	public String getBeanName() {
+		return beanName;
+	}
+
+	public void setBeanName(String beanName) {
+		this.beanName = beanName;
+	}
+
+	public Object getTarget() {
+		return target;
+	}
+
+	public void setTarget(Object target) {
+		this.target = target;
+	}
+
+	public String getTargetBeanName() {
+		return targetBeanName;
 	}
 
 }

@@ -23,7 +23,7 @@ import java.io.Serializable;
  * 
  * @author Jose Luis Martin
  */
-public interface SerializableObject extends Serializable {
+public interface SerializableObject extends SerializableAopProxy {
 	
 	Object writeReplace() throws ObjectStreamException;
 

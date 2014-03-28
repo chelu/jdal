@@ -20,7 +20,11 @@ import static org.junit.Assert.assertNotNull;
 import java.io.Serializable;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdal.aop.SerializableTargetSource;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,6 +38,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.util.SerializationUtils;
 
 /**
+ * Test serializable proxies with vaadin.
  * 
  * @author Jose Luis Martin
  */
@@ -42,7 +47,7 @@ import org.springframework.util.SerializationUtils;
 @ContextConfiguration(locations="serialization.xml")
 public class ProxySerializationTest {
 
-	
+	private static final Log log = LogFactory.getLog(ProxySerializationTest.class);
 	@Resource
 	private Bean b1;
 	@Resource 
@@ -51,6 +56,8 @@ public class ProxySerializationTest {
 	private TestUI testUI;
 	@Autowired
 	private BeanFactory beanFactory;
+	@PersistenceContext
+	private EntityManager em;
 	
 	@Test
 	public void testProxySerialization() {
@@ -64,7 +71,8 @@ public class ProxySerializationTest {
 	
 	private Object serialize(Object obj) {
 		byte[] ser = SerializationUtils.serialize(obj);
-
+		if (log.isDebugEnabled())
+			log.debug("Serialized [" + ser.length + "] bytes");
 		return SerializationUtils.deserialize(ser);
 	}
 	
@@ -76,12 +84,11 @@ public class ProxySerializationTest {
 	}
 	
 	@Test
-	public void testScopedProxy() {
+	public void testSerializableTargetSource() {
 		ProxyFactory pf = new ProxyFactory();
 		pf.setTargetSource(new SerializableTargetSource(beanFactory, "b2", true));
 		pf.setProxyTargetClass(true);
 		pf.addInterface(Serializable.class);
 		serialize(pf.getProxy());
 	}
-
 }

@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Jose Luis Martin
  */
-@SerializableProxy
+@SerializableProxy(useCache=true)
 public class Bean {
 	
 	@Autowired
@@ -37,7 +37,7 @@ public class Bean {
 	PageableTable<Category> categoryPageableTable;
 	
 	@Resource(name="categoryPageableTable")
-	@SerializableProxy(useCache=true)
+	@SerializableProxy
 	PageableTable<Category> categoryTable;
 
 	public PageableTable<Author> getAuthorPageableTable() {

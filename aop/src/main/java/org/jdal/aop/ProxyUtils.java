@@ -97,7 +97,7 @@ public class ProxyUtils {
 	public static Object createSerializableProxy(Object target, boolean proxyTargetClass, boolean useMemoryCache,
 			ConfigurableListableBeanFactory beanFactory, DependencyDescriptor descriptor, String beanName) 
 	{
-		if (target instanceof SerializableObject)
+		if (target instanceof SerializableAopProxy)
 			return target;
 		
 		ProxyFactory pf = new ProxyFactory(target);
@@ -114,7 +114,7 @@ public class ProxyUtils {
 	public static Object createSerializableProxy(Object target, boolean proxyTargetClass, 
 			boolean useMemoryCache, ConfigurableListableBeanFactory beanFactory, String targetBeanName) {
 		
-		if (target instanceof SerializableObject)
+		if (target instanceof SerializableAopProxy)
 			return target;
 		
 		ProxyFactory pf = new ProxyFactory(target);

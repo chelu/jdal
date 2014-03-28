@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SerializableBean implements Serializable {
 
 	@Autowired
-	@SerializableProxy(proxyTargetClass=true)
+	@SerializableProxy(proxyTargetClass=true, useCache=true)
 	private TransactionalBean transactional;
 
 	/**
