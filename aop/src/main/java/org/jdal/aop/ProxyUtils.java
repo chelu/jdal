@@ -15,6 +15,8 @@
  */
 package org.jdal.aop;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdal.aop.config.SerializableProxyFactoryBean;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
@@ -35,6 +37,7 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
  */
 public class ProxyUtils {
 
+	public static Log log = LogFactory.getLog(ProxyUtils.class);
 	public static final String TARGET_NAME_PREFIX = "jdalSerializableProxy.";
 
 	public static  BeanDefinitionHolder createSerializableProxy(BeanDefinitionHolder definition,
@@ -100,6 +103,10 @@ public class ProxyUtils {
 		if (target instanceof SerializableAopProxy)
 			return target;
 		
+		if (log.isDebugEnabled())
+			log.debug("Creating serializable proxy for [" + descriptor.getDependencyName() + "]" + 
+					" in bean [" + beanName + "]");
+		
 		ProxyFactory pf = new ProxyFactory(target);
 		pf.setExposeProxy(true);
 		SerializableReference reference = new SerializableReference(target, proxyTargetClass, useMemoryCache, 
@@ -116,6 +123,9 @@ public class ProxyUtils {
 		
 		if (target instanceof SerializableAopProxy)
 			return target;
+		
+		if (log.isDebugEnabled())
+			log.debug("Creating serializable proxy for bean [" +  targetBeanName + "]");
 		
 		ProxyFactory pf = new ProxyFactory(target);
 		pf.setExposeProxy(true);

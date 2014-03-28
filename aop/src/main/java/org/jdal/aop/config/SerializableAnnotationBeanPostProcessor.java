@@ -15,18 +15,18 @@
  */
 package org.jdal.aop.config;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdal.annotation.AnnotationUtils;
 import org.jdal.annotation.SerializableProxy;
 import org.jdal.aop.ProxyUtils;
 import org.jdal.aop.SerializableAopProxy;
 import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -43,10 +43,11 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter 
 	implements BeanFactoryAware {
 	
+	private static final Log log = LogFactory.getLog(SerializableAnnotationBeanPostProcessor.class);
 	private ConfigurableListableBeanFactory beanFactory;
 
 	@Override
-	public Object postProcessBeforeInitialization(Object bean, String beanName)
+	public Object postProcessAfterInitialization(Object bean, String beanName)
 			throws BeansException {
 		
 		// Check for already serializable, infraestructure or serializable proxy targets.
@@ -58,6 +59,9 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		SerializableProxy ann = AnnotationUtils.findAnnotation(bean.getClass(), SerializableProxy.class);
 		
 		if (ann != null) {
+			if (log.isDebugEnabled())
+				log.debug("Creating serializable proxy for bean [" + beanName + "]");
+			
 			boolean proxyTargetClass = !beanFactory.getType(beanName).isInterface() || ann.proxyTargetClass();
 			return ProxyUtils.createSerializableProxy(bean, proxyTargetClass, ann.useCache(), beanFactory, beanName);
 		}
@@ -105,16 +109,6 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
 	}
 
-
-
-	@Override
-	public PropertyValues postProcessPropertyValues(PropertyValues pvs,
-			PropertyDescriptor[] pds, Object bean, String beanName)
-			throws BeansException {
-
-		return super.postProcessPropertyValues(pvs, pds, bean, beanName);
-	}
-	
 	protected DependencyDescriptor getDependencyDescriptor(AnnotatedElement ae) {
 		return new DependencyDescriptor((Field) ae, false);
 	}

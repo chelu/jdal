@@ -1,8 +1,9 @@
 package org.jdal.aop;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdal.annotation.AnnotationUtils;
 import org.jdal.annotation.SerializableProxy;
-import org.jdal.aop.config.SerializableProxyFactoryBean;
 import org.springframework.aop.framework.autoproxy.ProxyCreationContext;
 import org.springframework.aop.support.DefaultIntroductionAdvisor;
 import org.springframework.beans.BeansException;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 public class SerializableProxyAdvisor extends DefaultIntroductionAdvisor 
 	implements BeanFactoryAware {
 	
+	private static final Log log = LogFactory.getLog(SerializableProxyAdvisor.class);
 	private ConfigurableListableBeanFactory beanFactory;
 
 	public SerializableProxyAdvisor() {
@@ -49,6 +51,9 @@ public class SerializableProxyAdvisor extends DefaultIntroductionAdvisor
 	 * @param ann annotation.
 	 */
 	private void configureReference(SerializableProxy ann, String beanName) {
+		if (log.isDebugEnabled())
+			log.debug("Configuring serializable reference for bean [" + beanName +"]");
+		
 		SerializableIntroductionInterceptor advice = (SerializableIntroductionInterceptor) getAdvice();
 		SerializableReference reference = advice.getReference();
 		reference.setTargetBeanName(beanName);
