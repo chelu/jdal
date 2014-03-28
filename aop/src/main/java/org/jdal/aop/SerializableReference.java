@@ -99,6 +99,11 @@ public class SerializableReference implements Serializable {
 	}
 	
 	private Object readResolve() throws ObjectStreamException {
+		if (beanFactory == null) {
+			log.error("Can't not deserialize reference without bean factory");
+			return null;
+		}
+		
 		if (useMemoryCache) {
 			Object ret = serializedObjects.remove(this.id);
 			if (ret != null) {
@@ -116,7 +121,7 @@ public class SerializableReference implements Serializable {
 			return ProxyUtils.createSerializableProxy(beanFactory.getBean(targetBeanName), 
 					proxyTargetClass, useMemoryCache, beanFactory, targetBeanName);
 		}
-		
+			
 		if (log.isDebugEnabled()) 
 			log.debug("Resolving serializable object for [" + descriptor.getDependencyName() +"]");
 		
