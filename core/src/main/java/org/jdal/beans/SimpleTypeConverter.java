@@ -16,6 +16,7 @@
 package org.jdal.beans;
 
 import java.beans.PropertyEditor;
+import java.io.Serializable;
 
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.MethodParameter;
@@ -25,7 +26,8 @@ import org.springframework.util.ClassUtils;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class SimpleTypeConverter extends org.springframework.beans.SimpleTypeConverter {
+public class SimpleTypeConverter extends org.springframework.beans.SimpleTypeConverter 
+	implements Serializable {
 	
 	@Override
 	public <T> T convertIfNecessary(Object value, Class<T> requiredType) throws TypeMismatchException {

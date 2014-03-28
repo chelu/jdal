@@ -15,12 +15,12 @@
  */
 package org.jdal.vaadin.ui;
 
+import java.io.Serializable;
+
 import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import com.vaadin.ui.Component;
 
@@ -28,7 +28,7 @@ import com.vaadin.ui.Component;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAware {
+public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAware, Serializable {
 	
 	public static final String VIEW_DIALOG = "viewDialog";
 	

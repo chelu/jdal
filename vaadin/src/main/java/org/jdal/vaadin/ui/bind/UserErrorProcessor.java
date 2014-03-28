@@ -15,6 +15,7 @@
  */
 package org.jdal.vaadin.ui.bind;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ import com.vaadin.ui.AbstractField;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
-public class UserErrorProcessor implements ErrorProcessor {
+public class UserErrorProcessor implements ErrorProcessor, Serializable {
 
 	private Set<AbstractField<?>> fieldSet = new HashSet<AbstractField<?>>();
 	/**

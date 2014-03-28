@@ -15,28 +15,19 @@
  */
 package org.jdal.aop.config;
 
-import java.io.Serializable;
-import java.lang.reflect.Modifier;
-
-import org.jdal.aop.SerializableAopProxy;
+import org.jdal.aop.ProxyUtils;
 import org.jdal.aop.SerializableTargetSource;
 import org.springframework.aop.TargetSource;
-import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.aop.framework.ProxyConfig;
-import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.util.ClassUtils;
 
 /**
  * ProxyFactoryBean to make serializable proxy for non serializable beans, including
- * prototypes.
- * <p>
- * Note: This class includes code from {@link org.springframework.aop.scope.ScopedProxyFactoryBean}
- * </p>
+ * prototypes allowing session replication
  * 
  * @author Jose Luis Martin
  * @since 2.0
@@ -47,7 +38,6 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	private ConfigurableListableBeanFactory beanFactory;
 	private boolean singleton;
 	private String targetBeanName;
-	private TargetSource targetSource;
 	private Object proxy;
 
 	public SerializableProxyFactoryBean() {
@@ -64,30 +54,12 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 		
 		return createProxy();
 	}
-
-	/**
-	 * @return
-	 */
-	private Object createProxy() {
-		targetSource = createTargetSource();
-		ProxyFactory pf = new ProxyFactory();
-		pf.copyFrom(this);
-		pf.setTargetSource(targetSource);	
-
-		Class<?> beanType = beanFactory.getType(this.targetBeanName);
-		if (beanType == null) {
-			throw new IllegalStateException("Cannot create serializable proxy for bean '" + this.targetBeanName +
-					"': Target type could not be determined at the time of proxy creation.");
-		}
-		if (!isProxyTargetClass() || beanType.isInterface() || Modifier.isPrivate(beanType.getModifiers())) {
-			pf.setInterfaces(ClassUtils.getAllInterfacesForClass(beanType, beanFactory.getBeanClassLoader()));
-		}
-
-		pf.addInterface(Serializable.class);
-		pf.addInterface(SerializableAopProxy.class);
-		pf.addInterface(AopInfrastructureBean.class);
-
-		return  pf.getProxy(beanFactory.getBeanClassLoader());
+	
+	 protected Object createProxy() {
+		Object target  = beanFactory.getBean(this.targetBeanName);
+		
+		return  ProxyUtils.createSerializableProxy(target, isProxyTargetClass(), false,
+				this.beanFactory, this.targetBeanName);
 	}
 
 	protected TargetSource createTargetSource() {
@@ -95,9 +67,6 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	}
 
 	public Class<?> getObjectType() {
-		if (targetSource != null)
-			return targetSource.getTargetClass();
-
 		if (beanFactory != null) 
 			return beanFactory.getType(targetBeanName);
 

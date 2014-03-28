@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.jdal.annotation.SerializableProxy;
 import org.jdal.dao.Dao;
 import org.jdal.util.BeanUtils;
 import org.springframework.util.ReflectionUtils;

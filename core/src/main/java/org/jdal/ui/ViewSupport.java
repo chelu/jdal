@@ -17,6 +17,7 @@ package org.jdal.ui;
 
 import java.awt.Component;
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ import org.springframework.validation.Validator;
  * @see ControlAccessorFactory
  * @see ErrorProcessor
  */
-public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, BinderHolder {
+public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, BinderHolder, Serializable {
 	
 	public final static String DEFAULT_BINDER_FACTORY_NAME = "binderFactory";
 	/** log */

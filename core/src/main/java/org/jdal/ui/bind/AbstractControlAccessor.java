@@ -16,6 +16,7 @@
 package org.jdal.ui.bind;
 
 import java.awt.Component;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +37,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class AbstractControlAccessor implements ControlAccessor {
+public abstract class AbstractControlAccessor implements ControlAccessor, Serializable {
 	
 	/** control object */
 	private Object control;

@@ -16,6 +16,7 @@
 package org.jdal.ui.bind;
 
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -44,7 +45,7 @@ import org.springframework.validation.BindingResult;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class AbstractBinder implements PropertyBinder {
+public abstract class AbstractBinder implements PropertyBinder, Serializable {
 	
 	private static final Log log = LogFactory.getLog(AbstractBinder.class);
 

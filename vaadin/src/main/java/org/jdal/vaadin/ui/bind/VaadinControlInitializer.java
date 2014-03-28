@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.annotation.SerializableProxy;
 import org.jdal.annotations.Reference;
 import org.jdal.ui.bind.ControlInitializerSupport;
 import org.jdal.util.BeanUtils;
@@ -19,6 +20,7 @@ import com.vaadin.ui.AbstractSelect;
  * 
  * @author Jose Luis Martin
  */
+@SerializableProxy
 public class VaadinControlInitializer extends ControlInitializerSupport {
 
 private static final Log log = LogFactory.getLog(VaadinControlInitializer.class);

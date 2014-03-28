@@ -1,6 +1,7 @@
 package org.jdal.ui.bind;
 
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ import org.springframework.validation.BindingResult;
  * @param <T> model 
  */
 @SuppressWarnings("unchecked")
-public class CompositeBinder<T> implements Binder<T>, BinderHolder, ModelHolder<T> {
+public class CompositeBinder<T> implements Binder<T>, BinderHolder, ModelHolder<T>, Serializable {
 	
 	private static final Log log = LogFactory.getLog(CompositeBinder.class);
 	private BinderFactory binderFactory;

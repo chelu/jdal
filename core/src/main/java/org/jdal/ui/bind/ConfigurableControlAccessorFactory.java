@@ -18,6 +18,7 @@ package org.jdal.ui.bind;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
@@ -28,6 +29,7 @@ import java.util.Map;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.annotation.SerializableProxy;
 import org.jdal.ui.View;
 
 /**
@@ -38,7 +40,8 @@ import org.jdal.ui.View;
  * @see org.jdal.ui.bind.ControlAccessor
  * @see org.jdal.ui.bind.ControlAccessorFactory
  */
-public class ConfigurableControlAccessorFactory implements ControlAccessorFactory {
+@SerializableProxy
+public class ConfigurableControlAccessorFactory implements ControlAccessorFactory, Serializable {
 	
 	private final static Log log = LogFactory.getLog(ConfigurableControlAccessorFactory.class);
 	

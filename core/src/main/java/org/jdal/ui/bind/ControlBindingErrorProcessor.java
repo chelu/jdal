@@ -15,6 +15,8 @@
  */
 package org.jdal.ui.bind;
 
+import java.io.Serializable;
+
 import org.springframework.beans.PropertyAccessException;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -26,7 +28,8 @@ import org.springframework.validation.DefaultBindingErrorProcessor;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public class ControlBindingErrorProcessor extends DefaultBindingErrorProcessor {
+public class ControlBindingErrorProcessor extends DefaultBindingErrorProcessor 
+	implements Serializable {
 
 	/** 
 	 * Add a ControlError instead FieldError to hold component that has failed.

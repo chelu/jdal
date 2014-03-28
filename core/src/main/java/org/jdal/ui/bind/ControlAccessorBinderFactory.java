@@ -15,6 +15,10 @@
  */
 package org.jdal.ui.bind;
 
+import java.io.Serializable;
+
+import org.jdal.annotation.SerializableProxy;
+
 /**
  * Binder Factory that use a ControlAccessorFactory to create PropertyBinders.
  * 
@@ -22,7 +26,8 @@ package org.jdal.ui.bind;
  * @since 1.1
  *
  */
-public class ControlAccessorBinderFactory implements BinderFactory {
+@SerializableProxy
+public class ControlAccessorBinderFactory implements BinderFactory, Serializable {
 	
 	private ControlAccessorFactory controlAccessorFactory;
 

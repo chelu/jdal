@@ -15,6 +15,7 @@
  */
 package org.jdal.beans;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import org.apache.commons.logging.Log;
@@ -30,7 +31,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
  * Add Simple message methods to a MessageSource
  *
  */
-public class MessageSourceWrapper implements MessageSource {
+public class MessageSourceWrapper implements MessageSource, Serializable {
 
 	private static final Log log = LogFactory.getLog(MessageSourceWrapper.class);
 	private MessageSource messageSource;

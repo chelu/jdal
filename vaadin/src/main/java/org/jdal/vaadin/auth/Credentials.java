@@ -15,11 +15,13 @@
  */
 package org.jdal.vaadin.auth;
 
+import java.io.Serializable;
+
 /**
  * @author Jose Luis Martin
  *
  */
-public class Credentials {
+public class Credentials implements Serializable {
 	private String username = "";
 	private String password = "";
 	

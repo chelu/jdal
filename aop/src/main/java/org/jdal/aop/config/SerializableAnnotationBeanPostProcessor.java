@@ -24,7 +24,6 @@ import org.jdal.annotation.AnnotationUtils;
 import org.jdal.annotation.SerializableProxy;
 import org.jdal.aop.ProxyUtils;
 import org.jdal.aop.SerializableAopProxy;
-import org.jdal.aop.SerializableObject;
 import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValues;
@@ -59,7 +58,7 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		SerializableProxy ann = AnnotationUtils.findAnnotation(bean.getClass(), SerializableProxy.class);
 		
 		if (ann != null) {
-		boolean proxyTargetClass = !beanFactory.getType(beanName).isInterface() || ann.proxyTargetClass();
+			boolean proxyTargetClass = !beanFactory.getType(beanName).isInterface() || ann.proxyTargetClass();
 			return ProxyUtils.createSerializableProxy(bean, proxyTargetClass, ann.useCache(), beanFactory, beanName);
 		}
 
@@ -89,6 +88,7 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 	 */
 	protected Object getProxy(Object target, boolean proxyTargetClass, boolean useCache,
 			DependencyDescriptor descriptor, String beanName) {
+		
 		return ProxyUtils.createSerializableProxy(target, proxyTargetClass, useCache, 
 				beanFactory, descriptor, beanName);
 	}
