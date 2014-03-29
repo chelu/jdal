@@ -30,6 +30,7 @@ import org.jdal.annotations.Reference;
 import org.jdal.swing.list.ListComboBoxModel;
 import org.jdal.swing.list.ListListModel;
 import org.jdal.ui.bind.ControlInitializerSupport;
+import org.jdal.ui.bind.InitializationConfig;
 import org.jdal.util.BeanUtils;
 
 
@@ -46,16 +47,17 @@ public class AnnotationControlInitializer extends ControlInitializerSupport {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void initialize(Object control, String property, Class<?> clazz) {
+	public void initialize(Object control, String property, InitializationConfig config) {
 		if (this.dao == null) {
 			log.warn("Nothing to do without persistent service");
 			return;
 		}
+		Class<?> clazz = config.getType();
 		Class<?> propertyType = BeanUtils.getPropertyDescriptor(clazz, property).getPropertyType();
 		Annotation[] annotations = getAnnotations(property, clazz);
 		for (Annotation a : annotations) {
 			if (ManyToOne.class.equals(a.annotationType())) {
-				List<Object> entities = getEntityList(propertyType);
+				List<Object> entities = getEntityList(propertyType, config.getSortPropertyName());
 				sort(entities, control);
 				if (control instanceof JComboBox) {
 					((JComboBox) control).setModel(new ListComboBoxModel(entities));
@@ -69,7 +71,7 @@ public class AnnotationControlInitializer extends ControlInitializerSupport {
 			if (Reference.class.equals(a.annotationType()) && control instanceof JComboBox) {
 				Reference r = (Reference) a;
 				Class type = void.class.equals(r.target()) ? propertyType : r.target();
-				List entities = getEntityList(type);
+				List entities = getEntityList(type, config.getSortPropertyName());
 				List values = StringUtils.isEmpty(r.property()) ?  entities : 
 					getValueList(entities, r.property());
 				

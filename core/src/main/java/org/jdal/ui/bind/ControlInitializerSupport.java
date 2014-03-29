@@ -20,14 +20,19 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.jdal.annotation.SerializableProxy;
 import org.jdal.dao.Dao;
+import org.jdal.dao.Page;
 import org.jdal.util.BeanUtils;
+import org.jdal.util.comparator.PropertyComparator;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
+
+import com.ctc.wstx.util.StringUtil;
 
 /**
  * Support class for ControlInitializers.
@@ -43,8 +48,9 @@ public abstract class ControlInitializerSupport implements ControlInitializer {
 	private boolean initializeEntities = false;
 	private boolean firstNull = false;
 
-	protected List<Object> getEntityList(Class<?> propertyType) {
+	protected List<Object> getEntityList(Class<?> propertyType, String sortProperty) {
 		List entities =  dao.getAll(propertyType);
+		sort(entities, sortProperty);
 		if (isInitializeEntities()) {
 			for (Object entity : entities)
 				dao.initialize(entity);
@@ -53,6 +59,19 @@ public abstract class ControlInitializerSupport implements ControlInitializer {
 			entities.add(0, null);
 		
 		return entities;
+	}
+	
+	/**
+	 * @param entities
+	 * @param sortProperty
+	 */
+	protected void sort(List entities, String sortProperty) {
+		if (!StringUtils.isEmpty(sortProperty))
+			Collections.sort(entities, new PropertyComparator(sortProperty));
+	}
+
+	protected List<Object> getEntityList(Class<?> propertyType) {
+		return getEntityList(propertyType, null);
 	}
 
 	/**

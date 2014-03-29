@@ -15,7 +15,6 @@
  */
 package org.jdal.vaadin.beans;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,13 +24,15 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.vaadin.UIid;
+import org.jdal.vaadin.VaadinUtils;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
 import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.server.ClientConnector.DetachListener;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
+import com.vaadin.util.CurrentInstance;
 
 /**
  * Spring scope for Vaadin.
@@ -71,34 +72,7 @@ public class VaadinScope implements Scope, DetachListener {
 			return bean;
 		}
 		
-		// No current UI, have a session?
-		UI closing = null;
-		VaadinSession session = VaadinSession.getCurrent();
-		Collection<UI> uisToSearch = null;
-
-		if (session != null) {
-			uisToSearch = session.getUIs();
-		}
-	
-		else {
-			// Session expired, try with global uis.
-			uisToSearch = uis;
-		}
-		
-		for (UI ui : uisToSearch) {
-			if (ui.isClosing()) {
-				closing = ui;
-				break;
-			}
-		}	
-
-		if (closing != null) {
-			return beans.get(String.valueOf(closing.getUIId() + "_" + name));
-		}
-		
-		log.error("Unknown request for bean [" + name + "] without current UI. Returning a new Object" );
-		
-		return objectFactory.getObject();
+		throw new RuntimeException("No UI found in scope");
 	}
 
 
@@ -127,15 +101,28 @@ public class VaadinScope implements Scope, DetachListener {
 	 * {@inheritDoc}
 	 */
 	public String getConversationId() {
+		Integer uiId = null;
+		
 		UI ui =  UI.getCurrent();
-		if (ui != null) {
+		if (ui == null) {
+			UIid id = CurrentInstance.get(UIid.class);
+			if (id != null) {
+				uiId = id.getUiId();
+			}
+		}
+		else if (ui != null) {
 			if (uis.add(ui))
 				ui.addDetachListener(this);
 			
-			return String.valueOf(ui.getUIId());
+			uiId = ui.getUIId();
 		}
 		
-		return null;
+		return uiId != null ? getConversationId(uiId) : null;
+	}
+	
+	private String getConversationId(Integer id) {
+		return VaadinUtils.getWindowName() + ":" + id.toString();
+		
 	}
 	
 	protected String key(String name) {
@@ -150,7 +137,7 @@ public class VaadinScope implements Scope, DetachListener {
 		
 		while (iter.hasNext()) {
 			String key = iter.next();
-			if (key.startsWith(String.valueOf(ui.getUIId()))) {
+			if (key.startsWith(getConversationId(ui.getUIId()))) {
 				iter.remove();
 				if (log.isDebugEnabled())
 					log.debug("Removed bean [" + key + "]");

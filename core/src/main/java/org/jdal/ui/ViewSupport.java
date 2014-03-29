@@ -41,6 +41,8 @@ import org.jdal.ui.bind.ControlError;
 import org.jdal.ui.bind.ControlEvent;
 import org.jdal.ui.bind.ControlInitializer;
 import org.jdal.ui.bind.DirectFieldAccessor;
+import org.jdal.ui.bind.InitializationConfig;
+import org.jdal.ui.bind.Initializer;
 import org.jdal.ui.bind.Property;
 import org.jdal.ui.bind.PropertyBinder;
 import org.jdal.ui.validation.ErrorProcessor;
@@ -52,6 +54,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -453,7 +456,9 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 
 		for (AnnotatedElement ae : elements) {
 			Property p = ae.getAnnotation(Property.class);
-			bindAndInitializeControl(p.value(), viewPropertyAccessor.getPropertyValue(((Field) ae).getName()));
+			InitializationConfig config = getInitializationConfig(ae.getAnnotation(Initializer.class));	
+			bindAndInitializeControl(p.value(), viewPropertyAccessor.getPropertyValue(((Field) ae).getName()),
+					config);
 			this.ignoredProperties.add(p.value());
 		}
 		
@@ -467,11 +472,24 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 					if (log.isDebugEnabled()) 
 						log.debug("Found control: " + control.getClass().getSimpleName() + 
 									" for property: " + propertyName);
+					TypeDescriptor descriptor = viewPropertyAccessor.getPropertyTypeDescriptor(propertyName);
+					InitializationConfig config = getInitializationConfig(descriptor.getAnnotation(Initializer.class));
 					// do bind
-					bindAndInitializeControl(propertyName, control);
+					bindAndInitializeControl(propertyName, control, config);
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param Initializer
+	 * @return
+	 */
+	private InitializationConfig getInitializationConfig(Initializer initializer) {
+		InitializationConfig config = new InitializationConfig(getModel().getClass());
+		if (initializer != null)
+			config.setSortPropertyName(initializer.orderBy());
+		return config;
 	}
 
 	/**
@@ -479,11 +497,11 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	 * @param propertyName property name
 	 * @param control control
 	 */
-	private void bindAndInitializeControl(String propertyName, Object control) {
+	private void bindAndInitializeControl(String propertyName, Object control, InitializationConfig config) {
 		bind(control, propertyName);
 		// initialize control
 		if (isInitializeControls() && controlInitializer != null)
-				controlInitializer.initialize(control, propertyName, getModel().getClass());
+				controlInitializer.initialize(control, propertyName, config);
 	}
 	
 	/** 

@@ -118,8 +118,7 @@ public class SerializableReference implements Serializable {
 			if (log.isDebugEnabled())
 				log.debug("Resolving serializable object to bean name [" + targetBeanName + "]");
 			
-			return ProxyUtils.createSerializableProxy(beanFactory.getBean(targetBeanName), 
-					proxyTargetClass, useMemoryCache, beanFactory, targetBeanName);
+			return getSerializableProxy(beanFactory.getBean(targetBeanName));
 		}
 			
 		if (log.isDebugEnabled()) 
@@ -180,6 +179,10 @@ public class SerializableReference implements Serializable {
 	}
 	
 	protected Object getSerializableProxy(Object targetObject) {
+		if (targetBeanName != null) 
+			return  ProxyUtils.createSerializableProxy(beanFactory.getBean(targetBeanName), 
+					proxyTargetClass, useMemoryCache, beanFactory, targetBeanName);
+		
 		return ProxyUtils.createSerializableProxy(targetObject, proxyTargetClass, useMemoryCache,
 				beanFactory, descriptor,  beanName);
 	}

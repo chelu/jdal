@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 the original author or authors.
+ * Copyright 2009-2014 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.ui.bind;
+package org.jdal.vaadin;
+
+import com.vaadin.util.CurrentInstance;
 
 /**
- * Interface for control initializers.
+ * Wrapper for UI identifier for storing it on {@link CurrentInstance}
  * 
- * @author Jose Luis Martin 
+ * @author Jose Luis Martin
+ * @since 2.0
  */
-public interface ControlInitializer {
-	
-	
+public class UIid {
+
+	private Integer uiId;
+
 	/**
-	 * Initalize control
-	 * @param control control to initialize
-	 * @param property property name
-	 * @param clazz backing object class, ie model
+	 * @param uiId
 	 */
-	void initialize(Object control, String property, InitializationConfig config);
-	
-	/**
-	 * Sets if initialize object, ie drop ORM  proxies.
-	 * @param initializeEntities
-	 */
-	void setInitializeEntities(boolean initializeEntities);
+	public UIid(Integer uiId) {
+		this.uiId = uiId;
+	}
+
+	public Integer getUiId() {
+		return uiId;
+	}
+
+	public void setUiId(Integer uiId) {
+		this.uiId = uiId;
+	}
+
 }

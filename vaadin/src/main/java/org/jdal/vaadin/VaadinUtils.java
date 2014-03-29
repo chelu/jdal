@@ -123,5 +123,13 @@ public abstract class VaadinUtils {
 		page.setLocation(location); 
 		
 	}
+	
+	/**
+	 * Return current window name
+	 * @return the current window name
+	 */
+	public static String getWindowName() {
+		 return getRequest().getParameter("v-wn");
+	}
 
 }
