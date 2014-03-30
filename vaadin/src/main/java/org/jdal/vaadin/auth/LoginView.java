@@ -127,7 +127,7 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		fb.row();
 		fb.startBox();
 		fb.row(50);
-		fb.add(errorLabel, BoxFormBuilder.SIZE_FULL, Alignment.MIDDLE_CENTER);
+		fb.add(errorLabel, BoxFormBuilder.SIZE_FULL, Alignment.BOTTOM_CENTER);
 		fb.endBox();
 		fb.row();
 		fb.startBox();
@@ -159,6 +159,9 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		if (authService.validate(model.getUsername(), model.getPassword())) {
 			for (AuthenticationListener al : authenticationListeners)
 				al.handleAuthentication(new AuthenticationEvent(getPanel(), getModel()));
+			
+			password.setValue("");
+			username.setValue("");
 		}
 		else {
 			showErrorMessage();

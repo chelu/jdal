@@ -15,22 +15,20 @@
  */
 package org.jdal.vaadin.beans;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.vaadin.UIid;
-import org.jdal.vaadin.VaadinUtils;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
 import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.server.ClientConnector.DetachListener;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.vaadin.util.CurrentInstance;
 
@@ -38,14 +36,15 @@ import com.vaadin.util.CurrentInstance;
  * Spring scope for Vaadin.
  * 
  * @author Jose Luis Martin
+ * @since 2.0
  */
 public class VaadinScope implements Scope, DetachListener {
 	
 	public static final String SCOPE_NAME = "vaadin";
 	private static final Log log = LogFactory.getLog(VaadinScope.class);
-	private Map<String, Object> beans = Collections.synchronizedMap(new HashMap<String, Object>());
-	private Map<String, Runnable> callbacks = Collections.synchronizedMap(new HashMap<String, Runnable>());
-	private Set<UI> uis = Collections.synchronizedSet(new LinkedHashSet<UI>());
+	private Map<String, Object> beans = new ConcurrentHashMap<String, Object>();
+	private Map<String, Runnable> callbacks = new ConcurrentHashMap<String, Runnable>();
+	private Map<UI, String> sessions = new ConcurrentHashMap<UI, String>();
 	
 	/**
 	 * {@inheritDoc}
@@ -74,7 +73,6 @@ public class VaadinScope implements Scope, DetachListener {
 		
 		throw new RuntimeException("No UI found in scope");
 	}
-
 
 	/**
 	 * {@inheritDoc}
@@ -111,9 +109,11 @@ public class VaadinScope implements Scope, DetachListener {
 			}
 		}
 		else if (ui != null) {
-			if (uis.add(ui))
+			if (!sessions.containsKey(ui)) {
 				ui.addDetachListener(this);
-			
+				sessions.put(ui, VaadinSession.getCurrent().getSession().getId());
+			}
+
 			uiId = ui.getUIId();
 		}
 		
@@ -121,8 +121,21 @@ public class VaadinScope implements Scope, DetachListener {
 	}
 	
 	private String getConversationId(Integer id) {
-		return VaadinUtils.getWindowName() + ":" + id.toString();
+		VaadinSession session = VaadinSession.getCurrent();
+		if (session == null) {
+			log.info("Request Conversation id without session");
+			return null;
+		}
 		
+		return session.getSession().getId() + ":" + id.toString();
+	}
+	
+	/**
+	 * @param ui
+	 * @return
+	 */
+	private String getConversationId(UI ui) {
+		return sessions.get(ui) + ":" + ui.getUIId();
 	}
 	
 	protected String key(String name) {
@@ -137,7 +150,9 @@ public class VaadinScope implements Scope, DetachListener {
 		
 		while (iter.hasNext()) {
 			String key = iter.next();
-			if (key.startsWith(getConversationId(ui.getUIId()))) {
+			String prefix = getConversationId(ui);
+			
+			if (key.startsWith(prefix)) {
 				iter.remove();
 				if (log.isDebugEnabled())
 					log.debug("Removed bean [" + key + "]");
@@ -156,7 +171,7 @@ public class VaadinScope implements Scope, DetachListener {
 			log.debug("UI [" + ui.getUIId() + "] detached, destroying scoped beans");
 		
 		removeBeans(ui);
-		uis.remove(ui);
+		sessions.remove(ui);
 		
 	}
 }

@@ -96,7 +96,7 @@
 					<version>2.8</version>
 					<configuration>
 						<encoding>UTF-8</encoding>
-						<detectLinks>true</detectLinks>
+						<detectLinks>false</detectLinks>
 						<attach>true</attach>
 						<links>
 							<link>http://docs.jboss.org/hibernate/core/3.6/javadocs</link>
@@ -227,6 +227,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
 					</plugin>
 				</plugins>
 			</build>
