@@ -2,6 +2,7 @@
 
 This módule contains the following Spring AOP Aspects:
 
+<<<<<<< HEAD
 ## Support for @DeclareMixin AspectJ annotation.
 
 To use @DeclareMixin in Spring AOP you only need to declare a bean of type  DeclareMixinAutoProxyCreatorConfigure
