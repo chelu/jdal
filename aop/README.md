@@ -37,7 +37,7 @@ To enable Serializable proxy configuratin use the following bean definitions in 
 
 ```
 
-To To replace a bean in the Spring context globally, we can use the 
+To replace a bean in the Spring context globally, we can use the 
 
 ```xml
 <jdal:serializable-proxy> 
