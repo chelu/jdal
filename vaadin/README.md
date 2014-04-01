@@ -20,4 +20,4 @@ JDAL Vaadin is a port of JDAL Swing Library  to Vaadin framework including the f
 - Configurable login form
 - Configurable button bar for Vaadin navigator.
 
-See [Jdal Vaadin 2.0 Overview](http://www.jdal.org/doc/jdal-vaadin-2.0m1.php) for more info.
+See [Jdal Vaadin 2.0 Overview](http://www.jdal.org/doc/jdal-vaadin-20m1.php) for more info.
