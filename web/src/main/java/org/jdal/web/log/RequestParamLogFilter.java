@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.log;
+package org.jdal.web.log;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 /**
  * Servlet 2.3 Filter that log request params
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 @SuppressWarnings("rawtypes")
 public class RequestParamLogFilter extends CommonsRequestLoggingFilter {

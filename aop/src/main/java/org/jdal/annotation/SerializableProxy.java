@@ -24,8 +24,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to keep in memory a copy of a non serializable object
- * until deserialization. Useful to avoid {@link java.io.NoSerializableException}
+ * Used to creaate a serializable proxy of a non serializable object.
+ * Useful to avoid {@link java.io.NoSerializableException}
  * when storing in a container sessions objects that references non serializable 
  * objects.
  * 

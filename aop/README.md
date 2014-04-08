@@ -1,10 +1,10 @@
 # JDAL Spring AOP Module
 
-This módule contains the following Spring AOP Aspects:
+This module contains the following Spring AOP Aspects.
 
 ## Support for @DeclareMixin AspectJ annotation.
 
-To use @DeclareMixin in Spring AOP you only need to declare a bean of type  DeclareMixinAutoProxyCreatorConfigure
+To use @DeclareMixin in Spring AOP you only need to declare a bean of type  `DeclareMixinAutoProxyCreatorConfigurer`
 in you context.
 
 ```xml
@@ -27,7 +27,7 @@ public class AppConfig {
 
 ## Serializable proxy support.
 
-To enable Serializable proxy configuratin use the following bean definitions in context configuration file:
+To enable serializable proxies use the following bean definitions in context configuration file:
 
 ```xml
 
@@ -37,12 +37,8 @@ To enable Serializable proxy configuratin use the following bean definitions in 
 
 ```
 
-To replace a bean in the Spring context globally, we can use the 
-
-```xml
-<jdal:serializable-proxy> 
-```
-tag in jdal spring custom namespace:
+To replace a bean in the Spring context globally, we can use the  `<jdal:serializable-proxy>` tag in jdal spring 
+custom namespace:
 
 ```xml
 
@@ -53,7 +49,7 @@ tag in jdal spring custom namespace:
 
 ```
 
-Or we can use @SerializbleProxy annotation on the bean types.
+Or we can use @SerializableProxy annotation on the bean types.
 
 ```java
 
@@ -75,3 +71,24 @@ public class MainLayout extends VerticalLayout {
 }
 ```
 
+## Maven
+
+The latest release candidate is *2.0.RC1*. configure maven as follows to include it.
+
+```xml 
+<repositories>
+       <repository>
+            <id>jdal</id>
+            <name>JDAL Repository</name>
+            <url>http://www.jdal.org/repo</url>
+       </repository>
+</repositories>
+
+...
+
+<dependency>
+       <groupId>org.jdal</groupId>
+       <artifactId>jdal-aop</artifactId>
+       <version>2.0.RC1</version>
+</dependency>
+```
