@@ -15,7 +15,6 @@
  */
 package org.jdal.aop.config;
 
-import org.aspectj.weaver.patterns.Declare;
 import org.jdal.aop.DeclareMixinAutoProxyCreatorConfigurer;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;

@@ -30,7 +30,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.annotation.AnnotationUtils;
+import org.jdal.annotation.AnnotatedElementAccessor;
 import org.jdal.ui.bind.BinderFactory;
 import org.jdal.ui.bind.BinderHolder;
 import org.jdal.ui.bind.CompositeBinder;
@@ -452,7 +452,7 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 		PropertyAccessor  viewPropertyAccessor = new DirectFieldAccessor(this);
 		
 		// Parse Property annotations
-		List<AnnotatedElement> elements = AnnotationUtils.findAnnotatedElements(Property.class, getClass());
+		List<AnnotatedElement> elements = AnnotatedElementAccessor.findAnnotatedElements(Property.class, getClass());
 
 		for (AnnotatedElement ae : elements) {
 			Property p = ae.getAnnotation(Property.class);

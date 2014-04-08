@@ -2,7 +2,6 @@ package org.jdal.aop;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.annotation.AnnotationUtils;
 import org.jdal.annotation.SerializableProxy;
 import org.springframework.aop.framework.autoproxy.ProxyCreationContext;
 import org.springframework.aop.support.DefaultIntroductionAdvisor;
@@ -10,6 +9,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  * Advisor for SerializableProxy annotation on types.

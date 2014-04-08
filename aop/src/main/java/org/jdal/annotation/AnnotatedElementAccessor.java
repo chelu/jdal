@@ -1,6 +1,6 @@
 package org.jdal.annotation;
 /*
- * Copyright 2009-2013 Jose Luis Martin.
+ * Copyright 2009-2014 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,15 +32,14 @@ import org.springframework.util.ReflectionUtils.MethodCallback;
 
 
 /**
- * Utility class for dealing with annotations, add some methods
- * to spring core utility class.
+ * Utility class for dealing with annotations elements.
  * 
  * @author Jose Luis Martin.
  * @since 2.0
  */
-public abstract class AnnotationUtils extends org.springframework.core.annotation.AnnotationUtils {
+public abstract class AnnotatedElementAccessor  {
 	
-	private static final Log log = LogFactory.getLog(AnnotationUtils.class);
+	private static final Log log = LogFactory.getLog(AnnotatedElementAccessor.class);
 
 	/**
 	 * Find annotated elements on types

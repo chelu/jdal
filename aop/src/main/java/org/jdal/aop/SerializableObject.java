@@ -16,7 +16,6 @@
 package org.jdal.aop;
 
 import java.io.ObjectStreamException;
-import java.io.Serializable;
 
 /**
  * Serializable Object interface.

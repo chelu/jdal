@@ -49,7 +49,7 @@ custom namespace:
 
 ```
 
-Or we can use @SerializableProxy annotation on the bean types.
+Or we can use `@SerializableProxy` annotation on the bean types.
 
 ```java
 

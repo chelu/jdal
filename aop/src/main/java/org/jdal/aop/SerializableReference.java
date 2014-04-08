@@ -118,7 +118,7 @@ public class SerializableReference implements Serializable {
 			if (log.isDebugEnabled())
 				log.debug("Resolving serializable object to bean name [" + targetBeanName + "]");
 			
-			return getSerializableProxy(beanFactory.getBean(targetBeanName));
+			return getSerializableProxy();
 		}
 			
 		if (log.isDebugEnabled()) 
@@ -131,27 +131,36 @@ public class SerializableReference implements Serializable {
 		PropertyValues pvs = rbd.getPropertyValues();
 		if (pvs.contains(field.getName())) {
 			Object value = pvs.getPropertyValue(field.getName());
-			if (value instanceof BeanReference) 
-				return getSerializableProxy(((BeanReference) value).getBeanName());
+			if (value instanceof BeanReference) {
+				// cache the bean name 
+				this.targetBeanName = ((BeanReference) value).getBeanName();
+				return getSerializableProxy();
+			}
+		}
+		
+		// Check Autowired
+		try {
+			Object bean = beanFactory.resolveDependency(descriptor, beanName);
+			
+			if (bean != null)
+				return getSerializableProxy(bean);
+		}
+		catch(BeansException be) {
+			// dependency not found.
 		}
 		
 		// Check Resource annotation
 		if (field.isAnnotationPresent(Resource.class)) {
 			Resource r = field.getAnnotation(Resource.class);
 			String name = StringUtils.isEmpty(r.name()) ? descriptor.getField().getName() : r.name();
-
-			return getSerializableProxy(beanFactory.getBean(name));
-		}
-		
-		// Check Autowired
-		try {
-			return getSerializableProxy(beanFactory.resolveDependency(descriptor, beanName));
-		}
-		catch(BeansException be) {
 			
+			if (beanFactory.containsBean(name)) {
+				this.targetBeanName = name;
+				return getSerializableProxy();
+			}
 		}
 		
-		// Try with dependt beans.		
+		// Try with depend beans.		
 		String[] dependentBeans = beanFactory.getDependenciesForBean(beanName);
 		List<String> candidates = new ArrayList<String>();
 		
@@ -180,11 +189,15 @@ public class SerializableReference implements Serializable {
 	
 	protected Object getSerializableProxy(Object targetObject) {
 		if (targetBeanName != null) 
-			return  ProxyUtils.createSerializableProxy(beanFactory.getBean(targetBeanName), 
-					proxyTargetClass, useMemoryCache, beanFactory, targetBeanName);
+			return getSerializableProxy();
 		
 		return ProxyUtils.createSerializableProxy(targetObject, proxyTargetClass, useMemoryCache,
 				beanFactory, descriptor,  beanName);
+	}
+	
+	protected Object getSerializableProxy() {
+		return  ProxyUtils.createSerializableProxy(beanFactory.getBean(targetBeanName), 
+				proxyTargetClass, useMemoryCache, beanFactory, targetBeanName);
 	}
 	
 	public void setBeanFactory(BeanFactory beanFactory) {

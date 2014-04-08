@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.annotation.AnnotationUtils;
+import org.jdal.annotation.AnnotatedElementAccessor;
 import org.jdal.annotation.SerializableProxy;
 import org.jdal.aop.ProxyUtils;
 import org.jdal.aop.SerializableAopProxy;
@@ -32,6 +32,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  * BeanPostProcessor that process {@link org.jdal.annotation.SerializableProxy} annotation 
@@ -66,18 +67,18 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 			return ProxyUtils.createSerializableProxy(bean, proxyTargetClass, ann.useCache(), beanFactory, beanName);
 		}
 
-		List<AnnotatedElement> elements = AnnotationUtils.findAnnotatedElements(SerializableProxy.class, bean.getClass());
+		List<AnnotatedElement> elements = AnnotatedElementAccessor.findAnnotatedElements(SerializableProxy.class, bean.getClass());
 		
 		for (AnnotatedElement element : elements) {
 			Field f = (Field) element;
-			Object value = AnnotationUtils.getValue(element, bean);
+			Object value = AnnotatedElementAccessor.getValue(element, bean);
 			if (value != null && !(value instanceof SerializableAopProxy)) {
 				ann = AnnotationUtils.getAnnotation(element, SerializableProxy.class);
 				boolean proxyTargetClass = !f.getType().isInterface() || ann.proxyTargetClass();
 				Object proxy = getProxy(value, proxyTargetClass, ann.useCache(), 
 						getDependencyDescriptor(element), beanName);
 				if (proxy != null)
-					AnnotationUtils.setValue(element, bean, proxy);
+					AnnotatedElementAccessor.setValue(element, bean, proxy);
 			}
 				
 		}
