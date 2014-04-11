@@ -17,13 +17,14 @@ package org.jdal.aop.config;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.annotation.AnnotatedElementAccessor;
 import org.jdal.annotation.SerializableProxy;
-import org.jdal.aop.ProxyUtils;
+import org.jdal.aop.SerializableProxyUtils;
 import org.jdal.aop.SerializableAopProxy;
 import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.beans.BeansException;
@@ -32,6 +33,8 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.core.MethodParameter;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotationUtils;
 
 /**
@@ -46,6 +49,8 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 	
 	private static final Log log = LogFactory.getLog(SerializableAnnotationBeanPostProcessor.class);
 	private ConfigurableListableBeanFactory beanFactory;
+	
+	
 
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName)
@@ -54,7 +59,7 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 		// Check for already serializable, infraestructure or serializable proxy targets.
 		if (bean instanceof SerializableAopProxy || 
 				bean instanceof AopInfrastructureBean || 
-				beanName.startsWith(ProxyUtils.TARGET_NAME_PREFIX))
+				beanName.startsWith(SerializableProxyUtils.TARGET_NAME_PREFIX))
 			return bean;
 		
 		SerializableProxy ann = AnnotationUtils.findAnnotation(bean.getClass(), SerializableProxy.class);
@@ -64,25 +69,9 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 				log.debug("Creating serializable proxy for bean [" + beanName + "]");
 			
 			boolean proxyTargetClass = !beanFactory.getType(beanName).isInterface() || ann.proxyTargetClass();
-			return ProxyUtils.createSerializableProxy(bean, proxyTargetClass, ann.useCache(), beanFactory, beanName);
+			return SerializableProxyUtils.createSerializableProxy(bean, proxyTargetClass, ann.useCache(), beanFactory, beanName);
 		}
 
-		List<AnnotatedElement> elements = AnnotatedElementAccessor.findAnnotatedElements(SerializableProxy.class, bean.getClass());
-		
-		for (AnnotatedElement element : elements) {
-			Field f = (Field) element;
-			Object value = AnnotatedElementAccessor.getValue(element, bean);
-			if (value != null && !(value instanceof SerializableAopProxy)) {
-				ann = AnnotationUtils.getAnnotation(element, SerializableProxy.class);
-				boolean proxyTargetClass = !f.getType().isInterface() || ann.proxyTargetClass();
-				Object proxy = getProxy(value, proxyTargetClass, ann.useCache(), 
-						getDependencyDescriptor(element), beanName);
-				if (proxy != null)
-					AnnotatedElementAccessor.setValue(element, bean, proxy);
-			}
-				
-		}
-		
 		return bean;
 	}
 	
@@ -94,7 +83,7 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 	protected Object getProxy(Object target, boolean proxyTargetClass, boolean useCache,
 			DependencyDescriptor descriptor, String beanName) {
 		
-		return ProxyUtils.createSerializableProxy(target, proxyTargetClass, useCache, 
+		return SerializableProxyUtils.createSerializableProxy(target, proxyTargetClass, useCache, 
 				beanFactory, descriptor, beanName);
 	}
 
@@ -113,4 +102,43 @@ public class SerializableAnnotationBeanPostProcessor extends InstantiationAwareB
 	protected DependencyDescriptor getDependencyDescriptor(AnnotatedElement ae) {
 		return new DependencyDescriptor((Field) ae, false);
 	}
+
+	/**
+	 * Lookup for {@link SerializableProxy} annotation on fields or methods and 
+	 * replace value with a Serializable proxy.
+	 */
+	@Override
+	public Object postProcessBeforeInitialization(Object bean, String beanName)
+			throws BeansException {
+		
+		List<AnnotatedElement> elements = AnnotatedElementAccessor.findAnnotatedElements(SerializableProxy.class, bean.getClass());
+		
+		for (AnnotatedElement element : elements) {
+			ResolvableType type = getResolvableType(element);
+			Object value = AnnotatedElementAccessor.getValue(element, bean);
+			if (value != null && !(value instanceof SerializableAopProxy)) {
+				SerializableProxy ann = AnnotationUtils.getAnnotation(element, SerializableProxy.class);
+				boolean proxyTargetClass = !type.resolve().isInterface() || ann.proxyTargetClass();
+				Object proxy = getProxy(value, proxyTargetClass, ann.useCache(), 
+						getDependencyDescriptor(element), beanName);
+				if (proxy != null)
+					AnnotatedElementAccessor.setValue(element, bean, proxy);
+			}	
+		}
+		
+		return bean;
+	}
+
+	private ResolvableType getResolvableType(AnnotatedElement element) {
+		if (element instanceof Field)
+			return ResolvableType.forField((Field) element);
+		else if (element instanceof Method)
+			return ResolvableType.forMethodParameter(
+					new MethodParameter((Method) element, 0));
+		
+		throw new IllegalArgumentException("SerializableProxy annotation should only be applied on types" +
+				", fields or methods but was found in [" + element.toString() + "]");
+	}
+
+	
 }

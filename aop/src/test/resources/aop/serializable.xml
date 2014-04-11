@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdal-aop="http://www.jdal.org/schema/jdal-aop"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.jdal.org/schema/jdal-aop http://www.jdal.org/schema/jdal-aop.xsd">
+
+	
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<bean id="noSerializableAnnotatedBean" class="aop.NoSerializableAnnotatedBean">
+	</bean>
+	
+	<bean id="serializableProxyAdvsor" class="org.jdal.aop.SerializableProxyAdvisor" scope="prototype" />
+	
+	<bean id="methodTracer" class="org.springframework.aop.interceptor.DebugInterceptor" />
+	
+	<aop:config>
+		<aop:advisor advice-ref="methodTracer" pointcut="execution(*  *(..)))"/>
+	</aop:config>
+
+</beans>

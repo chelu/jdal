@@ -62,4 +62,14 @@ public class SerializableIntroductionInterceptor extends IntroductionInfoSupport
 		this.reference = reference;
 	}
 
+	@Override
+	public int hashCode() {
+		return SerializableIntroductionInterceptor.class.hashCode() * 31;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof SerializableIntroductionInterceptor;
+	}
+
 }

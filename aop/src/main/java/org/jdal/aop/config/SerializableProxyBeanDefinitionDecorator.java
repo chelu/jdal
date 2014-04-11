@@ -15,7 +15,7 @@
  */
 package org.jdal.aop.config;
 
-import org.jdal.aop.ProxyUtils;
+import org.jdal.aop.SerializableProxyUtils;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
@@ -46,8 +46,8 @@ public class SerializableProxyBeanDefinitionDecorator implements
 
 		// Register the original bean definition
 		BeanDefinitionHolder holder =
-				ProxyUtils.createSerializableProxy(definition, parserContext.getRegistry(), proxyTargetClass);
-		String targetBeanName = ProxyUtils.getTargetBeanName(definition.getBeanName());
+				SerializableProxyUtils.createSerializableProxy(definition, parserContext.getRegistry(), proxyTargetClass);
+		String targetBeanName = SerializableProxyUtils.getTargetBeanName(definition.getBeanName());
 		parserContext.getReaderContext().fireComponentRegistered(
 				new BeanComponentDefinition(definition.getBeanDefinition(), targetBeanName));
 		return holder;

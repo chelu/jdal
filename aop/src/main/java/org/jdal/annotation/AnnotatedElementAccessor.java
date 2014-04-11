@@ -1,4 +1,3 @@
-package org.jdal.annotation;
 /*
  * Copyright 2009-2014 Jose Luis Martin.
  *
@@ -14,7 +13,7 @@ package org.jdal.annotation;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package org.jdal.annotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;

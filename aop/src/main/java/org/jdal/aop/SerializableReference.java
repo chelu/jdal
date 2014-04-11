@@ -191,12 +191,12 @@ public class SerializableReference implements Serializable {
 		if (targetBeanName != null) 
 			return getSerializableProxy();
 		
-		return ProxyUtils.createSerializableProxy(targetObject, proxyTargetClass, useMemoryCache,
+		return SerializableProxyUtils.createSerializableProxy(targetObject, proxyTargetClass, useMemoryCache,
 				beanFactory, descriptor,  beanName);
 	}
 	
 	protected Object getSerializableProxy() {
-		return  ProxyUtils.createSerializableProxy(beanFactory.getBean(targetBeanName), 
+		return  SerializableProxyUtils.createSerializableProxy(beanFactory.getBean(targetBeanName), 
 				proxyTargetClass, useMemoryCache, beanFactory, targetBeanName);
 	}
 	
@@ -242,6 +242,14 @@ public class SerializableReference implements Serializable {
 
 	public String getTargetBeanName() {
 		return targetBeanName;
+	}
+
+	public ConfigurableListableBeanFactory getBeanFactory() {
+		return beanFactory;
+	}
+
+	public void setBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		this.beanFactory = beanFactory;
 	}
 
 }

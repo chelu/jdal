@@ -19,7 +19,6 @@ package aop;
  *
  * @author Jose Luis Martin
  * @since 2.0
- *
  */
 public class NotTargetAware {
 

@@ -15,7 +15,7 @@
  */
 package org.jdal.aop.config;
 
-import org.jdal.aop.ProxyUtils;
+import org.jdal.aop.SerializableProxyUtils;
 import org.jdal.aop.SerializableTargetSource;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyConfig;
@@ -58,7 +58,7 @@ public class SerializableProxyFactoryBean  extends ProxyConfig implements Factor
 	 protected Object createProxy() {
 		Object target  = beanFactory.getBean(this.targetBeanName);
 		
-		return  ProxyUtils.createSerializableProxy(target, isProxyTargetClass(), false,
+		return  SerializableProxyUtils.createSerializableProxy(target, isProxyTargetClass(), false,
 				this.beanFactory, this.targetBeanName);
 	}
 
