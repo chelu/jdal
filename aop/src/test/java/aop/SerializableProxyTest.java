@@ -55,7 +55,8 @@ public class SerializableProxyTest {
 	@Test 
 	public void testAutoproxySerializableAdvisor() throws Exception {
 		
-		NoSerializableAnnotatedBean nsab = context.getBean(NoSerializableAnnotatedBean.class);
+		NoSerializableAnnotatedBean nsab = context.getBean("noSerializableAnnotatedBean", 
+				NoSerializableAnnotatedBean.class);
 		
 		assertTrue(ClassUtils.isAssignable(Advised.class, nsab.getClass()));
 		Advised advised = (Advised) nsab;

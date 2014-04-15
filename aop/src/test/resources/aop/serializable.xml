@@ -17,6 +17,10 @@
 	
 	<bean id="methodTracer" class="org.springframework.aop.interceptor.DebugInterceptor" />
 	
+	<bean id="noSerializableDecorator" class="aop.NoSerializableAnnotatedBean">
+		<jdal-aop:serializable-proxy/>
+	</bean>
+	
 	<aop:config>
 		<aop:advisor advice-ref="methodTracer" pointcut="execution(*  *(..)))"/>
 	</aop:config>
