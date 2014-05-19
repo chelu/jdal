@@ -13,33 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.vaadin;
+package org.jdal.vaadin.data.converter;
 
-import com.vaadin.util.CurrentInstance;
+import java.text.DateFormat;
+import java.util.Locale;
+
+import org.springframework.context.i18n.LocaleContextHolder;
+
+import com.vaadin.data.util.converter.StringToDateConverter;
 
 /**
- * Wrapper for UI identifier to storing it on {@link CurrentInstance}
+ * Date converter using {@link LocaleContextHolder}
  * 
  * @author Jose Luis Martin
- * @since 2.0
+ * @since 1.0
  */
-public class UIid {
+public class DateConverter extends StringToDateConverter {
 
-	private Integer uiId;
-
-	/**
-	 * @param uiId
-	 */
-	public UIid(Integer uiId) {
-		this.uiId = uiId;
-	}
-
-	public Integer getUiId() {
-		return uiId;
-	}
-
-	public void setUiId(Integer uiId) {
-		this.uiId = uiId;
+	@Override
+	protected DateFormat getFormat(Locale locale) {
+		if (locale == null) 
+			locale = LocaleContextHolder.getLocale();
+		
+	    DateFormat f = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+                DateFormat.SHORT, locale);
+        f.setLenient(false);
+        
+        return f;
 	}
 
 }

@@ -40,6 +40,10 @@ public class ClearFilterAction extends TableButtonListener {
 	public void buttonClick(ClickEvent event) {
 		PageableTable<?> table = getTable();
 		Filter filter = (Filter) table.getFilter();
+		
+		if (filter == null)
+			return;
+		
 		filter.clear();
 		
 		if (table.getFilterForm() instanceof Form) {

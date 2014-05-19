@@ -106,7 +106,7 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 	@Override
 	public void buttonClick(ClickEvent event) {
 		Button selected = event.getButton();
-		selected.setStyleName("selected");
+		selected.addStyleName("selected");
 		
 		for (Button b : buttons) {
 			if (!b.equals(event.getButton()))
