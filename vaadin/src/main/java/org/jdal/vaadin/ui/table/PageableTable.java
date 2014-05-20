@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.annotation.SerializableProxy;
@@ -117,6 +119,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 	
 	@SuppressWarnings("unchecked")
+	@PostConstruct
 	public void init() {
 		// build Component
 		verticalLayout = new VerticalLayout();
