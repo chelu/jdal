@@ -17,6 +17,8 @@ package org.jdal.vaadin.ui.table;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
+
 import org.jdal.beans.MessageSourceWrapper;
 import org.jdal.dao.Page;
 import org.jdal.dao.Paginator;
@@ -90,6 +92,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		page.firstPage();
 	}
 	
+	@PostConstruct
 	public void init() {
 		if (next == null) {
 			setNext(createButton(nextIconUrl));

@@ -18,7 +18,6 @@ package org.jdal.vaadin.ui;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CustomComponent;
 
 /**
@@ -31,8 +30,7 @@ public class ComponentViewAdapter extends CustomComponent implements View {
 	
 	public ComponentViewAdapter(Component component) {
 		if (component.getParent() != null) {
-			ComponentContainer cc = (ComponentContainer) component.getParent();
-			cc.removeComponent(component);
+			component.setParent(null);
 		}
 		
 		setCompositionRoot(component);
