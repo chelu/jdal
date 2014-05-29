@@ -34,6 +34,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
@@ -255,6 +256,20 @@ public abstract class FormUtils {
 		}
 		
 		return df;
+	}
+	
+	public static void showDialog(Component component, String caption, String width, String height) {
+		Dialog dlg = new Dialog(component);
+		dlg.setWidth(width);
+		dlg.setHeight(height);
+		dlg.center();
+		dlg.setCaption(caption);
+		dlg.show();
+		
+	}
+	
+	public static void showDialog(Component component, String caption) {
+		showDialog(component, caption, "80%", "80%");
 	}
 
 }

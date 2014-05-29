@@ -145,6 +145,17 @@ public class SerializableProxyUtils {
 	}
 	
 	/**
+	 * Creates a new serializable proxy for given target holding it in memory 
+	 * until deserialization.
+	 * 
+	 * @param target object to proxy
+	 * @return a serialziable proxy for target.
+	 */
+	public static Object createCachedSerializableProxy(Object target) {
+		return createSerializableProxy(target, true, true, null, null);
+	}
+	
+	/**
 	 * Create a new Serializable proxy for the given target
 	 * @param target target to proxy
 	 * @param beanFactory beanFactory to use.

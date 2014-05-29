@@ -17,6 +17,7 @@ package org.jdal.vaadin.ui.table;
 
 import java.io.Serializable;
 
+import com.vaadin.event.Action;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -26,13 +27,10 @@ import com.vaadin.ui.Button.ClickListener;
  * 
  * @author Jose Luis Martin
  */
-public abstract class ButtonListener implements ClickListener, Serializable {
-
-	private String caption;
-	private String description;
-	private Resource icon;
-	private String defaultIcon;
+public abstract class ButtonListener extends Action implements ClickListener, Serializable {
 	
+	private String description;
+	private String defaultIcon;
 	
 	/**
 	 * Creates new ButtonListener
@@ -55,42 +53,13 @@ public abstract class ButtonListener implements ClickListener, Serializable {
 	 * @param icon the button icon
 	 */
 	public ButtonListener(String caption, Resource icon) {
-		this.caption = caption;
-		this.icon = icon;
+		super(caption, icon);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	public abstract void buttonClick(ClickEvent event);
-
-	/**
-	 * @return the caption
-	 */
-	public String getCaption() {
-		return caption;
-	}
-
-	/**
-	 * @param caption the caption to set
-	 */
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
-
-	/**
-	 * @return the icon
-	 */
-	public Resource getIcon() {
-		return icon;
-	}
-
-	/**
-	 * @param icon the icon to set
-	 */
-	public void setIcon(Resource icon) {
-		this.icon = icon;
-	}
 
 	/**
 	 * @return the description
@@ -119,6 +88,5 @@ public abstract class ButtonListener implements ClickListener, Serializable {
 	public void setDefaultIcon(String defaultIcon) {
 		this.defaultIcon = defaultIcon;
 	}
-
 
 }

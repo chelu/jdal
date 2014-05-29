@@ -82,7 +82,7 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		Label applicationNameLabel = new Label(getMessage(applicationName));
 		applicationNameLabel.addStyleName("jd-login-appname");
 		applicationNameLabel.addStyleName(Reindeer.LABEL_H2);
-		applicationNameLabel.setSizeUndefined();
+		// applicationNameLabel.setSizeUndefined();
 		
 		loginButton.addClickListener(this);
 		loginButton.setCaption(getMessage("loginView.loginButtonCaption"));

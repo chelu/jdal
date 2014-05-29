@@ -113,6 +113,36 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 				b.removeStyleName("selected");
 		}
 	}
+	
+	/**
+	 * Simulates a button click on first button with provided caption
+	 * @param caption caption to search.
+	 */
+	public void click(String caption) {
+		if (caption == null && buttons.size() > 0) {
+			Button button = buttons.get(0);
+			button.click();
+			return;
+		}
+		
+		Button button = getButtonByCaption(caption);
+		if (button != null)
+			button.click();
+	}
+
+	/**
+	 * Find a button by caption
+	 * @param caption caption to search
+	 * @return the button, null if none
+	 */
+	private Button getButtonByCaption(String caption) {
+		for (Button b : buttons) {
+			if (caption.equals(b.getCaption()))
+				return b;
+		}
+		
+		return null;
+	}
 
 	public int getLayoutType() {
 		return layoutType;
