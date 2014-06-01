@@ -58,7 +58,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 		navigator.addProvider(viewProvider);
 		buildLogin();
 		setContent(root);
-		mainView.setStyleName(Reindeer.PANEL_LIGHT);
 		mainView.setSizeFull();
 		doInit(request);
 	}
@@ -82,22 +81,24 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 	 * Build application main window
 	 */
 	protected void buildMain() {
-		root.removeAllComponents();
-		top.setWidth(100, Unit.PERCENTAGE);
-		top.setSpacing(false);
-		top.setMargin(false);
-		top.addComponent(buttonBar);
-		root.addComponent(top);
-		root.addComponent(mainView);
-		root.setSpacing(false);
-		root.setMargin(false);
-		root.setExpandRatio(top, 0);
-		root.setExpandRatio(mainView, 1);
+		this.root.removeAllComponents();
+		this.top.setWidth(100, Unit.PERCENTAGE);
+		this.top.setSpacing(false);
+		this.top.setMargin(false);
+		this.top.addComponent(buttonBar);
+		this.root.addComponent(top);
+		this.root.addComponent(mainView);
+		this.root.setSpacing(false);
+		this.root.setMargin(false);
+		this.root.setExpandRatio(top, 0);
+		this.root.setExpandRatio(mainView, 1);
 	}
 	
 	protected void addStyleNames() {
-		root.addStyleName("jd-app-root");
-		top.addStyleName("jd-app-top");
+		this.root.addStyleName("jd-app-root");
+		this.top.addStyleName("jd-app-top");
+		this.mainView.addStyleName("jd-app-main");
+		this.mainView.addStyleName(Reindeer.PANEL_LIGHT);
 	}
 
 	@Override

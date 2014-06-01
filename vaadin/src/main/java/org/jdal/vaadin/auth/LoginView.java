@@ -124,9 +124,9 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 			fb.row(BoxFormBuilder.SIZE_FULL);
 			fb.add(imageWrapper, BoxFormBuilder.SIZE_FULL, Alignment.MIDDLE_CENTER);
 		}
-		fb.row(true);
+		fb.row();
 		fb.startBox();
-		fb.row(50);
+		fb.row(30);
 		fb.add(errorLabel, BoxFormBuilder.SIZE_FULL, Alignment.BOTTOM_CENTER);
 		fb.endBox();
 		fb.row();
