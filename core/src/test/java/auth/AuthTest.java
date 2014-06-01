@@ -18,6 +18,7 @@ import org.jdal.auth.AuthManager;
 import org.jdal.auth.AuthPlain;
 import org.jdal.auth.AuthStrategy;
 import org.jdal.dao.UserDao;
+import org.jdal.model.DefaultUser;
 import org.jdal.model.User;
 
 /**
@@ -108,7 +109,7 @@ public class AuthTest extends TestCase {
 	 * @return new test user
 	 */
 	private User newTestUser() {
-		User user = new User();
+		DefaultUser user = new DefaultUser();
 		user.setPassword(STORED_PASS);
 		user.setUsername(USERNAME);
 		return user;

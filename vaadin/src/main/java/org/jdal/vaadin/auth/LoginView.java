@@ -82,7 +82,7 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		Label applicationNameLabel = new Label(getMessage(applicationName));
 		applicationNameLabel.addStyleName("jd-login-appname");
 		applicationNameLabel.addStyleName(Reindeer.LABEL_H2);
-		// applicationNameLabel.setSizeUndefined();
+		applicationNameLabel.setSizeUndefined();
 		
 		loginButton.addClickListener(this);
 		loginButton.setCaption(getMessage("loginView.loginButtonCaption"));
@@ -115,7 +115,7 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		fb.row();
 		fb.startBox();
 		fb.setFixedHeight();
-		fb.row();
+		fb.row(false);
 		fb.add(greeting, Alignment.TOP_LEFT);
 		fb.add(applicationNameLabel, Alignment.TOP_RIGHT);
 		fb.endBox();
@@ -124,7 +124,7 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 			fb.row(BoxFormBuilder.SIZE_FULL);
 			fb.add(imageWrapper, BoxFormBuilder.SIZE_FULL, Alignment.MIDDLE_CENTER);
 		}
-		fb.row();
+		fb.row(true);
 		fb.startBox();
 		fb.row(50);
 		fb.add(errorLabel, BoxFormBuilder.SIZE_FULL, Alignment.BOTTOM_CENTER);

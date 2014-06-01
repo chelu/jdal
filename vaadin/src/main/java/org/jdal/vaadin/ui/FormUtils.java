@@ -272,4 +272,34 @@ public abstract class FormUtils {
 		showDialog(component, caption, "80%", "80%");
 	}
 
+	/**
+	 * Fill combo with a list of objects removing all items.
+	 * 
+	 * @param data list to fill with.
+	 * @param clear true if clear all items before adding new ones.
+	 */
+	public static void fillCombo(ComboBox combo, List<?> data) {
+		fillCombo(combo, data, true);
+	}
+	
+	/**
+	 * Fill combo with a list of objeces.
+	 * @param data list to fill with.
+	 * @param clear true if clear all items before adding new ones.
+	 */
+	public static void fillCombo(ComboBox combo, List<?> data, boolean clear) {
+		Object selected = combo.getValue();
+		
+		if (clear) {
+			combo.removeAllItems();
+		}
+		
+		for (Object o : data) {
+			combo.addItem(o);
+		}
+		
+		if (data.contains(selected))
+			combo.setValue(selected);
+	}
+
 }

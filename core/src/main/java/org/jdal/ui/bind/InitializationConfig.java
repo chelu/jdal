@@ -29,7 +29,7 @@ public class InitializationConfig implements Serializable {
 	private String sortPropertyName;
 	
 	/**
-	 * @param class1
+	 * @param type
 	 */
 	public InitializationConfig(Class<?> type) {
 		this.type = type;

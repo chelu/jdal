@@ -511,10 +511,13 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 
 	/**
-	 * 
+	 * Refresh table
 	 */
 	public void refresh() {
-		paginator.setPage(page.getPage());
+		this.paginator.setPage(page.getPage());
+		
+		if (this.filterForm != null)
+			this.filterForm.refresh();
 	}
 
 	/**
