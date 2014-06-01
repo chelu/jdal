@@ -26,7 +26,19 @@
 		<xsd:attribute name="width" type="xsd:integer" />
 		<xsd:attribute name="expand-ratio" type="xsd:float" />
 		<xsd:attribute name="renderer" type="xsd:string" />
-		<xsd:attribute name="editor" type="xsd:string" />
+		<xsd:attribute name="editor" type="xsd:string">
+		    <xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[Bean name to use as model editor.]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type type="org.jdal.View" />
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
 		<xsd:attribute name="cell-editor" type="xsd:string" />
 		<xsd:attribute name="cell-component" type="xsd:string" />
 		<xsd:attribute name="sortable" type="xsd:boolean" />

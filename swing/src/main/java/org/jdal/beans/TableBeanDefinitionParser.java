@@ -48,6 +48,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String PAGEABLE_TABLE_SUFFIX = "PageableTable";
 	private static final String SERVICE_SUFFIX = "Service";
 	private static final String EDITOR_SUFFIX = "Editor";
+	private static final String EDITOR = "editor";
+	private static final String EDITOR_NAME = "editorName";
 	private static final String DATA_SOURCE = "dataSource";
 	private static final String SERVICE_ATTRIBUTE = "service";
 	private static final String PAGINATOR_VIEW = "paginatorView";
@@ -58,7 +60,6 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String ACTIONS = "actions";
 	private static final String USE_ACTIONS = "use-actions";
 	private static final String GUI_FACTORY = "guiFactory";
-	private static final String EDITOR = "editorName";
 	private static final String PERSISTENT_SERVICE = "persistentService";
 	private static final String FILTER = "filter";
 	private static final String FILTER_VIEW = "filter-view";
@@ -161,7 +162,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		bdb.addPropertyReference(TABLE, pageableTableBeanName);
 		bdb.addPropertyReference(GUI_FACTORY, guiFactory);
-		bdb.addPropertyValue(EDITOR, editor);
+		bdb.addPropertyValue(EDITOR_NAME, editor);
 		bdb.addPropertyReference(PERSISTENT_SERVICE, dataSource);
 		
 		if (element.hasAttribute(FILTER_VIEW))

@@ -56,7 +56,8 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String ACTIONS = "actions";
 	private static final String USE_ACTIONS = "use-actions";
 	private static final String GUI_FACTORY = "guiFactory";
-	private static final String EDITOR = "editorName";
+	private static final String EDITOR = "editor";
+	private static final String EDITOR_NAME = "editorName";
 	private static final String FILTER = "filter";
 	private static final String FILTER_FORM = "filter-form";
 	private static final String TABLE_SERVICE = "tableService";
@@ -138,7 +139,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb.addPropertyValue(NAME, pageableTableBeanName);
 		bdb.addPropertyReference(TABLE, tableBeanName);
 		bdb.addPropertyReference(GUI_FACTORY, guiFactory);
-		bdb.addPropertyValue(EDITOR, editor);
+		bdb.addPropertyValue(EDITOR_NAME, editor);
 		bdb.addPropertyValue(ENTITY_CLASS, entity);
 		
 		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, TABLE_SERVICE);
