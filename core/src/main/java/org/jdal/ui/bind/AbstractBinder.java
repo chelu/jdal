@@ -16,7 +16,6 @@
 package org.jdal.ui.bind;
 
 import java.beans.PropertyDescriptor;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.beans.PropertyUtils;
 import org.jdal.beans.SimpleTypeConverter;
+import org.jdal.beans.SpringConverter;
 import org.jdal.text.PeriodFormatAnnotationFactory;
 import org.jdal.ui.DefaultModelHolder;
 import org.jdal.ui.ModelHolder;
@@ -45,7 +45,7 @@ import org.springframework.validation.BindingResult;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class AbstractBinder implements PropertyBinder, Serializable {
+public abstract class AbstractBinder extends SpringConverter implements PropertyBinder {
 	
 	private static final Log log = LogFactory.getLog(AbstractBinder.class);
 
@@ -61,15 +61,10 @@ public abstract class AbstractBinder implements PropertyBinder, Serializable {
 	protected boolean readOnly = false;
 	private ControlBindingErrorProcessor errorProcessor = new ControlBindingErrorProcessor();
 	private BindingResult bindingResult;
-	private static DefaultFormattingConversionService conversionService = new 
-			DefaultFormattingConversionService();
-	private SimpleTypeConverter converter = new SimpleTypeConverter();
+	
 	
 	public AbstractBinder() {
-		conversionService.addFormatterForFieldAnnotation(new PeriodFormatAnnotationFactory());
-		
-		converter.setConversionService(conversionService);
-		converter.registerCustomEditor(Date.class, 
+		registerCustomEditor(Date.class, 
 				new CustomDateEditor(SimpleDateFormat.getDateTimeInstance(), true));
 	}
 	
@@ -128,8 +123,9 @@ public abstract class AbstractBinder implements PropertyBinder, Serializable {
 	 */
 	protected void setValue(Object value) {
 		BeanWrapper wrapper = getBeanWrapper();
+		Object convertedValue = convertIfNecessary(value, wrapper.getPropertyType(this.propertyName));
 		try {
-			wrapper.setPropertyValue(propertyName, value);
+			wrapper.setPropertyValue(propertyName, convertedValue);
 			oldValue = value;
 		}
 		catch (PropertyAccessException pae) {
@@ -157,23 +153,11 @@ public abstract class AbstractBinder implements PropertyBinder, Serializable {
 	
 	private BeanWrapper getBeanWrapper() {
 		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(getModel());
-		wrapper.setConversionService(conversionService);
+		wrapper.setConversionService(getConversionService());
 		wrapper.registerCustomEditor(Date.class, 
 				new CustomDateEditor(SimpleDateFormat.getDateTimeInstance(), true));
 		
 		return wrapper;
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T> T convertIfNecessary(Object value, Class<T> requiredType) {
-		try {
-			return (T) conversionService.convert(value, new TypeDescriptor(getProperty()), 
-					TypeDescriptor.valueOf(requiredType));
-		}
-		catch(ConversionException ce) {
-			return converter.convertIfNecessary(value, requiredType);
-		}
-		
 	}
 	
 	/**

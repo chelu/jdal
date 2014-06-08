@@ -1,4 +1,4 @@
-JDAL Library 2.0 (November 2013)
+JDAL Library 2.1 (Jun 2014)
 -------------------------------------------------------------------------------
 http://www.jdal.org
 
@@ -24,19 +24,19 @@ JDAL is freely usable, licensed under the Apache 2.0 license.
 CONTENT
 -------------------------------------------------------------------------------
 
-core:              JDAL Core Library          Data access and common classes
-swing:             JDAL Swing Library         Swing binding and UI
-vaadin:            JDAL Vaadin Library        Vaadin Spring Integration
-aspects:           JDAL Aspects Library       Aspect Library
-web:               JDAL Web Library           Web Library
-  
+core:         JDAL Core Library          Data access and common classes
+swing:        JDAL Swing Library         Swing binding and UI
+vaadin:       JDAL Vaadin Library        Vaadin Spring Integration
+aspects:      JDAL Aspects Library       Aspect Library
+web:          JDAL Web Library           Web Library
+aop:          JDAL Spring AOP Library    DeclareMixin and SerializableProxy support  
 
 COMPILE
 -------------------------------------------------------------------------------
 
 mvn package or mvn package -Dmaven.test.skip=true  (to avoid test)
 
-Test need sample database, install from jdal-samples in db/library.sql
+Test uses a embedded H2 database
 
 
 INSTALL
@@ -48,4 +48,4 @@ mvn install
 AUTHOR
 -------------------------------------------------------------------------------
 
-Jose Luis Martin - jlm@joseluismartin.info
+Jose Luis Martin

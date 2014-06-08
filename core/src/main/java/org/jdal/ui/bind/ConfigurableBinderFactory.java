@@ -29,9 +29,13 @@ import org.jdal.ui.View;
 
 /**
 * Configurable Binder Factory that use a Map ComponentClass -> BinderClass
-* to create Binders for Swing components
+* to create Binders for Swing components.
 * 
-* @author Jose Luis Martin - (jlm@joseluismartin.info)
+* Registered binders has preference over control accessor binder created from 
+* {@link ControlAccessorFactory}
+* 
+* @author Jose Luis Martin.
+* @since 1.1
 */
 public class ConfigurableBinderFactory implements BinderFactory {
 	private final static Log log = LogFactory.getLog(BinderFactory.class);

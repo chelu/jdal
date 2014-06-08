@@ -23,8 +23,10 @@ import org.springframework.core.MethodParameter;
 import org.springframework.util.ClassUtils;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * Type converter that also convert Objects to String.
+ * 
+ * @author Jose Luis Martin
+ * @sice 1.1
  */
 public class SimpleTypeConverter extends org.springframework.beans.SimpleTypeConverter 
 	implements Serializable {
@@ -41,28 +43,35 @@ public class SimpleTypeConverter extends org.springframework.beans.SimpleTypeCon
 	@Override
 	public <T> T convertIfNecessary(Object value, Class<T> requiredType, MethodParameter methodParam)
 			throws TypeMismatchException {
-	
-		if (ClassUtils.isAssignable(String.class, requiredType)) {
-			if (value != null) {
-				PropertyEditor pe = findCustomEditor(value.getClass(), null);
-				if (pe != null) {
-					pe.setValue(value);
-					return (T) pe.getAsText();
+
+		T convertedValue = null;
+		try {
+			convertedValue = super.convertIfNecessary(value, requiredType, methodParam);
+		}
+		catch (TypeMismatchException tme) {
+			// Try Object to String conversion
+			if (ClassUtils.isAssignable(String.class, requiredType)) {
+				if (value != null) {
+					PropertyEditor pe = findCustomEditor(value.getClass(), null);
+					if (pe != null) {
+						pe.setValue(value);
+						return (T) pe.getAsText();
+					}
+					else {  // Object to String
+						return (T) value.toString();
+					}
 				}
-				
-				try {
-					return super.convertIfNecessary(value, requiredType, methodParam);	
-				} catch(Exception e) {
-					return (T) value.toString();
+				else {  // null to String
+					return (T) "";
 				}
+
 			}
 			else {
-				return (T) "";
+				throw tme;
 			}
-			
 		}
-		
-		return super.convertIfNecessary(value, requiredType, methodParam);
+
+		return convertedValue;
 	}
 
 }

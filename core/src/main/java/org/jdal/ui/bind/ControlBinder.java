@@ -30,7 +30,7 @@ import org.springframework.format.Printer;
  * control values. Handle <code>NumberFormat</code> and <code>PeriodFormat</code> 
  * annotations when binding string values to text components.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
  * @see org.jdal.ui.Binder
  * @see org.jdal.ui.bind.AbstractBinder
  * @since 1.1
@@ -52,7 +52,10 @@ public class ControlBinder extends AbstractBinder {
 	 */
 	@Override
 	public void doBind() {
-		controlAccessor = controlAccessorFactory.getControlAccessor(component);
+		this.controlAccessor = controlAccessorFactory.getControlAccessor(component);
+		if (this.controlAccessor == null)
+			throw new IllegalStateException("Unable to find a ControlAccessor for component [" +
+					this.component.getClass().getName() + "]");
 	}
 
 	/**

@@ -16,7 +16,6 @@
 package org.jdal.ui.bind;
 
 import java.awt.Component;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,11 +24,8 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.text.JTextComponent;
 
-import org.jdal.beans.SimpleTypeConverter;
+import org.jdal.beans.SpringConverter;
 import org.jdal.ui.View;
-import org.springframework.beans.PropertyEditorRegistry;
-import org.springframework.beans.TypeConverter;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 
 /**
@@ -37,14 +33,13 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-public abstract class AbstractControlAccessor implements ControlAccessor, Serializable {
+public abstract class AbstractControlAccessor extends SpringConverter implements ControlAccessor {
 	
 	/** control object */
 	private Object control;
 	/** control change listener list */
 	private List<ControlChangeListener> listeners = new ArrayList<ControlChangeListener>();
-	/** type converter */
-	private TypeConverter converter = new SimpleTypeConverter();
+	
 	
 	/**
 	 * Default ctor.
@@ -59,11 +54,8 @@ public abstract class AbstractControlAccessor implements ControlAccessor, Serial
 	 */
 	public AbstractControlAccessor(Object control)  {
 		setControl(control);
-		if (converter instanceof PropertyEditorRegistry) {
-			PropertyEditorRegistry per = (PropertyEditorRegistry) converter;
-			per.registerCustomEditor(Date.class, 
+		registerCustomEditor(Date.class, 
 					new CustomDateEditor(SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT), true));
-		}
 	}
 
 	/**
@@ -82,19 +74,6 @@ public abstract class AbstractControlAccessor implements ControlAccessor, Serial
 		if (!listeners.contains(l))
 			listeners.remove(l);
 		
-	}
-	
-	/**
-	 * Convert Object to required type using <code>SimpleTypeConverter</code>
-	 * @param <T> type to convert to
-	 * @param value value to convert
-	 * @param requiredType type to convert
-	 * @return converted type
-	 * @throws TypeMismatchException
-	 * @see org.springframework.beans.TypeConverter#convertIfNecessary(java.lang.Object, java.lang.Class)
-	 */
-	protected <T> T convertIfNecessary(Object value, Class<T> requiredType) throws TypeMismatchException {
-		return converter.convertIfNecessary(value, requiredType);
 	}
 	
 	/**
