@@ -11,7 +11,7 @@ really need to code and what is already coded in a common java
 database application, avoiding the complexity of many common
 programming tasks.
 
-JDAL is built on top of Hibernate ORM and Spring framework and
+JDAL is built on top of Hibernate or JPA ORMs and Spring framework and
 provides you with a set of core database services and UI Componentes
 ready to be used via configuration on Spring context configuration
 files.

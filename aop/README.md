@@ -73,7 +73,7 @@ public class MainLayout extends VerticalLayout {
 
 ## Maven
 
-The latest release candidate is *2.0.RC1*. configure maven as follows to include it.
+The latest released version is *2.0.0*. configure maven as follows to include it.
 
 ```xml 
 <repositories>
@@ -89,6 +89,6 @@ The latest release candidate is *2.0.RC1*. configure maven as follows to include
 <dependency>
        <groupId>org.jdal</groupId>
        <artifactId>jdal-aop</artifactId>
-       <version>2.0.RC1</version>
+       <version>2.0.0</version>
 </dependency>
 ```
