@@ -40,10 +40,6 @@
         		<entry key="openjpa.RuntimeUnenhancedClasses" value="supported" />
         	</map>
         </property>
-       <!--  <property name="packagesToScan" value="org.jdal.model;dao.jpa"></property> -->
-        <property name="loadTimeWeaver">
-        	<bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
-        </property>
     </bean>
 
 

@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class JpaUtilsTest {
 
 	@PersistenceContext
-	EntityManager em;
+	private EntityManager em;
 	
 	@Test
 	@Transactional

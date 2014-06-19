@@ -13,7 +13,6 @@
 	<artifactId>jdal-swing</artifactId>
 	<name>JDAL Swing Library</name>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>org.jdal</groupId>
