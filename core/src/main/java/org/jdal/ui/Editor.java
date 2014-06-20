@@ -20,7 +20,7 @@ import org.jdal.service.PersistentServiceAware;
 /**
  * Interface for model editors
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  */
 public interface Editor<T> extends PersistentServiceAware<T> {
 	
