@@ -15,6 +15,7 @@
  */
 package dao.jpa;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,7 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("jpaDaos-openjpa.xml")
 public class JpaUtilsOpenJpaTest extends JpaUtilsTest {
