@@ -21,6 +21,7 @@ import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
 import org.jdal.ui.bind.ControlAccessor;
 
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 /**
@@ -35,5 +36,6 @@ public abstract class VaadinBindingUtils {
 		
 		accessors.put(AbstractField.class, FieldAccessor.class);
 		accessors.put(TextField.class, TextFieldAccessor.class);
+		accessors.put(Label.class, LabelAccessor.class);
 	}
 }

@@ -32,6 +32,7 @@ import java.util.Vector;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
@@ -289,4 +290,38 @@ public abstract class FormUtils {
 		return BorderFactory.createEmptyBorder(size, size, size, size);
 	}
 	
+	/**
+	 * Create a box with an aligned component using Component constants for right, center and left.
+	 * @param c component
+	 * @param alignment aligment.
+	 * @return Box with compoenent
+	 */
+	public static Component newBoxForComponent(Component c, float alignment) {
+		Box box = Box.createHorizontalBox();
+		if (Component.RIGHT_ALIGNMENT == alignment) {
+			box.add(Box.createHorizontalGlue());
+			box.add(c);
+		}
+		else if (Component.CENTER_ALIGNMENT == alignment) {
+			box.add(Box.createHorizontalGlue());
+			box.add(c);
+			box.add(Box.createHorizontalGlue());
+		}
+		else { 
+			// default to left
+			box.add(c);
+			box.add(Box.createHorizontalGlue());
+		}
+		
+		return box;
+	}
+	
+	/**
+	 * Create a box with a coponent aligned to left.
+	 * @param c component
+	 * @return Box with the compoenent
+	 */
+	public static Component newBoxForComponent(Component c) {
+		return newBoxForComponent(c, Component.LEFT_ALIGNMENT);
+	}
 }
