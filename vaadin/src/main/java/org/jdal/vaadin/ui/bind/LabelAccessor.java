@@ -44,11 +44,15 @@ public class LabelAccessor extends AbstractControlAccessor {
 	 * {@inheritDoc}
 	 */
 	public void setControlValue(Object value) {
-		this.setControlValue(convertIfNecessary(value, String.class));
+		getControl().setValue(convertIfNecessary(value, String.class));
 	}
 	
 	public Label getControl() {
 		return (Label) super.getControl();
 	}
 
+	@Override
+	public boolean isTextControl() {
+		return true;
+	}
 }
