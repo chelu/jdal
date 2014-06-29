@@ -46,7 +46,7 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 	private Component main;
 	private List<ButtonListener> actions = new LinkedList<ButtonListener>();
 	private List<Button> buttons = new LinkedList<Button>();
-	private boolean useNativeButtons = true;
+	private boolean nativeButtons = true;
 	
 	public ButtonBar() {
 		addStyleName("jd-button-bar");
@@ -85,7 +85,7 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 	 * @return a new button.
 	 */
 	private Button createButton(ButtonListener action) {
-		Button button =  this.useNativeButtons ?  FormUtils.newNativeButton(action) : FormUtils.newButton(action);
+		Button button =  this.nativeButtons ?  FormUtils.newNativeButton(action) : FormUtils.newButton(action);
 		button.addStyleName(createButtonStyleName(action.getCaption()));
 		
 		return button;
@@ -168,12 +168,12 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 		this.actions = actions;
 	}
 
-	public boolean isUseNativeButtons() {
-		return useNativeButtons;
+	public boolean isNativeButtons() {
+		return nativeButtons;
 	}
 
-	public void setUseNativeButtons(boolean useNativeButtons) {
-		this.useNativeButtons = useNativeButtons;
+	public void setNativeButtons(boolean useNativeButtons) {
+		this.nativeButtons = useNativeButtons;
 	}
 	
 }

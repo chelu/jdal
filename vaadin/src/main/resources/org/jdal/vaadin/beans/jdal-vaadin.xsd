@@ -213,12 +213,19 @@
 				</xsd:appinfo>
 			</xsd:annotation>
 		</xsd:attribute>
+		<xsd:attribute name="native-buttons" type="xsd:boolean">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[Switch to use native buttons, false by default]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>	
 		<xsd:attribute name="scope" type="xsd:string" />
 		<xsd:attribute name="order" type="xsd:string" />
 		<xsd:attribute name="sort-property" type="xsd:string" />
 		<xsd:attribute name="page-size" type="xsd:int" />
 		<xsd:attribute name="selectable" type="xsd:boolean" />
-		<xsd:attribute name="multi-select" type="xsd:boolean" />	
+		<xsd:attribute name="multi-select" type="xsd:boolean" />
 	</xsd:complexType>
 	
 	<xsd:complexType name="proxyType">

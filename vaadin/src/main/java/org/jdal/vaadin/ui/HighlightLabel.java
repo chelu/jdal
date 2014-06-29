@@ -15,8 +15,6 @@
  */
 package org.jdal.vaadin.ui;
 
-import ch.qos.logback.classic.pattern.color.HighlightingCompositeConverter;
-
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.shared.communication.SharedState;

@@ -105,6 +105,9 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	private VaadinView<Filter> filterForm;
 	/** the entity class */
 	private Class<T> entityClass;
+	/** use native buttons */
+	private boolean nativeButtons;
+	
 	/** Message Source */
 	@Autowired
 	private MessageSource messageSource;
@@ -187,7 +190,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		hl.setSpacing(true);
 		for (TableButtonListener a : actions) {
 			a.setTable(this);
-			Button b = FormUtils.newButton(a);
+			Button b = FormUtils.newButton(a, this.nativeButtons);
 			hl.addComponent(b);
 		}
 		
@@ -633,5 +636,13 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 
 	public void setSelectable(boolean selectable) {
 		table.setSelectable(selectable);
+	}
+
+	public boolean isNativeButtons() {
+		return nativeButtons;
+	}
+
+	public void setUseNativeButtons(boolean useNativeButtons) {
+		this.nativeButtons = useNativeButtons;
 	}
 }
