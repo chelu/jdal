@@ -40,5 +40,9 @@ public interface GuiFactory {
 	 */
 	VaadinView<?> getView(String name);
 	
+	<T> VaadinView<T> getView(Class<?extends VaadinView<T>> clazz);
+	
+	<T> VaadinView<T> getView(String name, Class<?extends VaadinView<T>> type);
+	
 	ViewDialog newViewDialog(VaadinView<?> view);
 }

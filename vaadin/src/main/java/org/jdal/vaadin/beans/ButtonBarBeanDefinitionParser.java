@@ -15,7 +15,8 @@
  */
 package org.jdal.vaadin.beans;
 
-import org.jdal.beans.SimpleBeanDefinitionParser;
+import org.jdal.beans.BeanDefinitionUtils;
+import org.jdal.beans.CustomBeanDefinitionParser;
 import org.jdal.vaadin.ui.ButtonBar;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
@@ -28,9 +29,10 @@ import org.w3c.dom.Element;
  * @author Jose Luis Martin
  * @since 2.0
  */
-public class ButtonBarBeanDefinitionParser extends SimpleBeanDefinitionParser {
+public class ButtonBarBeanDefinitionParser extends CustomBeanDefinitionParser {
 
 	private static final String ACTIONS_ELEMENT = "actions";
+	private static final String NATIVE_BUTTONS_ELEMENT = "native-buttons";
 	
 	public ButtonBarBeanDefinitionParser() {
 		super(ButtonBar.class);
@@ -40,9 +42,9 @@ public class ButtonBarBeanDefinitionParser extends SimpleBeanDefinitionParser {
 	protected void doParse(Element element, ParserContext parserContext,
 			BeanDefinitionBuilder builder) {
 		
-		super.doParse(element, parserContext, builder);
-		parseDefaultAttributes(element, builder);
+	    parseBeanDefinition(element, parserContext, builder);
 		parseList(element, parserContext, builder, ACTIONS_ELEMENT);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(builder, element, NATIVE_BUTTONS_ELEMENT);
 	}
 	
 }

@@ -17,37 +17,18 @@ package org.jdal.vaadin.beans;
 
 import java.beans.PropertyEditorSupport;
 
-import org.apache.commons.lang.StringUtils;
+import org.jdal.vaadin.ui.FormUtils;
 
-import com.vaadin.server.ClassResource;
-import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Resource;
-import com.vaadin.server.ThemeResource;
 
 public class VaadinResourcePropertyEditor extends PropertyEditorSupport {
-	
-	private static final String THEME_PREFIX = "theme:";
-	private static final String CLASSPATH_PREFIX = "classpath:";
-	private static final String URL_PREFIX = "url:";
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
-		Resource resource;
-		
-		if (text.startsWith(CLASSPATH_PREFIX)) 
-			resource = new ClassResource(StringUtils.substringAfter(text, CLASSPATH_PREFIX));
-		else if (text.startsWith(THEME_PREFIX))
-			resource = new ThemeResource(StringUtils.substringAfter(text, THEME_PREFIX));
-		else if (text.startsWith(URL_PREFIX))
-			resource = new ExternalResource(StringUtils.substringAfter(text, URL_PREFIX));
-		else if (text.contains(":"))
-			resource = new ExternalResource(text);
-		else 
-			resource = new ThemeResource(text);
-		
+		Resource resource = FormUtils.getResource(text);
 		setValue(resource);
 	}
 		

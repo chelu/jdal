@@ -80,4 +80,16 @@ public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAwar
 		return dlg;
 	}
 
+	
+	@Override
+	public <T> VaadinView<T> getView(Class<?extends VaadinView<T>> type) {
+		return this.beanFactory.getBean(type);
+	}
+
+	
+	@Override
+	public <T> VaadinView<T> getView(String name, Class<?extends VaadinView<T>> type) {
+		return this.beanFactory.getBean(name, type);
+	}
+
 }

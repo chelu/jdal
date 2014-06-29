@@ -22,12 +22,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.jdal.beans.StaticMessageSource;
 import org.jdal.cmd.Command;
 import org.jdal.util.comparator.PropertyComparator;
 import org.jdal.vaadin.ui.table.ButtonListener;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import com.vaadin.server.ClassResource;
+import com.vaadin.server.ExternalResource;
+import com.vaadin.server.Resource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -56,6 +61,10 @@ public abstract class FormUtils {
 	
 	public static int OK = 0;
 	public static int CANCEL = 1;
+	public static final String THEME_PREFIX = "theme:";
+	public static final String CLASSPATH_PREFIX = "classpath:";
+	public static final String URL_PREFIX = "url:";
+	
 
 	/**
 	 * Add a default commit/discard buttons to a form
@@ -127,6 +136,20 @@ public abstract class FormUtils {
 		b.setIcon(buttonListener.getIcon());
 		b.setDescription(buttonListener.getDescription());
 		return b;
+	}
+	
+	/**
+	 * Build a new Button from Button Listener
+	 * @param buttonListener
+	 * @param native true for native buttons.
+	 * @return a new Button
+	 */
+	public static Button newButton(ButtonListener buttonListener, boolean isNative) {
+		if (isNative)
+			return newNativeButton(buttonListener);
+		
+		return newButton(buttonListener);
+		
 	}
 
 	/**
@@ -301,5 +324,22 @@ public abstract class FormUtils {
 		if (data.contains(selected))
 			combo.setValue(selected);
 	}
-
+	
+	public static Resource getResource(String url) {
+		Resource resource;
+		
+		if (url.startsWith(CLASSPATH_PREFIX)) 
+			resource = new ClassResource(StringUtils.substringAfter(url, CLASSPATH_PREFIX));
+		else if (url.startsWith(THEME_PREFIX))
+			resource = new ThemeResource(StringUtils.substringAfter(url, THEME_PREFIX));
+		else if (url.startsWith(URL_PREFIX))
+			resource = new ExternalResource(StringUtils.substringAfter(url, URL_PREFIX));
+		else if (url.contains(":"))
+			resource = new ExternalResource(url);
+		else 
+			resource = new ThemeResource(url);
+		
+		return resource;
+	}
+	
 }

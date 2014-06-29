@@ -224,21 +224,24 @@
 	<xsd:complexType name="proxyType">
 			<xsd:attribute name="proxy-target-class" type="xsd:boolean" />
 	</xsd:complexType>
-	
-	
+
 	<xsd:complexType name="buttonBarType">
-		<xsd:sequence>
-			<xsd:element name="actions">
-				<xsd:complexType>
-					<xsd:sequence minOccurs="1" maxOccurs="unbounded">
-						<xsd:any />
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-		</xsd:sequence>
-		<xsd:attribute name="native-buttons" type="xsd:boolean" />
-		<xsd:attribute name="id" type="xsd:string" />
-		<xsd:attribute name="scope" type="xsd:string" />
+		<xsd:complexContent>
+			<xsd:extension base="beans:identifiedType">
+				<xsd:sequence>
+					<xsd:element name="actions">
+						<xsd:complexType>
+							<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+								<xsd:any />
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:group ref="beans:beanElements" />
+				</xsd:sequence>
+				<xsd:attributeGroup ref="beans:beanAttributes" />
+				<xsd:attribute name="native-buttons" type="xsd:boolean" />
+			</xsd:extension>
+		</xsd:complexContent>
 	</xsd:complexType>
 	
 	<xsd:complexType name="actionType">

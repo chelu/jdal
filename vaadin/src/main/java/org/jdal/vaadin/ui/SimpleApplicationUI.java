@@ -54,8 +54,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 		addStyleNames();
 		root.setSizeFull();
 		loginView.addAuthenticationListener(this);
-		Navigator navigator = new Navigator(this, mainView);
-		navigator.addProvider(viewProvider);
 		buildLogin();
 		setContent(root);
 		mainView.setSizeFull();
@@ -92,6 +90,8 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 		this.root.setMargin(false);
 		this.root.setExpandRatio(top, 0);
 		this.root.setExpandRatio(mainView, 1);
+		Navigator navigator = new Navigator(this, mainView);
+		navigator.addProvider(viewProvider);
 	}
 	
 	protected void addStyleNames() {
