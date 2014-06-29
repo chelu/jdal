@@ -19,8 +19,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.jdal.beans.BeanDefinitionUtils;
-import org.jdal.vaadin.ui.table.ConfigurableTable;
-import org.jdal.vaadin.ui.table.PageableTable;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
@@ -75,6 +73,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String TABLE_CLASS = "table-class";
 	private static final String DEFAULT_TABLE_CLASS = "org.jdal.vaadin.ui.table.ConfigurableTable";
 	private static final String DEFAULT_PAGEABLE_TABLE_CLASS = "org.jdal.vaadin.ui.table.PageableTable";
+	private static final String NATIVE_BUTTONS = "native-buttons";
 	
 	/**
 	 * {@inheritDoc}
@@ -149,6 +148,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, SORT_PROPERTY);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, ORDER);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, PAGE_SIZE);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, NATIVE_BUTTONS);
 		
 		
 		if (!element.hasAttribute(USE_ACTIONS) || "true".equals(element.getAttribute(USE_ACTIONS)))

@@ -156,9 +156,8 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		if (paginator != null) {
 			paginator.setModel(page);
 			paginator.addPaginatorListener(this);
+			paginator.setNativeButtons(this.nativeButtons);
 			page.setPageableDataSource(service);
-			// get initial page and wrap data in container
-			paginator.firstPage();
 			// set external sorting, ie don't call Container.sort()
 			table.setSorter(new PageSorter());
 			Component p = paginator.getPanel();
@@ -167,6 +166,9 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			table.setPageLength(page.getPageSize());
 			if (beanFilter != null)
 				page.setFilter(beanFilter);
+			
+			// get initial page and wrap data in container
+			paginator.firstPage();
 		}
 	
 		table.addItemClickListener(this);
@@ -642,7 +644,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		return nativeButtons;
 	}
 
-	public void setUseNativeButtons(boolean useNativeButtons) {
-		this.nativeButtons = useNativeButtons;
+	public void setNativeButtons(boolean nativeButtons) {
+		this.nativeButtons = nativeButtons;
 	}
 }

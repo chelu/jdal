@@ -38,6 +38,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeButton;
 
 /**
  * Paginator implementation for Vaadin framework
@@ -75,6 +76,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	private String previousIconUrl = "images/table/go-previous.png";
 	private String lastIconUrl = "images/table/go-last.png";
 	private String firstIconUrl = "images/table/go-first.png";
+	private boolean nativeButtons;
 	
 	/** 
 	 * Creates a new paginator with default page size of 10 records
@@ -91,9 +93,20 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 		setModel(page);
 		page.firstPage();
 	}
-	
-	@PostConstruct
-	public void init() {
+
+	private Button createButton(String icon) {
+		Button b = nativeButtons ? new NativeButton() : new Button() ;
+		b.setIcon(new ThemeResource(icon));
+
+		return b;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected Component buildPanel() {
+		// buttons
 		if (next == null) {
 			setNext(createButton(nextIconUrl));
 		}
@@ -110,20 +123,6 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 			setFirst(createButton(firstIconUrl));
 		}
 		
-	}
-
-	private Button createButton(String icon) {
-		Button b = new Button();
-		b.setIcon(new ThemeResource(icon));
-
-		return b;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected Component buildPanel() {		
 		// goto page select
 		Label goToLabel = new Label(messageSource.getMessage("vaadinPaginator.goto"));
 		goToLabel.setSizeUndefined();
@@ -310,11 +309,13 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 			goTo.addItem(i);
 		}
 		
-		// Buttons
-		next.setEnabled(hasNext());
-		last.setEnabled(hasNext());
-		previous.setEnabled(hasPrevious());
-		first.setEnabled(hasPrevious());
+		if (next != null)  {
+			// Buttons
+			next.setEnabled(hasNext());
+			last.setEnabled(hasNext());
+			previous.setEnabled(hasPrevious());
+			first.setEnabled(hasPrevious());
+		}
 	}
 	
 	// Getters and Setters 
@@ -490,5 +491,13 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	@Autowired
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource.setMessageSource(messageSource);
+	}
+
+	public boolean isNativeButtons() {
+		return nativeButtons;
+	}
+
+	public void setNativeButtons(boolean nativeButtons) {
+		this.nativeButtons = nativeButtons;
 	}
 }
