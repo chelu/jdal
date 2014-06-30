@@ -40,7 +40,8 @@ public class FindAction extends TableButtonListener {
 	 */
 	@Override
 	public void buttonClick(ClickEvent event) {
-		VaadinView<Filter> filterView = getTable().getFilterForm();
+		PageableTable<?> table = (PageableTable<?>) getTable();
+		VaadinView<Filter> filterView = table.getFilterForm();
 		
 		if (filterView != null) {
 			filterView.update();
@@ -49,6 +50,6 @@ public class FindAction extends TableButtonListener {
 					Notification.show(filterView.getErrorMessage(), Notification.Type.ERROR_MESSAGE);
 			}
 		}
-		getTable().firstPage();
+		table.firstPage();
 	}
 }

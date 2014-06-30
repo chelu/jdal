@@ -40,7 +40,7 @@ public class RemoveAction extends TableButtonListener {
 	@Override
 	public void buttonClick(ClickEvent event) {
 		
-		final PageableTable<?> table = getTable();
+		final TableComponent<?> table = getTable();
 		final Collection<?> selected = table.getSelected();
 		
 		if (selected.isEmpty())  // nothing to delete

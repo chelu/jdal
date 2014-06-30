@@ -46,22 +46,19 @@ public class AddAction extends TableButtonListener {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void buttonClick(ClickEvent event) {
-		final PageableTable<?> table = getTable();
-		
-		if (table.getEditorView() instanceof VaadinView) {
-			VaadinView view = (VaadinView) table.getEditorView();
-			Object bean = BeanUtils.instantiate(table.getEntityClass());
-			view.setModel(bean);
-			ViewDialog dialog = table.getGuiFactory().newViewDialog(view);
-			dialog.setModal(modal);
-			dialog.addCloseListener(new CloseListener() {
+		final TableComponent<?> table = getTable();
+		VaadinView view = table.getEditorView();
+		Object bean = BeanUtils.instantiate(table.getEntityClass());
+		view.setModel(bean);
+		ViewDialog dialog = table.getGuiFactory().newViewDialog(view);
+		dialog.setModal(modal);
+		dialog.addCloseListener(new CloseListener() {
 
-				public void windowClose(CloseEvent e) {
-					table.refresh();
-				}
-			});
-			table.getUI().addWindow(dialog);
-		}
+			public void windowClose(CloseEvent e) {
+				table.refresh();
+			}
+		});
+		table.getUI().addWindow(dialog);
 	}
 
 	/**

@@ -30,7 +30,7 @@ import com.vaadin.ui.Button.ClickEvent;
 @Configurable
 public abstract class TableButtonListener extends ButtonListener {
 	
-	private PageableTable<?> table;
+	private TableComponent<?> table;
 	
 
 	protected transient MessageSourceWrapper messageSource = new MessageSourceWrapper();
@@ -55,14 +55,14 @@ public abstract class TableButtonListener extends ButtonListener {
 	/**
 	 * @return the table
 	 */
-	public PageableTable<?> getTable() {
+	public TableComponent<?> getTable() {
 		return table;
 	}
 
 	/**
 	 * @param table the table to set
 	 */
-	public void setTable(PageableTable<?> table) {
+	public void setTable(TableComponent<?> table) {
 		this.table = table;
 	}
 

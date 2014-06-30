@@ -38,7 +38,7 @@ public class ClearFilterAction extends TableButtonListener {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void buttonClick(ClickEvent event) {
-		PageableTable<?> table = getTable();
+		PageableTable<?> table = (PageableTable<?>) getTable();
 		Filter filter = (Filter) table.getFilter();
 		
 		if (filter == null)

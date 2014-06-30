@@ -31,14 +31,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class Bean {
 	
 	@Autowired
-	PageableTable<Author> authorPageableTable;
+	private PageableTable<Author> authorPageableTable;
 	@Resource
 	@SerializableProxy
-	PageableTable<Category> categoryPageableTable;
+	private PageableTable<Category> categoryPageableTable;
 	
 	@Resource(name="categoryPageableTable")
 	@SerializableProxy
-	PageableTable<Category> categoryTable;
+	private PageableTable<Category> categoryTable;
 
 	public PageableTable<Author> getAuthorPageableTable() {
 		return authorPageableTable;

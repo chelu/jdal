@@ -16,11 +16,7 @@
 package org.jdal.vaadin.ui.table;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -33,105 +29,74 @@ import org.jdal.dao.Page;
 import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PaginatorListener;
-import org.jdal.service.PersistentService;
-import org.jdal.ui.EditorEvent;
-import org.jdal.ui.EditorListener;
-import org.jdal.vaadin.ui.FormUtils;
-import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.form.FormDialog;
-import org.jdal.vaadin.ui.form.ViewDialog;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.MessageSource;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
 /**
- * Vaadin Table with paginator. 
- * <p>Use a BeanItemContainer as 
- * table datasource and request pages using a {@link PersistentService}. </p>
+ * Vaadin Table with paginator. Use a BeanItemContainer as 
+ * table datasource and request pages using a {@link Dao}. </p>
  * 
  * @author Jose Luis Martin
  * @see org.jdal.dao.Dao
+ * @param <T> bean type
  */
 @Configurable
-public class PageableTable<T> extends CustomComponent implements PaginatorListener, 
+public class PageableTable<T> extends TableComponent<T> implements PaginatorListener, 
 	Container.ItemSetChangeListener, ItemClickListener, CloseListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(PageableTable.class);
 	
-	/** the table */
-	private ConfigurableTable table;
-	/** the external paginator */
-	private VaadinPaginator<T> paginator;
 	/** persistentService */
 	@SerializableProxy
-	private Dao<T, Serializable>  service;
+	private Dao<T, Serializable> service;
+	/** external paginator */
+	private VaadinPaginator<T> paginator;
 	/** page */
-	private transient Page<T> page = new Page<T>();
+	transient Page<T> page = new Page<T>();
 	/** Filter */
 	private Filter beanFilter;
-	/** container to use when using external paginator */
-	private BeanItemContainer<T> container;
-	/** Form editor name */
-	private String editor;
-	/** Gui Factory used to get editor instances */
-	@Autowired
-	private transient GuiFactory guiFactory;
 	/** if true, pagesLength change to pageSize */
 	private boolean autoResize = true;
 	/** if true, will create a editor when none configured */
 	private boolean autoCreateEditor = true;
-	/** TableAction List */
-	private List<TableButtonListener> actions = new ArrayList<TableButtonListener>();
 	/** Filter editor */
 	private String filterEditor;
 	/** Filter Form */
 	private VaadinView<Filter> filterForm;
-	/** the entity class */
-	private Class<T> entityClass;
-	/** use native buttons */
-	private boolean nativeButtons;
-	
-	/** Message Source */
-	@Autowired
-	private MessageSource messageSource;
 	private String name;
-	private VerticalLayout verticalLayout;
+	/** propagate service to editors */
+	private boolean propagateService = true;
 	
 	public PageableTable() {
 	}
 	
 	public PageableTable(Class<T> entityClass) {
-		this.entityClass = entityClass;
+		super(entityClass);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void init() {
 		// build Component
-		verticalLayout = new VerticalLayout();
+		VerticalLayout verticalLayout = getVerticalLayout();
 		verticalLayout.setSizeUndefined();
 		verticalLayout.setSpacing(true);
 		
 		// filter 
 		if (filterEditor != null && filterForm == null) {
-			filterForm = (VaadinView<Filter>) guiFactory.getView(filterEditor);
+			filterForm = (VaadinView<Filter>) getGuiFactory().getView(filterEditor);
 		}
 
 		if (filterForm != null) {
@@ -145,25 +110,25 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		}
 		
 		// action group
-		if (actions.size() > 0) {
+		if (getActions().size() > 0) {
 			verticalLayout.addComponent(createButtonBox());
 		}
 		// table
-		verticalLayout.addComponent(table);
-		verticalLayout.setExpandRatio(table, 1.0f);
+		verticalLayout.addComponent(getTable());
+		verticalLayout.setExpandRatio(getTable(), 1.0f);
 		
 		// paginator
 		if (paginator != null) {
 			paginator.setModel(page);
 			paginator.addPaginatorListener(this);
-			paginator.setNativeButtons(this.nativeButtons);
-			page.setPageableDataSource(service);
+			paginator.setNativeButtons(isNativeButtons());
+			page.setPageableDataSource(getService());
 			// set external sorting, ie don't call Container.sort()
-			table.setSorter(new PageSorter());
+			getTable().setSorter(new PageSorter());
 			Component p = paginator.getPanel();
 			verticalLayout.addComponent(p);
 			verticalLayout.setComponentAlignment(p, Alignment.MIDDLE_CENTER);
-			table.setPageLength(page.getPageSize());
+			getTable().setPageLength(page.getPageSize());
 			if (beanFilter != null)
 				page.setFilter(beanFilter);
 			
@@ -171,32 +136,15 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			paginator.firstPage();
 		}
 	
-		table.addItemClickListener(this);
-		this.setCompositionRoot(verticalLayout);
+		getTable().addItemClickListener(this);
 		this.setSizeUndefined();
 		
 	}
 	
 	public void setWidthFull() {
 		this.setWidth("100%");
-		verticalLayout.setWidth("100%");
-		table.setWidth("100%");
-	}
-
-	/**
-	 * Create a ButtonBox from TableAction List
-	 * @return HorizontalLayout with Buttons
-	 */
-	private Component createButtonBox() {
-		HorizontalLayout hl = new HorizontalLayout();
-		hl.setSpacing(true);
-		for (TableButtonListener a : actions) {
-			a.setTable(this);
-			Button b = FormUtils.newButton(a, this.nativeButtons);
-			hl.addComponent(b);
-		}
-		
-		return hl;
+		getVerticalLayout().setWidth("100%");
+		getTable().setWidth("100%");
 	}
 
 	/**
@@ -207,7 +155,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 			log.debug("handling page change event [" + event.toString() + "]");
 		
 		if (autoResize)
-			table.setPageLength(page.getPageSize());
+			getTable().setPageLength(page.getPageSize());
 		
 		loadPage();
 	}
@@ -217,11 +165,17 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void loadPage() {
+		BeanItemContainer<T> container = getContainer();
+		Class<T> entityClass = getEntityClass();
+		
 		if (page.getData() != null && page.getData().size() > 0) {
+			
 			if (container == null) {
+				
 				Class beanClass = entityClass != null ? entityClass : page.getData().get(0).getClass();
 				container = new BeanItemContainer(beanClass, page.getData());
-				table.setContainerDataSource(container);
+				getTable().setContainerDataSource(container);
+				setContainer(container);
 			}
 			else {
 				container.removeAllItems();
@@ -236,79 +190,36 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		paginator.refresh();
 	}
 	
+	
 	/**
-	 * Get default form for edit or add models;
-	 * @return form editor
+	 * Refresh table
 	 */
-	@SuppressWarnings("unchecked")
-	public VaadinView<T> getEditorView() {
-		// If there are a cofigured form editor return it.
-		if (editor != null) {
-			return (VaadinView<T>) guiFactory.getView(editor);
-		}
+	@Override
+	public void refresh() {
+		this.paginator.setPage(page.getPage());
 		
-		return null;
+		if (this.filterForm != null)
+			this.filterForm.refresh();
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Collection<T> getSelected() {
-		Object selection = table.getValue();
-		if (selection instanceof Collection)
-			return (Collection<T>) selection;
-		else {
-			Set<T> set = new HashSet<T>();
-			set.add((T) selection);
-			return set;
-		}
+	@Override
+	public VaadinView<T> getEditorView() {
+		VaadinView<T> view = super.getEditorView();
+		if (view != null && this.propagateService)
+			view.setPersistentService(service);
+		
+		return view;
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * @param selected
 	 */
 	@SuppressWarnings("unchecked")
-	public void itemClick(ItemClickEvent event) {
-		if (event.isDoubleClick()) {
-			VaadinView<T> editor = getEditorView();
-			if (editor != null) {
-				BeanItem<T> bi = (BeanItem<T>) event.getItem();
-				editor.setModel(bi.getBean());
-				editor.refresh();
-				
-				editor.addEditorListener(new EditorListener() {
-					
-					public void modelChanged(EditorEvent e) {
-						refresh();
-					}
-				});
-				
-				ViewDialog dlg =  this.guiFactory.newViewDialog(editor);
-				dlg.init();
-				dlg.center();
-				this.getUI().addWindow(dlg);
-			}
-		}
+	@Override
+	public void delete(Collection<?> selected) {
+		this.service.delete((Collection<T>) selected);
 	}
 	
-	/**
-	 * By default, pageable table handle item clicks to edit items.
-	 * This method disable it.
-	 */
-	public void disableEditorListener() {
-		table.removeItemClickListener(this);
-	}
-	
-	public void enableEditorListener() {
-		table.addItemClickListener(this);
-	}
-	
-	public void addItemClickListener(ItemClickListener listener) {
-		table.addItemClickListener(listener);
-	}
-	
-	public void removeItemClickListener(ItemClickListener listener) {
-		table.removeItemClickListener(listener);
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -317,11 +228,11 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 	
 	public ConfigurableTable getTable() {		
-		return table;
+		return (ConfigurableTable) super.getTable();
 	}
 
 	public void setTable(ConfigurableTable table) {
-		this.table = table;
+		super.setTable(table);
 	}
 
 	public VaadinPaginator<T> getPaginator() {
@@ -332,14 +243,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 		this.paginator = paginator;
 	}
 
-	public Dao<T, Serializable> getService() {
-		return service;
-	}
-
-	public void setService(Dao<T, Serializable> service) {
-		this.service = service;
-	}
-	
 	/**
 	 * @return the filter Object
 	 */
@@ -354,55 +257,7 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	public void setFilter(Object filter) {
 		page.setFilter(filter);
 	}
-
-
-	/**
-	 * @return the editor
-	 * @deprecated use getEditorName instead
-	 */
-	public String getEditor() {
-		return editor;
-	}
 	
-	/**
-	 * @param editor the editor to se
-	 * @deprecated use getEditorName instead
-	 */
-	public void setEditor(String editor) {
-		this.editor = editor;
-	}
-
-	/**
-	 * @param editorName the editor to se
-	 */
-	public void setEditorName(String editorName) {
-		this.editor = editorName;
-	}
-	
-	/**
-	 * @return the editor name
-	 */
-	public String getEditorName() {
-		return editor;
-	}
-
-
-	/**
-	 * @return the guiFactory
-	 */
-	public GuiFactory getGuiFactory() {
-		return guiFactory;
-	}
-
-
-	/**
-	 * @param guiFactory the guiFactory to set
-	 */
-	public void setGuiFactory(GuiFactory guiFactory) {
-		this.guiFactory = guiFactory;
-	}
-
-
 	/**
 	 * @return the autoResize
 	 */
@@ -417,23 +272,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	public void setAutoResize(boolean autoResize) {
 		this.autoResize = autoResize;
 	}
-
-
-	/**
-	 * @return the actions
-	 */
-	public List<TableButtonListener> getActions() {
-		return actions;
-	}
-
-
-	/**
-	 * @param actions the actions to set
-	 */
-	public void setActions(List<TableButtonListener> actions) {
-		this.actions = actions;
-	}
-
 
 	/**
 	 * @return the autoCreateEditor
@@ -451,26 +289,12 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 
 	/**
-	 * @return the entityClass
-	 */
-	public Class<T> getEntityClass() {
-		return entityClass;
-	}
-
-	/**
-	 * @param entityClass the entityClass to set
-	 */
-	public void setEntityClass(Class<T> entityClass) {
-		this.entityClass = entityClass;
-	}
-	
-	/**
 	 * Sort using page requests
 	 */
 	class PageSorter implements TableSorter, Serializable {
 		
 		public void sort(Object[] propertyId, boolean[] ascending) {
-			Column c = table.getColumn(propertyId[0].toString());
+			Column c = getTable().getColumn(propertyId[0].toString());
 			if (c != null && c.isSortable()) {
 				page.setSortName(c.getSortPropertyName());
 				page.setOrder(ascending[0] ? Page.Order.ASC : Page.Order.DESC);
@@ -508,24 +332,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	}
 
 	/**
-	 * @param selected
-	 */
-	@SuppressWarnings("unchecked")
-	public void delete(Collection<?> selected) {
-		service.delete((Collection<T>) selected);
-	}
-
-	/**
-	 * Refresh table
-	 */
-	public void refresh() {
-		this.paginator.setPage(page.getPage());
-		
-		if (this.filterForm != null)
-			this.filterForm.refresh();
-	}
-
-	/**
 	 * @return the filterForm
 	 */
 	public VaadinView<Filter> getFilterForm() {
@@ -559,20 +365,6 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @return the verticalLayout
-	 */
-	public VerticalLayout getVerticalLayout() {
-		return verticalLayout;
-	}
-
-	/**
-	 * @param verticalLayout the verticalLayout to set
-	 */
-	public void setVerticalLayout(VerticalLayout verticalLayout) {
-		this.verticalLayout = verticalLayout;
 	}
 
 	/**
@@ -631,20 +423,21 @@ public class PageableTable<T> extends CustomComponent implements PaginatorListen
 	public void setPageSize(int pageSize) {
 		page.setPageSize(pageSize);
 	}
-	
-	public boolean isSelectable() {
-		return table.isSelectable();
+
+	public Dao<T, Serializable> getService() {
+		return service;
 	}
 
-	public void setSelectable(boolean selectable) {
-		table.setSelectable(selectable);
+	public void setService(Dao<T, Serializable> service) {
+		this.service = service;
+		this.page.setPageableDataSource(service);
 	}
 
-	public boolean isNativeButtons() {
-		return nativeButtons;
+	public boolean isPropagateService() {
+		return propagateService;
 	}
 
-	public void setNativeButtons(boolean nativeButtons) {
-		this.nativeButtons = nativeButtons;
+	public void setPropagateService(boolean propagateService) {
+		this.propagateService = propagateService;
 	}
 }
