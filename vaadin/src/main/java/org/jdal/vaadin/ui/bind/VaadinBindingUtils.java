@@ -19,9 +19,11 @@ import java.util.Map;
 
 import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
 import org.jdal.ui.bind.ControlAccessor;
+import org.jdal.vaadin.ui.table.PageableTable;
 
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 
 /**
@@ -37,5 +39,7 @@ public abstract class VaadinBindingUtils {
 		accessors.put(AbstractField.class, FieldAccessor.class);
 		accessors.put(TextField.class, TextFieldAccessor.class);
 		accessors.put(Label.class, LabelAccessor.class);
+		accessors.put(PageableTable.class, PageableTableAccessor.class);
+		accessors.put(Table.class, TableAccessor.class);
 	}
 }

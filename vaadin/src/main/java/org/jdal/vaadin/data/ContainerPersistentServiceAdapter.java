@@ -39,6 +39,15 @@ public class ContainerPersistentServiceAdapter<T, PK extends Serializable>
 	implements Dao<T, PK> {
 	
 	private Container container;
+	
+	public ContainerPersistentServiceAdapter() {
+		
+	}
+	
+	public ContainerPersistentServiceAdapter(Container container) {
+		this.container = container;
+	}
+	
 
 	/**
 	 * {@inheritDoc}
@@ -73,7 +82,6 @@ public class ContainerPersistentServiceAdapter<T, PK extends Serializable>
 	 * @return
 	 */
 	private Filter getFilter(Object filter) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -88,22 +96,21 @@ public class ContainerPersistentServiceAdapter<T, PK extends Serializable>
 	 * {@inheritDoc}
 	 */
 	public T initialize(T entity, int depth) {
-		// TODO Auto-generated method stub
-		return null;
+		return entity;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public T initialize(T entity) {
-		// TODO Auto-generated method stub
-		return null;
+		return entity;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public T save(T entity) {
+		container.addItem(entity);
 		return entity;
 	}
 
@@ -111,15 +118,13 @@ public class ContainerPersistentServiceAdapter<T, PK extends Serializable>
 	 * {@inheritDoc}
 	 */
 	public void delete(T entity) {
-		// TODO Auto-generated method stub
-		
+		container.removeItem(entity);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void deleteById(PK id) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -127,77 +132,71 @@ public class ContainerPersistentServiceAdapter<T, PK extends Serializable>
 	 * {@inheritDoc}
 	 */
 	public List<T> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList(container.getItemIds());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Collection<T> save(Collection<T> collection) {
-		// TODO Auto-generated method stub
-		return null;
+		for (T t: collection)
+			save(t);
+		
+		return collection;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void delete(Collection<T> collection) {
-		// TODO Auto-generated method stub
-		
+		for (T t : collection)
+			delete(t);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void deleteById(Collection<PK> ids) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public T get(PK id) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public <E> E get(PK id, Class<E> clazz) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public <E> List<E> getAll(Class<E> clazz) {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<E>) getAll();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Class<T> getEntityClass() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jdal.dao.Dao#exists(java.io.Serializable)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean exists(PK id) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jdal.dao.Dao#findByNamedQuery(java.lang.String, java.util.Map)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<T> findByNamedQuery(String queryName,

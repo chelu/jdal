@@ -108,7 +108,7 @@
 
 		<xsd:attribute name="paginator" type="xsd:string" />
 
-		<xsd:attribute name="dataSource" type="xsd:string">
+		<xsd:attribute name="service" type="xsd:string">
 			<xsd:annotation>
 				<xsd:documentation>
 					<![CDATA[PersistentService used to retreive data.]]>
@@ -219,7 +219,14 @@
 					<![CDATA[Switch to use native buttons, false by default]]>
 				</xsd:documentation>
 			</xsd:annotation>
-		</xsd:attribute>	
+		</xsd:attribute>
+		<xsd:attribute name="propagate-service" type="xsd:boolean">
+			<xsd:annotation>
+				<xsd:documentation source="java:java.lang.Class">
+					<![CDATA[Propagate persistent service to model editors]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>		
 		<xsd:attribute name="scope" type="xsd:string" />
 		<xsd:attribute name="order" type="xsd:string" />
 		<xsd:attribute name="sort-property" type="xsd:string" />
