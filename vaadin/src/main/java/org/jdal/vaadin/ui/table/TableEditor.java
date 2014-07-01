@@ -24,6 +24,7 @@ import org.jdal.vaadin.data.ContainerPersistentServiceAdapter;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.VaadinView;
 
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
@@ -45,13 +46,17 @@ public class TableEditor<T> extends TableComponent<T> {
 	
 	@PostConstruct
 	public void init() {
+		BeanItemContainer<T> c = new BeanItemContainer<T>(getEntityClass());
+		setContainer(c);
+		getTable().setContainerDataSource(c);
+		getTable().addItemClickListener(this);
 		VerticalLayout vl = getVerticalLayout();
 		vl.setSpacing(true);
 		vl.addComponent(this.buttonBar);
 		vl.addComponent(getTable());
 		vl.setExpandRatio(getTable(), 1);
+		this.buttonBar.setSpacing(true);
 	}
-	
 
 	@Override
 	public VaadinView<T> getEditorView() {

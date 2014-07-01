@@ -25,15 +25,14 @@ package org.jdal.beans;
 import java.beans.PropertyEditorSupport;
 
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.MessageSourceAccessor;
 
 public class MessageSourcePropertyEditor extends PropertyEditorSupport {
 	
 	
-	private MessageSourceAccessor messageSourceAccessor;
+	private MessageSourceWrapper messageSourceWrapper = new MessageSourceWrapper();
 
 	public MessageSourcePropertyEditor(MessageSource messageSource) {
-		this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
+		this.messageSourceWrapper.setMessageSource(messageSource);
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class MessageSourcePropertyEditor extends PropertyEditorSupport {
 		String value = text;
 		
 		if (text.startsWith("i18n:")) {
-			value = messageSourceAccessor.getMessage(text.substring(5));
+			value = this.messageSourceWrapper.getMessage(text.substring(5));
 		}
 		
 		setValue(value);

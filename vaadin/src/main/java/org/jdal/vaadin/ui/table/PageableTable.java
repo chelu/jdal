@@ -39,6 +39,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
@@ -141,12 +142,6 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		
 	}
 	
-	public void setWidthFull() {
-		this.setWidth("100%");
-		getVerticalLayout().setWidth("100%");
-		getTable().setWidth("100%");
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -211,6 +206,18 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		return view;
 	}
 	
+	public void filter() {
+		if (this.filterForm != null) {
+			filterForm.update();
+			
+			if (!filterForm.validateView()) {
+					Notification.show(filterForm.getErrorMessage(), Notification.Type.ERROR_MESSAGE);
+			}
+		}
+		
+		firstPage();
+	}
+	
 	/**
 	 * @param selected
 	 */
@@ -226,6 +233,7 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	public void containerItemSetChange(ItemSetChangeEvent event) {
 		paginator.refresh();
 	}
+	
 	
 	public ConfigurableTable getTable() {		
 		return (ConfigurableTable) super.getTable();

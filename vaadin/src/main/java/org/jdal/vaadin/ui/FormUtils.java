@@ -47,6 +47,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.Select;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -340,6 +341,14 @@ public abstract class FormUtils {
 			resource = new ThemeResource(url);
 		
 		return resource;
+	}
+	
+	public static TextArea newTextArea() {
+		TextArea area = new TextArea();
+		area.setNullRepresentation("");
+		area.setLocale(LocaleContextHolder.getLocale());
+		
+		return area;
 	}
 	
 }

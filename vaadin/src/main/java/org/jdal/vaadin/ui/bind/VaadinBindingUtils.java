@@ -20,6 +20,7 @@ import java.util.Map;
 import org.jdal.ui.bind.ConfigurableControlAccessorFactory;
 import org.jdal.ui.bind.ControlAccessor;
 import org.jdal.vaadin.ui.table.PageableTable;
+import org.jdal.vaadin.ui.table.TableEditor;
 
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Label;
@@ -41,5 +42,6 @@ public abstract class VaadinBindingUtils {
 		accessors.put(Label.class, LabelAccessor.class);
 		accessors.put(PageableTable.class, PageableTableAccessor.class);
 		accessors.put(Table.class, TableAccessor.class);
+		accessors.put(TableEditor.class, TableEditorAccessor.class);
 	}
 }

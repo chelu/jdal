@@ -40,7 +40,7 @@ public class Bean {
 	@SerializableProxy
 	private PageableTable<Category> categoryTable;
 
-	public PageableTable<Author> getAuthorPageableTable() {
+	public PageableTable<Author>  getAuthorPageableTable() {
 		return authorPageableTable;
 	}
 
@@ -52,8 +52,7 @@ public class Bean {
 		return categoryPageableTable;
 	}
 
-	public void setCategoryPageableTable(
-			PageableTable<Category> categoryPageableTable) {
+	public void setCategoryPageableTable(PageableTable<Category> categoryPageableTable) {
 		this.categoryPageableTable = categoryPageableTable;
 	}
 

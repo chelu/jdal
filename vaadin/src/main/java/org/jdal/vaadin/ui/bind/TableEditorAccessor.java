@@ -13,31 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdal.vaadin.ui.table;
+package org.jdal.vaadin.ui.bind;
 
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.Button.ClickEvent;
+import org.jdal.vaadin.ui.table.TableEditor;
 
 
 /**
- * Actionf to apply the filter on PageableTable
- * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.1
+ * @author Jose Luis Martin
+ *
  */
-public class FindAction extends TableButtonListener {
-	
-	public FindAction() {
-		setIcon(new ThemeResource("images/table/edit-find.png"));
-	}
-	
+public class TableEditorAccessor extends TableAccessor { 
+
 	/**
-	 * {@inheritDoc}
+	 * @param control
 	 */
-	@Override
-	public void buttonClick(ClickEvent event) {
-		PageableTable<?> table = (PageableTable<?>) getTable();
-		if (table != null)
-			table.filter();
+	public TableEditorAccessor(Object control) {
+		super(((TableEditor<?>) control).getTable());
 	}
+
 }

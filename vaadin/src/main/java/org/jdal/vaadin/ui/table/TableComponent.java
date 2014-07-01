@@ -156,6 +156,13 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	public void refresh() {
 		// do nothing by default
 	}
+	
+	public void setWidthFull() {
+		this.setWidth("100%");
+		this.verticalLayout.setWidth("100%");
+		this.table.setWidth("100%");
+	}
+
 
 	/**
 	 * By default, pageable table handle item clicks to edit items.
