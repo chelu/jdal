@@ -101,7 +101,9 @@ public abstract class AbstractView<T> extends ViewSupport<T> implements VaadinVi
 	}
 
 	public void save() {
-		this.persistentService.save(getModel());
+		if (this.persistentService != null)
+			this.persistentService.save(getModel());
+	
 		fireEditorEvent();
 	}
 	

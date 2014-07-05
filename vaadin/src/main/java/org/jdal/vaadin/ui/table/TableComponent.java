@@ -68,6 +68,7 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	/** Message Source */
 	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
 	private VerticalLayout verticalLayout = new VerticalLayout();
+	private List<EditorListener> editorListeners = new ArrayList<EditorListener>();
 
 	public TableComponent() {
 		this(null);
@@ -142,6 +143,7 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 					
 					public void modelChanged(EditorEvent e) {
 						refresh();
+						fireEditorEvent(e);
 					}
 				});
 				
@@ -182,6 +184,20 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 
 	public void removeItemClickListener(ItemClickListener listener) {
 		getTable().removeItemClickListener(listener);
+	}
+	
+	public void addEditorListener(EditorListener l) {
+		if (!this.editorListeners.contains(l))
+			this.editorListeners.add(l);
+	}
+	
+	public void removeEditorListener(EditorListener l) {
+		this.editorListeners.remove(l);
+	}
+	
+	protected void fireEditorEvent(EditorEvent e) {
+		for (EditorListener el : this.editorListeners)
+			el.modelChanged(e);
 	}
 	
 	public Table getTable() {
