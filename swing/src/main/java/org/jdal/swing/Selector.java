@@ -99,12 +99,14 @@ public class Selector<T> extends JPanel {
 	public void init() {
 		if (availableList == null) {
 			availableList = new JList(available);
-		} else {
+		} 
+		else {
 			availableList.setModel(available);
 		}
 		if (selectedList == null) {
 			selectedList = new JList(selected);
-		} else {
+		} 
+		else {
 			selectedList.setModel(selected);
 		}
 		
