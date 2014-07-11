@@ -97,8 +97,16 @@ public class Selector<T> extends JPanel {
 	}
 
 	public void init() {
-		availableList = new JList(available);
-		selectedList = new JList(selected);
+		if (availableList == null) {
+			availableList = new JList(available);
+		} else {
+			availableList.setModel(available);
+		}
+		if (selectedList == null) {
+			selectedList = new JList(selected);
+		} else {
+			selectedList.setModel(selected);
+		}
 		
 		availableSearch.setVisible(showSearchFields);
 		selectedSearch.setVisible(showSearchFields);
@@ -439,6 +447,34 @@ public class Selector<T> extends JPanel {
 	 */
 	public void setListheight(int listheight) {
 		this.listheight = listheight;
+	}
+
+	/**
+	 * @return the availableList
+	 */
+	public JList getAvailableList() {
+		return availableList;
+	}
+
+	/**
+	 * @param availableList the availableList to set
+	 */
+	public void setAvailableList(JList availableList) {
+		this.availableList = availableList;
+	}
+	
+	/**
+	 * @return the selectedList
+	 */
+	public JList getSelectedList() {
+		return selectedList;
+	}
+
+	/**
+	 * @param selectedList the selectedList to set
+	 */
+	public void setSelectedList(JList selectedList) {
+		this.selectedList = selectedList;
 	}
 
 	
