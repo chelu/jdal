@@ -120,9 +120,17 @@ public class StringListView extends AbstractView<List<String>> implements Serial
 		@Override
 		public void buttonClick(ClickEvent event) {
 			String value = textField.getValue();
-			if (StringUtils.isNotEmpty(value))
-				listSelect.addItem(value);
-				textField.setValue("");
+			
+			if (StringUtils.isNotEmpty(value)) {
+				String[] flights = value.split(",");
+				
+				for (String f : flights) {
+					if (StringUtils.isNotEmpty(f)) {
+						listSelect.addItem(f.trim());
+						textField.setValue("");
+					}
+				}
+			}
 		}
 		
 	}
