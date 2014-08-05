@@ -122,11 +122,11 @@ public class StringListView extends AbstractView<List<String>> implements Serial
 			String value = textField.getValue();
 			
 			if (StringUtils.isNotEmpty(value)) {
-				String[] flights = value.split(",");
+				String[] items = value.split(",");
 				
-				for (String f : flights) {
-					if (StringUtils.isNotEmpty(f)) {
-						listSelect.addItem(f.trim());
+				for (String item : items) {
+					if (StringUtils.isNotEmpty(item)) {
+						listSelect.addItem(item.trim());
 						textField.setValue("");
 					}
 				}
