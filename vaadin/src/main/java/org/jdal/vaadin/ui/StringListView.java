@@ -71,11 +71,10 @@ public class StringListView extends AbstractView<List<String>> implements Serial
 	@Override
 	protected Component buildPanel() {
 		BoxFormBuilder fb = new BoxFormBuilder();
-		
-		fb.setFixedHeight();
+	
 		fb.row();
 		fb.add(caption);
-		fb.row();
+		fb.row(BoxFormBuilder.SIZE_FULL);
 		fb.add(listSelect, SimpleBoxFormBuilder.SIZE_FULL);
 		fb.row();
 		fb.startBox();
