@@ -176,9 +176,11 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	 * Add a new model to the table
 	 */
 	public void add() {
-		T t = newType();
-		tableModel.add(t);
-		dirty.add(t);
+		if (onAdd()) {
+			T t = newType();
+			tableModel.add(t);
+			dirty.add(t);
+		}
 	}
 	
 	/**
@@ -186,19 +188,21 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	 */
 	@SuppressWarnings("unchecked")
 	public void delete() {
-		int[] rows = table.getSelectedRows();
-		for (int i : rows) {
-			T model = (T) tableModel.getList().get(table.convertRowIndexToModel(i));
-			try  {
-				service.delete(model);
-				tableModel.getList().remove(model);
-			} catch (DataAccessException dae) {
-				String errorMsg = messageSource.getMessage("TableEditor.objectInUse", 
-						new Object[] {model.toString()}, Locale.getDefault());
-				JOptionPane.showMessageDialog(getPanel(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+		if (onDelete()) {
+			int[] rows = table.getSelectedRows();
+			for (int i : rows) {
+				T model = (T) tableModel.getList().get(table.convertRowIndexToModel(i));
+				try  {
+					service.delete(model);
+					tableModel.getList().remove(model);
+				} catch (DataAccessException dae) {
+					String errorMsg = messageSource.getMessage("TableEditor.objectInUse", 
+							new Object[] {model.toString()}, Locale.getDefault());
+					JOptionPane.showMessageDialog(getPanel(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
+			tableModel.fireTableChanged();
 		}
-		tableModel.fireTableChanged();
 	}
 	
 	/**
@@ -411,5 +415,23 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	@Autowired
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource.setMessageSource(messageSource);
+	}
+	
+	/**
+	 * Do something on add, return false to cancel
+	 * @return boolean
+	 */
+	protected boolean onAdd() {
+		//Default return true
+		return true;
+	}
+	
+	/**
+	 *  Do something on delete, return false to cancel
+	 * @return boolean
+	 */
+	protected boolean onDelete() {
+		//Default return true
+		return true;
 	}
 }
