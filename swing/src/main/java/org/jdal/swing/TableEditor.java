@@ -72,7 +72,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	private Icon saveIcon;
 	private Icon refreshIcon;
 	/** Hold dirty rows */
-	private Set<T> dirty = new HashSet<T>();
+	private Set<T> dirtyModels = new HashSet<T>();
 	/** Entity type */
 	private Class<T> clazz;
 	private String name;
@@ -179,7 +179,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		if (onAdd()) {
 			T t = newType();
 			tableModel.add(t);
-			dirty.add(t);
+			dirtyModels.add(t);
 		}
 	}
 	
@@ -266,10 +266,13 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		 */
 		public void actionPerformed(ActionEvent e) {
 			try {
-				service.save(dirty);
+				service.save(dirtyModels);
 			} catch (DataAccessException dae) {
 				String errorMsg = messageSource.getMessage("TableEditor.saveError", null, Locale.getDefault());
 				JOptionPane.showMessageDialog(getPanel(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			finally {
+				dirtyModels.clear();
 			}
 			refresh();
 		}
@@ -315,7 +318,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			dirty.clear();
+			dirtyModels.clear();
 			refresh();
 		}
 		
@@ -334,7 +337,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		if (e.getType() == TableModelEvent.UPDATE) {
 			int row = e.getFirstRow();
 			if (row >= 0) {
-				dirty.add((T) tableModel.getList().get(row));
+				dirtyModels.add((T) tableModel.getList().get(row));
 			}
 		}
 	}

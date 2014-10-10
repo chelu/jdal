@@ -64,11 +64,13 @@ public class BoxFormBuilder {
 	}
 	
 	
-	public void endBox() {
+	public JComponent endBox() {
 		JComponent c = builder.getForm();
 		builder = stack.pop();
 		builder.addBox(c);
 		builder.setHeight(c.getHeight());
+		
+		return c;
 	}
 	/**
 	 * @param c

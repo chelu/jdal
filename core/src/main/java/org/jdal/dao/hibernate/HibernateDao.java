@@ -163,7 +163,7 @@ public class HibernateDao<T, PK extends Serializable> extends DaoSupport<T, PK>{
 	 * @param filter the filter
 	 * @return a new Criteria 
 	 */
-	private Criteria getCriteria(Page<?> page) {
+	protected Criteria getCriteria(Page<?> page) {
 		Criteria executableCriteria = getSession().createCriteria(
 				getEntityClass());
 		Object filter = page.getFilter();
