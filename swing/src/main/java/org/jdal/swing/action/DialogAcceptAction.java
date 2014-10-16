@@ -58,7 +58,7 @@ public class DialogAcceptAction<T> extends ViewAction<T> {
 			getDialog().dispose();
 		}
 		else {
-			FormUtils.showError(view.getErrorMessage());
+			FormUtils.showError(view.getPanel(), view.getErrorMessage());
 		}
 	}
 
