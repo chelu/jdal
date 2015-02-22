@@ -18,22 +18,30 @@ package org.jdal.vaadin.ui;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdal.beans.StaticMessageSource;
 import org.jdal.cmd.Command;
 import org.jdal.util.comparator.PropertyComparator;
 import org.jdal.vaadin.ui.table.ButtonListener;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.ClassResource;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.AbstractSelect;
+import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -46,7 +54,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.Select;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -66,7 +73,8 @@ public abstract class FormUtils {
 	public static final String CLASSPATH_PREFIX = "classpath:";
 	public static final String URL_PREFIX = "url:";
 	
-
+	private static final Log log = LogFactory.getLog(FormUtils.class);
+	
 	/**
 	 * Add a default commit/discard buttons to a form
 	 * @param f the Form
@@ -171,7 +179,7 @@ public abstract class FormUtils {
 		hl.setSpacing(true);
 		
 		Button ok = new Button(StaticMessageSource.getMessage("yes"));
-		ok.addListener(new ClickListener() {
+		ok.addClickListener(new ClickListener() {
 			
 			public void buttonClick(ClickEvent event) {
 				command.execute(null);
@@ -207,7 +215,7 @@ public abstract class FormUtils {
 	 * @param items items to add
 	 */
 	public static void addItemList(AbstractSelect combo, List<?> items) {
-		combo.setItemCaptionMode(Select.ITEM_CAPTION_MODE_ID);
+		combo.setItemCaptionMode(ItemCaptionMode.ID);
 		for (Object item : items)
 			combo.addItem(item);
 	}
@@ -326,6 +334,16 @@ public abstract class FormUtils {
 			combo.setValue(selected);
 	}
 	
+	/**
+	 * Gets resource from url using the following prefix
+	 * <ul>
+	 * <li> classpath: for searching the classpath.</li>
+	 * <li> theme: for searching in current theme </li>
+	 * <li> url: to use a url </li>
+	 * </ul>
+	 * @param url resource url
+	 * @return the resource.
+	 */
 	public static Resource getResource(String url) {
 		Resource resource;
 		
@@ -343,6 +361,10 @@ public abstract class FormUtils {
 		return resource;
 	}
 	
+	/** 
+	 * Create a new TextArea with current locale from {@link LocaleContextHolder}
+	 * @return a new TextArea
+	 */
 	public static TextArea newTextArea() {
 		TextArea area = new TextArea();
 		area.setNullRepresentation("");
@@ -350,5 +372,55 @@ public abstract class FormUtils {
 		
 		return area;
 	}
+	
+	 /**
+     * Add a link on primary and dependent ComboBoxes by property name. 
+     * When selection changes on primary use propertyName to get a Collection and fill dependent ComboBox with it
+     * @param primary ComboBox when selection changes
+     * @param dependent ComboBox that are filled with collection   
+     * @param propertyName the property name for get the collection from primary selected item
+     */
+	public static void link(final ComboBox primary, final ComboBox dependent, 
+			final String propertyName) {
+		link(primary, dependent, propertyName, false);
+	}
+
+    /**
+     * Add a link on primary and dependent ComboBoxes by property name. 
+     * When selection changes on primary use propertyName to get a Collection and fill dependent ComboBox with it
+     * @param primary ComboBox when selection changes
+     * @param dependent ComboBox that are filled with collection   
+     * @param propertyName the property name for get the collection from primary selected item
+     * @param addNull if true, add a null as first combobox item
+     */
+    @SuppressWarnings("rawtypes")
+    public static void link(final ComboBox primary, final ComboBox dependent,
+    		final String propertyName, final boolean addNull) {
+
+    	primary.addValueChangeListener(new ValueChangeListener() {
+
+    		public void valueChange(ValueChangeEvent event) {
+    			Object selected = event.getProperty().getValue();
+    			if (selected != null) {
+    				BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(selected);
+    				if (wrapper.isReadableProperty(propertyName)) {
+    					Collection items = (Collection) wrapper.getPropertyValue(propertyName);
+    					dependent.removeAllItems();
+    					
+    					if (addNull)
+    						dependent.addItem(null);
+    					
+    					for (Object item : items)
+    						dependent.addItem(item);
+    				}
+    				else {
+    					log.error("Can't write on propety '" + propertyName + "' of class: '" + selected.getClass() + "'");
+    				}
+    			}
+
+    		}
+    	});
+    }
+
 	
 }
