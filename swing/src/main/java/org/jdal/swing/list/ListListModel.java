@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2014 the original author or authors.
+ * Copyright 2008-2015 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package org.jdal.swing.list;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
@@ -24,7 +26,7 @@ import javax.swing.AbstractListModel;
 /**
  * A ListModel that uses a List as Container
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
  */
 public class ListListModel<T> extends AbstractListModel<T> {
 
@@ -40,19 +42,21 @@ public class ListListModel<T> extends AbstractListModel<T> {
 			this.list = list;
 	}
 	
+	@Override
 	public T getElementAt(int index) {
-		return list.get(index);
+		return this.list.get(index);
 	}
 
+	@Override
 	public int getSize() {
-		return list.size();
+		return this.list.size();
 	}
 
 	/**
 	 * @return the list
 	 */
 	public List<T> getList() {
-		return list;
+		return this.list;
 	}
 
 	/**
@@ -67,9 +71,8 @@ public class ListListModel<T> extends AbstractListModel<T> {
 	 * @param c collection with objects to remove
 	 */
 	public void removeAll(Collection<T> c) {
-		list.removeAll(c);
+		this.list.removeAll(c);
 		fireContentsChanged(this, -1, -1);
-		
 	}
 
 	/**
@@ -80,14 +83,30 @@ public class ListListModel<T> extends AbstractListModel<T> {
 		fireContentsChanged(this, -1, -1);
 	}
 
+	/**
+	 * Clear the list model.
+	 */
 	public void clear() {
 		list.clear();
 		fireContentsChanged(this, -1, -1);
 		
 	}
 	
+	/**
+	 * Add item to list model.
+	 * @param item item to add.
+	 */
 	public void add(T item) {
 		list.add(item);
 		fireContentsChanged(this, getSize() - 1, getSize());
+	}
+	
+	/**
+	 * Sort list elements using supplied Comparator
+	 * @param comparator comparator to use.
+	 */
+	public void sort(Comparator<T> comparator) {
+		Collections.sort(this.list, comparator);
+		fireContentsChanged(this, -1, -1);
 	}
 }

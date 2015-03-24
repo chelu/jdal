@@ -22,8 +22,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
@@ -53,32 +56,28 @@ public class Selector<T> extends JPanel {
 
 	private String name;
 	/** available list items */
-	private ListListModel available = new ListListModel();
+	private ListListModel<T> available = new ListListModel<T>();
 	/** selected list items */
-	private ListListModel selected = new ListListModel();
+	private ListListModel<T> selected = new ListListModel<T>();
 	/** all items */
 	private List<T> all = new ArrayList<T>();
-
-	private JList availableList;
-	private JList selectedList;
-	
+	private JList<T> availableList;
+	private JList<T> selectedList;
 	private JTextField availableSearch = new JTextField();
 	private JTextField selectedSearch = new JTextField();
-
 	private Icon rightArrow = FormUtils.getIcon("images/button_right.png");
 	private Icon leftArrow = FormUtils.getIcon("images/button_left.png");
-
 	/** A list of event listeners for this component. */
 	protected EventListenerList listenerList = new EventListenerList();
 	protected boolean firingActionEvent = false;
 	@Autowired
 	private MessageSource messageSource;
-	
 	private int buttonWidth = 30;
 	private int buttonHeight = 30;
 	private int listWidth = 300;
 	private int listheight = 100;
 	private boolean showSearchFields = false;
+	private Comparator<T> comparator;
 
 	public Selector() {
 	}
@@ -90,21 +89,25 @@ public class Selector<T> extends JPanel {
 	}
 
 	public Selector(List<T> available, List<T> selected) {
-		this.available = new ListListModel(available);
-		this.selected = new ListListModel(selected);
+		this.available.addAll(available);
+		this.selected.addAll(selected);
 		all.addAll(available);
 		all.addAll(selected);
 	}
 
+	/**
+	 * Initialize component after construction.
+	 */
+	@PostConstruct
 	public void init() {
 		if (availableList == null) {
-			availableList = new JList(available);
+			availableList = new JList<T>(available);
 		} 
 		else {
 			availableList.setModel(available);
 		}
 		if (selectedList == null) {
-			selectedList = new JList(selected);
+			selectedList = new JList<T>(selected);
 		} 
 		else {
 			selectedList.setModel(selected);
@@ -124,8 +127,6 @@ public class Selector<T> extends JPanel {
 		selectedScroll.setPreferredSize(new Dimension(listWidth, listheight));
 		availableScroll.setMinimumSize(new Dimension(listWidth, listheight));
 		selectedScroll.setMinimumSize(new Dimension(listWidth, listheight));
-		
-
 
 		// test message source
 		if (messageSource == null) {
@@ -181,12 +182,21 @@ public class Selector<T> extends JPanel {
 	 * Add selected values to selected list.
 	 */
 	private void addSelected() {
-		Object[] selectedValues = availableList.getSelectedValues();
-		if (selectedValues.length > 0) {
-			ListListModel availableModel  = (ListListModel) availableList.getModel();
-			availableModel.removeAll(Arrays.asList(selectedValues));
-			ListListModel  selectedModel = (ListListModel) selectedList.getModel();
-			selectedModel.addAll(Arrays.asList(selectedValues));
+		List<T> selectedValues = availableList.getSelectedValuesList();
+		addSelected(selectedValues);
+	}
+	
+	/**
+	 * Add selected values from available list.
+	 * @param values values to add
+	 */
+	public void addSelected(List<T> values) {
+		if (values.size() > 0) {
+			List<T> toAdd = new ArrayList<T>(values);
+			removeNotInList(toAdd, this.available.getList());
+			this.available.removeAll(toAdd);
+			this.selected.addAll(toAdd);
+			sort();
 			clearSelections();
 			fireActionEvent();
 		}
@@ -204,29 +214,45 @@ public class Selector<T> extends JPanel {
 	 * Remove selected values from selected list
 	 */
 	private void removeSelected() {
-		Object[] selectedValues = selectedList.getSelectedValues();
-		removeSelected(selectedValues);
-	}
-
-	private void removeSelected(Object[] selectedValues) {
-		if (selectedValues.length > 0) {
-			ListListModel selectedModel  = (ListListModel) selectedList.getModel();
-			selectedModel.removeAll(Arrays.asList(selectedValues));
-			ListListModel  availableModel = (ListListModel) availableList.getModel();
-			availableModel.addAll(Arrays.asList(selectedValues));
-			clearSelections();
-			fireActionEvent();
-		}
+		removeSelected(this.selectedList.getSelectedValuesList());
 	}
 	
+	/**
+	 * Remove list of selected element from selected list.
+	 * @param values values to remove
+	 */
 	public void removeSelected(List<T> values) {
-		List<T> toRemove = new ArrayList<T>();
-		for (T value : values) {
-			if (this.selected.getList().contains(value))
-				toRemove.add(value);
+		removeNotInList(values, this.selected.getList());
+		this.selected.removeAll(values);
+		this.available.addAll(values);
+		sort();
+		clearSelections();
+		fireActionEvent();
+	}
+	
+	/**
+	 * Remove elements that aren't in master list
+	 * @param values values to test
+	 * @param master master list.
+	 */
+	private void removeNotInList(List<T> values, List<T> master) {
+		Iterator<T> iter = values.iterator();
+
+		while (iter.hasNext()) {
+			T item = iter.next();
+			if (!master.contains(item))
+				iter.remove();
 		}
-		
-		removeSelected(toRemove.toArray());
+	}
+
+	/**
+	 * Sort list elements using internal comparator.
+	 */
+	public void sort() {
+		if (this.comparator != null) {
+			this.selected.sort(this.comparator);
+			this.available.sort(this.comparator);
+		}
 	}
 
 	/**
@@ -248,7 +274,6 @@ public class Selector<T> extends JPanel {
 	 * Get Available list
 	 * @return List with available values
 	 */
-	@SuppressWarnings("unchecked")
 	public List<T> getAvailable() {
 		return available.getList();
 	}
@@ -270,7 +295,6 @@ public class Selector<T> extends JPanel {
 	 * Gets the selected values
 	 * @return List with selected values
 	 */
-	@SuppressWarnings("unchecked")
 	public List<T> getSelected() {
 		return selected.getList();
 	}
@@ -468,29 +492,39 @@ public class Selector<T> extends JPanel {
 	/**
 	 * @return the availableList
 	 */
-	public JList getAvailableList() {
+	public JList<T> getAvailableList() {
 		return availableList;
 	}
 
 	/**
 	 * @param availableList the availableList to set
 	 */
-	public void setAvailableList(JList availableList) {
+	public void setAvailableList(JList<T> availableList) {
 		this.availableList = availableList;
+		this.availableList.setModel(this.available);
 	}
 	
 	/**
 	 * @return the selectedList
 	 */
-	public JList getSelectedList() {
+	public JList<T> getSelectedList() {
 		return selectedList;
 	}
 
 	/**
 	 * @param selectedList the selectedList to set
 	 */
-	public void setSelectedList(JList selectedList) {
+	public void setSelectedList(JList<T> selectedList) {
 		this.selectedList = selectedList;
+		this.selectedList.setModel(this.selected);
+	}
+	
+	public Comparator<T> getComparator() {
+		return comparator;
+	}
+
+	public void setComparator(Comparator<T> comparator) {
+		this.comparator = comparator;
 	}
 
 	
