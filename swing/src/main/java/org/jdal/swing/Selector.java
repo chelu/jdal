@@ -205,6 +205,10 @@ public class Selector<T> extends JPanel {
 	 */
 	private void removeSelected() {
 		Object[] selectedValues = selectedList.getSelectedValues();
+		removeSelected(selectedValues);
+	}
+
+	private void removeSelected(Object[] selectedValues) {
 		if (selectedValues.length > 0) {
 			ListListModel selectedModel  = (ListListModel) selectedList.getModel();
 			selectedModel.removeAll(Arrays.asList(selectedValues));
@@ -213,6 +217,16 @@ public class Selector<T> extends JPanel {
 			clearSelections();
 			fireActionEvent();
 		}
+	}
+	
+	public void removeSelected(List<T> values) {
+		List<T> toRemove = new ArrayList<T>();
+		for (T value : values) {
+			if (this.selected.getList().contains(value))
+				toRemove.add(value);
+		}
+		
+		removeSelected(toRemove.toArray());
 	}
 
 	/**
