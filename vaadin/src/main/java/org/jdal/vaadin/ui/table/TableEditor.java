@@ -21,10 +21,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.jdal.vaadin.data.ContainerPersistentServiceAdapter;
+import org.jdal.vaadin.data.ListBeanContainer;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.VaadinView;
 
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
@@ -46,7 +46,7 @@ public class TableEditor<T> extends TableComponent<T> {
 	
 	@PostConstruct
 	public void init() {
-		BeanItemContainer<T> c = new BeanItemContainer<T>(getEntityClass());
+		ListBeanContainer c = new ListBeanContainer(getEntityClass());
 		setContainer(c);
 		getTable().setContainerDataSource(c);
 		getTable().addItemClickListener(this);

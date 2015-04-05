@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.jdal.beans.PropertyUtils;
 import org.jdal.util.BeanUtils;
+import org.jdal.vaadin.data.ListBeanContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.MessageSource;
@@ -124,7 +125,7 @@ public class ConfigurableTable extends Table {
 				
 		for (int i = 0; i < size; i++) {
 			visibleColumns[i] = columns.get(i).getName();
-			displayNames[i] = intenacionalize(columns.get(i).getDisplayName());
+			displayNames[i] = getMessage(columns.get(i).getDisplayName());
 			alignments[i] = columns.get(i).getAlign();
 		}
 		
@@ -151,7 +152,7 @@ public class ConfigurableTable extends Table {
 	 * @param name
 	 * @return translated code or the string
 	 */
-	private String intenacionalize(String name) {
+	private String getMessage(String name) {
 		if (messageSource == null)
 			return name;
 		
@@ -172,6 +173,8 @@ public class ConfigurableTable extends Table {
 		if (cds instanceof AbstractBeanContainer<?,?>) {
 			((AbstractBeanContainer<?,?>) cds).addNestedContainerProperty(name);
 		}
+		else if (cds instanceof ListBeanContainer)
+			((ListBeanContainer) cds).addProperty(name);
 	}
 
 
@@ -224,6 +227,7 @@ public class ConfigurableTable extends Table {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected Object getPropertyValue(Object rowId, Object colId, Property property) {
 		Column column = columnMap.get(colId);
@@ -262,7 +266,7 @@ public class ConfigurableTable extends Table {
 	 * @param editorClass class to instantiate
 	 * @return editor instance
 	 */
-	private Component getComponentForProperty(Property property, Class<? extends Component> editorClass) {
+	private Component getComponentForProperty(Property<?> property, Class<? extends Component> editorClass) {
 		Component editor = BeanUtils.instantiate(editorClass);
 		if (editor instanceof Property.Viewer) {
 			((Property.Viewer) editor).setPropertyDataSource(property);

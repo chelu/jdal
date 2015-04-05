@@ -24,6 +24,8 @@ import java.util.Set;
 import org.jdal.beans.MessageSourceWrapper;
 import org.jdal.ui.EditorEvent;
 import org.jdal.ui.EditorListener;
+import org.jdal.vaadin.data.BeanWrapperItem;
+import org.jdal.vaadin.data.ListBeanContainer;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.VaadinView;
@@ -31,8 +33,6 @@ import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Button;
@@ -53,7 +53,7 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	/** the table */
 	private Table table;
 	/** container to use when using external paginator */
-	private BeanItemContainer<T> container;
+	private ListBeanContainer container;
 	/** Form editor name */
 	private String editor;
 	/** Gui Factory used to get editor instances */
@@ -135,8 +135,8 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 		if (event.isDoubleClick()) {
 			VaadinView<T> editor = getEditorView();
 			if (editor != null) {
-				BeanItem<T> bi = (BeanItem<T>) event.getItem();
-				editor.setModel(bi.getBean());
+				BeanWrapperItem bi = (BeanWrapperItem) event.getItem();
+				editor.setModel((T)bi.getBean());
 				editor.refresh();
 				
 				editor.addEditorListener(new EditorListener() {
@@ -318,11 +318,11 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 		this.nativeButtons = nativeButtons;
 	}
 	
-	public BeanItemContainer<T> getContainer() {
+	public ListBeanContainer getContainer() {
 		return container;
 	}
 
-	public void setContainer(BeanItemContainer<T> container) {
+	public void setContainer(ListBeanContainer container) {
 		this.container = container;
 	}
 

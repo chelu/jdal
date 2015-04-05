@@ -19,7 +19,6 @@ import org.jdal.vaadin.VaadinUtils;
 import org.jdal.vaadin.ui.table.ButtonListener;
 
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.UI;
 
 /**
  * Exit Action.

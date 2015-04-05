@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jdal.beans.PropertyUtils;
 import org.springframework.beans.BeanUtils;
 
 import com.vaadin.data.Container;
@@ -48,9 +49,52 @@ public class ListBeanContainer extends AbstractContainer
 			new HashMap<String, PropertyDescriptor>();
 
 	public ListBeanContainer(Class<?> beanClass) {
-		this.beanClass = beanClass;
+		this(beanClass, null, null);
 	}
 	
+	public ListBeanContainer(Class<?> beanClass, List<?> data) {
+		this(beanClass, data, null);
+	}
+	
+	public ListBeanContainer(Class<?> beanClass, List<?> data,  List<String> properties) {
+		this.beanClass = beanClass;
+		if (properties == null) {
+			initDefaultProperties();
+		}
+		else {
+			setProperties(properties);
+		}
+		
+		if (data != null)
+			init(data);
+	}
+
+	private void setProperties(List<String> properties) {
+		this.properties.clear();
+		this.propertyDescriptors.clear();
+		
+		for (String propertyName : properties) {
+			addProperty(propertyName);
+		}
+	
+		fireContainerPropertySetChange();
+	}
+
+	private void initDefaultProperties() {
+		for (PropertyDescriptor pd : BeanUtils.getPropertyDescriptors(beanClass)) { 
+			this.properties.add(pd.getName());
+			this.propertyDescriptors.put(pd.getName(), pd);
+		}
+	}
+
+	private void init(List<?> data) {
+		for (Object bean : data) {
+			this.beans.add(createBeanWrapper(bean));
+		}
+		
+		fireItemSetChange();
+	}
+
 	@Override
 	public Integer nextItemId(Object itemId) {
 		Integer index = getAsIndex(itemId);
@@ -207,6 +251,7 @@ public class ListBeanContainer extends AbstractContainer
 	@Override
 	public boolean removeAllItems() throws UnsupportedOperationException {
 		this.beans.clear();
+		fireItemSetChange();
 		
 		return true;
 	}
@@ -239,6 +284,16 @@ public class ListBeanContainer extends AbstractContainer
 	public Item addItemAt(int index, Object newItemId)
 			throws UnsupportedOperationException {
 		throw new UnsupportedOperationException();
+	}
+	
+	public void addAll(List<?> data) {
+		init(data);
+	}
+
+	public void addProperty(String name) {
+		this.properties.add(name);
+		this.propertyDescriptors.put(name, 
+				PropertyUtils.getPropertyDescriptor(this.beanClass, name));
 	}
 
 }

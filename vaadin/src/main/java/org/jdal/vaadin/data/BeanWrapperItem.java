@@ -81,5 +81,9 @@ public class BeanWrapperItem implements Item {
 			throws UnsupportedOperationException {
 		return this.properties.remove((String) id);
 	}
+	
+	public Object getBean() {
+		return this.beanWrapper.getWrappedInstance();
+	}
 
 }

@@ -38,6 +38,7 @@ public class BeanWrapperProperty<T> extends AbstractProperty<T> {
 	public void setValue(T newValue)
 			throws com.vaadin.data.Property.ReadOnlyException {
 		this.beanWrapper.setPropertyValue(this.propertyName, newValue);
+		fireValueChange();
 	}
 
 	@Override
