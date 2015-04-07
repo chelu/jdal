@@ -31,13 +31,14 @@ import org.springframework.beans.PropertyAccessorFactory;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@SuppressWarnings("rawtypes")
 public class ComboLinker implements ActionListener {
-	
-		private JComboBox primary;
-		private JComboBox dependent;
-		private String propertyName;
 
-	public ComboLinker(JComboBox primary, JComboBox dependent, String propertyName) {
+	private JComboBox primary;
+	private JComboBox dependent;
+	private String propertyName;
+
+	public ComboLinker(JComboBox<?> primary, JComboBox<?> dependent, String propertyName) {
 		this.primary = primary;
 		this.dependent = dependent;
 		this.propertyName = propertyName;

@@ -22,12 +22,12 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 /**
+ * {@link BeanFactoryPostProcessor} to handle {@link Parent} annotation.
  * 
  * @author Jose Luis Martin
  * @since 2.1
- *
  */
-public class ParentBeanFactoryPostProcessor implements BeanFactoryPostProcessor{
+public class ParentBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
 	/**
 	 * {@inheritDoc}

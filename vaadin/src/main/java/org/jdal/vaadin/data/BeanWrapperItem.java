@@ -28,10 +28,10 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 
 /**
- * An adapter to use beans as {@link Item Items}.
+ * An adapter to use beans as {@link Item Items} delegating work to 
+ * Spring {@link BeanWrapper}
  * 
  * @author Jose Luis Martin
- * @param <T> Bean type.
  * @since 2.1
  */
 public class BeanWrapperItem implements Item {
