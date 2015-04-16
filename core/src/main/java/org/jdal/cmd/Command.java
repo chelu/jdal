@@ -15,13 +15,17 @@
  */
 package org.jdal.cmd;
 
+import java.io.Serializable;
+
 /**
- * Commmand interface for Command Design Pattern (GoF)
+ * Commmand interface for Command Design Pattern
  * 
- * @author Jose Luis Martin - (chelu.es@gmail.com)
+ * @author Jose Luis Martin
+ * @since 1.0)
  */
 
-public interface Command {
+public interface Command extends Serializable {
+
 	/**
 	 * The Command Action
 	 * @param data generic command data
@@ -29,14 +33,18 @@ public interface Command {
      * @throws CommandException
 	 */	
 	boolean execute(Object data);
+	
 	/**
 	 * Notify Command object that some fault ocurred on a command list
 	 * @param data generic command data
 	 */
 	void onFault(Object data);  
 	
-	/** Undo the command, false if fail */
-	void undo();
+	/** 
+	 * Try to undo the command
+	 * @return false if fails.
+	 */
+	boolean undo();
 
 	/** 
 	 * @return the command name

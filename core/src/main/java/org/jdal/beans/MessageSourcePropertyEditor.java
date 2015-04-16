@@ -28,6 +28,8 @@ import org.springframework.context.MessageSource;
 
 public class MessageSourcePropertyEditor extends PropertyEditorSupport {
 	
+	private String prefix = "i18n:";
+	
 	
 	private MessageSourceWrapper messageSourceWrapper = new MessageSourceWrapper();
 
@@ -39,10 +41,18 @@ public class MessageSourcePropertyEditor extends PropertyEditorSupport {
 	public void setAsText(String text) throws IllegalArgumentException {
 		String value = text;
 		
-		if (text.startsWith("i18n:")) {
-			value = this.messageSourceWrapper.getMessage(text.substring(5));
+		if (text.startsWith(prefix)) {
+			value = this.messageSourceWrapper.getMessage(text.substring(prefix.length()));
 		}
 		
 		setValue(value);
+	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 }

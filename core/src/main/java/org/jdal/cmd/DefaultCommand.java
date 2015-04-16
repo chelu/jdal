@@ -61,7 +61,7 @@ public class DefaultCommand implements Command {
 	/**
 	 * Undo the command, do nothig by default.
 	 */
-	public void undo() {
-		
+	public boolean undo() {
+		return false;
 	}
 }

@@ -24,13 +24,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 /**
  * Auditor AOP Around advice to audit modifications on auditable models
  *  
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public class Auditor extends AbstractAuditor {
 
 	/** log */
 	private static final Log LOG = LogFactory.getLog(Auditor.class);
-	/** user holder thread local */ 
 	
 	/**
 	 * Around advice to audit auditable models
@@ -60,7 +60,7 @@ public class Auditor extends AbstractAuditor {
 	protected void audit(Auditable auditable) {
 		Date date = new Date();
 		auditable.setModificationDate(date);
-		auditable.setModificationUser("testUser");
+		auditable.setModificationUser(getUser());
 	}
 	
 	

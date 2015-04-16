@@ -21,7 +21,9 @@ import java.util.Locale;
 import org.springframework.format.number.CurrencyFormatter;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * Property editor for currencies.
+ * 
+ * @author Jose Luis Martin
  */
 public class CurrencyEditor extends PropertyEditorSupport {
 	

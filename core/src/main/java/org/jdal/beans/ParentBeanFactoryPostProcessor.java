@@ -22,12 +22,13 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 /**
+ * Postprocessor to handle Parent annotations. Sets a parent bean definition on
+ * annotated types.
  * 
  * @author Jose Luis Martin
  * @since 2.1
- *
  */
-public class ParentBeanFactoryPostProcessor implements BeanFactoryPostProcessor{
+public class ParentBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
 	/**
 	 * {@inheritDoc}

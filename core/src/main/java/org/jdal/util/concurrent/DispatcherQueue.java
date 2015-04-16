@@ -27,9 +27,9 @@ import org.springframework.core.task.SyncTaskExecutor;
  * Wrapper for a BlockingQueue that dispatchs incoming objets to a Task Executor.
  * You need to configure a Dispatcher or override dispatch(T t) mehod.   
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * @author Jose Luis Martin
  * @param <T> Objetc type stored in Queue.
+ * @since 1.3
  */
 public class DispatcherQueue<T>  {
 

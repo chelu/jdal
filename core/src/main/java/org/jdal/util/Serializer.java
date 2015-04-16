@@ -28,12 +28,14 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Serialize/Deserialize utility library class.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 
 public abstract class Serializer {
-	/** serial */
+	
 	private static Log log = LogFactory.getLog(Serializer.class);
+	
 	/**
 	 * Serialize Serializable to byte[]
 	 * @param ser Serializable to serialize

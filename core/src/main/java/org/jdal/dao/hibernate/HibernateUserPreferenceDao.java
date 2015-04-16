@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 the original author or authors.
+ * Copyright 2009-2015 Jose Luis Martin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,13 @@ import org.jdal.model.UserPreference;
 import org.jdal.util.BeanUtils;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * Hibernate implementation for {@link UserPreferenceDao}
+ * 
+ * @author Jose Luis Martin
+ * @since 1.2
  */
 public class HibernateUserPreferenceDao extends HibernateDao<UserPreference, Long> implements UserPreferenceDao  {
 
-	/**
-	 * 
-	 */
 	public HibernateUserPreferenceDao() {
 		this(UserPreference.class);
 	}
@@ -69,8 +68,6 @@ public class HibernateUserPreferenceDao extends HibernateDao<UserPreference, Lon
 	public UserPreference createUserPreference() {
 		return BeanUtils.instantiate(getEntityClass());
 	}
-
-	
 
 }
 

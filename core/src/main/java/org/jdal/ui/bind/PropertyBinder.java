@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2010 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@ package org.jdal.ui.bind;
 
 import org.jdal.ui.Binder;
 
-
 /**
- * Bind a component to a model property
+ * Bind a component to a model property. PropertyBinders are
+ * the base class for JDAL autobinding system.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public interface PropertyBinder extends Binder<Object> {
 	

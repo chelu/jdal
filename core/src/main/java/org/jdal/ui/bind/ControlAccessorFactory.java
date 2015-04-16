@@ -16,9 +16,9 @@
 package org.jdal.ui.bind;
 
 /**
- * A Factory for ControlAccessors
+ * A Factory for {@link ControlAccessor ControlAccessors} 
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 1.1
  * @see org.jdal.ui.bind.ControlAccessor
  */
@@ -26,7 +26,6 @@ public interface ControlAccessorFactory {
 	
 	/**
 	 * Try to find a control accessor for a Class, use super Class if none is configured.
-	 * 
 	 * @param control control for looking the control accessor
 	 * @return a ControlAccessor for that class or null if none
 	 */

@@ -64,7 +64,6 @@ public class SimpleTypeConverter extends org.springframework.beans.SimpleTypeCon
 				else {  // null to String
 					return (T) "";
 				}
-
 			}
 			else {
 				throw tme;

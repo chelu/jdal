@@ -22,8 +22,6 @@ import org.jdal.dao.ReportDao;
 import org.jdal.reporting.Report;
 import org.jdal.reporting.ReportType;
 
-
-
 /**
  * @author Jose A. Corbacho
  *

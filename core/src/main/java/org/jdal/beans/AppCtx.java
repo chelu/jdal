@@ -25,10 +25,9 @@ import org.springframework.core.env.PropertySource;
 /**
  * Minimalistic singleton with application context
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
-
-
 public class AppCtx {
 	
 	/** spring application context */
@@ -39,7 +38,6 @@ public class AppCtx {
 	
 	/** 
 	 * Search on classpath for context definition files and return the application context
-	 * 
 	 * @return the ApplicationContext
 	 */
 	public synchronized static ApplicationContext getInstance() {

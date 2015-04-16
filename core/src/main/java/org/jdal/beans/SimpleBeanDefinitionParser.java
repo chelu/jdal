@@ -81,5 +81,4 @@ public class SimpleBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 				!SCOPE_ATTRIBUTE.equals(attributeName);
 	}
 	
-	
 }

@@ -36,8 +36,10 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 /**
- * @author jose
- *
+ * Process a jasper file using the connection in the system to retrieve the data.
+ * 
+ * @author Jose A. Corbacho
+ * @since 1.0
  */
 public class JasperReportXMLFileProcessor implements FileProcessor {
 
@@ -48,9 +50,8 @@ public class JasperReportXMLFileProcessor implements FileProcessor {
 	private JRDataSource service;
 
 	private Map<String, Object> parameters = new HashMap<String, Object>();
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.util.processor.FileProcessor#processFile(java.io.File)
-	 */
+	
+	@Override
 	public void processFile(File file, String outputType, boolean hasQuery) {
 	    // File is XML
 	    InputStream reportStream = null;
@@ -95,17 +96,13 @@ public class JasperReportXMLFileProcessor implements FileProcessor {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.util.processor.FileProcessor#processFile(byte[])
-	 */
+	@Override
 	public void processFile(byte[] rawData) {
 		// TODO Auto-generated method stub
 
 	}
 
-	/* (non-Javadoc)
-	 * @see info.joseluismartin.util.processor.FileProcessor#getRawData()
-	 */
+	@Override
 	public byte[] getRawData() {
 		return rawData;
 	}

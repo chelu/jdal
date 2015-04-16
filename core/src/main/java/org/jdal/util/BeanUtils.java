@@ -33,7 +33,9 @@ import org.springframework.beans.PropertyValue;
 /**
  * Some static funtions added to spring BeanUtils
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @author Ignacio Vargas
+ * @since 1.0
  */
 public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 
@@ -89,7 +91,7 @@ public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 		BeanWrapper wrapper = new BeanWrapperImpl(source);
 		PropertyValue pv = new PropertyValue(propertyName,
 								wrapper.getPropertyValue(propertyName));
-		// wrapper.set(dest);
+
 		wrapper.setPropertyValue(pv);
 	}
 	
@@ -109,6 +111,7 @@ public abstract class BeanUtils extends org.springframework.beans.BeanUtils {
 			log.debug("Access Error on property: " + name);
 		}
 	}
+	
 	/**
 	 * Get property value null if none
 	 * @param bean beam

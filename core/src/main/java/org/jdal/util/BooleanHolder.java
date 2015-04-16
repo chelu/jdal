@@ -18,7 +18,8 @@ package org.jdal.util;
 /**
  * A boolean pointer
  *
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public class BooleanHolder {
 

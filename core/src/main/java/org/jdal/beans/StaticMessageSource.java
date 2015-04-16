@@ -24,7 +24,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 /**
  * Static access to message source bean, used to avoid excessive configuration.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.2
  */
 public class StaticMessageSource {
 	
@@ -74,7 +75,6 @@ public class StaticMessageSource {
 		return messageSource == null ?
 				msr.getDefaultMessage() : messageSource.getMessage(msr, LocaleContextHolder.getLocale());
 	}
-	 
 	 
 	 public static String getMessage(String code, Object[] args) {
 		 return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());

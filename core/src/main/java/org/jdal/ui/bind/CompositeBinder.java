@@ -21,11 +21,10 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
 /**
- * Composite Binder methods to a collection of
- * PropertyBinders that bind on the same model 
+ * Composite Binder groups property binders.
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @param <T> model 
+ * @param <T> default model to use when binding properties 
  */
 @SuppressWarnings("unchecked")
 public class CompositeBinder<T> implements Binder<T>, BinderHolder, ModelHolder<T>, Serializable {

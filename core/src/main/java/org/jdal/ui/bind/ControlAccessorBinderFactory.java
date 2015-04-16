@@ -22,7 +22,7 @@ import org.jdal.annotation.SerializableProxy;
 /**
  * Binder Factory that use a ControlAccessorFactory to create PropertyBinders.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 1.1
  *
  */

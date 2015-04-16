@@ -19,9 +19,10 @@ import org.jdal.dao.BeanFilter;
 import org.jdal.reporting.ReportType;
 
 /**
- * Report Filter 
+ * BeanFilter for reports.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public class ReportFilter extends BeanFilter {
 	

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2010-2015 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,16 @@
  */
 package org.jdal.ui.bind;
 
-
-
 /**
  * Interface for Binder Factories
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.1
  */
 public interface BinderFactory  {
 	
 	/**
 	 * Try to find a binder for a control Class, use super Class if none is configured.
-	 * 
 	 * @param clazz Class to looking for
 	 * @return a Binder for that class or null if none
 	 */

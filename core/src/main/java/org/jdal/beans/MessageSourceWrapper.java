@@ -26,10 +26,10 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * Simple access to a Spring {@link MessageSource}
  * 
- * Add Simple message methods to a MessageSource
- *
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public class MessageSourceWrapper implements MessageSource, Serializable {
 
@@ -47,7 +47,6 @@ public class MessageSourceWrapper implements MessageSource, Serializable {
 		super();
 		this.messageSource = messageSource;
 	}
-
 	
 	/** 
 	 * Get message from code using default Locale
@@ -91,6 +90,7 @@ public class MessageSourceWrapper implements MessageSource, Serializable {
 	}
 	
 	/**
+	 * Resolve message code with arguments.
 	 * @param code
 	 * @param args
 	 */
@@ -98,8 +98,8 @@ public class MessageSourceWrapper implements MessageSource, Serializable {
 		return getMessage(code, args, "", LocaleContextHolder.getLocale());
 	}
 
-
 	/**
+	 * Resolve message code with arguments and default message.
 	 * @param code
 	 * @param args
 	 * @param defaultMessage
@@ -112,10 +112,10 @@ public class MessageSourceWrapper implements MessageSource, Serializable {
 	}
 
 	/**
+	 * Resolve message code with arguments and {@link Locale}
 	 * @param code
 	 * @param args
 	 * @param locale
-	 * @return message
 	 * @throws NoSuchMessageException
 	 * @see org.springframework.context.MessageSource#getMessage(java.lang.String, java.lang.Object[], java.util.Locale)
 	 */
@@ -124,6 +124,7 @@ public class MessageSourceWrapper implements MessageSource, Serializable {
 	}
 
 	/**
+	 * Resolve a {@link MessageSourceResolvable}
 	 * @param resolvable
 	 * @param locale
 	 * @return message
@@ -137,7 +138,7 @@ public class MessageSourceWrapper implements MessageSource, Serializable {
 	/**
 	 * Test if code is resolved
 	 * @param code code to resolved
-	 * @return true if source can resolve code
+	 * @return true if source can resolve the code, false otherwise.
 	 */
 	public boolean hasMessage(String code) {
 		if  (messageSource == null)
@@ -151,6 +152,4 @@ public class MessageSourceWrapper implements MessageSource, Serializable {
 			return false;
 		}
 	}
-	
-	
 }

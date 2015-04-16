@@ -31,7 +31,8 @@ import org.springframework.core.io.Resource;
 /**
  * PropertyEditor for javax.swing.Icon
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public class IconPropertyEditor extends PropertyEditorSupport {
 	
@@ -49,7 +50,8 @@ public class IconPropertyEditor extends PropertyEditorSupport {
 		try {
 			Image image = Toolkit.getDefaultToolkit().getImage(resource.getURL());
 			icon = new ImageIcon(image);
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
 			log.error(e);
 		}
 		setValue(icon);

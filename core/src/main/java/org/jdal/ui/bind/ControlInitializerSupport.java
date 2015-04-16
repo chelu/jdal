@@ -35,7 +35,7 @@ import org.springframework.util.StringUtils;
 import com.ctc.wstx.util.StringUtil;
 
 /**
- * Support class for ControlInitializers.
+ * Support class for {@link ControlInitializer ControlInitializers}.
  * 
  * @author Jose Luis Martin
  * @see ControlInitializer

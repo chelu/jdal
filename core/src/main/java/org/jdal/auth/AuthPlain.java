@@ -18,7 +18,8 @@ package org.jdal.auth;
 /**
  * An Auth Strategy that use plain passwords.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public class AuthPlain implements AuthStrategy {
 

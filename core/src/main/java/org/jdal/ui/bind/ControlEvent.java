@@ -20,7 +20,7 @@ import java.util.EventObject;
 /**
  * ControlEvent Object
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 1.1
  * @see info.joseluismartin.gui.bind.ControlChangeListener
  */

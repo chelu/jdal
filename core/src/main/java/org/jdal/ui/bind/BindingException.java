@@ -16,7 +16,10 @@
 package org.jdal.ui.bind;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * Exception for data binding errors.
+ * 
+ * @author Jose Luis Martin
+ * @since 1.1
  */
 public class BindingException extends RuntimeException {
 

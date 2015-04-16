@@ -21,9 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 
-
 /**
- * Used to bind a control to a model property
+ * Bind a control to a model property
  * 
  * @author Jose Luis Martin
  * @since 2.0

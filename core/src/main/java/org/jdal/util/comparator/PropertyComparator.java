@@ -26,7 +26,8 @@ import org.apache.commons.logging.LogFactory;
  * is an alphaNumeric comparator. When two string have numbers
  * and have same prefix, use numeric comparation so test_10 > than test_2 
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @sine 1.0
  */
 public class PropertyComparator implements Comparator<Object> {
 	/** common logs */

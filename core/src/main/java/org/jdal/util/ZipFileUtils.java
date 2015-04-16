@@ -37,7 +37,9 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Utility library to manage Zip files.
  * 
- * @author Jose Luis Martin -(jlm@joseluismartin.info)
+ * @author Roberto Martin
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public abstract class ZipFileUtils {
 	/** commons log */

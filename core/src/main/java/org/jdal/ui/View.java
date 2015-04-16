@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2008-2015 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,15 @@
  */
 package org.jdal.ui;
 
-
 import org.jdal.ui.bind.ControlChangeListener;
 
 /**
- * Interface for Views
+ * Interface for Views. Views are visual represetantion of 
+ * models in MVC sense. Can validate and bind models from 
+ * UI controls.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public interface View<T> extends Binder<T>{
 

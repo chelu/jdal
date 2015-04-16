@@ -23,8 +23,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * An alhpa numeric comparator. ie 10 is after 9.
+ * 
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public class AlphaNumericComparator implements Comparator<String> {
 	
