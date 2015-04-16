@@ -30,7 +30,7 @@ import org.springframework.format.Printer;
  * control values. Handle <code>NumberFormat</code> and <code>PeriodFormat</code> 
  * annotations when binding string values to text components.
  * 
- * @author Jose Luis Martin.
+ * @author Jose Luis Martin
  * @see org.jdal.ui.Binder
  * @see org.jdal.ui.bind.AbstractBinder
  * @since 1.1

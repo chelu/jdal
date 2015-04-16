@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2008-2015 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ package org.jdal.xml;
  * Interface to marshal/unmarshall java objects to/from xml.
  * Use to hide the xml binding framework.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public interface XMLMapper {
 	
@@ -29,6 +30,7 @@ public interface XMLMapper {
 	 * @return xml string representation of obj.
 	 */
 	String serialize(Object obj);
+	
 	/**
 	 * Deserialize a xml string to an java object
 	 * @param xml to deserialize

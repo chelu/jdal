@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 original author or authors.
+ * Copyright 2009-2015 Jose Luis Martin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,11 @@ import org.springframework.validation.BindingResult;
 
 /**
  * Binder interface define methods common to model based
- * representation of data like Views.
+ * representation of data like {@link View Views}.
  *  
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- * @since 1.0
+ * @author Jose Luis Martin
  * @param <T> model type
+ * @since 1.0
  */
 public interface Binder<T> extends ModelHolder<T> {
 

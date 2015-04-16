@@ -30,7 +30,6 @@ import org.w3c.dom.Element;
  * 
  * @author Jose Luis Martin
  * @since 2.0
- *
  */
 public class ListBeanDefinitionParser extends AbstractSimpleBeanDefinitionParser {
 	

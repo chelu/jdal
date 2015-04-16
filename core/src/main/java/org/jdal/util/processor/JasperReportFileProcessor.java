@@ -41,9 +41,10 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Process a jasper file using the connection in the system to retrieve the data
- * @author Jose A. Corbacho
+ * Process a jasper file using the connection in the system to retrieve the data.
  * 
+ * @author Jose A. Corbacho
+ * @since 1.0
  */
 public class JasperReportFileProcessor implements FileProcessor {
 

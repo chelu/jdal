@@ -59,7 +59,6 @@ import org.springframework.util.ClassUtils;
  * @see org.jdal.swing.PageableTable
  * @since 1.0
  */
-// FIXME: - jlm - This class is growing quicky, revise design.
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ListTableModel implements TableModel {
 
@@ -359,19 +358,19 @@ public class ListTableModel implements TableModel {
 			baseIndex++;
 		}
 		for (int i = 0; i < columnNames.size(); i++) {
-
+			String name = this.columnNames.get(i);
 			TableColumn tableColumn = new TableColumn(baseIndex + i);
 			tableColumn.setHeaderValue(displayNames.get(i));
 
 			if (pds != null && pds.size() > 0) {
 				PropertyDescriptor descriptor = pds.get(i);
-				// property values for TableColums
+				// property values for TableColumns
 				if (descriptor != null) {
-					Integer maxWidth = getColumnWidth(i);
+					Integer maxWidth = getColumnWidth(name);
 					if (maxWidth != null)
 						tableColumn.setMaxWidth(maxWidth.intValue());
-					tableColumn.setCellRenderer(getColumnRenderer(i));
-					tableColumn.setCellEditor(getColumnEditor(i));
+					tableColumn.setCellRenderer(getColumnRenderer(name));
+					tableColumn.setCellEditor(getColumnEditor(name));
 				}
 			}
 
@@ -420,6 +419,31 @@ public class ListTableModel implements TableModel {
 
 		return editor;
 	}
+	
+	private TableCellRenderer getColumnRenderer(String name) {
+		TableCellRenderer renderer = null;
+		for (ColumnDefinition cd : this.columns) { 
+			if (name.equals(cd.getName())) {
+				renderer = cd.getRenderer();
+				break;
+			}
+		}
+		
+		return renderer != null ? renderer : this.defaultTableCellRenderer;
+	}
+	
+	private TableCellEditor getColumnEditor(String name) {
+		TableCellEditor editor = null;
+		
+		for (ColumnDefinition cd : this.columns) {
+			if (name.equals(cd.getName())) {
+				editor = cd.getEditor();
+				break;
+			}
+		}
+		
+		return editor;
+	}
 
 	/**
 	 * Try to get a column width from PropertyDescriptors or ColumnDefinitions
@@ -432,6 +456,15 @@ public class ListTableModel implements TableModel {
 			maxWidth = columns.get(index).getWidth();
 
 		return maxWidth;
+	}
+	
+	private Integer getColumnWidth(String name) {
+		for (ColumnDefinition cd : this.columns) {
+			if (name.equals(cd.getName()))
+				return cd.getWidth();
+		}
+		
+		return null;
 	}
 
 	/**

@@ -18,9 +18,9 @@ package org.jdal.auth;
 /**
  * An Auth Service to validate Users
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
-
 public interface AuthService {
 	
 	/**

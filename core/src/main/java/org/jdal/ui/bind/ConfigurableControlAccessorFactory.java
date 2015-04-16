@@ -35,7 +35,7 @@ import org.jdal.ui.View;
 /**
  * Implementation of ControlAccessorFactory using an asociative Map&lt;Class, ControlAccessor&gt;
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 1.1
  * @see org.jdal.ui.bind.ControlAccessor
  * @see org.jdal.ui.bind.ControlAccessorFactory

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2015 Jose Luis Martin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package org.jdal.ui.bind;
 import org.jdal.ui.View;
 
 /**
- * Control Accessor for Views
+ * {@link ControlAccessor} for {@link View Views}
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.2
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ViewAccessor extends AbstractControlAccessor {
@@ -67,7 +68,5 @@ public class ViewAccessor extends AbstractControlAccessor {
 	public void removeControlChangeListener(ControlChangeListener l) {
 		getControl().removeControlChangeListener(l);
 	}
-	
-	
 
 }

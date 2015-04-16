@@ -230,10 +230,13 @@ public class DefaultTask   implements Task {
 	/** 
 	 * Undo command 
 	 */
-	public void undo() {
-		for (Command cmd : newCommandList()) {
-			cmd.undo();
-		}
+	public boolean undo() {
+		boolean  result = true;
+
+		for (Command cmd : newCommandList())
+			result = result && cmd.undo();
+		
+		return result;
 	}
 
 

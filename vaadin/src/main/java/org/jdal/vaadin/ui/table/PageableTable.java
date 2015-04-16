@@ -29,9 +29,11 @@ import org.jdal.dao.Page;
 import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PaginatorListener;
+import org.jdal.vaadin.data.ListBeanContainer;
 import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.form.FormDialog;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.dao.DataAccessException;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
@@ -40,6 +42,7 @@ import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
@@ -158,23 +161,26 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	/**
 	 * Load models from page and add to internal bean item container
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
 	private void loadPage() {
-		BeanItemContainer<T> container = getContainer();
+		Container container = getContainer();
 		Class<T> entityClass = getEntityClass();
 		
 		if (page.getData() != null && page.getData().size() > 0) {
 			
 			if (container == null) {
-				
-				Class beanClass = entityClass != null ? entityClass : page.getData().get(0).getClass();
-				container = new BeanItemContainer(beanClass, page.getData());
+				Class<?> beanClass = entityClass != null ? entityClass : page.getData().get(0).getClass();
+				container = new ListBeanContainer(beanClass, page.getData());
 				getTable().setContainerDataSource(container);
 				setContainer(container);
 			}
 			else {
 				container.removeAllItems();
-				container.addAll(page.getData());
+				if (container instanceof ListBeanContainer)
+					((ListBeanContainer) container).addAll(page.getData());
+				else if (container instanceof BeanItemContainer) {
+					((BeanItemContainer<T>) container).addAll(page.getData());
+				}
 			}
 		}
 		else {
@@ -224,7 +230,12 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	@SuppressWarnings("unchecked")
 	@Override
 	public void delete(Collection<?> selected) {
-		this.service.delete((Collection<T>) selected);
+		try {
+			this.service.delete((Collection<T>) selected);
+		}
+		catch(DataAccessException dae) {
+			Notification.show("Error", getMessage("PageableTable.deleteError"), Type.ERROR_MESSAGE);
+		}
 	}
 	
 	/**

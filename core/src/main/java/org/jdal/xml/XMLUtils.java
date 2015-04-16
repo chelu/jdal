@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2008-2015 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
-
-
 
 /**
  * XML DOM Utility static lib for XML (Thread safe) 
@@ -203,7 +201,6 @@ public abstract class XMLUtils {
 	
 	/**
 	 * Copy one node to another node.
-	 * 
 	 * @param source source Node
 	 * @param dest destination Node
 	 * @return destination Node

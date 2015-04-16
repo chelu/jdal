@@ -16,9 +16,12 @@
 package org.jdal.ui.bind;
 
 /**
- * Interface for control initializers.
+ * Interface for control initializers. Initialize controls 
+ * based on external associations as JPA annotations or JDAL 
+ * annotations.
  * 
  * @author Jose Luis Martin 
+ * @since 1.1
  */
 public interface ControlInitializer {
 	

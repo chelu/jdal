@@ -64,7 +64,7 @@ import org.springframework.validation.Validator;
 /**
  * Template class that simplifies {@link View} implementation.
  * 
- * <p> The central method is <code>buildPanel</code> that builds the <code>JComponent</code>
+ * <p> The central method is <code>buildPanel</code> that builds the component
  * that hold the view controls. You may use custom binding of the view overwriting the methods 
  * <code>doUpdate</code> and <code>doRefresh</code>.
  * 
@@ -74,14 +74,14 @@ import org.springframework.validation.Validator;
  * of <code>ignoreProperty</code> methods.
  * 
  * <p> Manual binding is also supported via <code>bind</code> methods. When binding a control, a
- * the View is added to control as <code>ChangeListener</code> is added to the control for setting dirty property on control
- * changes.
+ * the View is added to control as <code>ChangeListener</code> is added to the control for 
+ * setting dirty property on control changes.
  * 
  * <p> Only <code>org.springframework.util.validation.Validator</code> validators are supported
  * The <code>validateView</code> method calls configured
  * <code>ErrorProcessors</code> to process errors found in validation.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
  * @since 2.0
  * @see BinderFactory
  * @see ControlAccessorFactory
@@ -329,8 +329,6 @@ public abstract class ViewSupport<T> implements View<T>, ControlChangeListener, 
 	public BinderFactory getBinderFactory() {
 		return binderFactory;
 	}
-	
-	
 
 	/**
 	 * Sets the binder factory, propagate it to composite binder.

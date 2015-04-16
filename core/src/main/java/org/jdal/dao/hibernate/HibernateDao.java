@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 Jose Luis Martin.
+ * Copyright 2009-2015 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,11 +51,9 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.util.ClassUtils;
 
-
 /**
- * Hibernate generic DAO implementation. Support pagination of results with filters
- * using the getPage(Page page) method.
- * 
+ * Hibernate generic DAO implementation. Support pagination of results and filters
+ * using the {@link #getPage(Page)} method.
  *
  * @author Jose Luis Martin
  * @see org.jdal.dao.Dao

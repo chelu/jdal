@@ -21,6 +21,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jdal.util.BeanUtils;
 
+/**
+ * Utility class for dealing with bean properties.
+ * 
+ * @author Jose Luis Martin
+ */
 public abstract class PropertyUtils {
 
 	public static String PROPERTY_SEPARATOR = ".";
@@ -63,5 +68,4 @@ public abstract class PropertyUtils {
 			
 		return pd;
 	}
-	
 }

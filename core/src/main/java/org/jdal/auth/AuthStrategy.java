@@ -20,11 +20,11 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Strategy for validate user supplied passords with user stored passwords
  * 
+ * @author Jose Luis Martin
+ * @since 1.0
  * @see AuthPlain 
  * @see AuthHashMD5
  * @see AuthManager
- * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
 public interface AuthStrategy {
 	

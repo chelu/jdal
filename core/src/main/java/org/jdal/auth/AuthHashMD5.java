@@ -23,11 +23,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.util.encoders.Base64;
 
-
 /**
  * An AuthStrategy that use HashMD5
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * 
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public class AuthHashMD5 implements AuthStrategy {
 

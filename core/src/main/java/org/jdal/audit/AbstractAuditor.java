@@ -18,12 +18,12 @@ package org.jdal.audit;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
- * An Abstract Auditor usiing  Spring AOP
+ * An Abstract Auditor using  Spring AOP
  *  
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public abstract class AbstractAuditor {
-
 
 	/**
 	 * Do audit

@@ -19,8 +19,10 @@ import org.jdal.aop.config.SerializableProxyBeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * NamespaceHandler for jdal-core
+ * 
+ * @author Jose Luis Martin.
+ * @since 1.3
  */
 public class JdalNamespaceHandler extends NamespaceHandlerSupport {
 

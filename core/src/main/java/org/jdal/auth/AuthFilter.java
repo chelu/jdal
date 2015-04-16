@@ -27,15 +27,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * Servlet 2.3 Filter  for simple session auth
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public class AuthFilter extends OncePerRequestFilter {
 	
 	public static String SESSION_USER_KEY = "AUTHFILTER_USER";
-	
 	private static String loginPage="/login.jsp";
 
-	
 	public void destroy() {
 
 	}

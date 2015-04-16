@@ -21,8 +21,10 @@ import java.util.Collection;
 import org.jdal.logic.CollectionPersistenceService;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * Binder for {@link CollectionPersistenceService}
+ * 
+ * @author Jose Luis Martin
+ * @since 1.1
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class CollectionPersistentServiceBinder extends AbstractBinder {

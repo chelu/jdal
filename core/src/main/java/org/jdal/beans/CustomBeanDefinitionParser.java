@@ -66,7 +66,7 @@ public class CustomBeanDefinitionParser extends AbstractSingleBeanDefinitionPars
 	 */
 	protected void parseList(Element element, ParserContext parserContext, BeanDefinitionBuilder builder,
 			String name) {
-		
+	
 		NodeList nl = element.getElementsByTagNameNS(element.getNamespaceURI(), name);
 
 		if (nl.getLength() > 0) {
@@ -82,8 +82,7 @@ public class CustomBeanDefinitionParser extends AbstractSingleBeanDefinitionPars
 	 * @param parserContext parserContext
 	 * @param builder builder
 	 */
-	protected void parseBeanDefinition(Element ele, ParserContext parserContext, BeanDefinitionBuilder builder) {
-		
+	protected void parseBeanDefinition(Element ele, ParserContext parserContext, BeanDefinitionBuilder builder) {	
 		BeanDefinitionParserDelegate delegate = parserContext.getDelegate();
 		AbstractBeanDefinition bd = builder.getRawBeanDefinition();
 		XmlReaderContext reader =  parserContext.getReaderContext();

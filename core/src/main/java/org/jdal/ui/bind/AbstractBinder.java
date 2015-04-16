@@ -22,9 +22,7 @@ import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.beans.PropertyUtils;
-import org.jdal.beans.SimpleTypeConverter;
 import org.jdal.beans.SpringConverter;
-import org.jdal.text.PeriodFormatAnnotationFactory;
 import org.jdal.ui.DefaultModelHolder;
 import org.jdal.ui.ModelHolder;
 import org.springframework.beans.BeanWrapper;
@@ -32,10 +30,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.core.convert.ConversionException;
 import org.springframework.core.convert.Property;
-import org.springframework.core.convert.TypeDescriptor;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
@@ -43,7 +38,8 @@ import org.springframework.validation.BindingResult;
  * Base class for Binders. Implement doBind() to do the binding.
  * Dereference ModelHolders when setting its as binded model.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.1
  */
 public abstract class AbstractBinder extends SpringConverter implements PropertyBinder {
 	

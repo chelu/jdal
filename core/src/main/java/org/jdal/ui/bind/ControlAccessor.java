@@ -18,7 +18,8 @@ package org.jdal.ui.bind;
 /**
  * Interface for generic access to ui controls
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.1
  */
 public interface ControlAccessor {
 

@@ -26,7 +26,8 @@ import java.lang.annotation.Target;
  * Mark a field or property as reference of other by
  * type or property
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.2
  */
 @Target({METHOD, FIELD}) 
 @Retention(RUNTIME)

@@ -29,9 +29,10 @@ import org.jdal.ui.View;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 
 /**
- * Base class for ControlAccessors
+ * Base class for {@link AbstractControlAccessor}
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.1
  */
 public abstract class AbstractControlAccessor extends SpringConverter implements ControlAccessor {
 	
@@ -39,7 +40,6 @@ public abstract class AbstractControlAccessor extends SpringConverter implements
 	private Object control;
 	/** control change listener list */
 	private List<ControlChangeListener> listeners = new ArrayList<ControlChangeListener>();
-	
 	
 	/**
 	 * Default ctor.

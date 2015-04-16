@@ -26,9 +26,10 @@ import org.apache.commons.io.FileUtils;
 import org.xml.sax.SAXException;
 
 /**
- * Command Line Xml utility
+ * Command Line Xml validator utility
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @sice 1.0
  */
 public class Main {
 	
@@ -46,7 +47,7 @@ public class Main {
 		ValidationResult vr = XMLUtils.validateSchema(
 				FileUtils.readFileToString(new File(xmlPath), "UTF-8"), schema);
 		
-		String result = vr.isValid() ? "Valido" : "Inválido\n";
+		String result = vr.isValid() ? "Valid" : "Invalid\n";
 		System.out.println(result  + vr.getMessage());
 	}
 }

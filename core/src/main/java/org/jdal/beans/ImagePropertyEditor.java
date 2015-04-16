@@ -28,7 +28,8 @@ import org.springframework.core.io.Resource;
 /**
  * Property editor for set Images from String in Spring bean definition files
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin.
+ * @since 1.0
  */
 public class ImagePropertyEditor extends PropertyEditorSupport {
 
@@ -45,7 +46,8 @@ public class ImagePropertyEditor extends PropertyEditorSupport {
 		Image image = null;
 		try {
 			image = Toolkit.getDefaultToolkit().getImage(resource.getURL());
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
 			log.error(e);
 		}
 		setValue(image);

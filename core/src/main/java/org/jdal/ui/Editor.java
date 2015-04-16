@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2015 Jose Luis Martin.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package org.jdal.ui;
 import org.jdal.service.PersistentServiceAware;
 
 /**
- * Interface for model editors
+ * Interface for model editors. 
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.1
  */
 public interface Editor<T> extends PersistentServiceAware<T> {
 	

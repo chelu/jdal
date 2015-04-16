@@ -25,6 +25,7 @@ import org.jdal.dao.Filter;
  *
  */
 public interface JpaCriteriaBuilder<T> {
+	
 	/**
 	 * Add Restrictions to Critera from filter
 	 * @param criteria criteria to add restrictions

@@ -16,7 +16,10 @@
 package org.jdal.ui;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * Default implementation for {@link ModelHolder ModelHolders}
+ * 
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public class DefaultModelHolder<T> implements ModelHolder<T> {
 	

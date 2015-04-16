@@ -50,6 +50,4 @@ public class InitializationConfig implements Serializable {
 	public void setSortPropertyName(String sortPropertyName) {
 		this.sortPropertyName = sortPropertyName;
 	}
-	
-	
 }

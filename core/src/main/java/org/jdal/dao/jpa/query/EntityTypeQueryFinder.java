@@ -28,8 +28,6 @@ import javax.persistence.metamodel.EntityType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
-
 /**
  * Find named queries declared annotated on EntityType.
  * 

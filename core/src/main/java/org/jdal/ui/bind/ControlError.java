@@ -18,9 +18,10 @@ package org.jdal.ui.bind;
 import org.springframework.validation.FieldError;
 
 /**
- * FieldError for Swing controls
+ * FieldError for Swing controls. Include the component that was failed.
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.1
  */
 public class ControlError extends FieldError {
 

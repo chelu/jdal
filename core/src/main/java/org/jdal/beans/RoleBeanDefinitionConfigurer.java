@@ -27,7 +27,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
  * 
  * @author Jose Luis Martin
  * @since 2.0
- *
  */
 public class RoleBeanDefinitionConfigurer implements BeanDefinitionRegistryPostProcessor {
 	
