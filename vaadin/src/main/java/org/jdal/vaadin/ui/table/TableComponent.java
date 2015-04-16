@@ -25,7 +25,6 @@ import org.jdal.beans.MessageSourceWrapper;
 import org.jdal.ui.EditorEvent;
 import org.jdal.ui.EditorListener;
 import org.jdal.vaadin.data.BeanWrapperItem;
-import org.jdal.vaadin.data.ListBeanContainer;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.VaadinView;
@@ -33,6 +32,7 @@ import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
+import com.vaadin.data.Container;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Button;
@@ -53,7 +53,7 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	/** the table */
 	private Table table;
 	/** container to use when using external paginator */
-	private ListBeanContainer container;
+	private Container container;
 	/** Form editor name */
 	private String editor;
 	/** Gui Factory used to get editor instances */
@@ -164,7 +164,6 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 		this.verticalLayout.setWidth("100%");
 		this.table.setWidth("100%");
 	}
-
 
 	/**
 	 * By default, pageable table handle item clicks to edit items.
@@ -318,11 +317,11 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 		this.nativeButtons = nativeButtons;
 	}
 	
-	public ListBeanContainer getContainer() {
+	public Container getContainer() {
 		return container;
 	}
 
-	public void setContainer(ListBeanContainer container) {
+	public void setContainer(Container container) {
 		this.container = container;
 	}
 
@@ -333,6 +332,10 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	@Autowired
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource.setMessageSource(messageSource);
+	}
+	
+	public String getMessage(String code) {
+		return this.messageSource.getMessage(code);
 	}
 
 }

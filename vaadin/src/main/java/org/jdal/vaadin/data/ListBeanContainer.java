@@ -25,7 +25,9 @@ import java.util.Map;
 import org.jdal.beans.PropertyUtils;
 import org.springframework.beans.BeanUtils;
 
-import com.vaadin.data.Container;
+import com.vaadin.data.Container.Indexed;
+import com.vaadin.data.Container.ItemSetChangeNotifier;
+import com.vaadin.data.Container.PropertySetChangeNotifier;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.AbstractContainer;
@@ -35,9 +37,10 @@ import com.vaadin.data.util.AbstractContainer;
  * Hold data in a List.
  * 
  * @author Jose Luis Martin
+ * @since 2.1
  */
-public class ListBeanContainer extends AbstractContainer
-	implements Container.Indexed {
+public class ListBeanContainer extends AbstractContainer implements Indexed,
+		ItemSetChangeNotifier, PropertySetChangeNotifier {
 	
 	/** Hold all beans in container */
 	private List<BeanWrapperItem> beans = new ArrayList<BeanWrapperItem>();
@@ -294,6 +297,49 @@ public class ListBeanContainer extends AbstractContainer
 		this.properties.add(name);
 		this.propertyDescriptors.put(name, 
 				PropertyUtils.getPropertyDescriptor(this.beanClass, name));
+	}
+
+	@Override
+	public void addPropertySetChangeListener(
+			PropertySetChangeListener listener) {
+
+		super.addPropertySetChangeListener(listener);
+	}
+
+	@Override
+	public void addItemSetChangeListener(ItemSetChangeListener listener) {
+		super.addItemSetChangeListener(listener);
+	}
+
+	@Override
+	public void addListener(PropertySetChangeListener listener) {
+		super.addListener(listener);
+	}
+
+	@Override
+	public void addListener(ItemSetChangeListener listener) {
+		super.addListener(listener);
+	}
+
+	@Override
+	public void removePropertySetChangeListener(
+			PropertySetChangeListener listener) {
+		super.removePropertySetChangeListener(listener);
+	}
+
+	@Override
+	public void removeListener(PropertySetChangeListener listener) {
+		super.removeListener(listener);
+	}
+
+	@Override
+	public void removeItemSetChangeListener(ItemSetChangeListener listener) {
+		super.removeItemSetChangeListener(listener);
+	}
+
+	@Override
+	public void removeListener(ItemSetChangeListener listener) {
+		super.removeListener(listener);
 	}
 
 }
