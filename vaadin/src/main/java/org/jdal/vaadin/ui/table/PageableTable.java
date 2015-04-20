@@ -193,18 +193,6 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	}
 	
 	/**
-	 * Create the BeanContainer, override tu use Vaadin {@link BeanItemContainer}
-	 * instead JDAL default ListBeanContainer.
-	 * @param beanClass bean type in container
-	 * @param data intial data.
-	 * @return a new BeanContainer
-	 */
-	@SuppressWarnings("unchecked")
-	protected Container createBeanContainer(Class<?> beanClass, List<T> data) {
-		return new BeanItemContainer<T>((Class<T>) beanClass, data);
-	}
-
-	/**
 	 * Refresh table
 	 */
 	@Override

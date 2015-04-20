@@ -35,6 +35,7 @@ import org.springframework.util.ReflectionUtils;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Button;
@@ -84,6 +85,17 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 		this.setCompositionRoot(this.verticalLayout);
 	}
 	
+	/**
+	 * Create the BeanContainer, override tu use Vaadin {@link BeanItemContainer}
+	 * instead JDAL default ListBeanContainer.
+	 * @param beanClass bean type in container
+	 * @param data intial data.
+	 * @return a new BeanContainer
+	 */
+	@SuppressWarnings("unchecked")
+	protected Container createBeanContainer(Class<?> beanClass, List<T> data) {
+		return new BeanItemContainer<T>((Class<T>) beanClass, data);
+	}
 	
 	/**
 	 * Create a ButtonBox from TableAction List
