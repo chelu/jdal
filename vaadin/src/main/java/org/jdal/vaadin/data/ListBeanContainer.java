@@ -43,7 +43,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 		ItemSetChangeNotifier, PropertySetChangeNotifier {
 	
 	/** Hold all beans in container */
-	private List<BeanWrapperItem> beans = new ArrayList<BeanWrapperItem>();
+	private transient List<Item> items = new ArrayList<Item>();
 	/** Bean type */
 	private Class<?> beanClass;
 	/** Bean properties used by container */
@@ -92,7 +92,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 
 	private void init(List<?> data) {
 		for (Object bean : data) {
-			this.beans.add(createBeanWrapper(bean));
+			this.items.add(createItem(bean));
 		}
 		
 		fireItemSetChange();
@@ -101,7 +101,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 	@Override
 	public Integer nextItemId(Object itemId) {
 		Integer index = getAsIndex(itemId);
-		return beans.size() > index - 1 ? index + 1 : null;
+		return items.size() > index - 1 ? index + 1 : null;
 	}
 
 	/**
@@ -126,12 +126,12 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 
 	@Override
 	public Integer firstItemId() {
-		return beans.isEmpty() ? null : 0;
+		return items.isEmpty() ? null : 0;
 	}
 
 	@Override
 	public Integer lastItemId() {
-		return beans.isEmpty() ? null : beans.size() - 1;
+		return items.isEmpty() ? null : items.size() - 1;
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 
 	@Override
 	public boolean isLastId(Object itemId) {
-		return getAsIndex(itemId) == beans.size() - 1;
+		return getAsIndex(itemId) == items.size() - 1;
 	}
 
 	@Override
@@ -159,7 +159,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 
 	@Override
 	public Item getItem(Object itemId) {
-		return beans.get(getAsIndex(itemId));
+		return items.get(getAsIndex(itemId));
 	}
 
 	@Override
@@ -169,7 +169,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 	
 	@Override
 	public Collection<?> getItemIds() {
-		return this.beans;
+		return this.items;
 	}
 	
 	@Override
@@ -177,10 +177,10 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 	public Property getContainerProperty(Object itemId, Object propertyId) {
 		int index = getAsIndex(itemId);
 		
-		if (index > this.beans.size() - 1)
+		if (index > this.items.size() - 1)
 			return null;
 		
-		return this.beans.get(index).getItemProperty(propertyId);
+		return this.items.get(index).getItemProperty(propertyId);
 	}
 
 	@Override
@@ -195,17 +195,17 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 
 	@Override
 	public int size() {
-		return this.beans.size();
+		return this.items.size();
 	}
 
 	@Override
 	public boolean containsId(Object itemId) {
-		if (this.beans.isEmpty())
+		if (this.items.isEmpty())
 			return false;
 		
 		int index = getAsIndex(itemId);
 		
-		return 0 >= index && index < this.beans.size();
+		return 0 >= index && index < this.items.size();
 	}
 
 	@Override
@@ -215,13 +215,13 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 
 	@Override
 	public Object addItem() throws UnsupportedOperationException {
-		if (this.beans.add(createBeanWrapper(newBean())))
-			return this.beans.size() - 1;
+		if (this.items.add(createItem(newBean())))
+			return this.items.size() - 1;
 		
 		return null;
 	}
 
-	private BeanWrapperItem createBeanWrapper(Object bean) {
+	protected BeanWrapperItem createItem(Object bean) {
 		return new BeanWrapperItem(bean, this.properties);
 	}
 
@@ -232,7 +232,11 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 	@Override
 	public boolean removeItem(Object itemId)
 			throws UnsupportedOperationException {
-		throw new UnsupportedOperationException();
+		
+		boolean result = this.items.remove(getAsIndex(itemId));
+		fireItemSetChange();
+		
+		return result;
 	}
 
 	@Override
@@ -245,7 +249,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 	@Override
 	public boolean removeContainerProperty(Object propertyId)
 			throws UnsupportedOperationException {
-		this.beans.remove(propertyId);
+		this.properties.remove(propertyId);
 		this.propertyDescriptors.remove(propertyId);
 		
 		return true;
@@ -253,7 +257,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 
 	@Override
 	public boolean removeAllItems() throws UnsupportedOperationException {
-		this.beans.clear();
+		this.items.clear();
 		fireItemSetChange();
 		
 		return true;

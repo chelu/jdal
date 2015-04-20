@@ -74,7 +74,6 @@ public class ConfigurableTable extends Table {
 	private transient MessageSource messageSource;
 	private List<String> properties = new ArrayList<String>();
 	
-	
 	/**
 	 * Configure Vaadin table with column definitions. 
 	 * Method useful for use from context bean definition file.
@@ -109,7 +108,6 @@ public class ConfigurableTable extends Table {
 		}
 		super.setContainerDataSource(newDataSource, properties);
 	}
-
 	
 	/**
 	 * Configure table
@@ -164,7 +162,6 @@ public class ConfigurableTable extends Table {
 		}
 	}
 
-
 	/**
 	 * Add nested property to datasource if is possilbe. 
 	 * @param name of nested property 
@@ -177,7 +174,6 @@ public class ConfigurableTable extends Table {
 			((ListBeanContainer) cds).addProperty(name);
 	}
 
-
 	/**
 	 * Gets usingChecks property, if true, table show checkboxes for row selection
 	 * @return the usingChecks
@@ -186,7 +182,6 @@ public class ConfigurableTable extends Table {
 		return usingChecks;
 	}
 
-
 	/**
 	 * Sets usingChecks property, if true, table show checkboxes for row selection
 	 * @param usingChecks the usingChecks to set
@@ -194,7 +189,6 @@ public class ConfigurableTable extends Table {
 	public void setUsingChecks(boolean usingChecks) {
 		this.usingChecks = usingChecks;
 	}
-
 
 	/**
 	 * Sort on container or on sorter
@@ -223,7 +217,6 @@ public class ConfigurableTable extends Table {
 		return sortableIds;
 	}
 	
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -257,7 +250,6 @@ public class ConfigurableTable extends Table {
 		// Default behavior
 		return super.getPropertyValue(rowId, colId, property);
 	}
-
 
 	/**
 	 * Instantiate editor Class and set property as DataSource if 

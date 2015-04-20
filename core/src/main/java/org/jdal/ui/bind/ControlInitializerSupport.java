@@ -26,13 +26,10 @@ import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.jdal.dao.Dao;
-import org.jdal.dao.Page;
 import org.jdal.util.BeanUtils;
 import org.jdal.util.comparator.PropertyComparator;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-
-import com.ctc.wstx.util.StringUtil;
 
 /**
  * Support class for {@link ControlInitializer ControlInitializers}.
