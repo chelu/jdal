@@ -15,6 +15,7 @@
  */
 package org.jdal.vaadin.ui.table;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,15 +25,16 @@ import java.util.Set;
 import org.jdal.beans.MessageSourceWrapper;
 import org.jdal.ui.EditorEvent;
 import org.jdal.ui.EditorListener;
-import org.jdal.vaadin.data.BeanWrapperItem;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.util.ReflectionUtils;
 
 import com.vaadin.data.Container;
+import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Button;
@@ -130,13 +132,12 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	public void itemClick(ItemClickEvent event) {
 		if (event.isDoubleClick()) {
 			VaadinView<T> editor = getEditorView();
 			if (editor != null) {
-				BeanWrapperItem bi = (BeanWrapperItem) event.getItem();
-				editor.setModel((T)bi.getBean());
+				Item item = event.getItem();
+				editor.setModel(getBean(item));
 				editor.refresh();
 				
 				editor.addEditorListener(new EditorListener() {
@@ -155,6 +156,17 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 		}
 	}
 	
+	/**
+	 * Get the wrapped bean from item calling to getMethod by  reflection.
+	 * @param item item
+	 * @return wrapped bean
+	 */
+	@SuppressWarnings("unchecked")
+	protected T getBean(Item item) {
+		Method method = ReflectionUtils.findMethod(item.getClass(), "getBean");
+		return (T) ReflectionUtils.invokeMethod(method, item);
+	}
+
 	public void refresh() {
 		// do nothing by default
 	}

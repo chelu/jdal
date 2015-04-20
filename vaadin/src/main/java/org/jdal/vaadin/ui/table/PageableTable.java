@@ -17,6 +17,7 @@ package org.jdal.vaadin.ui.table;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -162,15 +163,15 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	 * Load models from page and add to internal bean item container
 	 */
 	@SuppressWarnings("unchecked")
-	private void loadPage() {
+	protected void loadPage() {
 		Container container = getContainer();
 		Class<T> entityClass = getEntityClass();
 		
-		if (page.getData() != null && page.getData().size() > 0) {
+		if (this.page.getData() != null && this.page.getData().size() > 0) {
 			
 			if (container == null) {
-				Class<?> beanClass = entityClass != null ? entityClass : page.getData().get(0).getClass();
-				container = new ListBeanContainer(beanClass, page.getData());
+				Class<?> beanClass = entityClass != null ? entityClass : this.page.getData().get(0).getClass();
+				container = createBeanContainer(beanClass, this.page.getData());
 				getTable().setContainerDataSource(container);
 				setContainer(container);
 			}
@@ -191,7 +192,18 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		paginator.refresh();
 	}
 	
-	
+	/**
+	 * Create the BeanContainer, override tu use Vaadin {@link BeanItemContainer}
+	 * instead JDAL default ListBeanContainer.
+	 * @param beanClass bean type in container
+	 * @param data intial data.
+	 * @return a new BeanContainer
+	 */
+	@SuppressWarnings("unchecked")
+	protected Container createBeanContainer(Class<?> beanClass, List<T> data) {
+		return new BeanItemContainer<T>((Class<T>) beanClass, data);
+	}
+
 	/**
 	 * Refresh table
 	 */
@@ -242,7 +254,7 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	 * {@inheritDoc}
 	 */
 	public void containerItemSetChange(ItemSetChangeEvent event) {
-		paginator.refresh();
+		this.paginator.refresh();
 	}
 	
 	

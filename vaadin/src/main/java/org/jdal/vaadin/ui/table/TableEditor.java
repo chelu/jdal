@@ -15,12 +15,10 @@
  */
 package org.jdal.vaadin.ui.table;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.jdal.vaadin.data.ContainerPersistentServiceAdapter;
 import org.jdal.vaadin.data.ListBeanContainer;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.VaadinView;
@@ -29,8 +27,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 /**
+ * Table editor component.
+ * 
  * @author Jose Luis Martin
- *
+ * @since 2.1
  */
 public class TableEditor<T> extends TableComponent<T> {
 	
@@ -46,9 +46,11 @@ public class TableEditor<T> extends TableComponent<T> {
 	
 	@PostConstruct
 	public void init() {
-		ListBeanContainer c = new ListBeanContainer(getEntityClass());
-		setContainer(c);
-		getTable().setContainerDataSource(c);
+		if (getContainer() == null) {
+			ListBeanContainer c = new ListBeanContainer(getEntityClass());
+			setContainer(c);
+		}
+		getTable().setContainerDataSource(getContainer());
 		getTable().addItemClickListener(this);
 		VerticalLayout vl = getVerticalLayout();
 		vl.setSpacing(true);
@@ -60,12 +62,7 @@ public class TableEditor<T> extends TableComponent<T> {
 
 	@Override
 	public VaadinView<T> getEditorView() {
-		VaadinView<T> view = super.getEditorView();
-		if (view != null) 
-			view.setPersistentService(
-					new ContainerPersistentServiceAdapter<T, Serializable>(getContainer()));
-		
-		return view;
+		return super.getEditorView();
 	}
 
 	@Override
