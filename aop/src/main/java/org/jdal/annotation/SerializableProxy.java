@@ -24,12 +24,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to creaate a serializable proxy of a non serializable object.
+ * Used to create a serializable proxy of a non serializable object.
  * Useful to avoid {@link java.io.NoSerializableException}
  * when storing in a container sessions objects that references non serializable 
  * objects.
  * 
- * @author Jose Luis Martin 
+ * @author Jose Luis Martin
+ * @since 2.0
  */
 @Target({FIELD, TYPE}) 
 @Retention(RetentionPolicy.RUNTIME)

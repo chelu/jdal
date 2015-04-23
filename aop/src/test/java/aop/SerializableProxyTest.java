@@ -107,6 +107,10 @@ class NoSerializableBean {
 @SerializableProxy
 class NoSerializableAnnotatedBean {
 	
+	public void sayHello() {
+		System.out.println("Hello");
+	}
+	
 }
 
 class ConfigurableBean implements Serializable {

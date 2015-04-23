@@ -25,7 +25,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 
 /** 
- * Target source that use a {@link DependencyDescriptor} to lookup target.
+ * Target source that use a {@link DependencyDescriptor} to lookup targets.
  * 
  * @author Jose Luis Martin.
  * @since 2.0

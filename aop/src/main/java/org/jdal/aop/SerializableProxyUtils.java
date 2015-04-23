@@ -174,7 +174,7 @@ public class SerializableProxyUtils {
 	 * @param reference serializable reference 
 	 * @return a new serializable proxy
 	 */
-	private static Object createSerializableProxy(Object target, SerializableReference reference) {
+	public static Object createSerializableProxy(Object target, SerializableReference reference) {
 		ProxyFactory pf = new ProxyFactory(target);		
 		pf.setExposeProxy(true);		
 		pf.setProxyTargetClass(reference.isProxyTargetClass());

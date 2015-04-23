@@ -43,13 +43,12 @@ import org.springframework.util.StringUtils;
  * 
  * @author Jose Luis Martin
  * @since 2.0
- *
  */
 public class SerializableReference implements Serializable {
 	
 	private static final Log log = LogFactory.getLog(SerializableReference.class);
 	private static final Map<String, Object> serializedObjects = new ConcurrentHashMap<String, Object>();
-	/** force to use cglib in deseriazed proxies */
+	/** force to use cglib in deserialized proxies */
 	private boolean proxyTargetClass;
 	/** hold a copy of bean in memory instead looking in a bean factory */
 	private boolean useMemoryCache;

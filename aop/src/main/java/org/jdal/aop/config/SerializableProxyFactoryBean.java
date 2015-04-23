@@ -26,8 +26,7 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 /**
- * ProxyFactoryBean to make serializable proxy for non serializable beans, including
- * prototypes allowing session replication
+ * ProxyFactoryBean to make serializable proxy for non serializable beans.
  * 
  * @author Jose Luis Martin
  * @since 2.0
