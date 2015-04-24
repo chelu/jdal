@@ -25,8 +25,10 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import com.vaadin.ui.Component;
 
 /**
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
- *
+ * {@link GuiFactory} implementation that delegates in Spring {@link BeanFactory}
+ * 
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAware, Serializable {
 	
@@ -38,7 +40,7 @@ public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAwar
 	 * {@inheritDoc}
 	 */
 	public Component getComponent(String name) {
-		return (Component) beanFactory.getBean(name);
+		return (Component) this.beanFactory.getBean(name);
 	}
 
 	/**
@@ -52,14 +54,13 @@ public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAwar
 	 * {@inheritDoc}
 	 */
 	public VaadinView<?> getView(String name) {
-		return (VaadinView<?>) beanFactory.getBean(name);
+		return (VaadinView<?>) this.beanFactory.getBean(name);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public ViewDialog newViewDialog() {
 		ViewDialog dlg = null;
 		try {
-			dlg = beanFactory.getBean(VIEW_DIALOG, ViewDialog.class);
+			dlg = this.beanFactory.getBean(VIEW_DIALOG, ViewDialog.class);
 		}
 		catch(BeansException be)  {
 			

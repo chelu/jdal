@@ -33,7 +33,8 @@ import com.vaadin.ui.themes.Reindeer;
 /**
  * ListPane
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public class ListPane extends CustomComponent implements ClickListener {
 
@@ -50,7 +51,7 @@ public class ListPane extends CustomComponent implements ClickListener {
 		
 		for (ComponentHolder holder : components) {
 			MenuItem e = new MenuItem(holder);
-			e.addListener(this);
+			e.addClickListener(this);
 			menu.addComponent(e);
 			if (itemSelected == null)
 				select(e);

@@ -16,7 +16,6 @@
 package org.jdal.vaadin.ui;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
