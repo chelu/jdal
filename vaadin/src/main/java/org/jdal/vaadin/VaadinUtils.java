@@ -26,13 +26,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdal.vaadin.ui.Dialog;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.vaadin.server.Page;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
@@ -118,10 +119,12 @@ public abstract class VaadinUtils {
 	public static void exit() {
 		UI.getCurrent().close();
 		VaadinSession.getCurrent().close();
+		VaadinSession.getCurrent().getSession().removeAttribute(
+				HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
 		Page page = Page.getCurrent();
-		String location = StringUtils.substringBeforeLast(page.getLocation().toString(), page.getUriFragment());
-		location = StringUtils.substringAfterLast(location, "#");
-		page.setLocation(location); 
+//		String location = StringUtils.substringBeforeLast(page.getLocation().toString(), page.getUriFragment());
+//		location = StringUtils.substringAfterLast(location, "#");
+		page.setLocation(VaadinService.getCurrentRequest().getContextPath()); 
 		
 	}
 	

@@ -17,9 +17,10 @@ package org.jdal.model;
 
 
 /**
- * Base User model
+ * Base User interface
  * 
  * @author Jose Luis Martin
+ * @since 1.0
  */
 
 public interface User {

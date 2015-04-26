@@ -21,7 +21,8 @@ import org.jdal.model.User;
 /**
  * An Auth Manager that uses AuthStrategy to authorize users
  * 
- * @author Jose Luis Martin - (jlm@joseluismartin.info)
+ * @author Jose Luis Martin
+ * @since 1.0
  */
 public class AuthManager implements AuthService {
 	

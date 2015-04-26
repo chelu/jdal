@@ -32,4 +32,11 @@ public interface UiRequestMapping {
 	 * @return the mapped UI
 	 */
 	UI getUi(VaadinRequest request);
+
+	/**
+	 * Gets the UI Class taht applies for a request
+	 * @param request the request to map
+	 * @return the mapped UI class
+	 */
+	Class<?extends UI> getUiClass(VaadinRequest request);
 }

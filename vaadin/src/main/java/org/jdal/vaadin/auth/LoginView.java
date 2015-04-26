@@ -142,8 +142,14 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		form.setWidth(this.getWidth(), Unit.PIXELS);
 		form.setHeight(getHeight(), Unit.PIXELS);
 		form.setStyleName("jd-login");
+		HorizontalLayout hl = new HorizontalLayout();
+		hl.setMargin(false);
+		hl.addComponent(form);
+		hl.setComponentAlignment(form, Alignment.MIDDLE_CENTER);
+		hl.setSizeFull();
+		hl.setStyleName("jd-login-background");
 		
-		return form;
+		return hl;
 	}
 	
 	@Override
@@ -159,13 +165,12 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		if (authService.validate(model.getUsername(), model.getPassword())) {
 			for (AuthenticationListener al : authenticationListeners)
 				al.handleAuthentication(new AuthenticationEvent(getPanel(), getModel()));
-			
-			password.setValue("");
-			username.setValue("");
 		}
 		else {
 			showErrorMessage();
 		}
+		password.setValue("");
+		username.setValue("");
 	}
 
 	protected void showErrorMessage() {

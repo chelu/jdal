@@ -42,8 +42,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 	@Autowired(required=false)
 	protected ButtonBar buttonBar;
 	protected HorizontalLayout top = new HorizontalLayout();
-	@Autowired(required=false)
-	private LoginView loginView;
 	private VerticalLayout loginLayout = new VerticalLayout();
 	private Panel mainView = new Panel();
 	@Autowired
@@ -53,8 +51,7 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 	protected void init(VaadinRequest request) {
 		addStyleNames();
 		root.setSizeFull();
-		loginView.addAuthenticationListener(this);
-		buildLogin();
+		buildMain();
 		setContent(root);
 		mainView.setSizeFull();
 		doInit(request);
