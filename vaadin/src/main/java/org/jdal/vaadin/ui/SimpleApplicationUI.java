@@ -17,13 +17,11 @@ package org.jdal.vaadin.ui;
 
 import org.jdal.vaadin.auth.AuthenticationEvent;
 import org.jdal.vaadin.auth.AuthenticationListener;
-import org.jdal.vaadin.auth.LoginView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewProvider;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
@@ -31,7 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 /**
- * Simple application UI.
+ * Simple application UI. Mostly use for samples.
  * 
  * @author Jose Luis Martin
  * @since 2.0
@@ -42,7 +40,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 	@Autowired(required=false)
 	protected ButtonBar buttonBar;
 	protected HorizontalLayout top = new HorizontalLayout();
-	private VerticalLayout loginLayout = new VerticalLayout();
 	private Panel mainView = new Panel();
 	@Autowired
 	private ViewProvider viewProvider;
@@ -59,17 +56,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 	
 	protected void doInit(VaadinRequest request) {
 		// do noting by default
-	}
-	
-	/**
-	 * build login window
-	 */
-	protected void buildLogin() {
-		loginLayout.setSizeFull();
-		loginLayout.setStyleName("jd-login-layout");
-		loginLayout.addComponent(loginView.getPanel());
-		loginLayout.setComponentAlignment(loginView.getPanel(), Alignment.MIDDLE_CENTER);
-		root.addComponent(loginLayout);
 	}
 	
 	/**
@@ -109,14 +95,6 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 
 	public void setButtonBar(ButtonBar buttonBar) {
 		this.buttonBar = buttonBar;
-	}
-
-	public LoginView getLoginView() {
-		return loginView;
-	}
-
-	public void setLoginView(LoginView loginView) {
-		this.loginView = loginView;
 	}
 
 	public Panel getMainView() {
