@@ -22,8 +22,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
+ * {@link UserDetailsService} implementation delegating to a JDAL {@link UserDao}.
+ * 
  * @author Jose Luis Martin
- *
+ * @since 2.1
  */
 public class DaoUserDetailService implements UserDetailsService {
 

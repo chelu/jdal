@@ -32,6 +32,7 @@ import com.vaadin.server.VaadinSession;
  * Adapter to use Spring security {@link AuthenticationManager} as {@link AuthService}.
  * 
  * @author Jose Luis Martin
+ * @since 2.1
  */
 public class SpringAuthService implements AuthService {
 
