@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("jpaDaos-eclipse.xml")
 public class JpaUtilsEclipseLinkTest extends JpaUtilsTest {

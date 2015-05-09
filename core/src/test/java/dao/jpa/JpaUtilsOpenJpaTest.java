@@ -15,17 +15,31 @@
  */
 package dao.jpa;
 
-import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("jpaDaos-openjpa.xml")
 public class JpaUtilsOpenJpaTest extends JpaUtilsTest {
+	
+	@Autowired
+	private PlatformTransactionManager txManager;
+	
+	/**
+	 * Used only to consume an execption the first time that spring create a transaction.
+	 * Seem related to open jpa weaving. Just a work around to run tests.
+	 */
+	@Test(expected=Exception.class)
+	public void consumeOpenJpaException() {
+		txManager.commit(txManager.getTransaction(new DefaultTransactionDefinition()));
+	}
 
 }
