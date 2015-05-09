@@ -23,7 +23,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import org.jdal.dao.jpa.JpaUtils;
@@ -62,8 +64,25 @@ public class JpaUtilsTest {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Book> bookQuery = cb.createQuery(Book.class);
 		Root<Book> root = bookQuery.from(Book.class);
-		Join<Book, Category> join = root.join(em.getMetamodel().entity(Book.class).getSingularAttribute("category", Category.class));
+		Join<Book, Category> join = root.join("category");
 		bookQuery.where(cb.equal(join.<String>get("name"), "Java"));
+		bookQuery.from(Author.class);
+		bookQuery.select(root);
+		CriteriaQuery<Long> countQuery = JpaUtils.countCriteria(em, bookQuery);
+		Long result = Long.valueOf(em.createQuery(bookQuery).getResultList().size());
+		
+		assertEquals(result, (Long) em.createQuery(countQuery).getSingleResult());
+	}
+	
+	@Test
+	@Transactional
+	public void testCountFromFetchesCriteria() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Book> bookQuery = cb.createQuery(Book.class);
+		Root<Book> root = bookQuery.from(Book.class);
+		root.fetch("category");
+		Path<String> namePath = JpaUtils.getPath(root, "category.name");
+		bookQuery.where(cb.equal(namePath, "Java"));
 		bookQuery.from(Author.class);
 		bookQuery.select(root);
 		CriteriaQuery<Long> countQuery = JpaUtils.countCriteria(em, bookQuery);

@@ -50,7 +50,6 @@ import org.jdal.beans.PropertyUtils;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
 
-
 /**
  * Utility class for dealing with JPA API
  * 
@@ -85,7 +84,7 @@ public abstract class JpaUtils {
 	public static <T> CriteriaQuery<Long> countCriteria(EntityManager em, CriteriaQuery<T> criteria) {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-		copyCriteriaWithoutSelectionAndOrder(criteria, countCriteria);
+		copyCriteriaWithoutSelectionAndOrder(criteria, countCriteria, false);
 		
 		Expression<Long> countExpression;
 		
@@ -253,7 +252,7 @@ public abstract class JpaUtils {
 	 * @param to destination Criteria.
 	 */
 	public static void  copyCriteriaNoSelection(CriteriaQuery<?> from, CriteriaQuery<?> to) {
-		copyCriteriaWithoutSelectionAndOrder(from, to);
+		copyCriteriaWithoutSelectionAndOrder(from, to, true);
 		to.orderBy(from.getOrderList());
 	}
 
@@ -263,7 +262,7 @@ public abstract class JpaUtils {
 	 * @param to destination Criteria.
 	 */
 	private static void copyCriteriaWithoutSelectionAndOrder(
-			CriteriaQuery<?> from, CriteriaQuery<?> to) {
+			CriteriaQuery<?> from, CriteriaQuery<?> to, boolean copyFetches) {
 		if (isEclipseLink(from) && from.getRestriction() != null) {
 			// EclipseLink adds roots from predicate paths to critera. Skip copying 
 			// roots as workaround.
@@ -274,6 +273,8 @@ public abstract class JpaUtils {
 				 Root<?> dest = to.from(root.getJavaType());
 				 dest.alias(getOrCreateAlias(root));
 				 copyJoins(root, dest);
+				 if (copyFetches)
+					 copyFetches(root, dest);
 			 }
 		}
 		
@@ -309,11 +310,17 @@ public abstract class JpaUtils {
 		
 			copyJoins(j, toJoin);
 		}
-		
+	}
+	
+	/**
+	 * Copy Fetches
+	 * @param from source From
+	 * @param to destination From
+	 */
+	public static void copyFetches(From<?, ?> from, From<?, ?> to) {
 		for (Fetch<?, ?> f : from.getFetches()) {
 			Fetch<?, ?> toFetch = to.fetch(f.getAttribute().getName());
 			copyFetches(f, toFetch);
-			
 		}
 	}
 
