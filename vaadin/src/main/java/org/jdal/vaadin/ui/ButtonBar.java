@@ -20,7 +20,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.jdal.auth.AuthService;
 import org.jdal.vaadin.ui.table.ButtonListener;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
@@ -47,6 +49,8 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 	private List<ButtonListener> actions = new LinkedList<ButtonListener>();
 	private List<Button> buttons = new LinkedList<Button>();
 	private boolean nativeButtons = true;
+	@Autowired(required=false)
+	private AuthService authService;
 	
 	public ButtonBar() {
 		addStyleName("jd-button-bar");
@@ -61,11 +65,18 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 			this.menu = new VerticalLayout();
 		}
 
-		for (ButtonListener action : actions)
-			addAction(action);
+		for (ButtonListener action : actions) {
+			String accessExpression = action.getAccess();
+			if (this.authService != null && accessExpression != null) {
+				if (this.authService.checkAccess(action, accessExpression, null)) 
+					addAction(action);
+			}
+			else {
+				addAction(action);
+			}
+		}
 
 		setCompositionRoot(this.menu);
-
 	}
 
 	/**
@@ -174,6 +185,20 @@ public class ButtonBar extends CustomComponent implements ClickListener {
 
 	public void setNativeButtons(boolean useNativeButtons) {
 		this.nativeButtons = useNativeButtons;
+	}
+	
+	/**
+	 * @return the authService
+	 */
+	public AuthService getAuthService() {
+		return authService;
+	}
+
+	/**
+	 * @param authService the authService to set
+	 */
+	public void setAuthService(AuthService authService) {
+		this.authService = authService;
 	}
 	
 }

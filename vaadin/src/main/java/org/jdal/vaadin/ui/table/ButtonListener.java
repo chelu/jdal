@@ -31,6 +31,7 @@ public abstract class ButtonListener extends Action implements ClickListener, Se
 	
 	private String description;
 	private String defaultIcon;
+	private String access;
 	
 	/**
 	 * Creates new ButtonListener
@@ -88,5 +89,20 @@ public abstract class ButtonListener extends Action implements ClickListener, Se
 	public void setDefaultIcon(String defaultIcon) {
 		this.defaultIcon = defaultIcon;
 	}
+	
+	/**
+	 * @return the accessExpression
+	 */
+	public String getAccess() {
+		return access;
+	}
+
+	/**
+	 * @param accessExpression the accessExpression to set
+	 */
+	public void setAccess(String access) {
+		this.access = access;
+	}
+
 
 }

@@ -88,7 +88,7 @@ public class AuthManager implements AuthService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean checkAccess(Object target, Object principal) {
+	public boolean checkAccess(Object target, Object expression, Object principal) {
 		return true;
 	}
 }

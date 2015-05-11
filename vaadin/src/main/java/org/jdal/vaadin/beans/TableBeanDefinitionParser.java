@@ -75,6 +75,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String DEFAULT_PAGEABLE_TABLE_CLASS = "org.jdal.vaadin.ui.table.PageableTable";
 	private static final String NATIVE_BUTTONS = "native-buttons";
 	private static final String PROPAGATE_SERVICE = "propagate-service";
+	private static final String CONTAINER_CLASS = "container-class";
 	
 	/**
 	 * {@inheritDoc}
@@ -130,7 +131,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		
 		if (element.hasAttribute(TABLE_CLASS))
 			tableClass = element.getAttribute(TABLE_CLASS);
-
+		
 		// create PageableTable
 		BeanDefinitionBuilder bdb = BeanDefinitionBuilder.genericBeanDefinition(pageableTableClass);
 		bdb.setScope(scope);
@@ -151,6 +152,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, PAGE_SIZE);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, NATIVE_BUTTONS);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, PROPAGATE_SERVICE);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, CONTAINER_CLASS);
 		
 		
 		if (!element.hasAttribute(USE_ACTIONS) || "true".equals(element.getAttribute(USE_ACTIONS)))

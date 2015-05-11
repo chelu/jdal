@@ -32,11 +32,12 @@ public interface AuthService {
 	boolean validate(String username, String password);
 	
 	/**
-	 * Test if a principal has access to provided target object
+	 * Test if a principal has access to provided target object by security expression.
 	 * @param target access object
+	 * @param expression security expression
 	 * @param principal principal
 	 * @return true if principal has access to target, false otherwise.
 	 */
-	boolean checkAccess(Object target, Object principal);
+	boolean checkAccess(Object target, Object expression,  Object principal);
 
 }

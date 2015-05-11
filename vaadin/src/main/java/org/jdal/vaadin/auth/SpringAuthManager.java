@@ -16,8 +16,19 @@
 package org.jdal.vaadin.auth;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdal.auth.AuthService;
 import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,11 +46,26 @@ import com.vaadin.server.VaadinSession;
  * @author Jose Luis Martin
  * @since 2.1
  */
-public class SpringAuthService implements AuthService {
-
+public class SpringAuthManager implements AuthService {
+    
+	private static final Log log = LogFactory.getLog(SpringAuthManager.class);
+	
 	private AuthenticationManager authenticationManager;
 	private SessionAuthenticationStrategy sessionStrategy;
 	private AccessDecisionManager accessDecisionManager;
+	
+	@PostConstruct
+	public void init() {
+		if (this.accessDecisionManager == null) {
+			if (log.isDebugEnabled())
+				log.debug("Creating default AffirmativeBased AccesDecisionManager with RoleVoter");
+			
+			List<AccessDecisionVoter<? extends Object>> defaultVoters =
+					new ArrayList<AccessDecisionVoter<? extends Object>>();
+			defaultVoters.add(new RoleVoter());
+			this.accessDecisionManager = new AffirmativeBased(defaultVoters);
+		}
+	}
 	
 	@Override
 	public boolean validate(String username, String password) {
@@ -69,8 +95,38 @@ public class SpringAuthService implements AuthService {
 	}
 	
 	@Override
-	public boolean checkAccess(Object target, Object principal) {
-		return true;
+	public boolean checkAccess(Object target, Object expression, Object principal) {
+		List<ConfigAttribute> configAttributes = createConfigAttributes(expression);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		try {
+			this.accessDecisionManager.decide(authentication, target, configAttributes);
+			return true;
+		}
+		catch(Exception e) {
+			if (log.isDebugEnabled()) {
+				log.debug("AccessDecisionManager return: " + e.getMessage());
+			}
+			
+			return false;
+		}
+	}
+
+	/**
+	 * @param expression
+	 * @return
+	 */
+	private List<ConfigAttribute> createConfigAttributes(final Object expression) {
+		List<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
+		configAttributes.add(new ConfigAttribute() {
+			
+			@Override
+			public String getAttribute() {
+				return (String) expression;
+			}
+		});
+		
+		return configAttributes;
 	}
 
 	/**

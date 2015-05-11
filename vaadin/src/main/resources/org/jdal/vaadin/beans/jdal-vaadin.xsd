@@ -227,6 +227,19 @@
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>		
+		<xsd:attribute name="container-class" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[Container type to use for table]]>
+				</xsd:documentation>
+				<xsd:appinfo>
+					<tool:annotation kind="ref">
+						<tool:expected-type type="java.lang.Class" />
+					</tool:annotation>
+				</xsd:appinfo>
+			</xsd:annotation>
+		</xsd:attribute>
+		
 		<xsd:attribute name="scope" type="xsd:string" />
 		<xsd:attribute name="order" type="xsd:string" />
 		<xsd:attribute name="sort-property" type="xsd:string" />
@@ -263,6 +276,7 @@
 		<xsd:attribute name="caption" type="xsd:string" />
 		<xsd:attribute name="icon" type="xsd:string" />
 		<xsd:attribute name="description" type="xsd:string" />
+		<xsd:attribute name="access" type="xsd:string" />
 	</xsd:complexType>
 	
 	<xsd:complexType name="navigatorActionType">

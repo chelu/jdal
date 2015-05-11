@@ -225,7 +225,12 @@ public class ListBeanContainer extends AbstractContainer implements Indexed, Sor
 		return null;
 	}
 
-	protected BeanWrapperItem createItem(Object bean) {
+	/**
+	 * Create item from bean.
+	 * @param bean bean for item
+	 * @return new item.
+	 */
+	protected Item createItem(Object bean) {
 		return new BeanWrapperItem(bean, this.properties);
 	}
 
