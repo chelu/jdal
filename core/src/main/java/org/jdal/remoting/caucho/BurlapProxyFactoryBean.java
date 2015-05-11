@@ -28,6 +28,7 @@ import com.caucho.burlap.client.BurlapProxyFactory;
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  *
  */
+@SuppressWarnings("deprecation")
 public class BurlapProxyFactoryBean extends BurlapClientInterceptor implements FactoryBean<Object>, RemoteClient {
 
 	private Object serviceProxy;

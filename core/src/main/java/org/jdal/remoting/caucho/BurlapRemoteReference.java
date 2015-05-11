@@ -23,6 +23,7 @@ import org.jdal.remoting.UrlBasedRemoteReference;
  * 
  * @author Jose Luis Martin - (jlm@joseluismartin.info)
  */
+@SuppressWarnings("deprecation")
 public class BurlapRemoteReference extends UrlBasedRemoteReference {
 	
 	private boolean overloadEnabled = false;
