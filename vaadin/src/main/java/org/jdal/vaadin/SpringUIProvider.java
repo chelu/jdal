@@ -26,6 +26,7 @@ import com.vaadin.util.CurrentInstance;
 
 /**
  * {@link UIProvider} implementation that look for UIs in a {@link ApplicationContext}.
+ * Delegate url mapping to a {@link UiRequestMapping} instance.
  * 
  * @author Jose Luis Martin
  * @since 2.0

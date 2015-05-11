@@ -34,8 +34,8 @@ import com.vaadin.ui.UI;
 
 /**
  * {@link UiRequestMapping} implementation that look for {@link UI UIs} by bean name.
- * Parse {@link UiMapping} annotations is UI types and match urls using an 
- * {@link AntPathMatcher}.
+ * Parse {@link UiMapping} annotations in spring context UI types and match urls using 
+ * an {@link AntPathMatcher}.
  * 
  * @author Jose Luis Martin
  * @since 2.1
