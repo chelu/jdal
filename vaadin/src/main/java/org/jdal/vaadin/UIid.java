@@ -18,7 +18,7 @@ package org.jdal.vaadin;
 import com.vaadin.util.CurrentInstance;
 
 /**
- * Wrapper for UI identifier to storing it on {@link CurrentInstance}
+ * Wrapper for UI identifier to storing it in {@link CurrentInstance}
  * 
  * @author Jose Luis Martin
  * @since 2.0
