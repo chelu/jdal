@@ -30,5 +30,13 @@ public interface AuthService {
 	 * @return true if password match
 	 */
 	boolean validate(String username, String password);
+	
+	/**
+	 * Test if a principal has access to provided target object
+	 * @param target access object
+	 * @param principal principal
+	 * @return true if principal has access to target, false otherwise.
+	 */
+	boolean checkAccess(Object target, Object principal);
 
 }

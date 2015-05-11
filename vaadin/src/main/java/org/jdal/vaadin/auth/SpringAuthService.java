@@ -17,6 +17,7 @@ package org.jdal.vaadin.auth;
 
 
 import org.jdal.auth.AuthService;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,6 +39,7 @@ public class SpringAuthService implements AuthService {
 
 	private AuthenticationManager authenticationManager;
 	private SessionAuthenticationStrategy sessionStrategy;
+	private AccessDecisionManager accessDecisionManager;
 	
 	@Override
 	public boolean validate(String username, String password) {
@@ -64,6 +66,11 @@ public class SpringAuthService implements AuthService {
 			SecurityContextHolder.clearContext();
 			return false;
 		}
+	}
+	
+	@Override
+	public boolean checkAccess(Object target, Object principal) {
+		return true;
 	}
 
 	/**
@@ -94,4 +101,18 @@ public class SpringAuthService implements AuthService {
 		this.sessionStrategy = sessionStrategy;
 	}
 	
+	/**
+	 * @return the accessDecisionManager
+	 */
+	public AccessDecisionManager getAccessDecisionManager() {
+		return accessDecisionManager;
+	}
+
+	/**
+	 * @param accessDecisionManager the accessDecisionManager to set
+	 */
+	public void setAccessDecisionManager(AccessDecisionManager accessDecisionManager) {
+		this.accessDecisionManager = accessDecisionManager;
+	}
+
 }

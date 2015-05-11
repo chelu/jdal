@@ -83,4 +83,12 @@ public class AuthManager implements AuthService {
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean checkAccess(Object target, Object principal) {
+		return true;
+	}
 }
