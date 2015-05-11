@@ -17,7 +17,6 @@ package org.jdal.vaadin.ui.table;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -35,6 +34,8 @@ import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.form.FormDialog;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ReflectionUtils;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
@@ -170,18 +171,14 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		if (this.page.getData() != null && this.page.getData().size() > 0) {
 			
 			if (container == null) {
-				Class<?> beanClass = entityClass != null ? entityClass : this.page.getData().get(0).getClass();
+				Class<T> beanClass = (Class<T>) (entityClass != null ? entityClass : this.page.getData().get(0).getClass());
 				container = createBeanContainer(beanClass, this.page.getData());
 				getTable().setContainerDataSource(container);
 				setContainer(container);
 			}
 			else {
 				container.removeAllItems();
-				if (container instanceof ListBeanContainer)
-					((ListBeanContainer) container).addAll(page.getData());
-				else if (container instanceof BeanItemContainer) {
-					((BeanItemContainer<T>) container).addAll(page.getData());
-				}
+				addBeansFromPage(container);
 			}
 		}
 		else {
@@ -190,6 +187,14 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		}
 		
 		paginator.refresh();
+	}
+
+	/**
+	 * @param container
+	 */
+	protected void addBeansFromPage(Container container) {
+		ReflectionUtils.invokeMethod(ClassUtils.getMethod(container.getClass(), "addAll", Collection.class),
+				container, page.getData());
 	}
 	
 	/**

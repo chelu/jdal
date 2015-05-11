@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 the original author or authors.
+ * Copyright 2009-2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.jdal.vaadin.ui.table;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,8 +30,10 @@ import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.form.ViewDialog;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import com.vaadin.data.Container;
@@ -70,6 +73,9 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	private boolean nativeButtons;
 	/** Message Source */
 	private MessageSourceWrapper messageSource = new MessageSourceWrapper();
+	/** Container class to use */
+	private Class<?extends Container> containerClass = BeanItemContainer.class;
+	
 	private VerticalLayout verticalLayout = new VerticalLayout();
 	private List<EditorListener> editorListeners = new ArrayList<EditorListener>();
 
@@ -86,15 +92,19 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	}
 	
 	/**
-	 * Create the BeanContainer, override tu use Vaadin {@link BeanItemContainer}
-	 * instead JDAL default ListBeanContainer.
+	 * Create the BeanContainer to use.
 	 * @param beanClass bean type in container
 	 * @param data intial data.
 	 * @return a new BeanContainer
 	 */
-	@SuppressWarnings("unchecked")
-	protected Container createBeanContainer(Class<?> beanClass, List<T> data) {
-		return new BeanItemContainer<T>((Class<T>) beanClass, data);
+	protected Container createBeanContainer(Class<T> beanClass, List<T> data) {
+		Constructor<?extends Container> ctor = 
+				ClassUtils.getConstructorIfAvailable(this.containerClass, Class.class, Collection.class);
+		
+		if (ctor != null)
+			return BeanUtils.instantiateClass(ctor, beanClass, data);
+		
+		return new BeanItemContainer<T>(beanClass, data);
 	}
 	
 	/**
@@ -360,6 +370,20 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	
 	public String getMessage(String code) {
 		return this.messageSource.getMessage(code);
+	}
+	
+	/**
+	 * @return the containerClass
+	 */
+	public Class<? extends Container> getContainerClass() {
+		return containerClass;
+	}
+
+	/**
+	 * @param containerClass the containerClass to set
+	 */
+	public void setContainerClass(Class<? extends Container> containerClass) {
+		this.containerClass = containerClass;
 	}
 
 }

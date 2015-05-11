@@ -18,6 +18,7 @@ package org.jdal.vaadin.data;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +29,12 @@ import org.springframework.beans.BeanUtils;
 import com.vaadin.data.Container.Indexed;
 import com.vaadin.data.Container.ItemSetChangeNotifier;
 import com.vaadin.data.Container.PropertySetChangeNotifier;
+import com.vaadin.data.Container.Sortable;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.AbstractContainer;
+import com.vaadin.data.util.DefaultItemSorter;
+import com.vaadin.data.util.ItemSorter;
 
 /**
  * Bean container that uses a Integer as itemId and {@link BeanWrapperItem} as Item.
@@ -39,7 +43,7 @@ import com.vaadin.data.util.AbstractContainer;
  * @author Jose Luis Martin
  * @since 2.1
  */
-public class ListBeanContainer extends AbstractContainer implements Indexed,
+public class ListBeanContainer extends AbstractContainer implements Indexed, Sortable,
 		ItemSetChangeNotifier, PropertySetChangeNotifier {
 	
 	/** Hold all beans in container */
@@ -55,11 +59,11 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 		this(beanClass, null, null);
 	}
 	
-	public ListBeanContainer(Class<?> beanClass, List<?> data) {
+	public ListBeanContainer(Class<?> beanClass, Collection<?> data) {
 		this(beanClass, data, null);
 	}
 	
-	public ListBeanContainer(Class<?> beanClass, List<?> data,  List<String> properties) {
+	public ListBeanContainer(Class<?> beanClass, Collection<?> data,  List<String> properties) {
 		this.beanClass = beanClass;
 		if (properties == null) {
 			initDefaultProperties();
@@ -90,7 +94,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 		}
 	}
 
-	private void init(List<?> data) {
+	private void init(Collection<?> data) {
 		for (Object bean : data) {
 			this.items.add(createItem(bean));
 		}
@@ -243,7 +247,13 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 	public boolean addContainerProperty(Object propertyId, Class<?> type,
 			Object defaultValue) throws UnsupportedOperationException {
 		
-		throw new UnsupportedOperationException();
+		if (!this.properties.contains((String) propertyId)) {
+			addProperty((String) propertyId);
+			
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -293,7 +303,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 		throw new UnsupportedOperationException();
 	}
 	
-	public void addAll(List<?> data) {
+	public void addAll(Collection<?> data) {
 		init(data);
 	}
 
@@ -344,6 +354,18 @@ public class ListBeanContainer extends AbstractContainer implements Indexed,
 	@Override
 	public void removeListener(ItemSetChangeListener listener) {
 		super.removeListener(listener);
+	}
+
+	@Override
+	public void sort(Object[] propertyId, boolean[] ascending) {
+		ItemSorter itemSorter = new DefaultItemSorter();
+        itemSorter.setSortProperties((Sortable) this, propertyId,ascending);
+        Collections.sort(this.items, itemSorter);
+	}
+
+	@Override
+	public Collection<?> getSortableContainerPropertyIds() {
+		return this.properties;
 	}
 
 }
