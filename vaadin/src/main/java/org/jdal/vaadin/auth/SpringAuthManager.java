@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.annotation.SerializableProxy;
 import org.jdal.auth.AuthService;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -46,6 +47,7 @@ import com.vaadin.server.VaadinSession;
  * @author Jose Luis Martin
  * @since 2.1
  */
+@SerializableProxy
 public class SpringAuthManager implements AuthService {
     
 	private static final Log log = LogFactory.getLog(SpringAuthManager.class);

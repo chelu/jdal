@@ -22,6 +22,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.annotation.SerializableProxy;
 import org.jdal.auth.AuthService;
 import org.jdal.vaadin.annotation.ViewConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class SpringViewProvider implements ViewProvider {
 	private static final Log log = LogFactory.getLog(SpringViewProvider.class);
 	@Autowired
 	private ConfigurableListableBeanFactory beanFactory;
+	@SerializableProxy
 	@Autowired(required = false)
 	private AuthService authService;
 	

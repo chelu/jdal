@@ -116,15 +116,12 @@ public abstract class VaadinUtils {
 	 * Exit application
 	 */
 	public static void exit() {
-		UI.getCurrent().close();
-		VaadinSession.getCurrent().close();
 		VaadinSession.getCurrent().getSession().removeAttribute(
 				HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+		UI.getCurrent().close();
+		VaadinSession.getCurrent().close();
 		Page page = Page.getCurrent();
-//		String location = StringUtils.substringBeforeLast(page.getLocation().toString(), page.getUriFragment());
-//		location = StringUtils.substringAfterLast(location, "#");
-		page.setLocation(VaadinService.getCurrentRequest().getContextPath()); 
-		
+		page.setLocation(VaadinService.getCurrentRequest().getContextPath() + "/logout"); 
 	}
 	
 	/**
