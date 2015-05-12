@@ -147,7 +147,7 @@ public class LoginView extends AbstractView<Credentials> implements ClickListene
 		hl.addComponent(form);
 		hl.setComponentAlignment(form, Alignment.MIDDLE_CENTER);
 		hl.setSizeFull();
-		hl.setStyleName("jd-login-background");
+		hl.setStyleName("jd-login-layout");
 		
 		return hl;
 	}
