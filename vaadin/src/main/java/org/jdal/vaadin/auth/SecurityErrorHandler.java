@@ -47,15 +47,15 @@ public class SecurityErrorHandler extends DefaultErrorHandler {
 	 * @param event 
 	 */
 	protected void handleSecurityException(Throwable exception) {
-		Notification.show(exception.getMessage(), "Security Error", Notification.Type.ERROR_MESSAGE);
+		Notification.show(exception.getMessage(), Notification.Type.ERROR_MESSAGE);
 	}
 
 	/**
-	 * @param t
-	 * @return
+	 * @param thowable throwable to test
+	 * @return true if is an access denied exception
 	 */
-	protected boolean isSecurityException(Throwable t) {
-		return (t instanceof AccessDeniedException);
+	protected boolean isSecurityException(Throwable thowable) {
+		return (thowable instanceof AccessDeniedException);
 	}
 
 	
