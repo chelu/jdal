@@ -119,8 +119,9 @@ public class ListBeanContainer extends AbstractContainer implements Indexed, Sor
 		else if (itemId instanceof Long)
 			return ((Long) itemId).intValue();
 		
-		throw new IllegalArgumentException("Expected Integer, found + [" + 
-				itemId != null ? itemId.getClass().getName() : "null"  + "]");
+		String clazzName = itemId != null ? itemId.getClass().getName() : "null";
+		
+		throw new IllegalArgumentException("Expected Integer, found + [" + clazzName + "]");
 	}
 
 	@Override
@@ -211,7 +212,7 @@ public class ListBeanContainer extends AbstractContainer implements Indexed, Sor
 		
 		int index = getAsIndex(itemId);
 		
-		return 0 >= index && index < this.items.size();
+		return index >= 0  && index < this.items.size();
 	}
 
 	@Override

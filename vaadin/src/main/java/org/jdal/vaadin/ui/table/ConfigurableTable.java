@@ -291,4 +291,14 @@ public class ConfigurableTable extends Table {
 	public void setSorter(TableSorter sorter) {
 		this.sorter = sorter;
 	}
+	
+	/**
+	 * Override to set immediate to true when the table is selectable.
+	 */
+	public void setSelectable(boolean selectable) {
+		super.setSelectable(selectable);
+		
+		if (selectable)
+			setImmediate(true);
+	}
 }

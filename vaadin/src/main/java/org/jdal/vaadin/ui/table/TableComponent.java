@@ -141,11 +141,16 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 
 	@SuppressWarnings("unchecked")
 	public Collection<T> getSelected() {
+		Set<T> set = new HashSet<T>();
 		Object selection = getTable().getValue();
-		if (selection instanceof Collection)
+		
+		if (selection == null)
+			return set;
+		
+		if (selection instanceof Collection) {
 			return (Collection<T>) selection;
+		}
 		else {
-			Set<T> set = new HashSet<T>();
 			set.add((T) selection);
 			return set;
 		}
