@@ -16,7 +16,9 @@
 package org.jdal.vaadin.ui.table;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -29,7 +31,6 @@ import org.jdal.dao.Page;
 import org.jdal.dao.Page.Order;
 import org.jdal.dao.PageChangedEvent;
 import org.jdal.dao.PaginatorListener;
-import org.jdal.vaadin.data.ListBeanContainer;
 import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.form.FormDialog;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -39,7 +40,6 @@ import org.springframework.util.ReflectionUtils;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
@@ -232,11 +232,15 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	/**
 	 * @param selected
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void delete(Collection<?> selected) {
 		try {
-			this.service.delete((Collection<T>) selected);
+			List<T> beans = new ArrayList<T>();
+			for (Object id : selected) {
+				beans.add(getBean(getContainer().getItem(id)));
+			}
+			
+			this.service.delete(beans);
 		}
 		catch(DataAccessException dae) {
 			Notification.show("Error", getMessage("PageableTable.deleteError"), Type.ERROR_MESSAGE);

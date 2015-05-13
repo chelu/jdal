@@ -438,6 +438,7 @@ public abstract class FormUtils {
 		titleLabel.setSizeUndefined();
 		HorizontalLayout hl = new HorizontalLayout();
 		hl.addComponent(titleLabel);
+		Box.addHorizontalStruct(hl, 20);
 		hl.addComponent(rule);
 		hl.setComponentAlignment(rule, Alignment.BOTTOM_CENTER);
 		hl.setExpandRatio(rule, 1);
