@@ -50,7 +50,7 @@ public class SimpleApplicationUI extends UI implements AuthenticationListener {
 		root.setSizeFull();
 		buildMain();
 		setContent(root);
-		mainView.setSizeFull();
+	//	mainView.setSizeFull();
 		doInit(request);
 	}
 	

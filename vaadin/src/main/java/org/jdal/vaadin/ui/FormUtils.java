@@ -39,7 +39,9 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.ClassResource;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Resource;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Alignment;
@@ -56,9 +58,11 @@ import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.TwinColSelect;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.Reindeer;
 
 /**
  * Form Utility Library
@@ -422,5 +426,33 @@ public abstract class FormUtils {
     	});
     }
 
-	
+    /**
+     * Create a titled separator
+     * @param title title
+     * @return a {@link HorizontalLayout} with title and rule.
+     */
+    public static Component createTitledSeparator(String title) {
+    	Label titleLabel = new Label(title);
+    	titleLabel.setStyleName(Reindeer.LABEL_H2);
+		Label rule = new Label("<hr />", ContentMode.HTML);
+		titleLabel.setSizeUndefined();
+		HorizontalLayout hl = new HorizontalLayout();
+		hl.addComponent(titleLabel);
+		hl.addComponent(rule);
+		hl.setComponentAlignment(rule, Alignment.BOTTOM_CENTER);
+		hl.setExpandRatio(rule, 1);
+		hl.setWidth(100, Unit.PERCENTAGE);
+		
+		return hl;
+    }
+    
+    /**
+     * Crate a {@link TwinColSelect} 
+     */
+    public static TwinColSelect newTwinColSelect() {
+    	TwinColSelect select = new TwinColSelect();
+    	select.setLocale(LocaleContextHolder.getLocale());
+    	
+    	return select;
+    }
 }

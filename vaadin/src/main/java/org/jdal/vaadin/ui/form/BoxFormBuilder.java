@@ -67,15 +67,26 @@ public class BoxFormBuilder {
 		builder.setDefaultWidth(this.defaultWidth);
 		builder.setDebug(old.isDebug());
 		builder.setDefaultRowHeight(old.getDefaultRowHeight());
+		builder.setSpacing(builder.isSpacing());
+
+		if (old.isUseTabIndex()) {
+			builder.setUseTabIndex(old.isUseTabIndex());
+			builder.setTabIndex(old.getTabIndex());
+		}
 	}
 	
 	
 	public void endBox() {
 		Component c = builder.getForm();
 		int height = builder.getFormHeight();
+		SimpleBoxFormBuilder old = builder;
 		builder = stack.pop();
 		builder.add(c);
 		builder.setHeight(height);
+		
+		if (old.isUseTabIndex()) {
+			builder.setTabIndex(old.getTabIndex());
+		}
 	}
 	/**
 	 * @param c component to add
