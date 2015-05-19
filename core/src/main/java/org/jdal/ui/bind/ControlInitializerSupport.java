@@ -25,9 +25,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdal.dao.Dao;
 import org.jdal.util.BeanUtils;
 import org.jdal.util.comparator.PropertyComparator;
+import org.springframework.core.ResolvableType;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -41,17 +44,49 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class ControlInitializerSupport implements ControlInitializer {
 
+	private static final Log log = LogFactory.getLog(ControlInitializerSupport.class);
+	
 	protected Dao<Object, ?extends Serializable> dao;
 	private boolean initializeEntities = false;
 	private boolean firstNull = false;
 
-	protected List<Object> getEntityList(Class<?> propertyType, String sortProperty) {
-		List entities =  dao.getAll(propertyType);
+	protected List<Object> getEntityList(ResolvableType propertyType, String sortProperty) {
+		Class<?> entityClass = null;
+	
+		if (propertyType.asCollection() != ResolvableType.NONE) {
+			// look for generic type
+			if (propertyType.hasGenerics()) {
+				entityClass = propertyType.getGeneric().resolve();
+			}
+			else {
+				if (log.isWarnEnabled())
+					log.warn("Can't resolve generic type of [" + propertyType.toString() + "]");
+			
+				return new ArrayList<Object>();
+			}
+		}
+		else  {
+			entityClass = propertyType.resolve();
+		}
+		
+		return getEntityList(entityClass, sortProperty);
+	}
+
+	/**
+	 * Return all entities for entity class sorted by property
+	 * @param entityClass entity class
+	 * @param sortProperty property to sort
+	 * @return List with entities
+	 */
+	protected List<Object> getEntityList(Class<?> entityClass, String sortProperty) {
+		List entities =  dao.getAll(entityClass);
 		sort(entities, sortProperty);
+	
 		if (isInitializeEntities()) {
 			for (Object entity : entities)
 				dao.initialize(entity);
 		}
+		
 		if (isFirstNull())
 			entities.add(0, null);
 		
@@ -67,7 +102,7 @@ public abstract class ControlInitializerSupport implements ControlInitializer {
 			Collections.sort(entities, new PropertyComparator(sortProperty));
 	}
 
-	protected List<Object> getEntityList(Class<?> propertyType) {
+	protected List<Object> getEntityList(ResolvableType propertyType) {
 		return getEntityList(propertyType, null);
 	}
 

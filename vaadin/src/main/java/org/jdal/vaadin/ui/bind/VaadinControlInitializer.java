@@ -1,8 +1,10 @@
 package org.jdal.vaadin.ui.bind;
 
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +15,7 @@ import org.jdal.annotations.Reference;
 import org.jdal.ui.bind.ControlInitializerSupport;
 import org.jdal.ui.bind.InitializationConfig;
 import org.jdal.util.BeanUtils;
+import org.springframework.core.ResolvableType;
 
 import com.vaadin.ui.AbstractSelect;
 
@@ -35,18 +38,19 @@ private static final Log log = LogFactory.getLog(VaadinControlInitializer.class)
 			return;
 		}
 		Class<?> clazz = config.getType();
-		Class<?> propertyType = BeanUtils.getPropertyDescriptor(clazz, property).getPropertyType();
+		PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(clazz, property);
+		ResolvableType propertyType = ResolvableType.forMethodReturnType(pd.getReadMethod());
 		Annotation[] annotations = getAnnotations(property, clazz);
 		for (Annotation a : annotations) {
 			List<Object> items = null;
 			
-			if (ManyToOne.class.equals(a.annotationType())) {
+			if (ManyToOne.class.equals(a.annotationType()) || ManyToMany.class.equals(a.annotationType()) ) {
 				items = getEntityList(propertyType, config.getSortPropertyName());
 				
 			}
 			else if (Reference.class.equals(a.annotationType())) {
 				Reference r = (Reference) a;
-				Class<?> type = void.class.equals(r.target()) ? propertyType : r.target();
+				Class<?> type = void.class.equals(r.target()) ? propertyType.resolve() : r.target();
 				List<Object> entities = getEntityList(type, config.getSortPropertyName());
 				items = StringUtils.isEmpty(r.property()) ?  entities : 
 					getValueList(entities, r.property());	

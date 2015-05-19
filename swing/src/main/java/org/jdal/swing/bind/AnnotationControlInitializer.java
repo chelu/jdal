@@ -33,7 +33,6 @@ import org.jdal.ui.bind.ControlInitializerSupport;
 import org.jdal.ui.bind.InitializationConfig;
 import org.jdal.util.BeanUtils;
 
-
 /**
  * Initialize control by JPA Annotations.
  * 
@@ -58,7 +57,7 @@ public class AnnotationControlInitializer extends ControlInitializerSupport {
 		for (Annotation a : annotations) {
 			if (ManyToOne.class.equals(a.annotationType())) {
 				List<Object> entities = getEntityList(propertyType, config.getSortPropertyName());
-				sort(entities, control);
+
 				if (control instanceof JComboBox) {
 					((JComboBox) control).setModel(new ListComboBoxModel(entities));
 				}
@@ -80,10 +79,6 @@ public class AnnotationControlInitializer extends ControlInitializerSupport {
 			}
 			
 		}
-	}
-
-	private void sort(List<Object> entities, Object control) {
-		
 	}
 
 }
