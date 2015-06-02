@@ -102,6 +102,20 @@ public class PageableTable<T> extends JPanel implements RowSorterListener, Pagin
 	private BorderLayout layout = new BorderLayout();
 	/** table to show data to user */
 	private JTable table;
+	/**
+	 * @return the table
+	 */
+	public JTable getTable() {
+		return table;
+	}
+
+	/**
+	 * @param table the table to set
+	 */
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+
 	/** the paginator view */
 	private PaginatorView paginatorView;
 	/** Page used to query PageableDataSource */

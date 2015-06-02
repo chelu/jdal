@@ -367,8 +367,10 @@ public class ListTableModel implements TableModel {
 				// property values for TableColumns
 				if (descriptor != null) {
 					Integer maxWidth = getColumnWidth(name);
-					if (maxWidth != null)
+					if (maxWidth != null) {
 						tableColumn.setMaxWidth(maxWidth.intValue());
+						tableColumn.setPreferredWidth(maxWidth);
+					}
 					tableColumn.setCellRenderer(getColumnRenderer(name));
 					tableColumn.setCellEditor(getColumnEditor(name));
 				}
