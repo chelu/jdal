@@ -10,6 +10,10 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import model.Author;
+import model.Book;
+import model.Category;
+
 import org.apache.commons.lang.StringUtils;
 import org.jdal.dao.Filter;
 import org.jdal.dao.jpa.JpaCriteriaBuilder;

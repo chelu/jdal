@@ -29,6 +29,9 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import junit.framework.TestCase;
+import model.Author;
+import model.Book;
+import model.Category;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,6 +42,8 @@ import org.jdal.dao.jpa.JpaDao;
 import org.jdal.dao.jpa.JpaUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"jpaDaos.xml"})
+@DirtiesContext(classMode =ClassMode.AFTER_CLASS)
 public class TestJpaDao extends TestCase {
 	
 	private static final Log log = LogFactory.getLog(TestJpaDao.class);

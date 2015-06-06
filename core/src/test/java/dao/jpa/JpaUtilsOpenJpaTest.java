@@ -18,6 +18,8 @@ package dao.jpa;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,6 +30,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("jpaDaos-openjpa.xml")
+@DirtiesContext(classMode =ClassMode.AFTER_CLASS)
 public class JpaUtilsOpenJpaTest extends JpaUtilsTest {
 	
 	@Autowired

@@ -18,6 +18,8 @@ package dao.jpa;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
+import model.Category;
+
 import org.jdal.dao.Filter;
 import org.jdal.dao.jpa.JpaCriteriaBuilder;
 

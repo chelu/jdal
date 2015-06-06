@@ -2,6 +2,8 @@ package dao.jpa;
 
 import java.util.Date;
 
+import model.Category;
+
 import org.jdal.dao.BeanFilter;
 
 /**

@@ -49,7 +49,7 @@
    <bean id="daoFactory" class="org.jdal.dao.jpa.JpaDaoFactory" />
    
    <bean id="bookDao" class="org.jdal.dao.jpa.JpaDao">
-   		<constructor-arg value="dao.jpa.Book"/>
+   		<constructor-arg value="model.Book"/>
    		<property name="criteriaBuilderMap">
    			<map>
    				<entry key="bookFilter" value-ref="bookCriteriaBuilder"/>
@@ -59,7 +59,7 @@
    </bean>
    
    <bean id="categoryDao" class="org.jdal.dao.jpa.JpaDao">
-   		<constructor-arg value="dao.jpa.Category"/>
+   		<constructor-arg value="model.Category"/>
    </bean>
    
    	

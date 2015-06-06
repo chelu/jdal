@@ -73,6 +73,7 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	private Icon refreshIcon;
 	/** Hold dirty rows */
 	private Set<T> dirtyModels = new HashSet<T>();
+
 	/** Entity type */
 	private Class<T> clazz;
 	private String name;
@@ -183,6 +184,23 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		}
 	}
 	
+	public void save() {
+		if (onSave()) {
+			try {
+				this.service.save(dirtyModels);
+			} catch (DataAccessException dae) {
+				if (onSaveError(dae)) {
+					String errorMsg = messageSource.getMessage("TableEditor.saveError", null, Locale.getDefault());
+					JOptionPane.showMessageDialog(getPanel(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			finally {
+				dirtyModels.clear();
+			}
+			refresh();
+		}
+	}
+	
 	/**
 	 * Delete selected table rows using persistent service
 	 */
@@ -206,10 +224,10 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	}
 	
 	/**
-	 * Return a new instance of configured entity class
+	 * Create a new instance of configured entity class
 	 * @return new entity 
 	 */
-	private T newType() {
+	protected T newType() {
 		try {
 			return clazz.newInstance();
 		} catch (Exception e) {
@@ -261,20 +279,8 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 			setIcon(saveIcon);
 		}
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 */
 		public void actionPerformed(ActionEvent e) {
-			try {
-				service.save(dirtyModels);
-			} catch (DataAccessException dae) {
-				String errorMsg = messageSource.getMessage("TableEditor.saveError", null, Locale.getDefault());
-				JOptionPane.showMessageDialog(getPanel(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
-			}
-			finally {
-				dirtyModels.clear();
-			}
-			refresh();
+			save();
 		}
 		
 	}
@@ -287,9 +293,6 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 			setIcon(addIcon);
 		}
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 */
 		public void actionPerformed(ActionEvent e) {
 			add();
 		}
@@ -332,14 +335,21 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 		this.saveIcon = saveIcon;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void tableChanged(TableModelEvent e) {
 		if (e.getType() == TableModelEvent.UPDATE) {
 			int row = e.getFirstRow();
 			if (row >= 0) {
-				dirtyModels.add((T) tableModel.getList().get(row));
+				setDirtyRow(row);
 			}
 		}
+	}
+
+	/**
+	 * @param row
+	 */
+	@SuppressWarnings("unchecked")
+	public void setDirtyRow(int row) {
+		dirtyModels.add((T) tableModel.getList().get(row));
 	}
 
 	public String getName() {
@@ -425,7 +435,6 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	 * @return boolean
 	 */
 	protected boolean onAdd() {
-		//Default return true
 		return true;
 	}
 	
@@ -434,7 +443,31 @@ public class TableEditor<T> extends AbstractView<T> implements TableModelListene
 	 * @return boolean
 	 */
 	protected boolean onDelete() {
-		//Default return true
 		return true;
 	}
+	
+	/**
+	 * Do something on save, return false to cancel.
+	 * @return true to save, false to cancel.
+	 */
+	protected boolean onSave() {
+		return true;
+	}
+	
+	/**
+	 * @return the dirtyModels
+	 */
+	protected Set<T> getDirtyModels() {
+		return dirtyModels;
+	}
+	
+	/**
+	 * Do something on save error
+	 * @param dae exception
+	 * @return true to run default handler, false otherwise.
+	 */
+	private boolean onSaveError(DataAccessException dae) {
+		return true;
+	}
+
 }

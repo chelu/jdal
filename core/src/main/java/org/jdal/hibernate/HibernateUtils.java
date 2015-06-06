@@ -39,6 +39,7 @@ import org.hibernate.impl.CriteriaImpl.Subcriteria;
 import org.hibernate.impl.SessionImpl;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.collection.CollectionPersister;
+import org.jdal.util.BeanUtils;
 
 /**
  * Hibernate Utility library
@@ -49,8 +50,8 @@ import org.hibernate.persister.collection.CollectionPersister;
 public abstract class HibernateUtils {
 	
 	public static final int DEFAULT_DEPTH = 2;
-	
 	private static final Log log = LogFactory.getLog(HibernateUtils.class);
+	private static final String EXISTS_QUERY = "SELECT 1 from %s x WHERE %s = ?";
 	
 		
 	/** 
@@ -249,5 +250,26 @@ public abstract class HibernateUtils {
 		}
 		// not found
 		return null; 
+	}
+	
+	/**
+	 * Test if a entity already exists.
+	 * @param entity entity to test
+	 * @param session hibernate session
+	 * @return true if exists, false otherwise
+	 */
+	public static boolean exists(Object entity, Session session) {
+ 		String propertyId = getIdentifierPropertyName(session.getSessionFactory(), entity);
+		if (propertyId == null)
+			return false;
+		
+		Object id = BeanUtils.getProperty(entity, propertyId);
+		if (id == null)
+			return false;
+		
+		return session.createQuery(String.format(EXISTS_QUERY, entity.getClass().getSimpleName(), propertyId))
+			.setParameter(0, id)
+			.list()
+			.size() > 0;
 	}
 }

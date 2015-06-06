@@ -27,6 +27,10 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
+import model.Author;
+import model.Book;
+import model.Category;
+
 import org.jdal.dao.jpa.JpaUtils;
 import org.junit.Ignore;
 import org.junit.Test;

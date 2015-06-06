@@ -4,9 +4,9 @@
             <property name="openjpa.RuntimeUnenhancedClasses" value="supportedr"/>
    </properties> 
   <class>org.jdal.model.Entity</class>
-  <class>dao.jpa.Book</class>
-  <class>dao.jpa.Author</class>
-  <class>dao.jpa.Category</class>
+  <class>model.Book</class>
+  <class>model.Author</class>
+  <class>model.Category</class>
  </persistence-unit>
 </persistence>
 

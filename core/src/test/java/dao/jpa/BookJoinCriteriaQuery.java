@@ -19,6 +19,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import model.Book;
+
 import org.jdal.dao.Filter;
 import org.jdal.dao.jpa.JpaCriteriaBuilder;
 
