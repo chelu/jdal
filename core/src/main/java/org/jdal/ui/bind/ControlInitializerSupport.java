@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jdal.beans.PropertyUtils;
 import org.jdal.dao.Dao;
 import org.jdal.util.BeanUtils;
 import org.jdal.util.comparator.PropertyComparator;
@@ -140,7 +141,7 @@ public abstract class ControlInitializerSupport implements ControlInitializer {
 			fa = field.getAnnotations();
 		}
 		
-		Method method = BeanUtils.getPropertyDescriptor(clazz, property).getReadMethod();
+		Method method = PropertyUtils.getPropertyDescriptor(clazz, property).getReadMethod();
 		if (method != null) {
 			Annotation[] ma = method.getAnnotations();
 			Annotation[] annotations = (Annotation[]) ArrayUtils.addAll(fa, ma);

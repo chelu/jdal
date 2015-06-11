@@ -12,9 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdal.annotation.SerializableProxy;
 import org.jdal.annotations.Reference;
+import org.jdal.beans.PropertyUtils;
 import org.jdal.ui.bind.ControlInitializerSupport;
 import org.jdal.ui.bind.InitializationConfig;
-import org.jdal.util.BeanUtils;
 import org.springframework.core.ResolvableType;
 
 import com.vaadin.ui.AbstractSelect;
@@ -38,7 +38,13 @@ private static final Log log = LogFactory.getLog(VaadinControlInitializer.class)
 			return;
 		}
 		Class<?> clazz = config.getType();
-		PropertyDescriptor pd = BeanUtils.getPropertyDescriptor(clazz, property);
+		PropertyDescriptor pd = PropertyUtils.getPropertyDescriptor(clazz, property);
+
+		if (pd == null) {
+			log.error("Not found property descriptor for property [" + property + "]") ;
+			return;
+		}
+			
 		ResolvableType propertyType = ResolvableType.forMethodReturnType(pd.getReadMethod());
 		Annotation[] annotations = getAnnotations(property, clazz);
 		for (Annotation a : annotations) {
