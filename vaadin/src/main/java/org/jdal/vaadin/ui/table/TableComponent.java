@@ -26,12 +26,14 @@ import java.util.Set;
 import org.jdal.beans.MessageSourceWrapper;
 import org.jdal.ui.EditorEvent;
 import org.jdal.ui.EditorListener;
+import org.jdal.vaadin.ui.ApplicationContextGuiFactory;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
 import org.jdal.vaadin.ui.VaadinView;
 import org.jdal.vaadin.ui.form.ViewDialog;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
@@ -62,6 +64,8 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	private Container container;
 	/** Form editor name */
 	private String editor;
+	/** View dialog name */
+	private String dialog = ApplicationContextGuiFactory.VIEW_DIALOG;
 	/** Gui Factory used to get editor instances */
 	@Autowired
 	private GuiFactory guiFactory;
@@ -175,7 +179,7 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 					}
 				});
 				
-				ViewDialog dlg =  this.guiFactory.newViewDialog(editor);
+				ViewDialog dlg =  this.guiFactory.newViewDialog(editor, this.dialog);
 				dlg.init();
 				dlg.center();
 				this.getUI().addWindow(dlg);
@@ -389,6 +393,20 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	 */
 	public void setContainerClass(Class<? extends Container> containerClass) {
 		this.containerClass = containerClass;
+	}
+	
+	/**
+	 * @return the dialog
+	 */
+	public String getDialog() {
+		return dialog;
+	}
+
+	/**
+	 * @param dialog the dialog to set
+	 */
+	public void setDialog(String dialog) {
+		this.dialog = dialog;
 	}
 
 }

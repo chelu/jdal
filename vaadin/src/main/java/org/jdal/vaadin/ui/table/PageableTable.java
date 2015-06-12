@@ -59,7 +59,7 @@ import com.vaadin.ui.Window.CloseListener;
  */
 @Configurable
 public class PageableTable<T> extends TableComponent<T> implements PaginatorListener, 
-	Container.ItemSetChangeListener, ItemClickListener, CloseListener {
+	Container.ItemSetChangeListener, CloseListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(PageableTable.class);

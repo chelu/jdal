@@ -58,9 +58,13 @@ public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAwar
 	}
 	
 	public ViewDialog newViewDialog() {
+		return newViewDialog(VIEW_DIALOG);
+	}
+	
+	public ViewDialog newViewDialog(String name) {
 		ViewDialog dlg = null;
 		try {
-			dlg = this.beanFactory.getBean(VIEW_DIALOG, ViewDialog.class);
+			dlg = this.beanFactory.getBean(name, ViewDialog.class);
 		}
 		catch(BeansException be)  {
 			
@@ -74,14 +78,18 @@ public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAwar
 	}
 
 	public ViewDialog newViewDialog(VaadinView<?> view) {
-		ViewDialog dlg =  newViewDialog();
+		return newViewDialog(VIEW_DIALOG);
+	}
+	
+	@Override
+	public ViewDialog newViewDialog(VaadinView<?> view, String name) {
+		ViewDialog dlg =  newViewDialog(name);
 		dlg.setView(view);
 		dlg.init();
 		
 		return dlg;
 	}
 
-	
 	@Override
 	public <T> VaadinView<T> getView(Class<?extends VaadinView<T>> type) {
 		return this.beanFactory.getBean(type);

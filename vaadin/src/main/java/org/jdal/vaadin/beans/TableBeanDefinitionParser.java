@@ -76,6 +76,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String NATIVE_BUTTONS = "native-buttons";
 	private static final String PROPAGATE_SERVICE = "propagate-service";
 	private static final String CONTAINER_CLASS = "container-class";
+	private static final String DIALOG = "dialog";
 	
 	/**
 	 * {@inheritDoc}
@@ -153,6 +154,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, NATIVE_BUTTONS);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, PROPAGATE_SERVICE);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, CONTAINER_CLASS);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, DIALOG);
 		
 		
 		if (!element.hasAttribute(USE_ACTIONS) || "true".equals(element.getAttribute(USE_ACTIONS)))
