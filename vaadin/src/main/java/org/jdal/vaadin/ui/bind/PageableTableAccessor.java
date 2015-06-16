@@ -56,7 +56,7 @@ public class PageableTableAccessor extends VaadinControlAccessor {
 			
 		Collection<Object> collection = (Collection<Object>) value;
 		PageableTable<Object> table = getControl();
-		Dao<Object, Serializable> service = table.getService();
+		Dao<Object, ?extends Serializable> service = table.getService();
 		
 		if (service == null) {
 			service = new CollectionPersistenceService<Object, Serializable>();

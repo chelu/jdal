@@ -32,7 +32,6 @@ import com.vaadin.ui.Window.CloseListener;
  */
 @Configurable
 public class AddAction extends TableButtonListener {
-	
 
 	private boolean modal = false;
 	
@@ -51,7 +50,7 @@ public class AddAction extends TableButtonListener {
 		Object bean = BeanUtils.instantiate(table.getEntityClass());
 		view.setModel(bean);
 		ViewDialog dialog = table.getGuiFactory().newViewDialog(view);
-		dialog.setModal(modal);
+		dialog.setModal(this.modal);
 		dialog.addCloseListener(new CloseListener() {
 
 			public void windowClose(CloseEvent e) {

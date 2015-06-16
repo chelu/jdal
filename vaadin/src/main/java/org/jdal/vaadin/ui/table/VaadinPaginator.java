@@ -53,7 +53,7 @@ public class VaadinPaginator<T> extends AbstractView<Page<T>> implements Paginat
 	private Label status = new Label("- / -");
 	private Label resultCount = new Label("       ");
 	/** String array with available page sizes */
-	private String[] pageSizes;
+	private String[] pageSizes = { "10", "20", "30", "40", "50", "100", "ALL" };
 	/** goto next page button */
 	private Button next;
 	/** goto previous page button */

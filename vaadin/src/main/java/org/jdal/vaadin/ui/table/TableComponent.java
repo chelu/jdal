@@ -207,6 +207,19 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 		this.verticalLayout.setWidth("100%");
 		this.table.setWidth("100%");
 	}
+	
+	/**
+	 * Create default table actinons
+	 * @return list with add, refresh and remove actions.
+	 */
+	public List<TableButtonListener> createDefaultActions() {
+		ArrayList<TableButtonListener> defaultActions = new ArrayList<TableButtonListener>();
+		defaultActions.add(new AddAction());
+		defaultActions.add(new RefreshAction());
+		defaultActions.add(new RemoveAction());
+		
+		return defaultActions;
+	}
 
 	/**
 	 * By default, pageable table handle item clicks to edit items.
@@ -306,6 +319,10 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	 */
 	public void setActions(List<TableButtonListener> actions) {
 		this.actions = actions;
+		
+		for (TableButtonListener action : this.actions) {
+			action.setTable(this);
+		}
 	}
 
 	/**

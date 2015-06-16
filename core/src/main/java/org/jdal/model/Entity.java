@@ -22,6 +22,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jdal.beans.StaticMessageSource;
 
 @MappedSuperclass
@@ -70,10 +72,7 @@ public class Entity implements Serializable  {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		return new HashCodeBuilder().append(this.id).hashCode();
 	}
 
 	/**
@@ -81,18 +80,22 @@ public class Entity implements Serializable  {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Entity other = (Entity) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+		
+		if (!getClass().equals(obj.getClass())) {
+		     return false;
+		}
+		
+		if (this == obj) {
+			return true;
+		}
+		
+		Entity rhs = (Entity) obj;
+		
+		return new EqualsBuilder()
+			.append(id, rhs.id)
+			.isEquals();
 	}
+	
 }

@@ -66,7 +66,7 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	
 	/** persistentService */
 	@SerializableProxy
-	private Dao<T, Serializable> service;
+	private Dao<T, ?extends Serializable> service;
 	/** external paginator */
 	private VaadinPaginator<T> paginator;
 	/** page */
@@ -124,23 +124,27 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		verticalLayout.setExpandRatio(getTable(), 1.0f);
 		
 		// paginator
-		if (paginator != null) {
-			paginator.setModel(page);
-			paginator.addPaginatorListener(this);
-			paginator.setNativeButtons(isNativeButtons());
-			page.setPageableDataSource(getService());
-			// set external sorting, ie don't call Container.sort()
-			getTable().setSorter(new PageSorter());
-			Component p = paginator.getPanel();
-			verticalLayout.addComponent(p);
-			verticalLayout.setComponentAlignment(p, Alignment.MIDDLE_CENTER);
-			getTable().setPageLength(page.getPageSize());
-			if (beanFilter != null)
-				page.setFilter(beanFilter);
+		if (this.paginator == null) {
+			this.paginator = new VaadinPaginator<T>();
+			this.paginator.setMessageSource(getMessageSource());
+		}
+		
+		paginator.setModel(page);
+		paginator.addPaginatorListener(this);
+		paginator.setNativeButtons(isNativeButtons());
+		page.setPageableDataSource(getService());
+		// set external sorting, ie don't call Container.sort()
+		getTable().setSorter(new PageSorter());
+		Component p = paginator.getPanel();
+		verticalLayout.addComponent(p);
+		verticalLayout.setComponentAlignment(p, Alignment.MIDDLE_CENTER);
+		getTable().setPageLength(page.getPageSize());
+		
+		if (beanFilter != null)
+			page.setFilter(beanFilter);
 			
 			// get initial page and wrap data in container
-			paginator.firstPage();
-		}
+		paginator.firstPage();
 	
 		getTable().addItemClickListener(this);
 		this.setSizeUndefined();
@@ -452,11 +456,11 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		page.setPageSize(pageSize);
 	}
 
-	public Dao<T, Serializable> getService() {
+	public Dao<T, ?extends Serializable> getService() {
 		return service;
 	}
 
-	public void setService(Dao<T, Serializable> service) {
+	public void setService(Dao<T, ?extends Serializable> service) {
 		this.service = service;
 		this.page.setPageableDataSource(service);
 	}

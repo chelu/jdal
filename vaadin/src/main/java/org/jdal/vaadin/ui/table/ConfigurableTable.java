@@ -82,11 +82,9 @@ public class ConfigurableTable extends Table {
 	public void setColumns(List<Column> columns) {
 		this.columns = columns;
 		columnMap.clear();
-		properties.clear();
 		
 		for (Column c : columns) {
 			columnMap.put(c.getName(), c);
-			properties.add(c.getName());
 		}
 		
 		configure();
@@ -109,6 +107,31 @@ public class ConfigurableTable extends Table {
 		super.setContainerDataSource(newDataSource, properties);
 	}
 	
+	@Override
+	public void setVisibleColumns(Object... visibleColumns) {
+		this.properties = new ArrayList<String>();
+		for (Object id : visibleColumns)
+			this.properties.add(id.toString());
+		
+		if (this.columns == null)
+			createDefaultColumns();
+		
+		super.setVisibleColumns(visibleColumns);
+	}
+	
+	/**
+	 * Create default columns from properties 
+	 */
+	private void createDefaultColumns() {
+		this.columns = new ArrayList<Column>();
+		for (String propertyName : this.properties) {
+			Column c = new Column();
+			c.setName(propertyName);
+			this.columns.add(c);
+			this.columnMap.put(propertyName, c);
+		}
+	}
+
 	/**
 	 * Configure table
 	 */
@@ -129,7 +152,7 @@ public class ConfigurableTable extends Table {
 		
 		// Vaadin Table throw an exception when seting this properties 
 		// with an empty Container datasource. 
-		this.setVisibleColumns(visibleColumns);
+		this.setVisibleColumns((Object[]) visibleColumns);
 		this.setColumnHeaders(displayNames);
 		this.setColumnAlignments(alignments);
 		

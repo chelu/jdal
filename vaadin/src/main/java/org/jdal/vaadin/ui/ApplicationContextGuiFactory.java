@@ -78,7 +78,7 @@ public class ApplicationContextGuiFactory implements GuiFactory, BeanFactoryAwar
 	}
 
 	public ViewDialog newViewDialog(VaadinView<?> view) {
-		return newViewDialog(VIEW_DIALOG);
+		return newViewDialog(view, VIEW_DIALOG);
 	}
 	
 	@Override
