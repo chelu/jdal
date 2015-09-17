@@ -28,6 +28,7 @@ import org.jdal.auth.AuthService;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,6 +38,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.util.Assert;
 
 import com.vaadin.server.VaadinServletService;
 import com.vaadin.server.VaadinSession;
@@ -98,7 +100,8 @@ public class SpringAuthManager implements AuthService {
 	
 	@Override
 	public boolean checkAccess(Object target, Object expression, Object principal) {
-		List<ConfigAttribute> configAttributes = createConfigAttributes(expression);
+		Assert.isInstanceOf(String.class, expression);
+		List<ConfigAttribute> configAttributes = createConfigAttributes((String) expression);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		try {
@@ -118,17 +121,8 @@ public class SpringAuthManager implements AuthService {
 	 * @param expression
 	 * @return
 	 */
-	private List<ConfigAttribute> createConfigAttributes(final Object expression) {
-		List<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
-		configAttributes.add(new ConfigAttribute() {
-			
-			@Override
-			public String getAttribute() {
-				return (String) expression;
-			}
-		});
-		
-		return configAttributes;
+	private List<ConfigAttribute> createConfigAttributes(String expression) {
+		return SecurityConfig.createListFromCommaDelimitedString(expression);
 	}
 
 	/**
