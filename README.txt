@@ -49,3 +49,5 @@ AUTHOR
 -------------------------------------------------------------------------------
 
 Jose Luis Martin
+
+Join the chat at https://gitter.im/chelu/jdal
