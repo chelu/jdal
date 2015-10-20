@@ -18,6 +18,7 @@ package org.jdal.swing.bind;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jdal.swing.Selector;
@@ -49,7 +50,10 @@ public class SelectorAccessor extends AbstractControlAccessor implements ActionL
 	 * {@inheritDoc}
 	 */
 	public List<?> getControlValue() {
-		return getControl().getSelected();
+		List<?> controlValues = getControl().getSelected();
+		ArrayList<?> values = new ArrayList<>(controlValues);
+		
+		return values;
 	}
 
 	/**

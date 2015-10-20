@@ -62,6 +62,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String NAME = "name";
 	private static final String MESSAGE_SOURCE = "messageSource";
 	private static final String FIELD_FACTORY = "field-factory";
+	private static final String FIELD_FACTORY_PROPERTY = "tableFieldFactory";
 	private static final String SORT_PROPERTY = "sort-property";
 	private static final String ORDER = "order";
 	private static final String PAGE_SIZE = "page-size";
@@ -186,9 +187,10 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		bdb = BeanDefinitionBuilder.genericBeanDefinition(tableClass);
 		bdb.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 		
-		
-		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, FIELD_FACTORY);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, MULTISELECT);
+		
+		if (element.hasAttribute(FIELD_FACTORY))
+			bdb.addPropertyReference(FIELD_FACTORY_PROPERTY, element.getAttribute(FIELD_FACTORY));
 		
 		if (element.hasAttribute(SELECTABLE)) {
 			bdb.addPropertyValue(SELECTABLE, element.getAttribute(SELECTABLE));

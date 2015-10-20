@@ -76,7 +76,11 @@ public class BoxFormBuilder {
 	}
 	
 	
-	public void endBox() {
+	/**
+	 * Ends a Box and add to current cursor position.
+	 * @return the box component.
+	 */
+	public Component endBox() {
 		Component c = builder.getForm();
 		int height = builder.getFormHeight();
 		SimpleBoxFormBuilder old = builder;
@@ -87,6 +91,8 @@ public class BoxFormBuilder {
 		if (old.isUseTabIndex()) {
 			builder.setTabIndex(old.getTabIndex());
 		}
+		
+		return c;
 	}
 	/**
 	 * @param c component to add

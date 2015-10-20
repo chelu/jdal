@@ -66,7 +66,7 @@ public class ListTableModel implements TableModel {
 	public static final String CELL_RENDERER = "cellRenderer";
 	private static final String CELL_EDITOR = "cellEditor";
 
-	/**  log */
+	/** log */
 	private final static Log log = LogFactory.getLog(ListTableModel.class);
 
 	/** List holder for models */
@@ -368,7 +368,7 @@ public class ListTableModel implements TableModel {
 				if (descriptor != null) {
 					Integer maxWidth = getColumnWidth(name);
 					if (maxWidth != null) {
-						tableColumn.setMaxWidth(maxWidth.intValue());
+					//	tableColumn.setMaxWidth(maxWidth.intValue());
 						tableColumn.setPreferredWidth(maxWidth);
 					}
 					tableColumn.setCellRenderer(getColumnRenderer(name));
