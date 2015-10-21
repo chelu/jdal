@@ -20,6 +20,7 @@ Please, read our sample application for quicker information.
 
 JDAL is freely usable, licensed under the Apache 2.0 license.
 
+Join the chat at https://gitter.im/chelu/jdal
 
 CONTENT
 -------------------------------------------------------------------------------
@@ -50,4 +51,3 @@ AUTHOR
 
 Jose Luis Martin
 
-Join the chat at https://gitter.im/chelu/jdal
