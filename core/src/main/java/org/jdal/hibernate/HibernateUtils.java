@@ -39,7 +39,9 @@ import org.hibernate.impl.CriteriaImpl.Subcriteria;
 import org.hibernate.impl.SessionImpl;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.collection.CollectionPersister;
+import org.jdal.beans.PropertyUtils;
 import org.jdal.util.BeanUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * Hibernate Utility library
@@ -52,7 +54,6 @@ public abstract class HibernateUtils {
 	public static final int DEFAULT_DEPTH = 2;
 	private static final Log log = LogFactory.getLog(HibernateUtils.class);
 	private static final String EXISTS_QUERY = "SELECT 1 from %s x WHERE %s = ?";
-	
 		
 	/** 
 	 * Initialize a Object for use whith closed session. 
@@ -250,6 +251,23 @@ public abstract class HibernateUtils {
 		}
 		// not found
 		return null; 
+	}
+	
+	/**
+	 * Create an alias for a property path
+	 * @return the alias
+	 */
+	public static String  createAlias(Criteria criteria, String propertyPath) {
+		String[] paths = PropertyUtils.split(propertyPath);
+		String alias = "";
+		
+		for (String name : paths) {
+			alias += StringUtils.isEmpty(alias) ? name : "." + name;
+			criteria.createAlias(alias, name);
+		}
+		
+		
+		return PropertyUtils.getPropertyName(alias);
 	}
 	
 	/**

@@ -267,14 +267,10 @@ public class HibernateDao<T, PK extends Serializable> extends DaoSupport<T, PK>{
 			String sortProperty = PropertyUtils.getPropertyName(propertyPath);
 			try {
 				if (PropertyUtils.isNested(propertyPath)) {
-					String aliasPropertyPath = PropertyUtils.getPath(propertyPath);
-					
+					String alias = PropertyUtils.getPropertyName(PropertyUtils.getPath(propertyPath));
 					// Need to create alias?
-					String alias = HibernateUtils.findAliasForPropertyPath(criteria, propertyPath);
-					if (alias == null) {
-						alias = PropertyUtils.getPropertyName(aliasPropertyPath);
-						criteria.createAlias(aliasPropertyPath, alias);
-					}
+					// String alias = HibernateUtils.findAliasForPropertyPath(criteria, propertyPath);
+					HibernateUtils.createAlias(criteria, PropertyUtils.getPath(propertyPath));
 					sortProperty = alias + PropertyUtils.PROPERTY_SEPARATOR + sortProperty;
 				}
 				else { // test if property is an entity class

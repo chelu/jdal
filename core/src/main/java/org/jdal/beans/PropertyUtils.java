@@ -38,6 +38,9 @@ public abstract class PropertyUtils {
 	}
 	
 	public static String getPath(String propertyPath) {
+		if (!isNested(propertyPath))
+			return "";
+		
 		return StringUtils.substringBeforeLast(propertyPath, PROPERTY_SEPARATOR);
 	}
 
@@ -67,5 +70,9 @@ public abstract class PropertyUtils {
 			return getPropertyDescriptor(pd.getPropertyType(), getNestedPath(propertyPath));
 			
 		return pd;
+	}
+	
+	public static String[] split(String propertyPath) {
+		return propertyPath.split("\\" + PROPERTY_SEPARATOR);
 	}
 }
