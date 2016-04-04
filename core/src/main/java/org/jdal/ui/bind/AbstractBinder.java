@@ -95,7 +95,7 @@ public abstract class AbstractBinder extends SpringConverter implements Property
 	}
 	
 	public final void update() {
-		if (!readOnly && modelHolder != null) {
+		if (!readOnly &&  getModel() != null) {
 			bindingResult = createBindingResult();
 			doUpdate();
 		}
@@ -135,6 +135,9 @@ public abstract class AbstractBinder extends SpringConverter implements Property
 	 * @return model value
 	 */
 	protected Object getValue() {
+		if (getModel() == null)
+			return null;
+		
 		BeanWrapper wrapper = getBeanWrapper();
 		Object value = null;
 		try {
