@@ -26,6 +26,7 @@ import java.util.Set;
 import org.jdal.beans.MessageSourceWrapper;
 import org.jdal.ui.EditorEvent;
 import org.jdal.ui.EditorListener;
+import org.jdal.vaadin.data.ItemUtils;
 import org.jdal.vaadin.ui.ApplicationContextGuiFactory;
 import org.jdal.vaadin.ui.FormUtils;
 import org.jdal.vaadin.ui.GuiFactory;
@@ -194,8 +195,7 @@ public class TableComponent<T> extends CustomComponent implements ItemClickListe
 	 */
 	@SuppressWarnings("unchecked")
 	protected T getBean(Item item) {
-		Method method = ReflectionUtils.findMethod(item.getClass(), "getBean");
-		return (T) ReflectionUtils.invokeMethod(method, item);
+		return (T) ItemUtils.getBean(item);
 	}
 
 	public void refresh() {

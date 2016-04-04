@@ -18,6 +18,8 @@ package org.jdal.vaadin.ui.bind;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.jdal.vaadin.data.ItemUtils;
+
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.Filterable;
 import com.vaadin.ui.Table;
@@ -44,7 +46,12 @@ public class TableAccessor extends VaadinControlAccessor {
 		if (container instanceof Filterable) 
 			((Filterable) container).removeAllContainerFilters();
 		
-		return new ArrayList<Object>(container.getItemIds());
+		ArrayList<Object> list = new ArrayList<Object>();
+		
+		for (Object id : container.getItemIds())
+			list.add(ItemUtils.getBean(container.getItem(id)));
+		
+		return list;
 	}
 
 	/**
@@ -58,6 +65,7 @@ public class TableAccessor extends VaadinControlAccessor {
 		Collection<?> collection = (Collection<?>) value;
 		Container container = getControl().getContainerDataSource();
 		container.removeAllItems();
+		
 		for (Object itemId : collection)
 			container.addItem(itemId);
 	}

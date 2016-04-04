@@ -176,7 +176,12 @@ public class ListBeanContainer extends AbstractContainer implements Indexed, Sor
 	
 	@Override
 	public Collection<?> getItemIds() {
-		return this.items;
+		List<Integer> itemIds = new ArrayList<Integer>();
+		
+		for (int i = 0; i < this.items.size(); i++)
+			itemIds.add(new Integer(i));
+		
+		return itemIds;
 	}
 	
 	@Override
@@ -217,13 +222,21 @@ public class ListBeanContainer extends AbstractContainer implements Indexed, Sor
 
 	@Override
 	public Item addItem(Object itemId) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException();
+		Item item = createItem(itemId);
+		if (this.items.add(item)) {
+			fireItemSetChange();
+			return item;
+		}
+		
+		return null;
 	}
 
 	@Override
 	public Object addItem() throws UnsupportedOperationException {
-		if (this.items.add(createItem(newBean())))
+		if (this.items.add(createItem(newBean()))) {
+			fireItemSetChange();
 			return this.items.size() - 1;
+		}
 		
 		return null;
 	}

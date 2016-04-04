@@ -2,6 +2,7 @@ package org.jdal.vaadin.data;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.util.ClassUtils;
 
 import com.google.gwt.aria.client.Property;
 import com.vaadin.data.util.AbstractProperty;
@@ -43,7 +44,9 @@ public class BeanWrapperProperty<T> extends AbstractProperty<T> {
 
 	@Override
 	public Class<? extends T> getType() {
-		return (Class<? extends T>) this.beanWrapper.getPropertyDescriptor(this.propertyName).getPropertyType();
+		Class<?> clazz =  this.beanWrapper.getPropertyDescriptor(this.propertyName).getPropertyType();
+		
+		return (Class<? extends T>) ClassUtils.resolvePrimitiveIfNecessary(clazz);
 	}
 
 }
