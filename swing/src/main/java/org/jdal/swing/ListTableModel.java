@@ -776,6 +776,35 @@ public class ListTableModel implements TableModel {
 		this.columns = columns;
 		parseColumnDefinitions();
 	}
+	
+	/**
+	 * Gets a {@link ColumnDefinition} by column index.
+	 * @param column index to search on
+	 * @return the column definition, null if none.
+	 */
+	public ColumnDefinition getColumn(int column) {
+		int index = this.columnToPropertyIndex(column);
+		
+		if (this.columnNames.size()  > index) {
+			return getColumn(columnNames.get(index));
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Gets a {@link ColumnDefinition} by name;
+	 * @param name name to search on
+	 * @return the column definition, null if none.
+	 */
+	private ColumnDefinition getColumn(String name) {
+		for (ColumnDefinition cd : this.columns) {
+			if (cd.getName().equals(name))
+				return cd;
+		}
+		
+		return null;
+	}
 
 	/**
 	 * Parse columns definitions to internal state
@@ -813,10 +842,13 @@ public class ListTableModel implements TableModel {
 	public String getSortPropertyName(int column) {
 		String sortPropertyName = null;
 		if (isPropertyColumn(column)) {
-			if (columns.size() > column)
-				sortPropertyName = columns.get(columnToPropertyIndex(column)).getSortProperty();
-			if (sortPropertyName == null)
+			ColumnDefinition cd = getColumn(column);
+			if (cd != null) {
+				sortPropertyName = cd.getSortProperty();
+			}
+			else {
 				sortPropertyName = getPropertyName(column);
+			}
 		}
 
 		return sortPropertyName;

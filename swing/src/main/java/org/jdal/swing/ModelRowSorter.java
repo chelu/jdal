@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2011 the original author or authors.
+ * Copyright 2009-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,8 +143,11 @@ public class ModelRowSorter<M extends TableModel> extends RowSorter<M> {
 	@Override
 	public void toggleSortOrder(int column) {
 		
+		if (!isSortable(column))
+			return;
+		
 		List<SortKey> newKeys = new ArrayList<SortKey>(1);
-		if (sortKeys.size()  > 0) {
+		if (this.sortKeys.size()  > 0) {
 			SortKey key = sortKeys.get(0);
 			if (key.getColumn() == column) { // toggle order
 				newKeys.add(0, toggle(key));
@@ -157,6 +160,20 @@ public class ModelRowSorter<M extends TableModel> extends RowSorter<M> {
 			newKeys.add(0, new SortKey(column, SortOrder.ASCENDING));	
 		}
 		setSortKeys(newKeys);
+	}
+
+	/**
+	 * Test if column is sortable
+	 * @param column to check.
+	 * @return true if sortable, false otherwise.
+	 */
+	protected boolean isSortable(int column) {
+		if (getModel() instanceof ListTableModel) {
+			ListTableModel ltm = (ListTableModel) getModel();
+			return ltm.getColumns().get(ltm.columnToPropertyIndex(column)).isSortable();
+		}
+		
+		return true;
 	}
 
 	/**

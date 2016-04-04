@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 original author or authors.
+ * Copyright 2009-2016 original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ public class ColumnDefinition {
 	private TableCellRenderer renderer;
 	private TableCellEditor editor;
 	private Class<?> clazz;
+	private boolean sortable = true;
+	
 	private MessageSourceWrapper messageSourceWrapper = new MessageSourceWrapper();
 	
 	/**
@@ -49,12 +51,14 @@ public class ColumnDefinition {
 	public String getName() {
 		return name;
 	}
+	
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	/**
 	 * @return the displayName
 	 */
@@ -69,83 +73,110 @@ public class ColumnDefinition {
 		
 		return displayName;
 	}
+	
 	/**
 	 * @param displayName the displayName to set
 	 */
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
+	
 	/**
 	 * @return the editable
 	 */
 	public boolean isEditable() {
 		return editable;
 	}
+	
 	/**
 	 * @param editable the editable to set
 	 */
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
+	
 	/**
 	 * @return the sortProperty
 	 */
 	public String getSortProperty() {
 		return sortProperty;
 	}
+	
 	/**
 	 * @param sortProperty the sortProperty to set
 	 */
 	public void setSortProperty(String sortProperty) {
 		this.sortProperty = sortProperty;
 	}
+	
 	/**
 	 * @return the renderer
 	 */
 	public TableCellRenderer getRenderer() {
 		return renderer;
 	}
+	
 	/**
 	 * @param renderer the renderer to set
 	 */
 	public void setRenderer(TableCellRenderer renderer) {
 		this.renderer = renderer;
 	}
+	
 	/**
 	 * @return the width
 	 */
 	public Integer getWidth() {
 		return width;
 	}
+	
 	/**
 	 * @param width the width to set
 	 */
 	public void setWidth(Integer width) {
 		this.width = width;
 	}
+	
 	/**
 	 * @return the editor
 	 */
 	public TableCellEditor getEditor() {
 		return editor;
 	}
+	
 	/**
 	 * @param editor the editor to set
 	 */
 	public void setEditor(TableCellEditor editor) {
 		this.editor = editor;
 	}
+	
 	/**
 	 * @return the clazz
 	 */
 	public Class<?> getClazz() {
 		return clazz;
 	}
+	
 	/**
 	 * @param clazz the clazz to set
 	 */
 	public void setClazz(Class<?> clazz) {
 		this.clazz = clazz;
+	}
+	
+	/**
+	 * @return the sortable
+	 */
+	public boolean isSortable() {
+		return sortable;
+	}
+	
+	/**
+	 * @param sortable the sortable to set
+	 */
+	public void setSortable(boolean sortable) {
+		this.sortable = sortable;
 	}
 	
 	@Autowired
