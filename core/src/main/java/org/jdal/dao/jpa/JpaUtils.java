@@ -141,7 +141,12 @@ public abstract class JpaUtils {
 				return (Root<T>) r.as(clazz);
 			}
 		}
-		return (Root<T>) query.getRoots().iterator().next();
+		return null;
+	}
+
+	public static <T> Root<T> findOrCreateRoot(CriteriaQuery<?> query, Class<T> clazz){
+		Root<T> root = findRoot(query, clazz);
+		return root != null ? root :  query.from(clazz);
 	}
 	
 	/**

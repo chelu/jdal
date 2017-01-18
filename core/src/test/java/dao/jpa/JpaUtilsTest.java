@@ -16,6 +16,8 @@
 package dao.jpa;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.springframework.util.Assert.notNull;
 
 import java.util.List;
 
@@ -35,6 +37,7 @@ import org.jdal.dao.jpa.JpaUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * Base test for JpaUtils
@@ -100,6 +103,44 @@ public class JpaUtilsTest {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Category> c = cb.createQuery(Category.class);
 		Root<Category> root = c.from(Category.class);
+		c.where(cb.equal(JpaUtils.getPath(root, "name"), "Java"));
+		List<Category> list = em.createQuery(c).getResultList();
+		Category cat = list.get(0);
+		JpaUtils.initialize(em, cat, 2);
+		cat.getBooks().contains(new Book());
+	}
+
+	@Test
+	@Transactional
+	public void testgetRoot() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Category> c = cb.createQuery(Category.class);
+		Root<Category> root = c.from(Category.class);
+		Root<Category> foundedRoot = JpaUtils.findRoot(c, Category.class);
+
+		notNull(foundedRoot);
+		assertEquals(root, foundedRoot);
+	}
+
+	@Test
+	@Transactional
+	public void testGetNullRoot() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Category> c = cb.createQuery(Category.class);
+		Root<Category> foundedRoot = JpaUtils.findRoot(c, Category.class);
+
+		assertNull(foundedRoot);
+	}
+
+	@Test
+	@Transactional
+	public void testGetOrCreateRoot() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Category> c = cb.createQuery(Category.class);
+		Root<Category> root = JpaUtils.findOrCreateRoot(c, Category.class);
+
+		notNull(root);
+
 		c.where(cb.equal(JpaUtils.getPath(root, "name"), "Java"));
 		List<Category> list = em.createQuery(c).getResultList();
 		Category cat = list.get(0);
