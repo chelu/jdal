@@ -141,7 +141,19 @@ public abstract class JpaUtils {
 				return (Root<T>) r.as(clazz);
 			}
 		}
-		return (Root<T>) query.getRoots().iterator().next();
+		return null;
+	}
+
+	/**
+	 * Find the Root with type class on CriteriaQuery Root Set or creating new one if Root is not present
+	 * @param <T> root type
+	 * @param query criteria query
+	 * @param clazz root type
+	 * @return Root<T>
+	 */
+	public static <T> Root<T> findOrCreateRoot(CriteriaQuery<?> query, Class<T> clazz){
+		Root<T> root = findRoot(query, clazz);
+		return root != null ? root :  query.from(clazz);
 	}
 	
 	/**
