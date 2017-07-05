@@ -845,6 +845,8 @@ public class ListTableModel implements TableModel {
 			ColumnDefinition cd = getColumn(column);
 			if (cd != null) {
 				sortPropertyName = cd.getSortProperty();
+				if (sortPropertyName == null)
+					sortPropertyName = getPropertyName(column);
 			}
 			else {
 				sortPropertyName = getPropertyName(column);

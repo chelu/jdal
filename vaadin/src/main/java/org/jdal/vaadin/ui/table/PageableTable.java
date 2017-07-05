@@ -472,4 +472,12 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 	public void setPropagateService(boolean propagateService) {
 		this.propagateService = propagateService;
 	}
+	
+	public boolean isAutoload() {
+		return this.page.isAutoload();
+	}
+	
+	public void setAutoload(boolean autoload) {
+		this.page.setAutoload(autoload);
+	}
 }

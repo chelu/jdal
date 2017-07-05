@@ -53,7 +53,9 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	private transient PageableDataSource<?> pageableDataSource;
 	/** Paginator Listeners */
 	private ArrayList<PaginatorListener> listeners = new ArrayList<PaginatorListener>();
-
+	/** if true, autoload data in page property changes */
+	private boolean autoload = true;
+	
 	public Page(int pageSize, int page, String sortName, Order order) {
 	
 		this.pageSize = pageSize;
@@ -319,8 +321,8 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 
 	
 	public void load() {
-		if (pageableDataSource != null) {
-			Page<T> newPage = pageableDataSource.getPage(this);
+		if (this.pageableDataSource != null) {
+			Page<T> newPage = this.pageableDataSource.getPage(this);
 			this.data = newPage.data;
 		}
 	}
@@ -331,4 +333,19 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	public void setPageableDataSource(PageableDataSource<?> pageableDataSource) {
 		this.pageableDataSource = pageableDataSource;
 	}
+	
+	/**
+	 * @return the autoload
+	 */
+	public boolean isAutoload() {
+		return autoload;
+	}
+
+	/**
+	 * @param autoload the autoload to set
+	 */
+	public void setAutoload(boolean autoload) {
+		this.autoload = autoload;
+	}
+
 }

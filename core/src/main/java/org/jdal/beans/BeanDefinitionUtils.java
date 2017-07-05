@@ -35,9 +35,20 @@ public abstract class BeanDefinitionUtils {
 	 * @param attributeName the attribute name
 	 */
 	public static void addPropertyValueIfNeeded(BeanDefinitionBuilder bdb, Element element, String attributeName) {
+		 addPropertyValueIfNeeded(bdb, element, attributeName, 
+					Conventions.attributeNameToPropertyName(attributeName)); 
+	}
+	
+	/**
+	 * Add property value to {@link BeanDefinitionBuilder} if needed with given property name
+	 * @param bdb BeanDefintionBuilder to operate on.
+	 * @param element Element holding the attribute
+	 * @param attributeName the attribute name
+	 */
+	public static void addPropertyValueIfNeeded(BeanDefinitionBuilder bdb, Element element, String attributeName, 
+			String propertyName) {
 		if (element.hasAttribute(attributeName))
-			bdb.addPropertyValue(Conventions.attributeNameToPropertyName(attributeName), 
-					element.getAttribute(attributeName));
+			bdb.addPropertyValue(propertyName, element.getAttribute(attributeName));
 	}
 	
 	/**
@@ -47,9 +58,20 @@ public abstract class BeanDefinitionUtils {
 	 * @param attributeName the attribute name
 	 */
 	public static void addPropertyReferenceIfNeeded(BeanDefinitionBuilder bdb, Element element, String attributeName) {
+		addPropertyReferenceIfNeeded(bdb, element, attributeName, 
+				Conventions.attributeNameToPropertyName(attributeName));
+	}
+	
+	/**
+	 * Add property reference to {@link BeanDefinitionBuilder} if needed with given property name}
+	 * @param bdb BeanDefintionBuilder to operate on.
+	 * @param element Element holding the attribute
+	 * @param attributeName the attribute name
+	 */
+	public static void addPropertyReferenceIfNeeded(BeanDefinitionBuilder bdb, Element element, 
+			String attributeName, String propertyName) {
 		if (element.hasAttribute(attributeName))
-			bdb.addPropertyReference(Conventions.attributeNameToPropertyName(attributeName), 
-					element.getAttribute(attributeName));
+			bdb.addPropertyReference(propertyName, element.getAttribute(attributeName));
 	}
 	
 }

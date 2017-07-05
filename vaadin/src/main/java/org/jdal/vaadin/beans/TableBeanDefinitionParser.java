@@ -78,6 +78,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 	private static final String PROPAGATE_SERVICE = "propagate-service";
 	private static final String CONTAINER_CLASS = "container-class";
 	private static final String DIALOG = "dialog";
+	private static final String SORT_NAME = "sortName";
 	
 	/**
 	 * {@inheritDoc}
@@ -98,7 +99,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		parserContext.pushContainingComponent(
 				new CompositeComponentDefinition(name, parserContext.extractSource(element)));
 	
-		// Bean names
+		// Bean names and default values
 		String pageableTableBeanName = name + PAGEABLE_TABLE_SUFFIX;
 		String tableBeanName = name + TABLE_SUFFIX;
 		String dataSource = name + SERVICE_SUFFIX;
@@ -149,7 +150,7 @@ public class TableBeanDefinitionParser implements BeanDefinitionParser {
 		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, FILTER);
 		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, MESSAGE_SOURCE);
 		BeanDefinitionUtils.addPropertyReferenceIfNeeded(bdb, element, FILTER_FORM);
-		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, SORT_PROPERTY);
+		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, SORT_PROPERTY, SORT_NAME);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, ORDER);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, PAGE_SIZE);
 		BeanDefinitionUtils.addPropertyValueIfNeeded(bdb, element, NATIVE_BUTTONS);
