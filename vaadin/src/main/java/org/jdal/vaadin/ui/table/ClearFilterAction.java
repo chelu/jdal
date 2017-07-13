@@ -54,6 +54,6 @@ public class ClearFilterAction extends TableButtonListener {
 			((View) table.getFilterForm()).refresh();
 		}
 		
-		table.getPaginator().firstPage();
+		table.filter();
 	}
 }

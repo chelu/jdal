@@ -40,7 +40,6 @@ import org.springframework.util.ReflectionUtils;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
-import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
@@ -143,7 +142,8 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		if (beanFilter != null)
 			page.setFilter(beanFilter);
 			
-			// get initial page and wrap data in container
+		// get initial page and wrap data in container
+		this.page.setAutoload(true);
 		paginator.firstPage();
 	
 		getTable().addItemClickListener(this);

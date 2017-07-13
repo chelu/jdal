@@ -54,7 +54,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	/** Paginator Listeners */
 	private ArrayList<PaginatorListener> listeners = new ArrayList<PaginatorListener>();
 	/** if true, autoload data in page property changes */
-	private boolean autoload = true;
+	private boolean autoload = false;
 	
 	public Page(int pageSize, int page, String sortName, Order order) {
 	
@@ -208,7 +208,9 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	public void setPage(int indexPage) {
 		if (indexPage > 0)  {
 			page = indexPage;
-			load();
+			if (this.autoload) 
+				load();
+			
 			firePageChangedEvent();
 		}
 		else {
@@ -264,7 +266,10 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 			// need to recalculate current page
 			page = (int) Math.ceil(getStartIndex()/pageSize) + 1;
 			this.pageSize = pageSize;
-			load();
+		
+			if (this.autoload)
+				load();
+			
 			firePageChangedEvent();
 		}
 	}
