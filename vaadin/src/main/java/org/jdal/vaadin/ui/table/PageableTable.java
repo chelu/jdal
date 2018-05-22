@@ -139,8 +139,10 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 		verticalLayout.setComponentAlignment(p, Alignment.MIDDLE_CENTER);
 		getTable().setPageLength(page.getPageSize());
 		
-		if (beanFilter != null)
+		if (beanFilter != null) {
+			postProcessFilter(beanFilter);
 			page.setFilter(beanFilter);
+		}
 			
 		// get initial page and wrap data in container
 		this.page.setAutoload(true);
@@ -228,11 +230,21 @@ public class PageableTable<T> extends TableComponent<T> implements PaginatorList
 			if (!filterForm.validateView()) {
 					Notification.show(filterForm.getErrorMessage(), Notification.Type.ERROR_MESSAGE);
 			}
+			
+			postProcessFilter(this.filterForm.getModel());
 		}
 		
 		firstPage();
 	}
 	
+	/**
+	 * Lets subclases to postprocess filter before loading data.
+	 * @param filter to process
+	 */
+	protected void postProcessFilter(Filter filter) {
+		// do nothing by default.
+	}
+
 	/**
 	 * @param selected
 	 */

@@ -54,7 +54,7 @@ public class Page<T> implements Paginator, Cloneable, Serializable {
 	/** Paginator Listeners */
 	private ArrayList<PaginatorListener> listeners = new ArrayList<PaginatorListener>();
 	/** if true, autoload data in page property changes */
-	private boolean autoload = false;
+	private boolean autoload = true;
 	
 	public Page(int pageSize, int page, String sortName, Order order) {
 	
